@@ -42,6 +42,7 @@
                 0xE000103, // print &r1
                 0xE000203, // print &r2
                 //core.Compile(0xF, 0x0, 0x0, 0xE, ((byte)'H' & 0xF0) >> 4, ((byte)'H' & 0xF) >> 0, 0xC),
+                0x8F000C0, // ref point to *
                 0xF00E48C, // push 'H'
                 0xF00E45C, // push 'E'
                 0xF00E4CC, // push 'L'
@@ -56,6 +57,7 @@
                 0xF00E21C, // push '!'
                 0xF00E0AC, // push '\n'
                 0xF00E00F, // pop, and merge
+                0x8F000F0, // jump to *
                 //core.Compile(0xF, 0x0, 0x0, 0xE, 0x0, 0x0, 0xF),
                 0xDEAD     // halt
             });
@@ -63,7 +65,7 @@
             while (core.stack.halt == 0)
             {
                 await core.Step();
-                await Task.Delay(400);
+                await Task.Delay(40);
             }
 
             ReadKey();
@@ -86,7 +88,7 @@
 
         public uint Compile(uint opcode, uint r1 = 0, uint r2 = 0, uint r3 = 0, uint u1 = 0, uint u2 = 0, uint x1 = 0)
         {
-            return (opcode << 24) | (r1 << 20) | (r2 << 16) | (r3 << 12) | (u1 << 8) | (u2 << 4) | x1;
+            return (opcode << 0x18) | (r1 << 0x14) | (r2 << 0x10) | (r3 << 0xC) | (u1 << 0x8) | (u2 << 4) | x1;
         }
     }
     public unsafe class Stack
@@ -126,7 +128,6 @@
         public string pX = "";
         public void Eval()
         {
-            Print();
             switch (instructionID)
             {
                 case 0xA:
@@ -135,44 +136,51 @@
                     WriteLine($"{r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X}");
                     return;
                 case 0x1:
-                    WriteLine($"loadi ::0x{r1:X} &0x{u1:X}");
+                    WriteLine($"loadi");
                     break;
                 case 0x2:
-                    WriteLine($"add ::0x{r1:X} ::0x{r2:X} ::&0x{r3:X}");
+                    WriteLine($"add");
                     break;
                 case 0x0:
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
                     WriteLine("HALT");
                     break;
                 case 0xF when x1 == 0xC && r3 == 0xE:
-                    WriteLine($"push ::pX ::0x{u1:X} ::&0x{u2:X}");
+                    WriteLine($"push");
                     break;
                 case 0xF when x1 == 0xF && r3 == 0xE:
-                    WriteLine($"pop, print ::pX");
+                    WriteLine($"pop, dump");
                     break;
                 case 0x3:
-                    WriteLine($"swap ::0x{r1:X4} ::0x{r2:X4}");
+                    WriteLine($"swap");
                     break;
                 case 0xF when x1 == 0x1:
-                    WriteLine($"dump_l ::0x{prev:X2} -> hex 0x{regs[prev]:X}");
+                    WriteLine($"dump_l");
                     break;
                 case 0xF when x1 == 0x2:
-                    WriteLine($"dump_l ::0x{prev:X2} -> bin 0b{regs[prev]:2}");
+                    WriteLine($"dump_l");
                     break;
                 case 0xF when x1 == 0x3:
-                    WriteLine($"dump_l ::0x{prev:X2} -> dec   {regs[prev]}");
+                    WriteLine($"dump_l");
                     break;
                 case 0xE when x1 == 0x1:
-                    WriteLine($"dump_p ::0x{u1:X2} -> hex 0x{regs[u1]:X}");
+                    WriteLine($"dump_p");
                     break;
                 case 0xE when x1 == 0x2:
-                    WriteLine($"dump_p ::0x{u1:X2} -> bin 0b{regs[u1]:2}");
+                    WriteLine($"dump_p");
                     break;
                 case 0xE when x1 == 0x3:
-                    WriteLine($"dump_p ::0x{u1:X2} -> dec   {regs[u1]}");
+                    WriteLine($"dump_p");
+                    break;
+                case 0x8 when u2 == 0xF:
+                    WriteLine("jump_t");
+                    break;
+                case 0x8 when u2 == 0xC:
+                    WriteLine("ref_t");
                     break;
             }
-            
+            //WriteLine($"r r r u u x");
+            //WriteLine($"1 2 3 1 2 1");
             switch (instructionID)
             {
                 case 0x1:
@@ -198,8 +206,11 @@
                 case 0x7:
                     regs[r1] = (uint)Math.Pow(regs[r2], regs[r3]);
                     break;
-                case 0x8 when u2 == 0xF:
+                case 0x8 when u2 == 0xF: // 0x8F000F0
                     pc = regs[r1];
+                    break;
+                case 0x8 when u2 == 0xC: // 0x8F000C0
+                    regs[r1] = pc;
                     break;
                 case 0x0:
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
@@ -232,9 +243,11 @@
             //WriteLine($"*0x{instructionID:X4} :0x{r1:X4} :0x{r2:X4} :0x{r3:X4} &0x{u1:X4} &0x{u2:X4} %0x{x1:X4}");
         }
 
+        public void WriteLine(string s) => Title += s;
+
         public void Accept(ulong mem)
         {
-            WriteLine($"fetch page {mem:x8}");
+            Title = $"fetch page {mem:x8} - ";
             instructionID = (mem & 0xF000000) >> 24;
             r1            = (mem & 0xF00000 ) >> 20;
             r2            = (mem & 0xF0000  ) >> 16;
