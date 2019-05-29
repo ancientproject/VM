@@ -31,7 +31,9 @@
              // 0x 123121
                 0xABCDEFE, // warm up
                 0x1000600, // set &r1
+                0xF000003, // dump last reg
                 0x1100C00, // set &r2
+                0xF000003, // dump last reg
                 0x2021000, // add &r2 &r3 -> r1
                 0xF000003, // dump last reg
                 0xE000103, // print &r1
