@@ -9,4 +9,6 @@ dead   - 0xDEAD - halt cpu
 swap   - 0x3    - swipe two reg_value at reg_index{2}
 dump_l - 0xF    - dump reg_value at last reg_index
 dump_p - 0xE    - dump reg_value at current reg_index
+push_x - 0xF0CE - push to x reg_value{2}
+pop_p  - 0xF0FC - pop, merge and print to console
 ```
