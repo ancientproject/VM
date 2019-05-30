@@ -18,7 +18,7 @@
             _version = version;
         }
 
-        public void Save(DirectoryInfo info, string name)
+        public void Save(DirectoryInfo info, string name) // todo shitcode
         {
             if(!info.Exists) throw new InvalidOperationException();
 
