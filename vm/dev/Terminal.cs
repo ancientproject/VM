@@ -25,13 +25,13 @@
         [ActionAddress(0x6)]
         public void StageChar(char c) => relMemory += c;
         [ActionAddress(0x7)]
-        public void PushRel() => WriteLine(relMemory);
+        public void PushRel() => Write(relMemory);
         [ActionAddress(0x8)]
         public void ClearRel() => relMemory = "";
 
-        public void write(short address, int data) => (this as IDevice).WriteMemory(address, data);
+        public void write(int address, int data) => (this as IDevice).WriteMemory(address, data);
 
-        public int read(short address) => throw new NotImplementedException();
+        public int read(int address) => throw new NotImplementedException();
 
         [ActionAddress(0x3)]
         public void Init() => ClearRel();

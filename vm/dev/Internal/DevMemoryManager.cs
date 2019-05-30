@@ -8,7 +8,7 @@
 
     public static class DevMemoryManager
     {
-        public static void WriteMemory(this IDevice dev, short address, int memory)
+        public static void WriteMemory(this IDevice dev, int address, int memory)
         {
             var props = dev.GetType().GetProperties()
                 .Where(x => x.CanWrite)

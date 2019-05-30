@@ -6,8 +6,8 @@
     {
         string Name { get; }
         short StartAddress { get; }
-        void write(short address, int data);
-        int read(short address);
+        void write(int address, int data);
+        int read(int address);
 
 
         void Init();
