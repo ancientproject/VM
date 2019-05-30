@@ -15,19 +15,19 @@
         /// <summary>
         /// base register cell
         /// </summary>
-        public ulong r1, r2, r3;
+        public ushort r1, r2, r3;
         /// <summary>
         /// value register cell
         /// </summary>
-        public ulong u1, u2;
+        public ushort u1, u2;
         /// <summary>
         /// magic cell
         /// </summary>
-        public ulong x1;
+        public ushort x1;
         /// <summary>
         /// id
         /// </summary>
-        public ulong instructionID;
+        public ushort instructionID;
         /// <summary>
         /// last <see cref="r1"/>
         /// </summary>
@@ -52,56 +52,17 @@
                     WriteLine($"1 2 3 1 2 1");
                     WriteLine($"{r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X}");
                     return;
-                case 0x1:
-                    WriteLine($"loadi");
-                    break;
-                case 0x2:
-                    WriteLine($"add");
-                    break;
-                case 0x0:
-                case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
-                    WriteLine("HALT");
-                    break;
-                case 0xF when x1 == 0xC && r3 == 0xE:
-                    WriteLine($"push");
-                    break;
-                case 0xF when x1 == 0xF && r3 == 0xE:
-                    WriteLine($"pop, dump");
-                    break;
-                case 0x3:
-                    WriteLine($"swap");
-                    break;
-                case 0xF when x1 == 0x1:
-                    WriteLine($"dump_l");
-                    break;
-                case 0xF when x1 == 0x2:
-                    WriteLine($"dump_l");
-                    break;
-                case 0xF when x1 == 0x3:
-                    WriteLine($"dump_l");
-                    break;
-                case 0xE when x1 == 0x1:
-                    WriteLine($"dump_p");
-                    break;
-                case 0xE when x1 == 0x2:
-                    WriteLine($"dump_p");
-                    break;
-                case 0xE when x1 == 0x3:
-                    WriteLine($"dump_p");
-                    break;
-                case 0x8 when u2 == 0xF:
-                    WriteLine("jump_t");
-                    break;
-                case 0x8 when u2 == 0xC:
-                    WriteLine("ref_t");
+                default:
+                    WriteLine($"");
                     break;
             }
-            //WriteLine($"r r r u u x");
-            //WriteLine($"1 2 3 1 2 1");
             switch (instructionID)
             {
                 case 0x1:
-                    regs[r1] = u1;
+                    if (u2 != 0)
+                        regs[r1] = (ulong)((u1 << 4) | u2);
+                    else
+                        regs[r1] = u1;
                     break;
                 case 0x2:
                     regs[r1] = regs[r2] + regs[r3];
@@ -134,19 +95,29 @@
                     halt = 1;
                     break;
                 case 0xA: break;
+                case 0xF when x1 == 0xC && r3 == 0xE: // push_a
+                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (u1 << 4 | u2) & 0xFFFFFFF);
+                    break;
+                case 0xF when x1 == 0xE && r3 == 0x0: // push_d
+                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1]);
+                    break;
+                case 0xF when x1 == 0xF && r3 == 0x0: // push_x_debug
+                    var x = regs[u1].ToString();
 
-                case 0xF when x1 == 0xC && r3 == 0xE: //0xF16E{s}C
-                    _bus.Find((int)r1).write((short)r2, (int)(u1 << 4 | u2));
-                    break;
-                case 0xF when x1 == 0xF && r3 == 0xE: //0xF17E{s}F
-                    _bus.Find((int)r1).write((short)r2, (int)(u1 << 4 | u2));
-                    break;
-                case 0xF when x1 == 0x1:
-                case 0xF when x1 == 0x2:
-                case 0xF when x1 == 0x3:
-                case 0xE when x1 == 0x1:
-                case 0xE when x1 == 0x2:
-                case 0xE when x1 == 0x3:
+                    short[] cast(string str)
+                    {
+                        var list = new List<int>();
+                        foreach (var c in str)
+                        {
+                            var uu1 = (c & 0xF0) >> 4;
+                            var uu2 = (c & 0xF);
+                            list.Add((uu1 << 4 | uu2) & 0xFFFFFFF);
+                        }
+                        return list.Select(x => (short)x).ToArray();
+                    }
+
+                    foreach (var uuu in cast(x))
+                        _bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
             }
             prev = r1;
@@ -162,18 +133,18 @@
         public void Accept(ulong mem)
         {
             Title = $"fetch page {mem:x8} - ";
-            instructionID = (mem & 0xF000000) >> 24;
-            r1 = (mem & 0xF00000) >> 20;
-            r2 = (mem & 0xF0000) >> 16;
-            r3 = (mem & 0xF000) >> 12;
-            u1 = (mem & 0xF00) >> 8;
-            u2 = (mem & 0xF0) >> 4;
-            x1 = (mem & 0xF);
+            instructionID = (ushort)((mem & 0xF000000) >> 24);
+            r1 = (ushort)((mem & 0xF00000) >> 20);
+            r2 = (ushort)((mem & 0xF0000) >> 16);
+            r3 = (ushort)((mem & 0xF000) >> 12);
+            u1 = (ushort)((mem & 0xF00) >> 8);
+            u2 = (ushort)((mem & 0xF0) >> 4);
+            x1 = (ushort)(mem & 0xF);
         }
 
         public ulong Degrade()
         {
-            return (instructionID << 24) | (r1 << 20) | (r2 << 16) | (r3 << 12) | (u1 << 8) | (u2 << 4) | x1;
+            return (ulong)((instructionID << 24) | (r1 << 20) | (r2 << 16) | (r3 << 12) | (u1 << 8) | (u2 << 4) | x1);
         }
     }
 }
