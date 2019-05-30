@@ -6,12 +6,12 @@
     {
         public string Name { get; }
         public short StartAddress { get; }
-        public void write(short address, int data)
+        public void write(int address, int data)
         {
             throw new CorruptedMemoryException();
         }
 
-        public int read(short address)
+        public int read(int address)
         {
             throw new CorruptedMemoryException();
         }
