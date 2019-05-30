@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using component;
@@ -104,7 +105,7 @@
             {
                 new warm(),
                 new ref_t(0xA),                                       // .label 0xA
-                "svack pidor ".Cast_f<push_a>(0x1, 0x6),    // push_a 'svack pidor ', 0
+                "nya ".Cast_f<push_a>(0x1, 0x6),            // push_a 'nya ', to term_dev
                 new push_a(0x1, 0x7, 0),          // pop, merge
                 new push_a(0x1, 0x3, 0),          // clear
                 new jump_t(0xA),                                      // jump_to_label 0xA
@@ -119,6 +120,10 @@
                 else
                     list.Add((Instruction)o);
             }
+
+            var asm = new Assembly(list.ToArray(), new Version(1, 2, 0, 0));
+            Directory.CreateDirectory("out");
+            asm.Save(new DirectoryInfo("out"), "test");
 
             core.State.Load(list.Select(x => (uint)x).ToArray());
             //core.State.Load(new uint[]
