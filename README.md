@@ -1,4 +1,4 @@
-## 4bit_cpu_host
+## 🔥 4bit_cpu_host
 
 ##### Try
 
