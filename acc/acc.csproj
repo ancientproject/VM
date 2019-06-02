@@ -9,7 +9,7 @@
     <Authors>Yuuki Wesp</Authors>
     <Product>flame.compiler</Product>
     <Copyright>Yuuki Wesp(C) 2019</Copyright>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>acc.flame.key.pfx</AssemblyOriginatorKeyFile>
     <StartupObject>flame.compiler.Program</StartupObject>
     <ApplicationIcon>app.ico</ApplicationIcon>
