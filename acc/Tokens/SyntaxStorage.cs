@@ -84,11 +84,13 @@
             .Token()
             .WithPosition()
             .Named("ref_t expression");
+        // todo
         public static Parser<IInputToken[]> InstructionParser => (
-            from many in SwapToken.Token().Named("swap")
-                .Or(JumpT.Token().Named("jump_t"))
-                .Or(RefT.Token().Named("ref_t"))
-                .Or(PushA.Token().Named("push_a"))
+            from many in 
+                SwapToken
+                .Or(JumpT)
+                .Or(RefT)
+                .Or(PushA)
             select many)
             .ContinueMany()
             .Select(x => x.ToArray());
