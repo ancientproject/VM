@@ -1,11 +1,11 @@
-﻿namespace vm.models.list
+﻿namespace flame.runtime
 {
     public class loadi : Instruction
     {
         private readonly ushort _index;
         private readonly ushort _value;
 
-        public loadi(ushort index, ushort value) : base(InsID.loadi, 0x1)
+        public loadi(ushort index, ushort value) : base(InsID.loadi)
         {
             _index = index;
             _value = value;

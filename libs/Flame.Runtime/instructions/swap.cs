@@ -1,4 +1,4 @@
-﻿namespace vm.models.list
+﻿namespace flame.runtime
 {
     public class swap : Instruction
 
@@ -6,7 +6,7 @@
         private readonly short _index1;
         private readonly short _index2;
 
-        public swap(short index1, short index2) : base(InsID.swap, 0x3)
+        public swap(short index1, short index2) : base(InsID.swap)
         {
             _index1 = index1;
             _index2 = index2;

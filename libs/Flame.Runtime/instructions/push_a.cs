@@ -1,4 +1,4 @@
-﻿namespace vm.models.list
+﻿namespace flame.runtime
 {
     using System.Linq;
     using System.Text;
@@ -10,7 +10,7 @@
         private readonly short _addressDev;
         private readonly short _value;
 
-        public push_a(short addressBus, short addressDev, short value) : base(InsID.push_a, 0xF)
+        public push_a(short addressBus, short addressDev, short value) : base(InsID.push_a)
         {
             _addressBus = addressBus;
             _addressDev = addressDev;
@@ -31,7 +31,7 @@
         private readonly short _addressDev;
         private readonly short _cellIndex;
 
-        public push_d(short addressBus, short addressDev, short cellIndex) : base(InsID.push_d, 0xF)
+        public push_d(short addressBus, short addressDev, short cellIndex) : base(InsID.push_d)
         {
             _addressBus = addressBus;
             _addressDev = addressDev;
@@ -49,7 +49,7 @@
         private readonly short _addressDev;
         private readonly short _cellIndex;
 
-        public push_x_debug(short addressBus, short addressDev, short cellIndex) : base(InsID.push_d, 0xF)
+        public push_x_debug(short addressBus, short addressDev, short cellIndex) : base(InsID.push_d)
         {
             _addressBus = addressBus;
             _addressDev = addressDev;
@@ -68,7 +68,7 @@
             var err_bit = s.Select(x => new { len = Encoding.UTF8.GetBytes($"{x}").Length, x}).Where(x => x.len > 2).ToArray();
 
             if(err_bit.Any())
-                throw new InvalidCharsException($"Chars: '{string.Join(',', err_bit.Select(x => x.x))}' more than two bytes.");
+                throw new InvalidCharsException($"Chars: '{string.Join(",", err_bit.Select(x => x.x))}' more than two bytes.");
             return s.Select(x => new push_a(addrBus, addrDev, (short) x)).ToArray();
         }
 
