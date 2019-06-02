@@ -55,14 +55,18 @@
                 return;
             }
 
-            var source = File.ReadAllLines(args.sourceFiles.First()).Where(x => !string.IsNullOrEmpty(x));
+            var source = File.ReadAllText(args.sourceFiles.First()).Replace("\r", "");
 
-            var compiled = source.Select(s => SyntaxStorage.Parser.Parse(s).First()).ToList();
+            var @try = SyntaxStorage.Parser.TryParse(source);
+            if (!@try.WasSuccessful)
+            {
+                Error(Warning.InternalError, @try.Message);
+            }
 
             using var mem = new MemoryStream();
             var map = new StringBuilder();
             var offset = 0;
-            foreach (var instruction in compiled)
+            foreach (var instruction in @try.Value)
             {
                 offset++;
                 var value = (ushort) instruction.Assembly();
