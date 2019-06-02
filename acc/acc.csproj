@@ -26,11 +26,11 @@
     <PackageReference Include="GEmojiSharp" Version="1.0.0" />
     <PackageReference Include="morelinq" Version="3.1.1" />
     <PackageReference Include="Sprache" Version="2.2.0" />
-    <PackageReference Include="TrueColorConsole" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\libs\Flame.Runtime\Flame.Runtime.csproj" />
+    <ProjectReference Include="..\libs\truecolor\TrueColorConsole\TrueColorConsole.csproj" />
   </ItemGroup>
 
   <ItemGroup>

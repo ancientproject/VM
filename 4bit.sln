@@ -5,9 +5,13 @@ VisualStudioVersion = 16.0.28822.285
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vm", "vm\vm.csproj", "{D5E4972E-6188-464A-AB44-6E73C5573A4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "acc", "acc\acc.csproj", "{4FA84905-6A02-4FDD-9CDF-468588F1D6D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "acc", "acc\acc.csproj", "{4FA84905-6A02-4FDD-9CDF-468588F1D6D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flame.Runtime", "libs\Flame.Runtime\Flame.Runtime.csproj", "{3E4AFC02-B943-4FA2-A95B-61F4A3F686C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flame.Runtime", "libs\Flame.Runtime\Flame.Runtime.csproj", "{3E4AFC02-B943-4FA2-A95B-61F4A3F686C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{240CCCDC-3EAC-487F-82C9-DDAA50FF159E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueColorConsole", "libs\truecolor\TrueColorConsole\TrueColorConsole.csproj", "{F77AD91A-49F3-44B9-9BE5-B21987287E96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +31,16 @@ Global
 		{3E4AFC02-B943-4FA2-A95B-61F4A3F686C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E4AFC02-B943-4FA2-A95B-61F4A3F686C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E4AFC02-B943-4FA2-A95B-61F4A3F686C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F77AD91A-49F3-44B9-9BE5-B21987287E96} = {240CCCDC-3EAC-487F-82C9-DDAA50FF159E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77DF946F-0A1C-4A24-8A58-E2136BF8FC38}
