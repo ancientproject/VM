@@ -13,6 +13,6 @@
     }
     public static class WarningEx
     {
-        public static string Format(this Warning w) => $"FC{(int)w:####}";
+        public static string Format(this Warning w) => $"FC{(int)w:00000}";
     }
 }
