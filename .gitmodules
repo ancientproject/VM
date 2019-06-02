@@ -1,0 +1,3 @@
+[submodule "libs/truecolor"]
+	path = libs/truecolor
+	url = https://github.com/zivillian/TrueColorConsole.git
