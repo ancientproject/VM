@@ -1,6 +1,6 @@
 ﻿namespace vm.dev
 {
-    using exceptions;
+    using flame.runtime.exceptions;
 
     public class CorruptedDevice : IDevice
     {

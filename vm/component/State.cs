@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using flame.runtime;
     using static System.Console;
     public unsafe class State
     {
@@ -56,6 +57,9 @@
                     WriteLine($"");
                     break;
             }
+
+            WriteLine($"{instructionID.getInstruction()}");
+
             switch (instructionID)
             {
                 case 0x1:

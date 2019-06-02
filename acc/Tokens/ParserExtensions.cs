@@ -7,14 +7,10 @@
 
     public static class ParserExtensions
     {
-        public static Parser<OperatorKind> NamedOperator(this Parser<OperatorKind> parser)
+        public static Parser<OperatorKind> NamedOperator(this Parser<OperatorKind> parser, OperatorKind kind)
         {
-            return i =>
-            {
-                var value = parser(i);
-                return parser.Named(
-                    $"{value.Value} operator ({SyntaxStorage.Operators.First(x => x.Value == value.Value).Key})")(i);
-            };
+            return parser.Named(
+                $"{kind} operator ({SyntaxStorage.Operators.First(x => x.Value == kind).Key})");
         }
 
         public static Parser<T> WithPosition<T>(this Parser<T> parser) where T : class, IInputToken

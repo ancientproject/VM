@@ -51,12 +51,12 @@
             (from _ in Parse.String("@>>")
              select OperatorKind.PipeLeft)
             .Token()
-            .NamedOperator();
+            .NamedOperator(OperatorKind.PipeLeft);
         public static Parser<OperatorKind> PipeRight =>
             (from _ in Parse.String("<<@")
              select OperatorKind.PipeRight)
             .Token()
-            .NamedOperator();
+            .NamedOperator(OperatorKind.PipeRight);
         public static Parser<InstructionExpression> SwapToken =>
             (from dword in InstructionToken(InsID.swap)
                 from space1 in Parse.WhiteSpace.Optional()

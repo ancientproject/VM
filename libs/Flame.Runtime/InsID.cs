@@ -29,6 +29,31 @@
 
             return attr.OpCode;
         }
+        public static InsID getInstruction(this ushort id)
+        {
+            var member = typeof(InsID).GetMembers().Where(m => m.DeclaringType == typeof(InsID));
+
+            if (member is null)
+                throw new InvalidOperationException();
+
+
+            var attr = member.Select(x => new { x , atr= x.GetCustomAttributes(typeof(OpCodeAttribute), false).FirstOrDefault() as OpCodeAttribute });
+
+            if (attr is null)
+                throw new
+                    InvalidOperationException(
+                        $"Field '{id}' of type '{nameof(InsID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
+
+            foreach (var op in attr)
+            {
+                if(op.atr is null)
+                    continue;
+                if (op.atr.OpCode == id)
+                    return (InsID)Enum.Parse(typeof(InsID), op.x.Name, true);
+            }
+
+            return InsID.halt;
+        }
     }
     public enum InsID : short
     {
