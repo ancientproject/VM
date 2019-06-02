@@ -9,6 +9,7 @@
     using System.Text;
     using emit;
     using Fclp;
+    using GEmojiSharp;
     using runtime;
     using Sprache;
     using tokens;
@@ -29,8 +30,6 @@
                 .WithDescription("Out file.");
             raw.Parse(c_args);
             var args = raw.Object;
-            
-
             Enable();
             CursorSetVisibility(false);
             CursorSetBlinking(false);
@@ -56,9 +55,8 @@
             }
 
             var source = File.ReadAllText(args.sourceFiles.First()).Replace("\r", "");
-
             var @try = SyntaxStorage.InstructionParser.Parse(source);
-
+            
             using var mem = new MemoryStream();
             var map = new StringBuilder();
             var offset = 0;
@@ -68,7 +66,7 @@
                 {
                     var token = iExp.Instruction;
                     offset++;
-                    var value = (ushort)token.Assembly();
+                    var value = (uint)token.Assembly();
                     var bytes = BitConverter.GetBytes(value);
                     mem.Write(bytes);
                     var str =
@@ -82,7 +80,7 @@
                     return;
                 }
             }
-            File.WriteAllBytes($"{args.OutFile}.bin", mem.ToArray());
+            File.WriteAllBytes($"{args.OutFile}.exf", mem.ToArray());
             File.WriteAllText($"{args.OutFile}.map", map.ToString());
         }
 

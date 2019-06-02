@@ -4,7 +4,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using exceptions;
+    using flame.runtime.exceptions;
 
     public static class DevMemoryManager
     {

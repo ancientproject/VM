@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentCommandLineParser-netstandard" Version="1.4.3.13" />
+    <PackageReference Include="GEmojiSharp" Version="1.0.0" />
     <PackageReference Include="morelinq" Version="3.1.1" />
     <PackageReference Include="Sprache" Version="2.2.0" />
     <PackageReference Include="TrueColorConsole" Version="1.0.2" />
