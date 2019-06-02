@@ -2,14 +2,25 @@
 {
     using System;
     using System.Drawing;
+    using emit;
     using static TrueColorConsole.VTConsole;
     internal class _term
     {
         private static readonly object Guarder = new object();
 
-        public static void Warn(string message) => Warn("", message);
-
-        public static void Warn(string keyCode, string message)
+        public static void Trace(string message)
+        {
+            lock (Guarder)
+            {
+                if (!IsSupported || !IsEnabled)
+                {
+                    Console.WriteLine($"trace: {message}");
+                    return;
+                }
+                WriteLine($"trace: {message}", Color.Gray);
+            }
+        }
+        public static void Warn(Warning keyCode, string message)
         {
             lock (Guarder)
             {
@@ -18,13 +29,11 @@
                     Console.WriteLine($"warning {keyCode}: {message}");
                     return;
                 }
-                Write("warning ", Color.Orange);
-                Write(keyCode, Color.Orange);
-                Write(": ", Color.White);
-                Write(message, Color.White);
+                Write($"warning {keyCode.Format()}", Color.Orange);
+                WriteLine($": {message}", Color.White);
             }
         }
-        public static void Error(string keyCode, string message)
+        public static void Error(Warning keyCode, string message)
         {
             lock (Guarder)
             {
@@ -33,10 +42,8 @@
                     Console.WriteLine($"error {keyCode}: {message}");
                     return;
                 }
-                Write("warning ", Color.Red);
-                Write(keyCode, Color.Red);
-                Write(": ", Color.White);
-                Write(message, Color.White);
+                Write($"error {keyCode.Format()}", Color.Red);
+                WriteLine($": {message}", Color.White);
             }
         }
     }
