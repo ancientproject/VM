@@ -57,8 +57,6 @@
              select OperatorKind.PipeRight)
             .Token()
             .NamedOperator();
-
-
         public static Parser<InstructionExpression> SwapToken =>
             (from dword in InstructionToken(InsID.swap)
                 from space1 in Parse.WhiteSpace.Optional()
@@ -69,7 +67,6 @@
             .Token()
             .WithPosition()
             .Named("swap expression");
-
         public static Parser<InstructionExpression> PushA =>
             (from dword in InstructionToken(InsID.push_a)
                 from cell1 in RefToken
@@ -80,7 +77,6 @@
             .Token()
             .WithPosition()
             .Named("push_a expression");
-
         public static Parser<InstructionExpression> RefT => (
                 from dword in InstructionToken(InsID.ref_t)
                 from cell1 in RefToken
@@ -88,10 +84,6 @@
             .Token()
             .WithPosition()
             .Named("ref_t expression");
-
-        
-
-
         public static Parser<IInputToken[]> InstructionParser => (
             from many in SwapToken.Token().Named("swap")
                 .Or(JumpT.Token().Named("jump_t"))
@@ -100,8 +92,6 @@
             select many)
             .ContinueMany()
             .Select(x => x.ToArray());
-        
-
         public static Parser<string> InstructionToken(InsID instruction) =>
             from dot in Parse.Char('.')
             from ident in Parse.String(instruction.ToString()).Text()
