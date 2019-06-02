@@ -32,4 +32,10 @@
     <ProjectReference Include="..\libs\Flame.Runtime\Flame.Runtime.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="test.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
