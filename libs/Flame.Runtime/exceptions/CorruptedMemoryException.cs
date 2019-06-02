@@ -1,4 +1,4 @@
-﻿namespace vm.exceptions
+﻿namespace flame.runtime.exceptions
 {
     using System;
 
