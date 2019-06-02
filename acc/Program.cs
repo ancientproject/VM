@@ -57,25 +57,30 @@
 
             var source = File.ReadAllText(args.sourceFiles.First()).Replace("\r", "");
 
-            var @try = SyntaxStorage.Parser.TryParse(source);
-            if (!@try.WasSuccessful)
-            {
-                Error(Warning.InternalError, @try.Message);
-            }
+            var @try = SyntaxStorage.InstructionParser.Parse(source);
 
             using var mem = new MemoryStream();
             var map = new StringBuilder();
             var offset = 0;
-            foreach (var instruction in @try.Value)
+            foreach (var expression in @try)
             {
-                offset++;
-                var value = (ushort) instruction.Assembly();
-                var bytes = BitConverter.GetBytes(value);
-                mem.Write(bytes);
-                var str =
-                    $"0x{value:X7} // Offset: 0x{offset:X8}, ID: {instruction.ID}, OpCode: 0x{instruction.OPCode:X8}";
-                map.AppendLine(str);
-                Trace(str);
+                if (expression is InstructionExpression iExp)
+                {
+                    var token = iExp.Instruction;
+                    offset++;
+                    var value = (ushort)token.Assembly();
+                    var bytes = BitConverter.GetBytes(value);
+                    mem.Write(bytes);
+                    var str =
+                        $"0x{value:X7} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X8}";
+                    map.AppendLine(str);
+                    Trace(str);
+                }
+                if (expression is ErrorToken error)
+                {
+                    Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
+                    return;
+                }
             }
             File.WriteAllBytes($"{args.OutFile}.bin", mem.ToArray());
             File.WriteAllText($"{args.OutFile}.map", map.ToString());
