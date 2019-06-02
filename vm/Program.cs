@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
     using component;
     using dev;
     using dev.Internal;
-    using models;
-    using models.list;
+    using flame.runtime;
     using MoreLinq;
     using static System.Console;
     internal class Program
@@ -121,9 +121,6 @@
                     list.Add((Instruction)o);
             }
 
-            var asm = new Assembly(list.ToArray(), new Version(1, 2, 0, 0));
-            Directory.CreateDirectory("out");
-            asm.Save(new DirectoryInfo("out"), "test");
 
             core.State.Load(list.Select(x => (uint)x).ToArray());
             //core.State.Load(new uint[]
