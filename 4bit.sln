@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrueColorConsole", "libs\truecolor\TrueColorConsole\TrueColorConsole.csproj", "{F77AD91A-49F3-44B9-9BE5-B21987287E96}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{24CBAF1C-EBD3-47DB-89BC-AD7F407DE760}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "acc_test", "test\acc_test\acc_test.csproj", "{737A19B5-7197-4B8C-82D2-2765C81D38CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +39,17 @@ Global
 		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F77AD91A-49F3-44B9-9BE5-B21987287E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{737A19B5-7197-4B8C-82D2-2765C81D38CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{737A19B5-7197-4B8C-82D2-2765C81D38CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{737A19B5-7197-4B8C-82D2-2765C81D38CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{737A19B5-7197-4B8C-82D2-2765C81D38CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F77AD91A-49F3-44B9-9BE5-B21987287E96} = {240CCCDC-3EAC-487F-82C9-DDAA50FF159E}
+		{737A19B5-7197-4B8C-82D2-2765C81D38CB} = {24CBAF1C-EBD3-47DB-89BC-AD7F407DE760}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77DF946F-0A1C-4A24-8A58-E2136BF8FC38}

@@ -6,6 +6,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Text;
     using emit;
     using Fclp;
@@ -15,7 +16,6 @@
     using tokens;
     using static TrueColorConsole.VTConsole;
     using static _term;
-
     internal class Program
     {
         public static void Main(string[] c_args)
