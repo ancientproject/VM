@@ -33,6 +33,10 @@
         /// last <see cref="r1"/>
         /// </summary>
         public ulong prev;
+        /// <summary>
+        /// trace flag
+        /// </summary>
+        public bool tc = false;
 
         public ulong[] regs = new ulong[16];
         public sbyte halt { get; set; } = 0;
@@ -48,59 +52,75 @@
         {
             if (instructionID == 0xA)
             {
-                WriteLine($"r r r u u x");
-                WriteLine($"1 2 3 1 2 1");
-                WriteLine($"{r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X}");
+                WriteLine($"  r   r   r   u   u   x");
+                WriteLine($"  1   2   3   1   2   1");
+                WriteLine($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X}\n\n\n");
             }
 
             switch (instructionID)
             {
                 case 0x1:
+                    Trace($"addi 0x{u1:X}, 0x{u2:X}");
                     if (u2 != 0)
                         regs[r1] = (ulong)((u1 << 4) | u2);
                     else
                         regs[r1] = u1;
                     break;
                 case 0x2:
+                    Trace($"sum 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] + regs[r3];
                     break;
                 case 0x3:
+                    Trace($"swap 0x{r1:X}, 0x{r2:X}");
                     regs[r1] ^= regs[r2];
                     regs[r2] = regs[r1] ^ regs[r2];
                     regs[r1] ^= regs[r2];
                     break;
                 case 0x4:
+                    Trace($"sub 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] - regs[r3];
                     break;
                 case 0x5:
+                    Trace($"mul 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] * regs[r3];
                     break;
                 case 0x6:
+                    Trace($"div 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] / regs[r3];
                     break;
-                case 0x7:
+                case 0x7 when u2 == 0x0:
+                    Trace($"pow 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = (uint)Math.Pow(regs[r2], regs[r3]);
                     break;
+                case 0x7 when u2 == 0xA:
+                    Trace($"sqrt 0x{r2:X}");
+                    regs[r1] = (uint)Math.Sqrt(regs[r2]);
+                    break;
                 case 0x8 when u2 == 0xF: // 0x8F000F0
+                    Trace($"jump_t 0x{r1:X}");
                     pc = regs[r1];
                     break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
+                    Trace($"ref_t 0x{r1:X}");
                     regs[r1] = pc;
                     break;
                 case 0x0:
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
+                    Trace($"halt");
                     halt = 1;
                     break;
                 case 0xA: break;
                 case 0xF when x1 == 0xC && r3 == 0xE: // push_a
+                    Trace($"push_a 0x{r1:X} 0x{r2:X} 0x{u1:X} 0x{u2:X}");
                     _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (u1 << 4 | u2) & 0xFFFFFFF);
                     break;
                 case 0xF when x1 == 0xE && r3 == 0x0: // push_d
+                    Trace($"push_d 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1]);
                     break;
-                case 0xF when x1 == 0xF && r3 == 0x0: // push_x_debug
+                case 0xF when x1 == 0xF && r3 == 0x0: // push_x
+                    Trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     var x = regs[u1].ToString();
-
                     short[] cast(string str)
                     {
                         var list = new List<int>();
@@ -112,7 +132,6 @@
                         }
                         return list.Select(x => (short)x).ToArray();
                     }
-
                     foreach (var uuu in cast(x))
                         _bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
@@ -128,6 +147,12 @@
             u1 = (ushort)((mem & 0xF00) >> 8);
             u2 = (ushort)((mem & 0xF0) >> 4);
             x1 = (ushort)(mem & 0xF);
+        }
+
+        private void Trace(string str)
+        {
+            if(tc)
+                WriteLine(str);
         }
     }
 }

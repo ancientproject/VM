@@ -23,6 +23,8 @@
 
             var core = bus.Cpu;
 
+            core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
+
             if (!args.Any())
                 core.State.Load(new uint[] { 0xABCDEFE, 0xDEAD });
             else
@@ -40,8 +42,6 @@
                 await core.Step();
                 await Task.Delay(10);
             }
-
-            ReadKey();
         }
 
         public static uint[] CastFromBytes(byte[] bytes)
