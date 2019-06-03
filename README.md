@@ -1,4 +1,4 @@
-## 🔥 4bit_cpu_host
+## 🔥 FlameVM (4bit_cpu_host and compiler combine-based-parser)
 
 ![image](https://user-images.githubusercontent.com/13326808/58775994-0597bc00-85d1-11e9-99c3-e6f7208cd37b.png)
 
