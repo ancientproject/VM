@@ -1,8 +1,11 @@
 .warm
 
+; label to 0xF
 .ref_t &(0xF)
 
+; push setting color to device
 .push_a &(0x1) &(0x9) <| $(0x1A)
+; push char to device
 .push_a &(0x1) &(0x5) <| @char_t('n')
 .push_a &(0x1) &(0x9) <| $(0x1B)
 .push_a &(0x1) &(0x5) <| @char_t('y')
@@ -12,8 +15,10 @@
 .push_a &(0x1) &(0x5) <| @char_t('n')
 .push_a &(0x1) &(0x9) <| $(0x1E)
 .push_a &(0x1) &(0x5) <| @char_t('!')
+; clear setting color in device
 .push_a &(0x1) &(0x9) <| $(0x3F)
 
+; jump to 0xF
 .jump_t &(0xF)
 ; shutdown
 .halt
