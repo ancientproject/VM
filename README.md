@@ -1,26 +1,42 @@
-## 🔥 4bit_cpu_host
+## 🔥 FlameVM 
+##### (4bit_cpu_host and compiler combine-based-parser)
+  
+![image](https://user-images.githubusercontent.com/13326808/58775994-0597bc00-85d1-11e9-99c3-e6f7208cd37b.png)
+
+
 
 ##### Try
 
 🌧 Download lates release
 
-File 'test.asm'
+💥 Save it to file 'test.asm'
 ```asm
 
-.ref_t &(0xC)                          // label set at 0xC
-.push_a &(0x1) &(0x6) |> &(0x6E)       // push 'n'(0x6E) to terminal device(0x1 - ID) and call StageChar(0x6) action
-.push_a &(0x1) &(0x6) |> &(0x79)       // push 'y'(0x79) to terminal device(0x1 - ID) and call StageChar(0x6) action
-.push_a &(0x1) &(0x6) |> @char_t('a')  // push 'a'(0x61) to terminal device(0x1 - ID) and call StageChar(0x6) action
-.push_a &(0x1) &(0x6) |> @char_t(' ')  // push ' '(0x20) to terminal device(0x1 - ID) and call StageChar(0x6) action
+; set label to index in cell 0xC
+.ref_t &(0xC)
+; push to device char 'n'(0x6E)
+.push_a &(0x1) &(0x6) <| @char_t('n')
+; push to device char 'a'(0x79)
+.push_a &(0x1) &(0x6) <| @char_t('a')
+; push to device char 'y'(0x61)
+.push_a &(0x1) &(0x6) <| @char_t('y')
+; push to device char ' '(0x20)
+.push_a &(0x1) &(0x6) <| @char_t(' ')
+; push to device char '\n'(0x0A)
+.push_a &(0x1) &(0x6) <| $(0x0A)
 
-.push_a &(0x1) &(0x7) |> &(0x00)  // call PushRel(0x7) action in terminal device(0x1)
-.push_a &(0x1) &(0x3) |> &(0x00)  // call ClearStack(0x3) action in terminal device(0x1)
+; stash memory in device
+.push_a &(0x1) &(0x7) <| $(0x00)
+; clear memory in device
+.push_a &(0x1) &(0x3) <| $(0x00)
 
-.jump_t &(0xC)                     // goto label 0xC
+; jump to label by index in cell 0xC
+.jump_t &(0xC)
+
 ```
 
-🐝 Compile binary: `acc.exe -o nameOfBinary -s .\test.asm`    
-⚡️ Execute result: `vm.exe nameOfBinary.exf`    
+🐝 Compile binary: `acc.exe -o superBinary -s test.asm`    
+⚡️ Execute result: `vm.exe superBinary.exf`    
 
 👑 Complete! You're beautiful!✨ 
 
@@ -41,11 +57,12 @@ Todo: `.push_y, .push_b, .move_t, and etc`
 .halt                                             // shutdown cpu_host
 .warm                                             // up cpu_host (warm up cpu cells)
 // math instruction
-.mul &(cellID1) &(cellID2)
-.add &(cellID1) &(cellID2)
-.div &(cellID1) &(cellID2)
-.sub &(cellID1) &(cellID2)
-.pow &(cellID1) &(cellID2)
+.mul &(cellResult) &(cellValue1) &(cellValue2)
+.add &(cellResult) &(cellValue1) &(cellValue2)
+.div &(cellResult) &(cellValue1) &(cellValue2)
+.sub &(cellResult) &(cellValue1) &(cellValue2)
+.pow &(cellResult) &(cellValue1) &(cellValue2)
+.sqrt &(cellResult) &(cellValue)
 
 .push_j &($device_id) &(action_id) <| @string_t("test string") // transform instruction, casted to array push_a
 ```
