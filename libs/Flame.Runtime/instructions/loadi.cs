@@ -2,10 +2,10 @@
 {
     public class loadi : Instruction
     {
-        private readonly ushort _index;
-        private readonly ushort _value;
+        internal readonly short _index;
+        internal readonly short _value;
 
-        public loadi(ushort index, ushort value) : base(InsID.loadi)
+        public loadi(short index, short value) : base(InsID.loadi)
         {
             _index = index;
             _value = value;
