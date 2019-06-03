@@ -2,7 +2,7 @@
 {
     public class ref_t : Instruction
     {
-        private readonly short _cell;
+        internal readonly short _cell;
 
         public ref_t(short cell) : base(InsID.ref_t) => _cell = cell;
 

@@ -1,10 +1,9 @@
 ﻿namespace flame.runtime
 {
     public class swap : Instruction
-
     {
-        private readonly short _index1;
-        private readonly short _index2;
+        internal readonly short _index1;
+        internal readonly short _index2;
 
         public swap(short index1, short index2) : base(InsID.swap)
         {

@@ -6,9 +6,9 @@
 
     public class push_a : Instruction
     {
-        private readonly short _addressBus;
-        private readonly short _addressDev;
-        private readonly short _value;
+        internal readonly short _addressBus;
+        internal readonly short _addressDev;
+        internal readonly short _value;
 
         public push_a(short addressBus, short addressDev, short value) : base(InsID.push_a)
         {
