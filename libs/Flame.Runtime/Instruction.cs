@@ -38,11 +38,10 @@
                     null;
                 static T Activate<T>(Type t, object[] args) where T : class
                 {
-                    Console.WriteLine(args.Length);
                     var @params = t.GetConstructors().First().GetParameters();
                     if (!@params.Any() || !args.Any())
                         return Activator.CreateInstance(t) as T;
-                    if(args.Length == @params.Length)
+                    if (args.Length == @params.Length)
                         return Activator.CreateInstance(t, args, null) as T;
                     return default;
                 }

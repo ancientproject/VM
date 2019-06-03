@@ -17,7 +17,5 @@
             var u2 = (_value & 0xF);
             return (ulong)((OPCode << 24) | (_index << 20) | (0 << 16) | (0 << 12) | (u1 << 8) | (u2 << 4) | 0);
         }
-
-        
     }
 }
