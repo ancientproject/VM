@@ -8,7 +8,7 @@ namespace flame.runtime.compiler.test
     public class InstructionTest
     {
         [Theory]
-        [InlineData(".push_j &(0x0) &(0xC) <<@ @string_t(\"test\")")]
+        [InlineData(".push_j &(0x0) &(0xC) <| @string_t(\"test\")")]
         public void PushJ(string code)
         {
             var result = SyntaxStorage.PushJ.End().Parse(code);
@@ -21,8 +21,8 @@ namespace flame.runtime.compiler.test
         }
 
         [Theory]
-        [InlineData(".push_a &(0x0) &(0xC) @>> $(0xFF)")]
-        [InlineData(".push_a &(0x0) &(0xC) @>> @char_t('ÿ')")]
+        [InlineData(".push_a &(0x0) &(0xC) |> $(0xFF)")]
+        [InlineData(".push_a &(0x0) &(0xC) |> @char_t('ÿ')")]
         public void PushA(string code)
         {
             var result = SyntaxStorage.PushA.End().Parse(code) as InstructionExpression;
@@ -37,7 +37,7 @@ namespace flame.runtime.compiler.test
             else Assert.True(false);
         }
         [Theory]
-        [InlineData(".loadi &(0x0) $(0xF)")]
+        [InlineData(".loadi &(0x0) <| $(0xF)")]
         public void LoadI(string code)
         {
             var result = SyntaxStorage.LoadI.End().Parse(code) as InstructionExpression;
