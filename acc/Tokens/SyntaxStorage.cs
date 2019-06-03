@@ -12,8 +12,8 @@
         internal static readonly Dictionary<string, OperatorKind> Operators = new Dictionary<string, OperatorKind>
         {
             ["."] = OperatorKind.Dot,
-            ["@>>"] = OperatorKind.PipeLeft,
-            ["<<@"] = OperatorKind.PipeRight,
+            ["|>"] = OperatorKind.PipeLeft,
+            ["<|"] = OperatorKind.PipeRight,
             ["&"] = OperatorKind.Ref,
             ["$"] = OperatorKind.Value,
             ["^"] = OperatorKind.AltRef,
@@ -23,27 +23,34 @@
 
         public static Parser<IInputToken[]> InstructionParser => (
                 from many in
-                    SwapToken
-
+                    CommentToken
+                        // base instruction token
                         .Or(JumpT)
+                        .Or(SwapToken)
                         .Or(RefT)
                         .Or(PushA).Or(PushD).Or(PushX)
                         .Or(LoadI)
-
+                        // empty instruction token
                         .Or(ByIIDToken(InsID.halt))
                         .Or(ByIIDToken(InsID.warm))
-
+                        // math instruction token
                         .Or(MathInstruction(InsID.add))
                         .Or(MathInstruction(InsID.mul))
                         .Or(MathInstruction(InsID.sub))
                         .Or(MathInstruction(InsID.div))
                         .Or(MathInstruction(InsID.pow))
-
+                        .Or(SqrtToken)
+                        // tramsformation instruction token
                         .Or(PushJ)
-
                 select many)
             .ContinueMany()
             .Select(x => x.ToArray());
+
+        public static Parser<CommentToken> CommentToken =
+            (from comment in new CommentParser(";",null, null, "\n").SingleLineComment
+                select new CommentToken(comment))
+            .Token()
+            .Named("comment token");
 
         public static Parser<char> CharToken =
             (from _1 in Parse.Char('\'')
@@ -69,12 +76,12 @@
 
         #region Operator tokens
         public static Parser<OperatorKind> PipeLeft =>
-            (from _ in Parse.String("@>>")
+            (from _ in Parse.String("|>")
                 select OperatorKind.PipeLeft)
             .Token()
             .NamedOperator(OperatorKind.PipeLeft);
         public static Parser<OperatorKind> PipeRight =>
-            (from _ in Parse.String("<<@")
+            (from _ in Parse.String("<|")
                 select OperatorKind.PipeRight)
             .Token()
             .NamedOperator(OperatorKind.PipeRight);
@@ -98,10 +105,10 @@
             .Named("value_token");
         public static Parser<short> CastCharToken =
             (from refSym in Parse.String("@char_t")
-             from openParen in Parse.Char('(')
-                from @char in CharToken
-             from closeParen in Parse.Char(')')
-                select (short)@char)
+                 from openParen in Parse.Char('(')
+                 from @char in CharToken
+                 from closeParen in Parse.Char(')')
+                 select (short)@char)
             .Token()
             .Named("char_t expression");
         public static Parser<string> CastStringToken =
@@ -118,6 +125,7 @@
             (from dword in InstructionToken(InsID.loadi)
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
+                from pipe in PipeRight
                 from cell2 in ValueToken
                 select new InstructionExpression(new loadi(cell1.Cell, cell2.Cell)))
             .Token()
@@ -145,7 +153,7 @@
             (from dword in InstructionToken(InsID.push_a)
                 from cell1 in RefToken
                 from cell2 in RefToken
-                from op2 in PipeLeft
+                from op2 in PipeRight
                 from cell3 in ValueToken.Or(CastCharToken.Select(x => new RefExpression(x)))
              select new InstructionExpression(new push_a(cell1.Cell, cell2.Cell, cell3.Cell)))
             .Token()
@@ -181,12 +189,22 @@
 
         public static Parser<IInputToken> MathInstruction(InsID id) => (
                 from dword in InstructionToken(id)
+                from cell0 in RefToken
                 from cell1 in RefToken
                 from cell2 in RefToken
-                select new InstructionExpression(Instruction.Summon(id, (ushort)cell1.Cell, (ushort)cell2.Cell)))
+                select new InstructionExpression(Instruction.Summon(id, cell0.Cell, cell1.Cell, cell2.Cell)))
             .Token()
             .WithPosition()
             .Named($"{id} expression");
+
+        public static Parser<IInputToken> SqrtToken => (
+                from dword in InstructionToken(InsID.sqrt)
+                from cell0 in RefToken
+                from cell1 in RefToken
+                select new InstructionExpression(Instruction.Summon(InsID.sqrt, cell0.Cell, cell1.Cell)))
+            .Token()
+            .WithPosition()
+            .Named($"sqrt expression");
         #endregion
         #region etc tokens
         public static Parser<string> InstructionToken(InsID instruction) =>
@@ -219,17 +237,10 @@
 
     }
 
-    public class TransformationContext : IInputToken
+    public class CommentToken : IInputToken
     {
-        public Instruction[] Instructions { get; set; }
+        public readonly string _comment;
         public Position InputPosition { get; set; }
-    }
-
-    public class TransformPushJ : TransformationContext
-    {
-        public TransformPushJ(string value, short cellDev, short ActionDev)
-        {
-            Instructions = value.Select(x => new push_a(cellDev, ActionDev, (short) x)).Cast<Instruction>().ToArray();
-        }
+        public CommentToken(string comment) => _comment = comment;
     }
 }
