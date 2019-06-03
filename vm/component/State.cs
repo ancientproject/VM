@@ -46,19 +46,12 @@
         public string pX = "";
         public void Eval()
         {
-            switch (instructionID)
+            if (instructionID == 0xA)
             {
-                case 0xA:
-                    WriteLine($"r r r u u x");
-                    WriteLine($"1 2 3 1 2 1");
-                    WriteLine($"{r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X}");
-                    return;
-                default:
-                    WriteLine($"");
-                    break;
+                WriteLine($"r r r u u x");
+                WriteLine($"1 2 3 1 2 1");
+                WriteLine($"{r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X}");
             }
-
-            WriteLine($"{instructionID.getInstruction()}");
 
             switch (instructionID)
             {
@@ -126,17 +119,8 @@
             }
             prev = r1;
         }
-
-        public void Print()
-        {
-            //WriteLine($"*0x{instructionID:X4} :0x{r1:X4} :0x{r2:X4} :0x{r3:X4} &0x{u1:X4} &0x{u2:X4} %0x{x1:X4}");
-        }
-
-        public void WriteLine(string s) => Title += s;
-
         public void Accept(ulong mem)
         {
-            Title = $"fetch page {mem:x8} - ";
             instructionID = (ushort)((mem & 0xF000000) >> 24);
             r1 = (ushort)((mem & 0xF00000) >> 20);
             r2 = (ushort)((mem & 0xF0000) >> 16);
@@ -144,11 +128,6 @@
             u1 = (ushort)((mem & 0xF00) >> 8);
             u2 = (ushort)((mem & 0xF0) >> 4);
             x1 = (ushort)(mem & 0xF);
-        }
-
-        public ulong Degrade()
-        {
-            return (ulong)((instructionID << 24) | (r1 << 20) | (r2 << 16) | (r3 << 12) | (u1 << 8) | (u2 << 4) | x1);
         }
     }
 }
