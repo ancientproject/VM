@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Yuuki Wesp</Authors>
-    <AssemblyVersion>0.4.0.603</AssemblyVersion>
+    <AssemblyVersion>0.4.12.603</AssemblyVersion>
     <Version>0.4.0</Version>
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

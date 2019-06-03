@@ -71,6 +71,8 @@
         mul,
         [OpCode(0x7)]
         pow,
+        [OpCode(0x7)]
+        sqrt,
         [OpCode(0xF)]
         push_a,
         [OpCode(0xF)]
