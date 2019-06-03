@@ -1,21 +1,19 @@
 ﻿namespace flame.compiler
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Text;
     using emit;
     using Fclp;
-    using GEmojiSharp;
     using runtime;
     using Sprache;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
     using tokens;
-    using static TrueColorConsole.VTConsole;
     using static _term;
+    using static TrueColorConsole.VTConsole;
     internal class Program
     {
         public static void Main(string[] c_args)
@@ -34,7 +32,8 @@
             CursorSetVisibility(false);
             CursorSetBlinking(false);
 
-            WriteLine($"Flame Assembler Compiler version 0.0.0.0 (default)", Color.Gray);
+            var ver = FileVersionInfo.GetVersionInfo(typeof(Program).Assembly.Location).ProductVersion;
+            WriteLine($"Flame Assembler Compiler version {ver} (default)", Color.Gray);
             WriteLine($"Copyright (C) Yuuki Wesp.\n\n", Color.Gray);
 
             if (!args.sourceFiles.Any())
@@ -69,9 +68,9 @@
                     var bytes = BitConverter.GetBytes(value);
                     mem.Write(bytes);
                     var str =
-                        $"0x{value:X7} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X8}";
+                        $"0x{value:X7} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X4}";
                     map.AppendLine(str);
-                    Trace(str);
+                    Trace($"Compile {str}");
                 }
 
                 switch (expression)
@@ -88,6 +87,9 @@
                     case ErrorToken error:
                         Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
                         return;
+                    case CommentToken comment:
+                        // ignore
+                        break;
                     default:
                         Warn(Warning.IgnoredToken, $"Ignored {expression} at {expression.InputPosition}");
                         break;

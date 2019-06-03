@@ -14,7 +14,7 @@
     <StartupObject>flame.compiler.Program</StartupObject>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <LangVersion>preview</LangVersion>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <AssemblyVersion>0.0.17.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,12 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\libs\Flame.Runtime\Flame.Runtime.csproj" />
     <ProjectReference Include="..\libs\truecolor\TrueColorConsole\TrueColorConsole.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="test.asm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
