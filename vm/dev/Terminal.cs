@@ -29,6 +29,29 @@
         [ActionAddress(0x8)]
         public void ClearRel() => relMemory = "";
 
+        [ActionAddress(0x9)]
+        public void Setting(char c)
+        {
+            var u1 = ((short)c & 0xF0) >> 4;
+            var u2 = (short)c & 0xF;
+
+            switch (u1)
+            {
+                case 0x1:
+                    ForegroundColor = (ConsoleColor)u2;
+                    break;
+                case 0x2:
+                    BackgroundColor = (ConsoleColor)u2;
+                    break;
+                case 0x3:
+                    ForegroundColor = ConsoleColor.White;
+                    break;
+                case 0x4:
+                    BackgroundColor = ConsoleColor.Black;
+                    break;
+            }
+        }
+
         public void write(int address, int data) => (this as IDevice).WriteMemory(address, data);
 
         public int read(int address) => throw new NotImplementedException();
