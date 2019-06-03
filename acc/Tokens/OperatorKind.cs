@@ -8,6 +8,7 @@
         Ref,
         AltRef,
         OpenParen,
-        CloseParen
+        CloseParen,
+        Value
     }
 }
