@@ -8,11 +8,24 @@ namespace flame.runtime.compiler.test
     public class InstructionTest
     {
         [Theory]
+        [InlineData(".push_j &(0x0) &(0xC) <<@ @string_t(\"test\")")]
+        public void PushJ(string code)
+        {
+            var result = SyntaxStorage.PushJ.End().Parse(code);
+
+            if (result is TransformationContext i)
+            {
+                Assert.Equal(4, i.Instructions.Length);
+            }
+            else Assert.True(false);
+        }
+
+        [Theory]
         [InlineData(".push_a &(0x0) &(0xC) @>> $(0xFF)")]
         [InlineData(".push_a &(0x0) &(0xC) @>> @char_t('ÿ')")]
         public void PushA(string code)
         {
-            var result = SyntaxStorage.PushA.End().Parse(code);
+            var result = SyntaxStorage.PushA.End().Parse(code) as InstructionExpression;
 
             if (result.Instruction is push_a i)
             {
@@ -27,7 +40,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".loadi &(0x0) $(0xF)")]
         public void LoadI(string code)
         {
-            var result = SyntaxStorage.LoadI.End().Parse(code);
+            var result = SyntaxStorage.LoadI.End().Parse(code) as InstructionExpression;
 
             if (result.Instruction is loadi i)
             {
@@ -41,7 +54,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".jump_t &(0x0)")]
         public void JumpT(string code)
         {
-            var result = SyntaxStorage.JumpT.End().Parse(code);
+            var result = SyntaxStorage.JumpT.End().Parse(code) as InstructionExpression;
 
             if (result.Instruction is jump_t i)
             {
@@ -54,7 +67,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".ref_t &(0x0)")]
         public void RefT(string code)
         {
-            var result = SyntaxStorage.RefT.End().Parse(code);
+            var result = SyntaxStorage.RefT.End().Parse(code) as InstructionExpression;
 
             if (result.Instruction is ref_t i)
             {
@@ -67,7 +80,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".swap &(0x0) &(0xF)")]
         public void Swap(string code)
         {
-            var result = SyntaxStorage.SwapToken.End().Parse(code);
+            var result = SyntaxStorage.SwapToken.End().Parse(code) as InstructionExpression;
 
             if (result.Instruction is swap i)
             {

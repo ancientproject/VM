@@ -62,9 +62,8 @@
             var offset = 0;
             foreach (var expression in @try)
             {
-                if (expression is InstructionExpression iExp)
+                void CompileToken(Instruction token)
                 {
-                    var token = iExp.Instruction;
                     offset++;
                     var value = (uint)token.Assembly();
                     var bytes = BitConverter.GetBytes(value);
@@ -74,10 +73,24 @@
                     map.AppendLine(str);
                     Trace(str);
                 }
-                if (expression is ErrorToken error)
+
+                switch (expression)
                 {
-                    Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
-                    return;
+                    case InstructionExpression iExp:
+                        CompileToken(iExp.Instruction);
+                        break;
+                    case TransformationContext ctx:
+                    {
+                        foreach (var ins in ctx.Instructions)
+                            CompileToken(ins);
+                        break;
+                    }
+                    case ErrorToken error:
+                        Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
+                        return;
+                    default:
+                        Warn(Warning.IgnoredToken, $"Ignored {expression} at {expression.InputPosition}");
+                        break;
                 }
             }
             File.WriteAllBytes($"{args.OutFile}.exf", mem.ToArray());
