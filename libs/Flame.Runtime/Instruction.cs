@@ -21,7 +21,7 @@
         public static implicit operator uint(Instruction i) => (uint)i.Assembly();
 
 
-        public static Instruction Summon(InsID id)
+        public static Instruction Summon(InsID id, params object[] args)
         {
             var currentAsm = typeof(Instruction).Assembly;
             var classes =
@@ -38,11 +38,16 @@
                     null;
                 static T Activate<T>(Type t, object[] args) where T : class
                 {
-                    if (t.GetConstructors().First().GetParameters().Any())
+                    Console.WriteLine(args.Length);
+                    var @params = t.GetConstructors().First().GetParameters();
+                    if (!@params.Any() || !args.Any())
+                        return Activator.CreateInstance(t) as T;
+                    if(args.Length == @params.Length)
                         return Activator.CreateInstance(t, args, null) as T;
-                    return Activator.CreateInstance(t) as T;
+                    return default;
                 }
-                var args = @class.GetConstructors().First().GetParameters().Select(@default).ToArray();
+                if(!args.Any())
+                    args = @class.GetConstructors().First().GetParameters().Select(@default).ToArray();
                 var inst = Activate<Instruction>(@class, args);
                 if (inst is { } block && block.ID == id)
                     return inst;
