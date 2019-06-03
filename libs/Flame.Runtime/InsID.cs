@@ -75,6 +75,8 @@
         push_a,
         [OpCode(0xF)]
         push_d,
+        [OpCode(0xF)]
+        push_x,
         [OpCode(0x3)]
         swap,
 
@@ -84,6 +86,8 @@
         jump_t,
 
         mov_d, // todo
+
+        push_j,
 
         [OpCode(0xD)]
         halt
