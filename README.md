@@ -15,13 +15,15 @@
 ; set label to index in cell 0xC
 .ref_t &(0xC)
 ; push to device char 'n'(0x6E)
-.push_a &(0x1) &(0x6) <| $(0x6E)
+.push_a &(0x1) &(0x6) <| @char_t('n')
 ; push to device char 'a'(0x79)
-.push_a &(0x1) &(0x6) <| $(0x79)
+.push_a &(0x1) &(0x6) <| @char_t('a')
 ; push to device char 'y'(0x61)
-.push_a &(0x1) &(0x6) <| $(0x61)
+.push_a &(0x1) &(0x6) <| @char_t('y')
 ; push to device char ' '(0x20)
-.push_a &(0x1) &(0x6) <| $(0x20)
+.push_a &(0x1) &(0x6) <| @char_t(' ')
+; push to device char '\n'(0x0A)
+.push_a &(0x1) &(0x6) <| $(0x0A)
 
 ; stash memory in device
 .push_a &(0x1) &(0x7) <| $(0x00)
@@ -55,11 +57,12 @@ Todo: `.push_y, .push_b, .move_t, and etc`
 .halt                                             // shutdown cpu_host
 .warm                                             // up cpu_host (warm up cpu cells)
 // math instruction
-.mul &(cellID1) &(cellID2)
-.add &(cellID1) &(cellID2)
-.div &(cellID1) &(cellID2)
-.sub &(cellID1) &(cellID2)
-.pow &(cellID1) &(cellID2)
+.mul &(cellResult) &(cellValue1) &(cellValue2)
+.add &(cellResult) &(cellValue1) &(cellValue2)
+.div &(cellResult) &(cellValue1) &(cellValue2)
+.sub &(cellResult) &(cellValue1) &(cellValue2)
+.pow &(cellResult) &(cellValue1) &(cellValue2)
+.sqrt &(cellResult) &(cellValue)
 
 .push_j &($device_id) &(action_id) <| @string_t("test string") // transform instruction, casted to array push_a
 ```
