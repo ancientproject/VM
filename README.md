@@ -9,23 +9,32 @@
 
 🌧 Download lates release
 
-File 'test.asm'
+💥 Save it to file 'test.asm'
 ```asm
 
-.ref_t &(0xC)                          // label set at 0xC
-.push_a &(0x1) &(0x6) |> &(0x6E)       // push 'n'(0x6E) to terminal device(0x1 - ID) and call StageChar(0x6) action
-.push_a &(0x1) &(0x6) |> &(0x79)       // push 'y'(0x79) to terminal device(0x1 - ID) and call StageChar(0x6) action
-.push_a &(0x1) &(0x6) |> @char_t('a')  // push 'a'(0x61) to terminal device(0x1 - ID) and call StageChar(0x6) action
-.push_a &(0x1) &(0x6) |> @char_t(' ')  // push ' '(0x20) to terminal device(0x1 - ID) and call StageChar(0x6) action
+; set label to index in cell 0xC
+.ref_t &(0xC)
+; push to device char 'n'(0x6E)
+.push_a &(0x1) &(0x6) <| $(0x6E)
+; push to device char 'a'(0x79)
+.push_a &(0x1) &(0x6) <| $(0x79)
+; push to device char 'y'(0x61)
+.push_a &(0x1) &(0x6) <| $(0x61)
+; push to device char ' '(0x20)
+.push_a &(0x1) &(0x6) <| $(0x20)
 
-.push_a &(0x1) &(0x7) |> &(0x00)  // call PushRel(0x7) action in terminal device(0x1)
-.push_a &(0x1) &(0x3) |> &(0x00)  // call ClearStack(0x3) action in terminal device(0x1)
+; stash memory in device
+.push_a &(0x1) &(0x7) <| $(0x00)
+; clear memory in device
+.push_a &(0x1) &(0x3) <| $(0x00)
 
-.jump_t &(0xC)                     // goto label 0xC
+; jump to label by index in cell 0xC
+.jump_t &(0xC)
+
 ```
 
-🐝 Compile binary: `acc.exe -o nameOfBinary -s .\test.asm`    
-⚡️ Execute result: `vm.exe nameOfBinary.exf`    
+🐝 Compile binary: `acc.exe -o superBinary -s test.asm`    
+⚡️ Execute result: `vm.exe superBinary.exf`    
 
 👑 Complete! You're beautiful!✨ 
 
