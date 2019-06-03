@@ -7,7 +7,6 @@
 
 
 ; print info
-
 .push_j &(0x1) &(0x6) <| @string_t("Vector values:")
 .push_a &(0x1) &(0x6) <| $(0x0A)
 
