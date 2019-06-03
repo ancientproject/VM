@@ -12,7 +12,8 @@
         CouldNotWrite = 3,
         OutFileNotSpecified = 4,
         SourceFileNotFound = 5,
-        UnexpectedToken = 6
+        UnexpectedToken = 6,
+        IgnoredToken
     }
     public static class WarningEx
     {
