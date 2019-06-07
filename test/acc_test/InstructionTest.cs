@@ -17,8 +17,8 @@ namespace flame.runtime.compiler.test
         }
 
         [Theory]
-        [InlineData(".push_a &(0x0) &(0xC) |> $(0xFF)")]
-        [InlineData(".push_a &(0x0) &(0xC) |> @char_t('ÿ')")]
+        [InlineData(".push_a &(0x0) &(0xC) <| $(0xFF)")]
+        [InlineData(".push_a &(0x0) &(0xC) <| @char_t('ÿ')")]
         public void PushA(string code)
         {
             var result = SyntaxStorage.PushA.End().Parse(code);
