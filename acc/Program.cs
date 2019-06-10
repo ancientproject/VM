@@ -11,6 +11,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using runtime.emit;
     using tokens;
     using static _term;
     using static TrueColorConsole.VTConsole;
@@ -35,6 +36,10 @@
             var ver = FileVersionInfo.GetVersionInfo(typeof(Program).Assembly.Location).ProductVersion;
             WriteLine($"Flame Assembler Compiler version {ver} (default)", Color.Gray);
             WriteLine($"Copyright (C) Yuuki Wesp.\n\n", Color.Gray);
+
+            var d = new DynamicAssembly("test", new (string key, string value)[1]{("C", "Yuuki Wesp")});
+            File.WriteAllBytes("test.dlx", d.GetBytes());
+            var dlx = FlameAssembly.LoadFrom("test.dlx");
 
             if (!args.sourceFiles.Any())
             {

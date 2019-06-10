@@ -14,7 +14,7 @@
     <StartupObject>flame.compiler.Program</StartupObject>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <LangVersion>preview</LangVersion>
-    <AssemblyVersion>0.0.17.0</AssemblyVersion>
+    <AssemblyVersion>0.0.19.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

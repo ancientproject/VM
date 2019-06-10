@@ -1,10 +1,12 @@
 ﻿namespace flame.runtime
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
-    // ReSharper disable VariableHidesOuterVariable
-    public abstract class Instruction
+    using emit;
+    [DebuggerDisplay("{ToString()}")]
+    public abstract class Instruction : OpCode
     {
         public InsID ID { get; }
         public short OPCode { get; }
@@ -17,8 +19,14 @@
 
         public abstract ulong Assembly();
 
+
+
         public static implicit operator ulong(Instruction i) => i.Assembly();
         public static implicit operator uint(Instruction i) => (uint)i.Assembly();
+
+
+        public override byte[] GetBodyILBytes() => BitConverter.GetBytes(Assembly());
+        public override string ToString() => $"{ID} [{string.Join(" ", GetBodyILBytes().Select(x => x.ToString("X2")))}]";
 
 
         public static Instruction Summon(InsID id, params object[] args)

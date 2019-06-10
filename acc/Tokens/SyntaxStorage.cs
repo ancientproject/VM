@@ -53,12 +53,25 @@
             .Named("comment token");
 
         public static Parser<char> CharToken =
-            (from _1 in Parse.Char('\'')
+               (from _1 in Parse.Char('\'')
                 from @char in Parse.AnyChar
                 from _2 in Parse.Char('\'')
              select @char)
             .Token()
             .Named("char token");
+
+        public static Parser<string> IdentifierToken =
+            (from word in Parse.AnyChar.Except(Parse.Char(' ')).Many().Text()
+            select word)
+            .Token()
+            .Named("identifier token");
+
+        public static Parser<string> Keyword(string keyword) =>
+            (from word in Parse.String(keyword).Text()
+                select word)
+            .Token()
+            .Named($"keyword {keyword} token");
+
         public static Parser<string> StringToken =
                (from open in Parse.Char('"')
                 from @string in Parse.AnyChar.Except(Parse.Char('"')).Many().Text()
@@ -232,9 +245,25 @@
             .Token()
             .WithPosition()
             .Named("push_j transform expression");
-
+        public static Parser<IInputToken> Label => (
+                from dword in InstructionToken(InsID.label)
+                from nameOfLabel in IdentifierToken
+                from auto in Keyword("auto").Optional()
+                from id in RefToken.Optional()
+                select new LabelTransform(nameOfLabel, auto.IsDefined, id.GetOrDefault()?.Cell))
+            .Token()
+            .WithPosition()
+            .Named("label transform expression");
         #endregion
 
+    }
+    
+    public class LabelTransform : TransformationContext
+    {
+        public LabelTransform(string name, bool isAuto, short? cell_id)
+        {
+            Instructions = name.Select((v, i) => new label(v, isAuto, i == name.Length, cell_id)).Cast<Instruction>().ToArray();
+        }
     }
 
     public class CommentToken : IInputToken

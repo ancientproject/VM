@@ -6,8 +6,14 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class OpCodeAttribute : Attribute
     {
+        private readonly bool _isIgnore;
         public readonly short OpCode;
         public OpCodeAttribute(short op) => OpCode = op;
+        public OpCodeAttribute(bool isIgnore)
+        {
+            _isIgnore = isIgnore;
+            OpCode = short.MinValue;
+        }
     }
 
     public static class InsIDEx
@@ -87,9 +93,12 @@
         [OpCode(0x8)]
         jump_t,
 
+        [OpCode(true)]
         mov_d, // todo
-
+        [OpCode(true)]
         push_j,
+        [OpCode(0x9)]
+        label,
 
         [OpCode(0xD)]
         halt
