@@ -35,7 +35,7 @@
                 throw new InvalidOperationException("Invalid state for current assembly.");
             var header = Encoding.UTF32.GetBytes(JsonConvert.SerializeObject(new { Name, Metadata }));
             var list = new List<byte>();
-            var headerLen = 0l;
+            var headerLen = 0L;
             using var outMemory = new MemoryStream();
             if (Tag.Sign == AssemblyTag.SignType.Signed)
             {
