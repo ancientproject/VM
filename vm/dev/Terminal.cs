@@ -4,10 +4,10 @@
     using System.Threading.Tasks;
     using Internal;
     using static System.Console;
-    public class Terminal : IDevice
+    public class Terminal : IDevice, IComparable
     {
         [StringAddress(0xE, 0xF)]
-        public string Name { get; } = "Term228";
+        public string Name { get; } = "8bit-terminal";
 
         public Terminal(short startAddr) => StartAddress = startAddr;
 
@@ -61,5 +61,8 @@
 
         [ActionAddress(0x4)]
         public void Shutdown() => relMemory = null;
+
+        public override int GetHashCode() => StartAddress ^ 42;
+        public int CompareTo(object obj) => 1;
     }
 }
