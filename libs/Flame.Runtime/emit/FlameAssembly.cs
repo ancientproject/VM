@@ -16,28 +16,38 @@
         public List<(string key, string value)> Metadata { get; protected set; }
         protected byte[] ILCode { get; set; }
 
+        public AssemblyTag Tag { get; protected set; } = new AssemblyTag(AssemblyTag.SignType.UnSecurity, AssemblyTag.ArchType.Any, 1);
+
         public static FlameAssembly Load(byte[] bytes)
         {
             using var mem = new MemoryStream(bytes);
 
-            var type = mem.ReadBytes(sizeof(long));
-            if (type[0] != 'E' && type[1] != 'F' && type[2] != 'V')
+            var raw = Encoding.ASCII.GetString(mem.ReadBytes(10));
+            if (raw[0] != 'E' && raw[1] != 'F')
                 throw new BadImageFormatException();
+            if(!AssemblyTag.IsTag(raw))
+                throw new BadImageFormatException();
+            var tag = AssemblyTag.Parse(raw);
+            mem.ReadBytes(1); // read '\n'
             mem.ReadBytes(1); // read '\n'
             var headerLen = BitConverter.ToInt64(mem.ReadBytes(sizeof(long)), 0);
+            using var outMemory = new MemoryStream();
+            if (tag.Sign == AssemblyTag.SignType.Signed)
+            {
+                using var sig = new AssemblySigner(SymmetricAlgorithm.Create("Rijndael"), HashAlgorithm.Create("MD5"));
+                using var inMemory = new MemoryStream(mem.ReadBytes((int) headerLen));
+                
+                var pass = new SecureString();
+                Array.ForEach("flame-asm".ToArray(), pass.AppendChar);
+                pass.MakeReadOnly();
+                sig.SetPassword(pass);
+                sig.DecryptStream(inMemory, outMemory, default);
+            }
+            else
+                outMemory.Write(mem.ReadBytes((int) headerLen), 0, (int)headerLen);
 
-            //using var sig = new AssemblySigner(SymmetricAlgorithm.Create("DES"), HashAlgorithm.Create("MD5"));
-            //using var inMemory = new MemoryStream(mem.ReadBytes((int) headerLen));
-            //using var outMemory = new MemoryStream();
-
-            //var pass = new SecureString();
-            //Array.ForEach("flame-asm".ToArray(), pass.AppendChar);
-            //pass.MakeReadOnly();
-            //sig.SetPassword(pass);
-
-            //sig.DecryptStream(inMemory, outMemory, default);
-            (string key, string value)[] Metadata = new []{("", "")};
-            dynamic header = JsonConvert.DeserializeObject(Encoding.UTF32.GetString(mem.ReadBytes((int) headerLen)), new{Name = "", Metadata}.GetType());
+            (string key, string value)[] Metadata = { ("", "") };
+            dynamic header = JsonConvert.DeserializeObject(Encoding.UTF32.GetString(outMemory.ToArray()), new{Name = "", Metadata}.GetType());
            
             mem.ReadBytes(1); // read '\n'
 
@@ -47,8 +57,9 @@
             var asm = new FlameAssembly
             {
                 ILCode = body,
-                Metadata = header.Metadata, 
-                Name = header.Name
+                Metadata = new List<(string key, string value)>(header.Metadata), 
+                Name = header.Name,
+                Tag = tag
             };
 
 

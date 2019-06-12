@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Security;
     using System.Security.Cryptography;
@@ -92,8 +93,11 @@
                 BytePassword = new byte[Password.Length * 2];
                 Marshal.Copy(UnmanagedDecipherPassword, BytePassword, 0, BytePassword.Length);
                 Console.WriteLine(Convert.ToBase64String(keyHashAlgorithm.ComputeHash(BytePassword)));
-                cryptAlgorithm.Key = keyHashAlgorithm.ComputeHash(BytePassword);
-                cryptAlgorithm.GenerateIV();
+                var key = new Rfc2898DeriveBytes(BytePassword, BytePassword, 1);
+                cryptAlgorithm.Key = key.GetBytes(cryptAlgorithm.KeySize / 8);
+                cryptAlgorithm.IV = key.GetBytes(cryptAlgorithm.BlockSize / 8);
+                cryptAlgorithm.Padding = PaddingMode.Zeros;
+                
             }
             finally
             {
@@ -124,7 +128,6 @@
             
             OutputStream.Write(Encoding.ASCII.GetBytes("FLX"), 0, 3);
             OutputStream.Write(BitConverter.GetBytes(InputStream.Length), 0, sizeof(long));
-            OutputStream.Write(cryptAlgorithm.IV, 0, cryptAlgorithm.BlockSize / 8 );
                 
             InputStream.Position = 0;
             var DataBuffer = new byte[MaxBufferSizeValue];
@@ -156,15 +159,13 @@
             var MaxBufferSizeValue = bufferCoefficient * ConstBufferCoefficient;
  
             var OriginFileLengthArray = new byte[sizeof(long)];
-            var IV = new byte[cryptAlgorithm.BlockSize / 8];
  
             InputStream.Seek(3, SeekOrigin.Begin);
             InputStream.Read(OriginFileLengthArray, 0, sizeof(long));
-            InputStream.Read(IV, 0, cryptAlgorithm.BlockSize / 8);
  
             var DeltaLength = InputStream.Length - HeadSize - cryptAlgorithm.BlockSize / 8 - BitConverter.ToInt64(OriginFileLengthArray, 0);
 
-            using var decryptor = cryptAlgorithm.CreateDecryptor(cryptAlgorithm.Key, IV);
+            using var decryptor = cryptAlgorithm.CreateDecryptor(cryptAlgorithm.Key, cryptAlgorithm.IV);
             var csEncrypt = new CryptoStream(InputStream, decryptor, CryptoStreamMode.Read);
  
             var DataBuffer = new byte[MaxBufferSizeValue];
