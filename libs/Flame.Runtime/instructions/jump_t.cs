@@ -2,11 +2,10 @@
 {
     public class jump_t : Instruction
     {
-        internal readonly short _cell;
+        internal readonly byte _cell;
 
-        public jump_t(short cell) : base(InsID.jump_t) => _cell = cell;
+        public jump_t(byte cell) : base(InsID.jump_t) => _cell = cell;
 
-        public override ulong Assembly()
-            => (ulong)((OPCode << 24) | (_cell << 20) | (0 << 16) | (0 << 12) | (0 << 8) | (0xF << 4) | 0);
+        protected override void OnCompile() => SetRegisters(_cell);
     }
 }

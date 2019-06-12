@@ -6,9 +6,10 @@
         {
         }
 
-        public override ulong Assembly()
+
+        protected override void OnCompile()
         {
-            return 0;
+            throw new System.NotImplementedException();
         }
     }
 }
