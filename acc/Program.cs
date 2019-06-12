@@ -1,10 +1,10 @@
 ﻿namespace flame.compiler
 {
+    using System;
     using emit;
     using Fclp;
     using runtime;
     using Sprache;
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
@@ -37,9 +37,12 @@
             WriteLine($"Flame Assembler Compiler version {ver} (default)", Color.Gray);
             WriteLine($"Copyright (C) Yuuki Wesp.\n\n", Color.Gray);
 
-            var d = new DynamicAssembly("test", new (string key, string value)[1]{("C", "Yuuki Wesp")});
-            File.WriteAllBytes("test.dlx", d.GetBytes());
-            var dlx = FlameAssembly.LoadFrom("test.dlx");
+            var dyn = new DynamicAssembly("test.dlx", ("C", "Yuuki Wesp"));
+            dyn.EnableSign();
+            dyn.GetGenerator().Emit(new loadi(1, 55),new loadi(2, 77),new halt());
+            File.WriteAllBytes("test.dlx", dyn.GetBytes());
+
+            var asm2 = FlameAssembly.LoadFrom("test.dlx");
 
             if (!args.sourceFiles.Any())
             {
@@ -61,17 +64,18 @@
             var source = File.ReadAllText(args.sourceFiles.First()).Replace("\r", "");
             var @try = SyntaxStorage.InstructionParser.Parse(source);
             
-            using var mem = new MemoryStream();
             var map = new StringBuilder();
             var offset = 0;
+            var asm = new DynamicAssembly(args.OutFile, ("timestamp", $"{DateTime.UtcNow.Ticks}"));
+            var gen = asm.GetGenerator();
+
             foreach (var expression in @try)
             {
                 void CompileToken(Instruction token)
                 {
                     offset++;
+                    gen.Emit(token);
                     var value = (uint)token.Assembly();
-                    var bytes = BitConverter.GetBytes(value);
-                    mem.Write(bytes);
                     var str =
                         $"0x{value:X7} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X4}";
                     map.AppendLine(str);
@@ -100,7 +104,8 @@
                         break;
                 }
             }
-            File.WriteAllBytes($"{args.OutFile}.exf", mem.ToArray());
+            
+            File.WriteAllBytes($"{args.OutFile}.dlx", asm.GetBytes());
             File.WriteAllText($"{args.OutFile}.map", map.ToString());
         }
 

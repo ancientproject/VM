@@ -15,34 +15,42 @@
     {
         [JsonIgnore]
         private ILGen generator { get; }
+        
 
-        public DynamicAssembly(string name, IEnumerable<(string key, string value)> metadata)
+        public DynamicAssembly(string name, params (string key, string value)[] metadata)
         {
             Name = name;
             Metadata = metadata.ToList();
             generator = new ILGen(this);
         }
 
+        public void EnableSign() => Tag.Sign = AssemblyTag.SignType.Signed;
+
         public ILGen GetGenerator() => generator;
 
 
         public byte[] GetBytes()
         {
-            //if(!generator.Any())
-            //    throw new InvalidOperationException("Invalid state for current assembly.");
+            if(!generator.Any())
+                throw new InvalidOperationException("Invalid state for current assembly.");
             var header = Encoding.UTF32.GetBytes(JsonConvert.SerializeObject(new { Name, Metadata }));
             var list = new List<byte>();
+            var headerLen = 0l;
+            using var outMemory = new MemoryStream();
+            if (Tag.Sign == AssemblyTag.SignType.Signed)
+            {
+                using var sig = new AssemblySigner(SymmetricAlgorithm.Create("Rijndael"), HashAlgorithm.Create("MD5"));
+                using var inMemory = new MemoryStream(header);
+                
+                var pass = new SecureString();
+                Array.ForEach("flame-asm".ToArray(), pass.AppendChar);
+                pass.MakeReadOnly();
+                sig.SetPassword(pass);
+                headerLen = sig.EncryptStream(inMemory, outMemory, default);
+            }
+            else
+                headerLen = header.LongLength;
 
-            //using var sig = new AssemblySigner(SymmetricAlgorithm.Create("DES"), HashAlgorithm.Create("MD5"));
-            //using var inMemory = new MemoryStream(header);
-            //using var outMemory = new MemoryStream();
-
-            //var pass = new SecureString();
-            //Array.ForEach("flame-asm".ToArray(), pass.AppendChar);
-            //pass.MakeReadOnly();
-            //sig.SetPassword(pass);
-
-            var headerLen = header.LongLength;//sig.EncryptStream(inMemory, outMemory, default);
             var body = generator.Load().SelectMany(x => x.GetBodyILBytes()).ToArray(out var bodyLen);
 
             
@@ -70,13 +78,24 @@
                 }
             }
 
-            // wS 8 bytes - file type
-            push("EFV_1\0\0\0");
+            // EF0119JG00
+            // 01 - version
+            // 0 - not sign, 1 - sign
+            // 9 - any arch cpu
+            // A - 2010 year, J - 2019
+            // A - junary, G - june
+
+            // wS 10 bytes - file type
+            push(Tag.ToString());
+            push("\n"); // push 0x0A to next section
             push("\n"); // push 0x0A to next section
             // wL 8 bytes - header len
             push(headerLen);
             // wM ? bytes - header body 
-            push(header);
+            if (Tag.Sign == AssemblyTag.SignType.Signed)
+                push(outMemory);
+            else 
+                push(header);
             push("\n"); // push 0x0A to next section
             // wL 8 bytes - body code len
             push(bodyLen);
