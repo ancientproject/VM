@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using flame.runtime;
     using static System.Console;
     public unsafe class State
@@ -24,7 +25,7 @@
         /// <summary>
         /// magic cell
         /// </summary>
-        public ushort x1;
+        public ushort x1, x2;
         /// <summary>
         /// id
         /// </summary>
@@ -37,6 +38,10 @@
         /// trace flag
         /// </summary>
         public bool tc = false;
+        /// <summary>
+        /// Error flag
+        /// </summary>
+        public bool ec = true;
 
         public ulong[] regs = new ulong[16];
         public sbyte halt { get; set; } = 0;
@@ -48,15 +53,15 @@
         public uint Fetch() => program.ElementAt((int)pc++);
 
         public string pX = "";
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Eval()
         {
             if (instructionID == 0xA)
             {
-                WriteLine($"  r   r   r   u   u   x");
-                WriteLine($"  1   2   3   1   2   1");
-                WriteLine($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X}\n\n\n");
+                WriteLine($"  r   r   r   u   u   x   x");
+                WriteLine($"  1   2   3   1   2   1   2");
+                WriteLine($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             }
-
             switch (instructionID)
             {
                 case 0x1:
@@ -106,19 +111,23 @@
                     break;
                 case 0x0:
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
-                    Trace($"halt");
+                    Error($"halt");
+                    halt = 1;
+                    break;
+                case 0xB when r1 == 0x0 && r2 == 0x0 && r3 == 0xB && u1 == 0x5:
+                    Error($"HALT: Bootable sector not found.");
                     halt = 1;
                     break;
                 case 0xA: break;
-                case 0xF when x1 == 0xC && r3 == 0xE: // push_a
+                case 0xF when x2 == 0xC: // push_a
                     Trace($"push_a 0x{r1:X} 0x{r2:X} 0x{u1:X} 0x{u2:X}");
-                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (u1 << 4 | u2) & 0xFFFFFFF);
+                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
-                case 0xF when x1 == 0xE && r3 == 0x0: // push_d
+                case 0xF when x2 == 0xE: // push_d
                     Trace($"push_d 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1]);
                     break;
-                case 0xF when x1 == 0xF && r3 == 0x0: // push_x
+                case 0xF when x2 == 0xF: // push_x
                     Trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     var x = regs[u1].ToString();
                     short[] cast(string str)
@@ -138,21 +147,34 @@
             }
             prev = r1;
         }
+       
         public void Accept(ulong mem)
         {
-            instructionID = (ushort)((mem & 0xF000000) >> 24);
-            r1 = (ushort)((mem & 0xF00000) >> 20);
-            r2 = (ushort)((mem & 0xF0000) >> 16);
-            r3 = (ushort)((mem & 0xF000) >> 12);
-            u1 = (ushort)((mem & 0xF00) >> 8);
-            u2 = (ushort)((mem & 0xF0) >> 4);
-            x1 = (ushort)(mem & 0xF);
+            instructionID 
+                = (ushort)((mem & 0xF0000000) >> 28);
+            r1  = (ushort)((mem & 0xF000000 ) >> 24);
+            r2  = (ushort)((mem & 0xF00000  ) >> 20);
+            r3  = (ushort)((mem & 0xF0000   ) >> 16);
+            u1  = (ushort)((mem & 0xF000    ) >> 12);
+            u2  = (ushort)((mem & 0xF00     ) >> 8);
+            x1  = (ushort)((mem & 0xF0      ) >> 4);
+            x2  = (ushort) (mem & 0xF             );
         }
 
         private void Trace(string str)
         {
             if(tc)
                 WriteLine(str);
+        }
+
+        private void Error(string str)
+        {
+            if (ec)
+            {
+                ForegroundColor = ConsoleColor.Red;
+                WriteLine(str);
+                ForegroundColor = ConsoleColor.White;
+            }
         }
     }
 }

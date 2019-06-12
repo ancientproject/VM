@@ -2,8 +2,14 @@
 {
     public class RefExpression : OperatorToken
     {
-        public readonly short Cell;
+        public readonly byte Cell;
 
-        public RefExpression(short cell) : base(OperatorKind.Ref) => Cell = cell;
+        public RefExpression(byte cell) : base(OperatorKind.Ref) => Cell = cell;
+    }
+    public class ValueExpression : OperatorToken
+    {
+        public readonly ushort Value;
+
+        public ValueExpression(ushort value) : base(OperatorKind.Ref) => Value = value;
     }
 }
