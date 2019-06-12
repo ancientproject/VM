@@ -2,20 +2,20 @@
 {
     public class loadi : Instruction
     {
-        internal readonly short _index;
-        internal readonly short _value;
+        internal readonly byte _index;
+        internal readonly ushort _value;
 
-        public loadi(short index, short value) : base(InsID.loadi)
+        public loadi(byte index, ushort value) : base(InsID.loadi)
         {
             _index = index;
             _value = value;
         }
 
-        public override ulong Assembly()
+        protected override void OnCompile()
         {
-            var u1 = (_value & 0xF0) >> 4;
-            var u2 = (_value & 0xF);
-            return (ulong)((OPCode << 24) | (_index << 20) | (0 << 16) | (0 << 12) | (u1 << 8) | (u2 << 4) | 0);
+            var u1 = (byte)((_value & 0xF0) >> 4);
+            var u2 = (byte)(_value & 0xF);
+            SetRegisters(_index, 0x0, 0x0, u1, u2);
         }
     }
 }
