@@ -103,25 +103,25 @@
                 from openParen in Parse.Char('(')
                 from cellID in HexNumber
                 from closeParen in Parse.Char(')')
-                select new RefExpression(short.Parse(cellID, NumberStyles.AllowHexSpecifier)))
+                select new RefExpression(byte.Parse(cellID, NumberStyles.AllowHexSpecifier)))
             .Token()
             .WithPosition()
             .Named("ref_token");
-        public static Parser<RefExpression> ValueToken =
+        public static Parser<ValueExpression> ValueToken =
             (from refSym in Parse.Char('$')
                 from openParen in Parse.Char('(')
-                from cellID in HexNumber
+                from value in HexNumber
                 from closeParen in Parse.Char(')')
-                select new RefExpression(short.Parse(cellID, NumberStyles.AllowHexSpecifier)))
+                select new ValueExpression(ushort.Parse(value, NumberStyles.AllowHexSpecifier)))
             .Token()
             .WithPosition()
             .Named("value_token");
-        public static Parser<short> CastCharToken =
+        public static Parser<ushort> CastCharToken =
             (from refSym in Parse.String("@char_t")
                  from openParen in Parse.Char('(')
                  from @char in CharToken
                  from closeParen in Parse.Char(')')
-                 select (short)@char)
+                 select (ushort)@char)
             .Token()
             .Named("char_t expression");
         public static Parser<string> CastStringToken =
@@ -139,8 +139,8 @@
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
                 from pipe in PipeRight
-                from cell2 in ValueToken
-                select new InstructionExpression(new loadi(cell1.Cell, cell2.Cell)))
+                from val1 in ValueToken
+                select new InstructionExpression(new loadi(cell1.Cell, val1.Value)))
             .Token()
             .WithPosition()
             .Named("loadi expression");
@@ -167,8 +167,8 @@
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeRight
-                from cell3 in ValueToken.Or(CastCharToken.Select(x => new RefExpression(x)))
-             select new InstructionExpression(new push_a(cell1.Cell, cell2.Cell, cell3.Cell)))
+                from cell3 in ValueToken.Or(CastCharToken.Select(x => new ValueExpression(x)))
+             select new InstructionExpression(new push_a(cell1.Cell, cell2.Cell, cell3.Value)))
             .Token()
             .WithPosition()
             .Named("push_a expression");
@@ -260,7 +260,7 @@
     
     public class LabelTransform : TransformationContext
     {
-        public LabelTransform(string name, bool isAuto, short? cell_id)
+        public LabelTransform(string name, bool isAuto, byte? cell_id)
         {
             Instructions = name.Select((v, i) => new label(v, isAuto, i == name.Length, cell_id)).Cast<Instruction>().ToArray();
         }
