@@ -10,8 +10,9 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>embedded</DebugType>
+    <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\libs\Flame.Runtime\Flame.Runtime.csproj" />
+    <ProjectReference Include="..\libs\truecolor\TrueColorConsole\TrueColorConsole.csproj" />
   </ItemGroup>
 
 </Project>
