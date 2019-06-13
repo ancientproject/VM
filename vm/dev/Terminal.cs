@@ -21,9 +21,21 @@
         private string relMemory;
 
         [ActionAddress(0x5)]
-        public void WriteChar(char c) => Write(c);
+        public void WriteChar(char c)
+        {
+            if(c == 0xA)
+                Write(Environment.NewLine);
+            else 
+                Write(c);
+        }
         [ActionAddress(0x6)]
-        public void StageChar(char c) => relMemory += c;
+        public void StageChar(char c)
+        {
+            if (c == 0xA)
+                relMemory += Environment.NewLine;
+            else 
+                relMemory += c;
+        }
         [ActionAddress(0x7)]
         public void PushRel() => Write(relMemory);
         [ActionAddress(0x8)]

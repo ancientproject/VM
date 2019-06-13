@@ -171,12 +171,6 @@
                     Trace($"sum 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] + regs[r3];
                     break;
-                case 0x3:
-                    Trace($"swap 0x{r1:X}, 0x{r2:X}");
-                    regs[r1] ^= regs[r2];
-                    regs[r2] = regs[r1] ^ regs[r2];
-                    regs[r1] ^= regs[r2];
-                    break;
                 case 0x4:
                     Trace($"sub 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] - regs[r3];
@@ -202,9 +196,20 @@
                     Trace($"sqrt 0x{r2:X}");
                     regs[r1] = (uint)Math.Sqrt(regs[r2]);
                     break;
+                case 0x3:
+                    Trace($"swap 0x{r1:X}, 0x{r2:X}");
+                    regs[r1] ^= regs[r2];
+                    regs[r2] = regs[r1] ^ regs[r2];
+                    regs[r1] ^= regs[r2];
+                    break;
                 case 0x8 when u2 == 0xF: // 0x8F000F0
                     Trace($"jump_t 0x{r1:X}");
                     pc = regs[r1];
+                    break;
+                case 0xA: break;
+                case 0xF when x2 == 0xC: // push_a
+                    Trace($"push_a 0x{r1:X} 0x{r2:X} 0x{u1:X} 0x{u2:X}");
+                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
                     Trace($"ref_t 0x{r1:X}");
@@ -216,11 +221,7 @@
                 case 0xB when r1 == 0x0 && r2 == 0x0 && r3 == 0xB && u1 == 0x5:
                     _bus.Cpu.Halt(0x1);
                     break;
-                case 0xA: break;
-                case 0xF when x2 == 0xC: // push_a
-                    Trace($"push_a 0x{r1:X} 0x{r2:X} 0x{u1:X} 0x{u2:X}");
-                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
-                    break;
+                
                 case 0xF when x2 == 0xE: // push_d
                     Trace($"push_d 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1]);
@@ -253,8 +254,8 @@
         public void Accept(ulong mem)
         {
             Trace($"fetch 0x{mem:X}");
-            instructionID 
-                = (ushort)((mem & 0xF0000000) >> 28);
+            instructionID =
+                  (ushort)((mem & 0xF0000000) >> 28);
             r1  = (ushort)((mem & 0xF000000 ) >> 24);
             r2  = (ushort)((mem & 0xF00000  ) >> 20);
             r3  = (ushort)((mem & 0xF0000   ) >> 16);
