@@ -42,7 +42,7 @@
             _cellIndex = cellIndex;
         }
         protected override void OnCompile() 
-            => SetRegisters(_addressBus, _addressDev, 0xE, _cellIndex, x1: 0xE);
+            => SetRegisters(_addressBus, _addressDev, 0xE, _cellIndex, x2: 0xE);
     }
     public class push_x_debug : Instruction
     {
@@ -58,7 +58,7 @@
         }
 
         protected override void OnCompile() 
-            => SetRegisters(_addressBus, _addressDev, 0xE, _cellIndex, x1: 0xF);
+            => SetRegisters(_addressBus, _addressDev, 0xE, _cellIndex, x2: 0xF);
     }
     public static class StringEx
     {
