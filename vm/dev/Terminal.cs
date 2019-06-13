@@ -63,6 +63,16 @@
         public void Shutdown() => relMemory = null;
 
         public override int GetHashCode() => StartAddress ^ 42;
-        public int CompareTo(object obj) => 1;
+
+        public int CompareTo(object obj)
+        {
+            if (obj is IDevice dev)
+            {
+                if (StartAddress > dev.StartAddress)
+                    return 1;
+                return -1;
+            }
+            return 0;
+        }
     }
 }
