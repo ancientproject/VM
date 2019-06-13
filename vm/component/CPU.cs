@@ -24,6 +24,7 @@
 
         public void Halt(byte code)
         {
+            Error(Environment.NewLine);
             _bus.State.halt = 1;
             switch (code)
             {
@@ -34,10 +35,7 @@
                     Error("HALT: Bootable sector not found.");
                     break;
                 case 0xC:
-                    Error("HALT: Divide by zero.");
-                    break;
-                case 0xB:
-                    Error("HALT: Divide by zero.");
+                    Error("HALT: Divide by zero - YOU JUST CREATED A BLACK HOLE!");
                     break;
                 case 0xF:
                     Error($"HALT: Corrupted memory.");

@@ -31,11 +31,17 @@
 
             core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
             //core.State.Load(BIOS.GetILCode().ToArray());
-            core.State.Load(0xABCDEFE0);
-            core.State.Load(new loadi(0x1, 17));
-            core.State.Load(new loadi(0x2, 0));
-            core.State.Load(new div(0x3, 0x1, 0x2));
-            if(false)
+
+            //uint[] page = {
+            //    0xABCDEFE0,
+            //    new loadi(0x1, 0x5),  // x
+            //    new loadi(0x2, 0x7),  // y
+            //    new loadi(0x3, 0x8),  // z
+            //};
+
+            //core.State.Load(page);
+            //if(true) {}
+            //else 
             if (!args.Any())
                 core.State.Load(0xB00B5000);
             else
