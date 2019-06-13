@@ -41,7 +41,6 @@
             list.AddRange(WriteLine("⠜ ⠷ ⠷ ⠾ ⠚ ⠜ ⠾ ⠸ ⠵ ⠅ ⠙ ⠅ ⠇ ⠵ ⠗", Color.LawnGreen).Select(x => (uint)x));
             list.AddRange(WriteLine("Execute main code...", Color.LawnGreen).Select(x => (uint)x));
 
-            list.Add(0xB00B5000);
             return list.AsReadOnly();
         }
 
@@ -50,7 +49,7 @@
             line = $"{line}{Environment.NewLine}";
             var result = $"{GetColorForegroundString(color)}{line}{GetColorForegroundString(Color.White)}";
 
-            return result.Select(x => new push_a(0x2, 0x5, (short) x)).Cast<Instruction>().ToArray();
+            return result.Select(x => new push_a(0x2, 0x5, x)).Cast<Instruction>().ToArray();
         }
 
         private static string GetColorForegroundString(Color c) => 
