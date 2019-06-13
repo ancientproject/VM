@@ -8,6 +8,7 @@
     using component;
     using dev;
     using dev.Internal;
+    using flame.runtime;
     using flame.runtime.emit;
     using MoreLinq;
     using TrueColorConsole;
@@ -18,8 +19,6 @@
         {
             Title = "cpu_host";
             OutputEncoding = Encoding.UTF8;
-            ;
-            WriteLine("\u2876\u2877\u2878");
             VTConsole.Enable();
             IntToCharConverter.Register<char>();
 
@@ -31,17 +30,25 @@
             var core = bus.Cpu;
 
             core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
-
+            //core.State.Load(BIOS.GetILCode().ToArray());
+            core.State.Load(0xABCDEFE0);
+            core.State.Load(new loadi(0x1, 17));
+            core.State.Load(new loadi(0x2, 0));
+            core.State.Load(new div(0x3, 0x1, 0x2));
+            if(false)
             if (!args.Any())
-                core.State.Load(BIOS.GetILCode().ToArray());
+                core.State.Load(0xB00B5000);
             else
             {
+                
                 var file = new FileInfo(args.First());
                 if (file.Exists)
                 {
                     var bytes = FlameAssembly.LoadFrom(file.FullName).GetILCode();
                     core.State.Load(CastFromBytes(bytes));
                 }
+                else
+                    core.State.Load(0xB00B5000);
             }
 
             while (core.State.halt == 0)
@@ -55,7 +62,7 @@
         {
             if(bytes.Length % sizeof(uint) != 0)
                 throw new Exception("invalid offset file.");
-            return bytes.Batch(sizeof(uint)).Select(x => BitConverter.ToUInt32(x.ToArray())).ToArray();
+            return bytes.Batch(sizeof(uint)).Select(x => BitConverter.ToUInt32(x.ToArray())).Reverse().ToArray();
         }
 
     }
