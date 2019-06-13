@@ -36,14 +36,7 @@
             var ver = FileVersionInfo.GetVersionInfo(typeof(Program).Assembly.Location).ProductVersion;
             WriteLine($"Flame Assembler Compiler version {ver} (default)", Color.Gray);
             WriteLine($"Copyright (C) Yuuki Wesp.\n\n", Color.Gray);
-
-            var dyn = new DynamicAssembly("test.dlx", ("C", "Yuuki Wesp"));
-            dyn.EnableSign();
-            dyn.GetGenerator().Emit(new loadi(1, 55),new loadi(2, 77),new halt());
-            File.WriteAllBytes("test.dlx", dyn.GetBytes());
-
-            var asm2 = FlameAssembly.LoadFrom("test.dlx");
-
+            
             if (!args.sourceFiles.Any())
             {
                 Warn(Warning.NoSource, "No source files specified.");
