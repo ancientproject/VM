@@ -3,17 +3,28 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using flame.runtime;
     using static System.Console;
-    public unsafe class State
+
+    public interface ShadowCache<out T> where T : Cache, ICloneable
     {
-        private readonly Bus _bus;
+        T L1 { get; }
+        T L2 { get; }
 
-        public State(Bus bus) => _bus = bus;
+        void Reflect();
+    }
 
-        public ulong pc { get; set; } = 0;
+    public class ShadowCacheFactory : ShadowCache<Cache>
+    {
+        public Cache L1 { get; } = new Cache();
+        public Cache L2 { get; private set; } = new Cache();
 
+        public void Reflect() => L2 = L1.Clone() as Cache;
+
+        public static ShadowCache<Cache> Create() => new ShadowCacheFactory();
+    }
+
+    public class Cache : ICloneable
+    {
         /// <summary>
         /// base register cell
         /// </summary>
@@ -26,14 +37,85 @@
         /// magic cell
         /// </summary>
         public ushort x1, x2;
+
         /// <summary>
         /// id
         /// </summary>
-        public ushort instructionID;
+        public ushort IID;
+
+        public ulong PC { get; set; }
+
+        public object Clone() => new Cache 
+            { r1 = r1, r2 = r2, r3 = r3, u1 = u1, u2 = u2, x1 = x1, x2 = x2, IID = IID, PC = PC };
+    }
+
+    public unsafe class State
+    {
+        private readonly Bus _bus;
+
+        public State(Bus bus) => _bus = bus;
+
+        public ulong pc
+        {
+            get => Registers.L1.PC;
+            set => Registers.L1.PC = value;
+        }
+
+        public ShadowCache<Cache> Registers = ShadowCacheFactory.Create();
+
         /// <summary>
-        /// last <see cref="r1"/>
+        /// base register cell
         /// </summary>
-        public ulong prev;
+        public ushort r1
+        {
+            get => Registers.L1.r1;
+            set => Registers.L1.r1 = value;
+        }
+        public ushort r2
+        {
+            get => Registers.L1.r2;
+            set => Registers.L1.r2 = value;
+        }
+        public ushort r3
+        {
+            get => Registers.L1.r3;
+            set => Registers.L1.r3 = value;
+        }
+        /// <summary>
+        /// value register cell
+        /// </summary>
+        public ushort u1
+        {
+            get => Registers.L1.u1;
+            set => Registers.L1.u1 = value;
+        }
+        public ushort u2
+        {
+            get => Registers.L1.u2;
+            set => Registers.L1.u2 = value;
+        }
+        /// <summary>
+        /// magic cell
+        /// </summary>
+        public ushort x1
+        {
+            get => Registers.L1.x1;
+            set => Registers.L1.x1 = value;
+        }
+        public ushort x2
+        {
+            get => Registers.L1.x2;
+            set => Registers.L1.x2 = value;
+        }
+        
+        /// <summary>
+        /// id
+        /// </summary>
+        public ushort instructionID
+        {
+            get => Registers.L1.IID;
+            set => Registers.L1.IID = value;
+        }
         /// <summary>
         /// trace flag
         /// </summary>
@@ -43,17 +125,27 @@
         /// </summary>
         public bool ec = true;
 
+
+
         public ulong[] regs = new ulong[16];
+
         public sbyte halt { get; set; } = 0;
 
-        public List<uint> program { get; set; }
+        public List<uint> program { get; set; } = new List<uint>();
 
-        public void Load(uint[] prog) => program = prog.ToList();
+        public void Load(params uint[] prog) => program.AddRange(prog);
 
-        public uint Fetch() => program.ElementAt((int)pc++);
+        public uint Fetch()
+        {
+            if (program.Count == (int) pc && halt == 0)
+            {
+                Array.Fill(regs, (ulong)0xDEAD);
+                Load(0xFFFFFFFF);
+            }
+            return program.ElementAt((int)pc++);
+        }
 
         public string pX = "";
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Eval()
         {
             if (instructionID == 0xA)
@@ -62,10 +154,14 @@
                 WriteLine($"  1   2   3   1   2   1   2");
                 WriteLine($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             }
+            Trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             switch (instructionID)
             {
+                case 0xF when r1 == 0xF && r2 == 0xF && r3 == 0xF && u1 == 0xF && u2 == 0xF && x1 == 0xF:
+                    _bus.Cpu.Halt(0xF);
+                    break;
                 case 0x1:
-                    Trace($"addi 0x{u1:X}, 0x{u2:X}");
+                    Trace($"loadi 0x{u1:X}, 0x{u2:X}");
                     if (u2 != 0)
                         regs[r1] = (ulong)((u1 << 4) | u2);
                     else
@@ -91,6 +187,11 @@
                     break;
                 case 0x6:
                     Trace($"div 0x{r2:X}, 0x{r3:X}");
+                    if (regs[r3] == 0)
+                    {
+                        _bus.Cpu.Halt(0xC);
+                        break;
+                    }
                     regs[r1] = regs[r2] / regs[r3];
                     break;
                 case 0x7 when u2 == 0x0:
@@ -109,14 +210,11 @@
                     Trace($"ref_t 0x{r1:X}");
                     regs[r1] = pc;
                     break;
-                case 0x0:
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
-                    Error($"halt");
-                    halt = 1;
+                    _bus.Cpu.Halt(0x0);
                     break;
                 case 0xB when r1 == 0x0 && r2 == 0x0 && r3 == 0xB && u1 == 0x5:
-                    Error($"HALT: Bootable sector not found.");
-                    halt = 1;
+                    _bus.Cpu.Halt(0x1);
                     break;
                 case 0xA: break;
                 case 0xF when x2 == 0xC: // push_a
@@ -144,12 +242,17 @@
                     foreach (var uuu in cast(x))
                         _bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
+                default:
+                    Error(
+                        $"Unk OpCode: {instructionID:X2} {Environment.NewLine}0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
+                    break;
             }
-            prev = r1;
+            Registers.Reflect();
         }
        
         public void Accept(ulong mem)
         {
+            Trace($"fetch 0x{mem:X}");
             instructionID 
                 = (ushort)((mem & 0xF0000000) >> 28);
             r1  = (ushort)((mem & 0xF000000 ) >> 24);
