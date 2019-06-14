@@ -14,15 +14,156 @@
         <StaticResource ResourceKey="VSWindowStyle"/>
     </Window.Style>
     <Grid>
-        <Grid Margin="10">
-            <Button Content="{iconPacks:Material Play}" Margin="10,10,731,350.04"/>
-            <Button Click="Step" Content="{iconPacks:Material DebugStepOver}" Margin="47,10,699,370.04" Height="32" Width="32"/>
-            <Grid.Effect>
-                <BlurEffect Radius="10" RenderingBias="Quality"></BlurEffect>
-            </Grid.Effect>
-        </Grid>
-        <Grid Margin="10" Visibility="{Binding Path=IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Controls:ProgressRing IsActive="{Binding Path=IsLoading}" HorizontalAlignment="Left" Margin="744,10,0,0" VerticalAlignment="Top" Width="24" Height="28" d:LayoutOverrides="VerticalAlignment" />
+        <Button Click="Step" Foreground="GreenYellow" Content="{iconPacks:Material Play, Width=16, Height=16}" MinHeight="32" MinWidth="32" Margin="323,366,0,0" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="33"/>
+        <Button Click="Step" Foreground="DeepSkyBlue" Content="{iconPacks:Material DebugStepOver, Height=16, Width=16}" MinHeight="32" MinWidth="32" Margin="361,365,0,0" Height="33" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Button Click="Step" Foreground="Red" Content="{iconPacks:Material Stop, Height=16, Width=16}" MinHeight="32" MinWidth="32" Margin="398,365,0,0" Height="33" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <ListBox Height="175" Margin="10,10,0,0" VerticalAlignment="Top" Width="28" HorizontalAlignment="Left">
+            <ListBoxItem>R1:</ListBoxItem>
+            <ListBoxItem>R2:</ListBoxItem>
+            <ListBoxItem>R3:</ListBoxItem>
+            <ListBoxItem>U1:</ListBoxItem>
+            <ListBoxItem>U2:</ListBoxItem>
+            <ListBoxItem>X1:</ListBoxItem>
+            <ListBoxItem>X2:</ListBoxItem>
+            <ListBox.Effect>
+                <DropShadowEffect BlurRadius="8" Color="#FF686868" RenderingBias="Quality" ShadowDepth="2" Direction="0"></DropShadowEffect>
+            </ListBox.Effect>
+        </ListBox>
+        <ListBox Name="regBox" Height="175" Margin="38,10,0,0" VerticalAlignment="Top" Width="37" HorizontalAlignment="Left">
+            <ListBoxItem Foreground="Red">0x00</ListBoxItem>
+            <ListBoxItem Foreground="Red">0x00</ListBoxItem>
+            <ListBoxItem Foreground="Red">0x00</ListBoxItem>
+            <ListBoxItem Foreground="Red">0x00</ListBoxItem>
+            <ListBoxItem Foreground="Red">0x00</ListBoxItem>
+            <ListBoxItem Foreground="Red">0x00</ListBoxItem>
+            <ListBoxItem Foreground="GreenYellow">0x00</ListBoxItem>
+            <ListBox.Effect>
+                <DropShadowEffect BlurRadius="8" Color="#FF686868" RenderingBias="Quality" ShadowDepth="2" Direction="0"></DropShadowEffect>
+            </ListBox.Effect>
+        </ListBox>
+        <Label Name="PC" Foreground="Wheat" Content="PC: 0x000000C2" Margin="90,10,0,0" FontFamily="Fira Code" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116"/>
+        <Label Name="IC" Foreground="Wheat" Content="IC: 0x000000FF" Margin="90,36,0,0" FontFamily="Fira Code" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116"/>
+        <Grid Margin="490,10,0,0" Height="175" VerticalAlignment="Top" HorizontalAlignment="Left" Width="298" >
+            <Grid Name="block_01"  Height="36" VerticalAlignment="Top">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_02" Height="36" VerticalAlignment="Top" Margin="0,18,0,0">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_03" Height="36" VerticalAlignment="Top" Margin="0,36,0,0">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_04" Margin="0,54,0,85">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_05" Margin="0,72,0,67">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_06" Height="36" VerticalAlignment="Top" Margin="0,90,0,0">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_07" Height="36" VerticalAlignment="Top" Margin="0,108,0,0">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
+            <Grid Name="block_08" Height="36" VerticalAlignment="Top" Margin="0,126,0,0">
+                <Ellipse Fill="Gray" Height="16" Margin="15,10,267,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="36,10,246,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="57,10,225,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="78,10,204,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="99,10,183,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="120,10,162,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="141,10,141,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="162,10,120,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="183,10,99,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="204,10,78,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="225,10,57,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="246,10,36,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+                <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
