@@ -5,9 +5,9 @@
     using System.Linq;
     using static System.Console;
 
-    public interface ShadowCache<out T> where T : Cache, ICloneable
+    public interface ShadowCache<T> where T : Cache, ICloneable
     {
-        T L1 { get; }
+        T L1 { get; set; }
         T L2 { get; }
 
         void Reflect();
@@ -15,7 +15,7 @@
 
     public class ShadowCacheFactory : ShadowCache<Cache>
     {
-        public Cache L1 { get; } = new Cache();
+        public Cache L1 { get; set; } = new Cache();
         public Cache L2 { get; private set; } = new Cache();
 
         public void Reflect() => L2 = L1.Clone() as Cache;
