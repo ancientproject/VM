@@ -9,6 +9,8 @@ using vm.dev.Internal;
 
 namespace CPU_Host
 {
+    using System.Threading;
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -17,6 +19,12 @@ namespace CPU_Host
         public App()
         {
             IntToCharConverter.Register<char>();
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                MessageBox.Show($"CPU HALT", $"{args.ExceptionObject}", MessageBoxButton.OK, MessageBoxImage.Error);
+                HostContainer.Instance.bus.State.halt = 1;
+                Environment.Exit(-1);
+            };
         }
     }
 }
