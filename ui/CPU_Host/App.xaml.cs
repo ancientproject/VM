@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using vm.dev.Internal;
 
 namespace CPU_Host
 {
@@ -13,5 +14,9 @@ namespace CPU_Host
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            IntToCharConverter.Register<char>();
+        }
     }
 }
