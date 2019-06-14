@@ -1,6 +1,8 @@
 ﻿namespace vm.component
 {
     using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using flame.runtime;
     using static System.Console;
@@ -58,5 +60,8 @@
             ForegroundColor = ConsoleColor.White;
         }
 
+
+        public void ResetCache() => _bus.State.Registers.L1 = new Cache();
+        public void ResetMemory() => _bus.State.program.Clear();
     }
 }
