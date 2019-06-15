@@ -10,6 +10,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Documents;
     using System.Windows.Forms;
@@ -49,7 +50,7 @@
     {
         public bool IsLoading { get; set; } = true;
         public bool IsPLaying { get; set; } = false;
-
+        private LampBus.LampControl[] LED { get; set; }
 
         public static MainWindow Singleton { get; set; }
         public MainWindow()
@@ -63,9 +64,9 @@
             {
                 SpeedValue = (int)args.NewValue;
             };
-            var arr = new []{block_01, block_02, block_03, block_04, block_05, block_06, block_07, block_08}
+            LED = new []{block_01, block_02, block_03, block_04, block_05, block_06, block_07, block_08}
                 .Select((x, i) => new LampBus.LampControl(i, x.Children.OfType<Ellipse>().ToArray())).ToArray();
-            Task.Factory.StartNew(async () => { await WarmUpAllDiods(arr); });
+            Task.Factory.StartNew(async () => { await WarmUpAllDiods(LED); });
 
         }
 
@@ -138,6 +139,14 @@
             HostContainer.Instance.bus.State.pc = 0;
         }
 
+        public void ResetLED(object sender, EventArgs e)
+        {
+            var block = LED.Length;
+            var col = LED.First().Diods.Length;
+            for (var u = 0; u != block; u++)
+            for (var v = 0; v != col; v++)
+                LED[u].TurnOff(v);
+        }
         public void Stop(object sender, EventArgs e)
         {
             if(!IsPLaying || IsLoading)
@@ -157,7 +166,7 @@
             
             Task.Factory.StartNew(async () =>
             {
-                while (IsPLaying)
+                while (IsPLaying && HostContainer.Instance.bus.State.halt == 0)
                 {
                     Console.Beep();
                     await HostContainer.Instance.bus.Cpu.Step();

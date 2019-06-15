@@ -22,7 +22,10 @@
             set
             {
                 _iid = value;
+                var state = HostContainer.Instance.bus.State;
                 MainWindow.Singleton.Dispatcher.Invoke(() => { MainWindow.Singleton.IC.Content = $"IC: 0x{value:X8}"; });
+                MainWindow.Singleton.Dispatcher.Invoke(() => { MainWindow.Singleton.CurAddr.Content = $"CA: 0x{state.curAddr:X}"; });
+                MainWindow.Singleton.Dispatcher.Invoke(() => { MainWindow.Singleton.LastAddr.Content = $"LA: 0x{state.lastAddr:X}"; });
             }
         }
 
