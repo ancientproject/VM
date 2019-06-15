@@ -1,29 +1,31 @@
 ﻿namespace vm.dev
 {
+    using component;
     using flame.runtime.exceptions;
 
     public class CorruptedDevice : IDevice
     {
-        public string Name { get; }
-        public short StartAddress { get; }
+        private readonly CPU _cpu;
+
+        public CorruptedDevice(CPU cpu) => _cpu = cpu;
+        public string Name => "<unknown-device>";
+        public short StartAddress => 0xFF;
         public void write(int address, int data)
         {
-            throw new CorruptedMemoryException();
+            throw new CorruptedMemoryException($"Instruction at address 0x{_cpu.State.curAddr:X4} accessed memory 0x{address:X4}. Memory could not be write.");
         }
 
         public int read(int address)
         {
-            throw new CorruptedMemoryException();
+            throw new CorruptedMemoryException($"Instruction at address 0x{_cpu.State.curAddr:X4} accessed memory 0x{address:X4}. Memory could not be read.");
         }
 
         public void Init()
         {
-            throw new CorruptedMemoryException();
         }
 
         public void Shutdown()
         {
-            throw new CorruptedMemoryException();
         }
     }
 }
