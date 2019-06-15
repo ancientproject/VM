@@ -3,9 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <FileVersion>0.0.1.154</FileVersion>
-    <AssemblyVersion>1.0.8.0</AssemblyVersion>
-    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+    <FileVersion>1.0.8.154</FileVersion>
+    <AssemblyVersion>1.0.8.154</AssemblyVersion>
+    <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
