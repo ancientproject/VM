@@ -30,14 +30,14 @@
 
             public void TurnOff(int index)
             {
-                if(Diods.Length < index)
-                    throw new CorruptedMemoryException($"lamp module not found.");
+                if(Diods.Length <= index)
+                    throw new CorruptedMemoryException($"LED 0x{index:X} not found in 0x{StackIndex:X} stack.");
                 Diods[index].Dispatcher.Invoke(() => { Diods[index].Fill = Brushes.Gray; });
             }
             public void TurnOn(int index)
             {
-                if(Diods.Length < index)
-                    throw new CorruptedMemoryException($"lamp module not found.");
+                if(Diods.Length <= index)
+                    throw new CorruptedMemoryException($"LED 0x{index:X} not found in 0x{StackIndex:X} stack.");
                 Diods[index].Dispatcher.Invoke(() => { Diods[index].Fill = Brushes.Yellow; });
             }
         }
@@ -50,8 +50,8 @@
 
         private void Manage(int u1, int u2, bool isPowerOff)
         {
-            if(_stack.Length < u1)
-                throw new CorruptedMemoryException("lamp bus not found.");
+            if(_stack.Length <= u1)
+                throw new CorruptedMemoryException($"LED stack 0x{u1:X} not found.");
             
             if(isPowerOff)
                 _stack[u1].TurnOff(u2);
@@ -60,9 +60,9 @@
         }
 
         [ActionAddress(0xD)]
-        public void Light(char reg) => Manage(reg & 0xF0 >> 4, reg & 0xF, false);
+        public void Light(char reg) => Manage((reg & 0xF0) >> 4, reg & 0xF, false);
         [ActionAddress(0xE)]
-        public void PowerOff(char reg) => Manage(reg & 0xF0 >> 4, reg & 0xF, true);
+        public void PowerOff(char reg) => Manage((reg & 0xF0) >> 4, reg & 0xF, true);
 
 
 
