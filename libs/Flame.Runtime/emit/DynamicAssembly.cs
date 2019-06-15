@@ -24,11 +24,19 @@
             generator = new ILGen(this);
         }
 
-        public void EnableSign() => Tag.Sign = AssemblyTag.SignType.Signed;
+        public void EnableSign() 
+            => Tag.Sign = AssemblyTag.SignType.Signed;
+        public ILGen GetGenerator() 
+            => generator;
+        public override byte[] GetILCode() 
+            => generator.Load().SelectMany(x => x.GetBodyILBytes()).ToArray();
 
-        public ILGen GetGenerator() => generator;
-
-
+        /// <summary>
+        /// Get bytes of assembly
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Invalid state for current assembly.
+        /// </exception>
         public byte[] GetBytes()
         {
             if(!generator.Any())
