@@ -1,5 +1,6 @@
 namespace flame.runtime.compiler.test
 {
+    using System.Linq;
     using flame.compiler.tokens;
     using runtime;
     using Sprache;
@@ -7,15 +8,33 @@ namespace flame.runtime.compiler.test
 
     public class InstructionTest
     {
+        [Fact]
+        public void ShiftTest()
+        {
+            var shifter = ShiftFactory.Create(28);
+            Assert.Equal(28, shifter.Shift());
+            Assert.Equal(24, shifter.Shift());
+            Assert.Equal(20, shifter.Shift());
+            Assert.Equal(16, shifter.Shift());
+            Assert.Equal(12, shifter.Shift());
+            Assert.Equal(8, shifter.Shift());
+            Assert.Equal(4, shifter.Shift());
+            Assert.Equal(0, shifter.Shift());
+            Assert.Equal(0, shifter.Shift());
+        }
+
         [Theory]
         [InlineData(".push_j &(0x0) &(0xC) <| @string_t(\"test\")")]
         public void PushJ(string code)
         {
             var result = SyntaxStorage.PushJ.End().Parse(code);
-            Assert.True(result is TransformationContext);
-            Assert.Equal(4, (result as TransformationContext).Instructions.Length);
+            if (result is TransformationContext t)
+            {
+                Assert.Equal(4, t.Instructions.Length);
+                Assert.Equal(0xF0C0074C, (uint)t.Instructions.First().Assembly());
+                Assert.Equal(0xF0C0074C, (uint)t.Instructions.Last().Assembly());
+            }
         }
-
         [Theory]
         [InlineData(".push_a &(0x0) &(0xC) <| $(0xFF)")]
         [InlineData(".push_a &(0x0) &(0xC) <| @char_t('ÿ')")]
@@ -29,6 +48,7 @@ namespace flame.runtime.compiler.test
                 Assert.Equal(0x0, i._addressBus);
                 Assert.Equal(0xC, i._addressDev);
                 Assert.Equal(0xFF, i._value);
+                Assert.Equal(0xF0C00FFC, (uint)i.Assembly());
             }
         }
         [Theory]
