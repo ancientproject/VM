@@ -2,26 +2,55 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Windows.Media;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Forms;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using flame.runtime;
+    using flame.runtime.emit;
     using JetBrains.Annotations;
-    using vm.component;
+    using MoreLinq.Extensions;
     using vm.dev;
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class InverseBooleanConverter: IValueConverter
+    {
+        #region IValueConverter Members
 
+        public object Convert(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException("The target must be a boolean");
+
+            return !(bool)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+
+        #endregion
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public bool IsLoading { get; set; } = true;
+        public bool IsPLaying { get; set; } = false;
+
+
         public static MainWindow Singleton { get; set; }
         public MainWindow()
         {
@@ -29,14 +58,11 @@
             Singleton = this;
             Icon = new BitmapImage(new Uri($"file://{new FileInfo("./resource/icon.png").FullName}"));
             DataContext = this;
-            new Thread(() =>
-            {
-                Thread.Sleep(5000);
-                IsLoading = false;
-                OnPropertyChanged(nameof(IsLoading));
-                
-            }).Start();
             StartUpCPU();
+            speed.ValueChanged += (o, args) =>
+            {
+                SpeedValue = (int)args.NewValue;
+            };
             var arr = new []{block_01, block_02, block_03, block_04, block_05, block_06, block_07, block_08}
                 .Select((x, i) => new LampBus.LampControl(i, x.Children.OfType<Ellipse>().ToArray())).ToArray();
             Task.Factory.StartNew(async () => { await WarmUpAllDiods(arr); });
@@ -51,29 +77,53 @@
             for (var v = 0; v != col; v++)
             {
                 arr[u].TurnOn(v);
-                await Task.Delay(100);
+                await Task.Delay(10);
             }
             for (var u = 0; u != block; u++)
             for (var v = 0; v != col; v++)
             {
                 arr[u].TurnOff(v);
-                await Task.Delay(100);
+                await Task.Delay(10);
             }
-            await Task.Factory.StartNew(async () =>
-            {
-                await Task.Delay(3000);
-                while (true)
-                {
-                    Console.Beep();
-                    await HostContainer.Instance.bus.Cpu.Step();
-                    await Task.Delay(600);
-                }
-            });
+            IsLoading = false;
+            OnPropertyChanged(nameof(IsLoading));
         }
         public void StartUpCPU()
         {
-            var bus = HostContainer.Instance.bus;
+            void err(string s)
+            {
+                WriteToDebug($"[", Brushes.Gray);
+                WriteToDebug(DateTime.Now.ToShortTimeString(), Brushes.DarkGoldenrod);
+                WriteToDebug($"]", Brushes.Gray);
+                WriteToDebug($"[", Brushes.Gray);
+                WriteToDebug($"ERROR", Brushes.Red);
+                WriteToDebug($"]", Brushes.Gray);
+                WriteToDebug($"{s}\r\n", Brushes.Red);
+            }
 
+            var bus = HostContainer.Instance.bus;
+            bus.Cpu.OnError += exception =>
+            {
+                IsPLaying = false;
+                OnPropertyChanged(nameof(IsPLaying));
+                IsLoading = false;
+                OnPropertyChanged(nameof(IsLoading));
+                System.Windows.MessageBox.Show($"Access Violation Exception\n{exception.Message}\n{bus.Cpu.getStateOfCPU()}", $"CPU HALT", MessageBoxButton.OK, MessageBoxImage.Error);
+                HostContainer.Instance.bus.Cpu.ResetMemory();
+                err($"HALT {exception.Message}");
+            };
+
+            bus.State.OnError += err;
+            bus.State.OnTrace += s =>
+            {
+                WriteToDebug($"[", Brushes.Gray);
+                WriteToDebug(DateTime.Now.ToShortTimeString(), Brushes.DarkGoldenrod);
+                WriteToDebug($"]", Brushes.Gray);
+                WriteToDebug($"[", Brushes.Gray);
+                WriteToDebug($"TRACE", Brushes.Gray);
+                WriteToDebug($"]: ", Brushes.Gray);
+                WriteToDebug($"{s}\r\n", Brushes.Gray);
+            };
             bus.State.Registers = new WPFShadowCacheFactory();
 
             bus.Add(new LampBus(this, 
@@ -84,34 +134,107 @@
             
 
             core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
-
-            core.State.Load(new ref_t(0x6));
-            core.State.Load(new loadi(0x2,  0x11));
-            core.State.Load(new loadi(0x3,  0x1));
-
-            foreach (var i in Enumerable.Range(0, 5))
-            {
-                core.State.Load(new sum(0x4,  0x2, 0x3));
-                core.State.Load(new sum(0x2,  0x2, 0x3));
-                core.State.Load(new push_d(0xB, 0xD, 0x4));
-                core.State.Load(new push_d(0xB, 0xE, 0x4));
-            }
-
-
-
-            core.State.Load(new jump_t(0x6));
+            HostContainer.Instance.bus.State.instructionID = 0;
+            HostContainer.Instance.bus.State.pc = 0;
         }
 
-
-        public void SwitchRun()
+        public void Stop(object sender, EventArgs e)
         {
+            if(!IsPLaying || IsLoading)
+                return;
 
+            IsPLaying = false;
+            OnPropertyChanged(nameof(IsPLaying));
+        }
+        private int SpeedValue { get; set; }
+        public void Run(object sender, EventArgs e)
+        {
+            if(IsPLaying|| IsLoading)
+                return;
+            HostContainer.Instance.bus.State.halt = 0;
+            IsPLaying = true;
+            OnPropertyChanged(nameof(IsPLaying));
+            
+            Task.Factory.StartNew(async () =>
+            {
+                while (IsPLaying)
+                {
+                    Console.Beep();
+                    await HostContainer.Instance.bus.Cpu.Step();
+                    await Task.Delay((int)SpeedValue);
+                }
+            });
+        }
+
+        public void WriteSystemMessage(string message)
+        {
+            WriteToDebug($"[", Brushes.Gray);
+            WriteToDebug(DateTime.Now.ToShortTimeString(), Brushes.DarkGoldenrod);
+            WriteToDebug($"]", Brushes.Gray);
+            WriteToDebug($"[", Brushes.Gray);
+            WriteToDebug($"SYS", Brushes.MediumPurple);
+            WriteToDebug($"]: ", Brushes.Gray);
+            WriteToDebug($"{message}\r\n", Brushes.MediumPurple);
+        }
+
+        public void WriteToDebug(string message, Brush b)
+        {
+            outputLog.Dispatcher.Invoke(() =>
+            {
+                var tr = new TextRange(outputLog.Document.ContentEnd, outputLog.Document.ContentEnd)
+                {
+                    Text = message
+                };
+                tr.ApplyPropertyValue(TextElement.ForegroundProperty, b);
+                outputLog.ScrollToEnd();
+            });
+        }
+
+        public void Load(object sender, EventArgs e)
+        {
+            if(IsPLaying || IsLoading)
+                return;
+            var openFileDialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                Filter = "Flame Binary(*.flx;*.dlx)|*.FLX;*.DLX",
+                Title = "Select flame binary."
+            };
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                WriteSystemMessage($"Loading '../{System.IO.Path.GetFileName(openFileDialog.FileName)}'");
+                IsLoading = true;
+                OnPropertyChanged(nameof(IsLoading));
+                Task.Factory.StartNew(async () =>
+                {
+                    await Task.Delay(1000);
+                    var dyn = FlameAssembly.LoadFrom(openFileDialog.FileName);
+                    WriteSystemMessage($"Assembly '{dyn.Name}-{dyn.Tag}' load success.");
+                    HostContainer.Instance.bus.State.Load(CastFromBytes(dyn.GetILCode()));
+                    HostContainer.Instance.bus.State.instructionID = 0;
+                    HostContainer.Instance.bus.State.pc = 0;
+                    IsLoading = false;
+                    OnPropertyChanged(nameof(IsLoading));
+                });
+                return;
+            }
+        }
+        public static uint[] CastFromBytes(byte[] bytes)
+        {
+            if(bytes.Length % sizeof(uint) != 0)
+                throw new Exception("invalid offset file.");
+            return bytes.Batch(sizeof(uint)).Select(x => BitConverter.ToUInt32(x.ToArray())).Reverse().ToArray();
         }
 
         public void Step(object sender, EventArgs e) => 
             Task.Factory.StartNew(async () => await HostContainer.Instance.bus.Cpu.Step());
-        public void SoftReset(object sender, EventArgs e) => 
+
+        public void SoftReset(object sender, EventArgs e)
+        {
+            IsPLaying = false;
             Task.Factory.StartNew(() => HostContainer.Instance.bus.Cpu.ResetCache());
+        }
+            
         public void HardReset(object sender, EventArgs e) => 
             Task.Factory.StartNew(() => HostContainer.Instance.bus.Cpu.ResetMemory());
 
@@ -122,142 +245,5 @@
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public class WPFShadowCacheFactory : ShadowCache<Cache>
-    {
-        public Cache L1 { get; set; } = new WPFCache();
-
-        public Cache L2 { get; set; } = new Cache();
-
-        public void Reflect()
-        {
-            L2 = (Cache)L1.Clone();
-        }
-    }
-
-    public class WPFCache : Cache
-    {
-        private ushort _iid;
-        private ushort _r1;
-        private ushort _r2;
-        private ushort _r3;
-        private ushort _u1;
-        private ushort _u2;
-        private ushort _x1;
-        private ushort _x2;
-        private ulong _pc;
-
-        public override ushort IID
-        {
-            get => _iid;
-            set
-            {
-                _iid = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() => { MainWindow.Singleton.IC.Content = $"0x{value:X8}"; });
-            }
-        }
-
-        public override ulong PC
-        {
-            get => _pc;
-            set
-            {
-                _pc = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() => { MainWindow.Singleton.PC.Content = $"0x{value:X8}"; });
-            }
-        }
-
-        public override ushort r1
-        {
-            get => _r1;
-            set
-            {
-                _r1 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[0].Content = $"0x{value:X2}";
-                });
-            }
-        }
-        public override ushort r2
-        {
-            get => _r2;
-            set
-            {
-                _r2 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[1].Content = $"0x{value:X2}";
-                });
-            }
-        }
-        public override ushort r3
-        {
-            get => _r3;
-            set
-            {
-                _r3 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[2].Content = $"0x{value:X2}";
-                });
-            }
-        }
-        public override ushort u1
-        {
-            get => _u1;
-            set
-            {
-                _u1 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[3].Content = $"0x{value:X2}";
-                });
-            }
-        }
-        public override ushort u2
-        {
-            get => _u2;
-            set
-            {
-                _u2 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[4].Content = $"0x{value:X2}";
-                });
-            }
-        }
-        public override ushort x1
-        {
-            get => _x1;
-            set
-            {
-                _x1 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[5].Content = $"0x{value:X2}";
-                });
-            }
-        }
-        public override ushort x2
-        {
-            get => _x2;
-            set
-            {
-                _x2 = value;
-                MainWindow.Singleton.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[6].Content = $"0x{value:X2}";
-                });
-            }
-        }
-    }
-
-    public class HostContainer
-    {
-        public static readonly HostContainer Instance = new HostContainer();
-
-        public Bus bus { get; set; } = new Bus();
     }
 }

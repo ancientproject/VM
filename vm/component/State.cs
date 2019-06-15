@@ -129,6 +129,8 @@
         /// </summary>
         public bool ec = true;
 
+        public uint curAddr { get; set; } = 0xFFFF;
+        public uint lastAddr { get; set; } = 0xFFFF;
 
 
         public ulong[] regs = new ulong[16];
@@ -141,12 +143,14 @@
 
         public uint Fetch()
         {
+            lastAddr = curAddr;
             if (program.Count == (int) pc && halt == 0)
             {
                 Array.Fill(regs, (ulong)0xDEAD);
                 Load(0xFFFFFFFF);
+                return (curAddr = program.Last());
             }
-            return program.ElementAt((int)pc++);
+            return (curAddr = program.ElementAt((int)pc++));
         }
 
         public string pX = "";
@@ -273,10 +277,12 @@
         {
             if(tc)
                 WriteLine(str);
+            OnTrace?.Invoke(str);
         }
 
         private void Error(string str)
         {
+            OnError?.Invoke(str);
             if (ec)
             {
                 ForegroundColor = ConsoleColor.Red;
@@ -284,5 +290,8 @@
                 ForegroundColor = ConsoleColor.White;
             }
         }
+
+        public event Action<string> OnTrace;
+        public event Action<string> OnError;
     }
 }

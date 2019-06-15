@@ -46,7 +46,7 @@
         {
             var idx = Array.BinarySearch(boundaries, address);
             if (idx < 0) idx = -idx - 2;
-            if (idx < 0) return new CorruptedDevice();
+            if (idx < 0) return new CorruptedDevice(Cpu);
             return Devices[idx];
         }
     }
