@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using flame.runtime.exceptions;
     using static System.Console;
 
     public interface ShadowCache<T> where T : Cache, ICloneable
@@ -143,14 +144,19 @@
 
         public uint Fetch()
         {
-            lastAddr = curAddr;
-            if (program.Count == (int) pc && halt == 0)
+            try
+            {
+                lastAddr = curAddr;
+                if (program.Count != (int) pc || halt != 0) 
+                    return (curAddr = program.ElementAt((int) pc++));
+                return (curAddr = program.ElementAt((int) pc++));
+            }
+            catch
             {
                 Array.Fill(regs, (ulong)0xDEAD);
                 Load(0xFFFFFFFF);
-                return (curAddr = program.Last());
+                throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
-            return (curAddr = program.ElementAt((int)pc++));
         }
 
         public string pX = "";
