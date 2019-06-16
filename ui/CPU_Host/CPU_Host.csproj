@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="resource\FiraCode-Regular.ttf" />
     <None Remove="Styles\VSWindowStyle.xaml" />
   </ItemGroup>
 
@@ -27,9 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="resource\FiraCode-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="resource\FiraCode-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="resource\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
