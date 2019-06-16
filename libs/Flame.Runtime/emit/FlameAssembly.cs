@@ -18,6 +18,7 @@
 
         public AssemblyTag Tag { get; protected set; } = new AssemblyTag(AssemblyTag.SignType.UnSecurity, AssemblyTag.ArchType.Any, 1);
 
+        /// <exception cref="BadImageFormatException"/>
         public static FlameAssembly Load(byte[] bytes)
         {
             using var mem = new MemoryStream(bytes);
@@ -65,7 +66,7 @@
 
             return asm;
         }
-
+        /// <exception cref="BadImageFormatException"/>
         public static FlameAssembly LoadFrom(string filename) // todo
             => Load(File.ReadAllBytes(filename));
 
