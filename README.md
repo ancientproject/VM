@@ -58,7 +58,6 @@ Todo: `.push_y, .push_b, .move_t, and etc`
 
 ```csharp
 .ref_t &(cell_id)                                 // set current program offset to shared memory at cell_id
-.jump_t &(cell_id)                                // get program offset in shared memory at cell_id and goto to offset
 .push_a &($device_id) &(action_id) <| &(params)  // push params to device_id.action_id 
 .swap &(cell_id_source) &(cell_id_target)         // swap memory at two cell index
 .halt                                             // shutdown cpu_host
@@ -70,6 +69,12 @@ Todo: `.push_y, .push_b, .move_t, and etc`
 .sub &(cellResult) &(cellValue1) &(cellValue2)
 .pow &(cellResult) &(cellValue1) &(cellValue2)
 .sqrt &(cellResult) &(cellValue)
+// jump instruction
+.jump_t &(cell_id)                  // get program offset in shared memory at cell_id and goto to offset
+.jump_e &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more or equal 0x6 cell value
+.jump_g &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more 0x6 cell value 
+.jump_u &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less 0x6 cell value 
+.jump_y &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less or equal 0x6 cell value 
 
 .push_j &($device_id) &(action_id) <| @string_t("test string") // transform instruction, casted to array push_a
 ```
