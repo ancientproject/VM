@@ -203,6 +203,8 @@
                     Text = message
                 };
                 tr.ApplyPropertyValue(TextElement.ForegroundProperty, b);
+                if (outputLog.Document.Blocks.Count > 25)
+                    outputLog.Document.Blocks.Remove(outputLog.Document.Blocks.FirstBlock);
                 outputLog.ScrollToEnd();
             });
         }
@@ -243,14 +245,19 @@
             return bytes.Batch(sizeof(uint)).Select(x => BitConverter.ToUInt32(x.ToArray())).Reverse().ToArray();
         }
 
+        public void ResetMemory(object sender, EventArgs e)
+        {
+            IsPLaying = false;
+            OnPropertyChanged(nameof(IsPLaying));
+            IsLoading = false;
+            OnPropertyChanged(nameof(IsLoading));
+            HostContainer.Instance.bus.Cpu.ResetMemory();
+            WriteSystemMessage("RESET");
+        }
+
         public void Step(object sender, EventArgs e) => 
             Task.Factory.StartNew(async () => await HostContainer.Instance.bus.Cpu.Step());
 
-        public void SoftReset(object sender, EventArgs e)
-        {
-            IsPLaying = false;
-            Task.Factory.StartNew(() => HostContainer.Instance.bus.Cpu.ResetCache());
-        }
             
         public void HardReset(object sender, EventArgs e) => 
             Task.Factory.StartNew(() => HostContainer.Instance.bus.Cpu.ResetMemory());

@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Windows.Controls;
+    using System.Windows.Media;
     using vm.component;
 
     public class WPFCache : Cache
@@ -39,6 +40,14 @@
             }
         }
 
+        private void Trigger(ListBoxItem el, ushort value)
+        {
+            el.Content = $"0x{value:X2}";
+            if(value == 0xFF || value == 0x0 || value == 0xF)
+                el.Foreground = Brushes.Red;
+            else
+                el.Foreground = Brushes.GreenYellow;
+        }
         public override ushort r1
         {
             get => _r1;
@@ -47,7 +56,7 @@
                 _r1 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[0].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[0], value);
                 });
             }
         }
@@ -59,7 +68,7 @@
                 _r2 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[1].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[1], value);
                 });
             }
         }
@@ -71,7 +80,7 @@
                 _r3 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[2].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[2], value);
                 });
             }
         }
@@ -83,7 +92,7 @@
                 _u1 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[3].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[3], value);
                 });
             }
         }
@@ -95,7 +104,7 @@
                 _u2 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[4].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[4], value);
                 });
             }
         }
@@ -107,7 +116,7 @@
                 _x1 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[5].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[5], value);
                 });
             }
         }
@@ -119,7 +128,7 @@
                 _x2 = value;
                 MainWindow.Singleton.Dispatcher.Invoke(() =>
                 {
-                    MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[6].Content = $"0x{value:X2}";
+                    Trigger(MainWindow.Singleton.regBox.Items.OfType<ListBoxItem>().ToArray()[6], value);
                 });
             }
         }
