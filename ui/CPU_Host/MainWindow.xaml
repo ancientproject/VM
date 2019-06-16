@@ -35,7 +35,7 @@
                 <DropShadowEffect BlurRadius="8" Color="#FF686868" RenderingBias="Quality" ShadowDepth="2" Direction="0"></DropShadowEffect>
             </ListBox.Effect>
         </ListBox>
-        <ListBox Name="regBox" Height="175" Margin="38,10,0,0" VerticalAlignment="Top" Width="37" HorizontalAlignment="Left">
+        <ListBox FontFamily="Fira Code" Name="regBox" Height="175" Margin="38,10,0,0" VerticalAlignment="Top" Width="37" HorizontalAlignment="Left">
             <ListBoxItem Foreground="Red">0x00</ListBoxItem>
             <ListBoxItem Foreground="Red">0x00</ListBoxItem>
             <ListBoxItem Foreground="Red">0x00</ListBoxItem>
@@ -50,7 +50,7 @@
         <Label ToolTip="Program Counter" Name="PC" Foreground="Wheat" Content="PC: 0x000000C2" Margin="100,185,0,0" FontFamily="Fira Code" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
         <Label ToolTip="Instruction ID" Name="IC" Foreground="Wheat" Content="IC: 0x000000FF" Margin="221,185,0,0" FontFamily="Fira Code" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
         <Label Foreground="Coral" Content="Led Sector" Margin="186,-2,0,0" FontFamily="Fira Code" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="86" d:LayoutOverrides="HorizontalAlignment"/>
-        <Slider Name="speed" Margin="378,14,0,0" Minimum="100" Maximum="700" Value="700" Orientation="Vertical" TickPlacement="TopLeft" Height="335" VerticalAlignment="Top" HorizontalAlignment="Left" TickFrequency="50" />
+        <Slider IsEnabled="False" Name="speed" Margin="378,14,0,0" Minimum="100" Maximum="700" Value="600" Orientation="Vertical" TickPlacement="TopLeft" Height="335" VerticalAlignment="Top" HorizontalAlignment="Left" TickFrequency="50" />
         <Grid Margin="80,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="298" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="111*"/>
@@ -182,7 +182,7 @@
                 <Ellipse Fill="Gray" Height="16" Margin="267,10,15,10" Width="16" d:LayoutOverrides="VerticalAlignment"/>
             </Grid>
         </Grid>
-        <RichTextBox VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" IsReadOnly="true" x:Name="outputLog" Margin="408,14,0,0" HorizontalAlignment="Left" Width="370" Height="335" VerticalAlignment="Top">
+        <RichTextBox FontFamily="Fira Code" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" IsReadOnly="true" x:Name="outputLog" Margin="408,14,0,0" HorizontalAlignment="Left" Width="370" Height="335" VerticalAlignment="Top">
             <RichTextBox.Resources>
                 <Style TargetType="{x:Type Paragraph}">
                     <Setter Property="Margin" Value="0"/>
