@@ -23,15 +23,20 @@
         {
             try
             {
-                var nuget = State.Fetch();
-                var n1 = Convert.ToUInt32(nuget);
-                State.Accept(n1);
+                State.Accept(State.Fetch());
                 State.Eval();
             }
             catch (Exception e)
             {
                 OnError?.Invoke(e);
             }
+            await Task.CompletedTask;
+        }
+
+        public async Task Step(uint address)
+        {
+            State.Accept(address);
+            State.Eval();
             await Task.CompletedTask;
         }
 
