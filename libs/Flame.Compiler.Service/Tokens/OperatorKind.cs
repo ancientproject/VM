@@ -9,6 +9,7 @@
         AltRef,
         OpenParen,
         CloseParen,
-        Value
+        Value,
+        When
     }
 }

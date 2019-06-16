@@ -92,6 +92,14 @@
         ref_t,
         [OpCode(0x8)]
         jump_t,
+        [OpCode(0x8)]
+        jump_e,
+        [OpCode(0x8)]
+        jump_g,
+        [OpCode(0x8)]
+        jump_u,
+        [OpCode(0x8)]
+        jump_y,
 
         [OpCode(true)]
         mov_d, // todo

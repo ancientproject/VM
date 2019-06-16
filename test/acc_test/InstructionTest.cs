@@ -119,5 +119,31 @@ namespace flame.runtime.compiler.test
             if (result.Instruction is warm i)
                 Assert.Equal(InsID.warm, i.ID);
         }
+
+        [Theory]
+        [InlineData(".jump_t &(0xF)")]
+        [InlineData(".jump_e &(0xF) -~ &(0x9) &(0x9)")]
+        [InlineData(".jump_g &(0xF) -~ &(0x9) &(0x9)")]
+        [InlineData(".jump_u &(0xF) -~ &(0x9) &(0x9)")]
+        [InlineData(".jump_y &(0xF) -~ &(0x9) &(0x9)")]
+        public void JumperTest(string code)
+        {
+            var result = SyntaxStorage.InstructionParser.End().Parse(code).First();
+
+            if (result is InstructionExpression i)
+            {
+                Assert.Contains(i.Instruction.GetType().Name, code);
+                if(i.Instruction is jump_t t)
+                    Assert.Equal(0x8F000F00, (uint)t.Assembly());
+                if(i.Instruction is jump_e e)
+                    Assert.Equal(0x8F990F10, (uint)e.Assembly());
+                if(i.Instruction is jump_g g)
+                    Assert.Equal(0x8F990F20, (uint)g.Assembly());
+                if(i.Instruction is jump_u u)
+                    Assert.Equal(0x8F990F30, (uint)u.Assembly());
+                if(i.Instruction is jump_y y)
+                    Assert.Equal(0x8F990F40, (uint)y.Assembly());
+            }
+        }
     }
 }

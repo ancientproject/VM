@@ -19,17 +19,23 @@
             ["^"] = OperatorKind.AltRef,
             ["("] = OperatorKind.OpenParen,
             [")"] = OperatorKind.CloseParen,
+            ["-~"] = OperatorKind.When
         };
 
         public static Parser<IInputToken[]> InstructionParser => (
                 from many in
                     CommentToken
                         // base instruction token
-                        .Or(JumpT)
                         .Or(SwapToken)
                         .Or(RefT)
                         .Or(PushA).Or(PushD).Or(PushX)
                         .Or(LoadI)
+                        // jumps
+                        .Or(JumpT)
+                        .Or(JumpAt(InsID.jump_e))
+                        .Or(JumpAt(InsID.jump_g))
+                        .Or(JumpAt(InsID.jump_u))
+                        .Or(JumpAt(InsID.jump_y))
                         // empty instruction token
                         .Or(ByIIDToken(InsID.halt))
                         .Or(ByIIDToken(InsID.warm))
@@ -98,6 +104,12 @@
                 select OperatorKind.PipeRight)
             .Token()
             .NamedOperator(OperatorKind.PipeRight);
+
+        public static Parser<OperatorKind> When =>
+            (from _ in Parse.String("-~")
+                select OperatorKind.When)
+            .Token()
+            .NamedOperator(OperatorKind.When);
         public static Parser<RefExpression> RefToken =
             (from refSym in Parse.Char('&')
                 from openParen in Parse.Char('(')
@@ -149,6 +161,18 @@
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
                 select new InstructionExpression(new jump_t(cell1.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("jump_t expression");
+
+        public static Parser<IInputToken> JumpAt(InsID id) =>
+            (from dword in InstructionToken(id)
+                from space1 in Parse.WhiteSpace.Optional()
+                from cell0 in RefToken
+                from _ in When
+                from cell1 in RefToken
+                from cell2 in RefToken
+                select new InstructionExpression(Instruction.Summon(id, cell0.Cell, cell1.Cell, cell2.Cell)))
             .Token()
             .WithPosition()
             .Named("jump_t expression");
