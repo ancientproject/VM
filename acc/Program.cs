@@ -13,12 +13,14 @@
     using System.Text;
     using runtime.emit;
     using tokens;
+    using TrueColorConsole;
     using static _term;
     using static TrueColorConsole.VTConsole;
     internal class Program
     {
         public static void Main(string[] c_args)
         {
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { VTConsole.Disable(); };
             var raw = new FluentCommandLineParser<Args>();
             raw.Setup(x => x.sourceFiles)
                 .As('s', "source")

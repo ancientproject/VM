@@ -17,6 +17,7 @@
     {
         public static async Task Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { VTConsole.Disable(); };
             Title = "cpu_host";
             OutputEncoding = Encoding.UTF8;
             VTConsole.Enable();
