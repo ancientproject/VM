@@ -5,9 +5,7 @@
     using System.Threading.Tasks;
     using BenchmarkDotNet.Attributes;
     using BenchmarkDotNet.Running;
-    using flame.compiler.tokens;
     using flame.runtime;
-    using Sprache;
     using vm.component;
     using vm.dev;
     using vm.dev.Internal;
@@ -39,14 +37,14 @@
         [GlobalSetup(Targets = new[] {nameof(S5), nameof(S4)})]
         public void EnableFastWrite()
         {
-            DevMemoryManager.FastWrite = true;
+            MemoryManagement.FastWrite = true;
             Setup();
         }
 
         [GlobalSetup(Targets = new[] {nameof(S1), nameof(S2), nameof(S3)})]
         public void DisableFastWrite()
         {
-            DevMemoryManager.FastWrite = false;
+            MemoryManagement.FastWrite = false;
             Setup();
         }
 
@@ -65,7 +63,7 @@
     {
         public RelDevice() : base(0x4, "<null-device>") { }
 
-        private StringBuilder relMemory = new StringBuilder();
+        private readonly StringBuilder relMemory = new StringBuilder();
 
         [ActionAddress(0x6)]
         public void StageChar(char c)

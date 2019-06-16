@@ -1,18 +1,18 @@
 ﻿namespace vm.dev.Internal
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
     using flame.runtime.exceptions;
 
-    public static class DevMemoryManager
+    public static class MemoryManagement
     {
-        private static Dictionary<string, (IDevice dev, MethodAddress address)> storage = new Dictionary<string, (IDevice dev, MethodAddress address)>();
+        internal static Dictionary<string, (IDevice dev, MethodAddress address)> storage = new Dictionary<string, (IDevice dev, MethodAddress address)>();
+        
         public static bool FastWrite = false;
 
-        private struct MethodAddress
+        internal struct MethodAddress
         {
             public MethodInfo Method { get; set; }
             public short Address { get; set; }
@@ -20,7 +20,7 @@
             public TypeConverter ArgConverter { get; set; }
         }
 
-        public static void WriteMemory(this IDevice dev, int address, int memory)
+        internal static void WriteMemory(this IDevice dev, int address, int memory)
         {
             var key = $"{dev.Name}-{dev.StartAddress:X}-{address:X}";
             if (FastWrite)

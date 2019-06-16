@@ -21,6 +21,8 @@
     using JetBrains.Annotations;
     using MoreLinq.Extensions;
     using vm.dev;
+    using vm.dev.Internal;
+
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter: IValueConverter
     {
@@ -56,9 +58,14 @@
         public MainWindow()
         {
             InitializeComponent();
+            WriteSystemMessage("Booting bios...");
+            MemoryManagement.FastWrite = Environment.GetEnvironmentVariable("FLAME_MEM_FAST_WRITE") == "1";
+            if(MemoryManagement.FastWrite)
+                WriteSystemMessage($"FastWrite: Enabled");
             Singleton = this;
             Icon = new BitmapImage(new Uri($"file://{new FileInfo("./resource/icon.png").FullName}"));
             DataContext = this;
+            WriteSystemMessage($"Booting cpu...");
             StartUpCPU();
             speed.ValueChanged += (o, args) =>
             {
@@ -72,19 +79,20 @@
 
         public async Task WarmUpAllDiods(LampBus.LampControl[] arr)
         {
+            WriteSystemMessage($"Booting LED device...");
             var block = arr.Length;
             var col = arr.First().Diods.Length;
             for (var u = 0; u != block; u++)
             for (var v = 0; v != col; v++)
             {
                 arr[u].TurnOn(v);
-                await Task.Delay(10);
+                await Task.Delay(1);
             }
             for (var u = 0; u != block; u++)
             for (var v = 0; v != col; v++)
             {
                 arr[u].TurnOff(v);
-                await Task.Delay(10);
+                await Task.Delay(1);
             }
             IsLoading = false;
             OnPropertyChanged(nameof(IsLoading));
@@ -168,9 +176,8 @@
             {
                 while (IsPLaying && HostContainer.Instance.bus.State.halt == 0)
                 {
-                    Console.Beep();
                     await HostContainer.Instance.bus.Cpu.Step();
-                    await Task.Delay((int)SpeedValue);
+                    await Task.Delay(10);
                 }
             });
         }
