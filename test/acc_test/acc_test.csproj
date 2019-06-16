@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\acc\acc.csproj" />
+    <ProjectReference Include="..\..\vm\vm.csproj" />
   </ItemGroup>
 
 </Project>
