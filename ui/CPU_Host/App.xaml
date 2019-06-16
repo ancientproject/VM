@@ -4,8 +4,11 @@
              xmlns:local="clr-namespace:CPU_Host"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
         <ResourceDictionary>
+            <FontFamily x:Key="FiraCode">pack://application:,,,/resource/#Fira Code</FontFamily>
             <ResourceDictionary.MergedDictionaries>
+
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/dark.red.xaml" />

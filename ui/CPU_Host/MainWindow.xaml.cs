@@ -96,6 +96,7 @@
             }
             IsLoading = false;
             OnPropertyChanged(nameof(IsLoading));
+            WriteSystemMessage($"Boot LED device success");
         }
         public void StartUpCPU()
         {
@@ -106,7 +107,7 @@
                 WriteToDebug($"]", Brushes.Gray);
                 WriteToDebug($"[", Brushes.Gray);
                 WriteToDebug($"ERROR", Brushes.Red);
-                WriteToDebug($"]", Brushes.Gray);
+                WriteToDebug($"]: ", Brushes.Gray);
                 WriteToDebug($"{s}\r\n", Brushes.Red);
             }
 
