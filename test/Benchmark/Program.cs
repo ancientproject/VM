@@ -22,23 +22,35 @@
         private uint loadi;
 
         [Benchmark(Description = ".loadi")]
-        public async Task ExecuteLoadIDefault()
+        public async Task S1() => await bus.Cpu.Step(loadi);
+
+        [Benchmark(Description = ".push_a <null-dev> fast-off")]
+        public async Task S2() => await bus.Cpu.Step(push_a_to_null);
+
+        [Benchmark(Description = ".push_a <rel-dev> fast-off")]
+        public async Task S3() => await bus.Cpu.Step(push_a_to_rel);
+
+        [Benchmark(Description = ".push_a <null-dev> fast-on")]
+        public async Task S4() => await bus.Cpu.Step(push_a_to_null);
+
+        [Benchmark(Description = ".push_a <rel-dev> fast-on")]
+        public async Task S5() => await bus.Cpu.Step(push_a_to_rel);
+
+        [GlobalSetup(Targets = new[] {nameof(S5), nameof(S4)})]
+        public void EnableFastWrite()
         {
-            await bus.Cpu.Step(loadi);
-        }
-        [Benchmark(Description = ".push_a <null-dev>")]
-        public async Task ExecutePushANullDev()
-        {
-            await bus.Cpu.Step(push_a_to_null);
-        }
-        [Benchmark(Description = ".push_a <rel-dev>")]
-        public async Task ExecutePushARelDev()
-        {
-            await bus.Cpu.Step(push_a_to_rel);
+            DevMemoryManager.FastWrite = true;
+            Setup();
         }
 
-        [GlobalSetup]
-        public void Setup()
+        [GlobalSetup(Targets = new[] {nameof(S1), nameof(S2), nameof(S3)})]
+        public void DisableFastWrite()
+        {
+            DevMemoryManager.FastWrite = false;
+            Setup();
+        }
+
+        private void Setup()
         {
             IntToCharConverter.Register<char>();
             bus = new Bus();
