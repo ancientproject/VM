@@ -228,19 +228,30 @@
                     pc = regs[r1];
                     break;
                 case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
-                    Trace($"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
-                    if(regs[r2] >= regs[r3]) pc = regs[r1];
+                    Trace(regs[r2] >= regs[r3]
+                        ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(regs[r2] >= regs[r3]) 
+                        pc = regs[r1];
                     break;
                 case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
-                    Trace($"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
-                    if(regs[r2] > regs[r3]) pc = regs[r1];
+                    Trace(regs[r2] > regs[r3]
+                        ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(regs[r2] > regs[r3])
+                        pc = regs[r1];
                     break;
                 case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
-                    Trace($"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
-                    if(regs[r2] < regs[r3]) pc = regs[r1];
+                    Trace(regs[r2] < regs[r3]
+                        ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(regs[r2] < regs[r3])
+                        pc = regs[r1];
                     break;
                 case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
-                    Trace($"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
+                    Trace(regs[r2] <= regs[r3]
+                        ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(regs[r2] <= regs[r3]) pc = regs[r1];
                     break;
                 case 0xA: break;
