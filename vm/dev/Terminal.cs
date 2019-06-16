@@ -4,14 +4,10 @@
     using System.Threading.Tasks;
     using Internal;
     using static System.Console;
-    public class Terminal : IDevice, IComparable
+    public class Terminal : AbstractDevice
     {
-        [StringAddress(0xE, 0xF)]
-        public string Name { get; } = "8bit-terminal";
+        public Terminal(short addr) : base(addr, "8bit-terminal") {}
 
-        public Terminal(short startAddr) => StartAddress = startAddr;
-
-        public short StartAddress { get; }
 
         [PropAddress(0x0)]
         public ConsoleColor foregroundColor { get; protected set; } = ConsoleColor.White;
@@ -64,27 +60,10 @@
             }
         }
 
-        public void write(int address, int data) => (this as IDevice).WriteMemory(address, data);
-
-        public int read(int address) => throw new NotImplementedException();
-
         [ActionAddress(0x3)]
-        public void Init() => ClearRel();
+        public override void Init() => ClearRel();
 
         [ActionAddress(0x4)]
-        public void Shutdown() => relMemory = null;
-
-        public override int GetHashCode() => StartAddress ^ 42;
-
-        public int CompareTo(object obj)
-        {
-            if (obj is IDevice dev)
-            {
-                if (StartAddress > dev.StartAddress)
-                    return 1;
-                return -1;
-            }
-            return 0;
-        }
+        public override void Shutdown() => relMemory = null;
     }
 }
