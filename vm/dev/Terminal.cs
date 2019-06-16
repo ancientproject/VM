@@ -1,6 +1,7 @@
 ﻿namespace vm.dev
 {
     using System;
+    using System.Text;
     using System.Threading.Tasks;
     using Internal;
     using static System.Console;
@@ -14,7 +15,7 @@
         [PropAddress(0x1)]
         public ConsoleColor backgroundColor { get; protected set; } = ConsoleColor.Black;
 
-        private string relMemory;
+        private StringBuilder relMemory = new StringBuilder();
 
         [ActionAddress(0x5)]
         public void WriteChar(char c)
@@ -28,14 +29,14 @@
         public void StageChar(char c)
         {
             if (c == 0xA)
-                relMemory += Environment.NewLine;
+                relMemory.Append(Environment.NewLine);
             else 
-                relMemory += c;
+                relMemory.Append(c);
         }
         [ActionAddress(0x7)]
-        public void PushRel() => Write(relMemory);
+        public void PushRel() => Out.Write(relMemory);
         [ActionAddress(0x8)]
-        public void ClearRel() => relMemory = "";
+        public void ClearRel() => relMemory.Clear();
 
         [ActionAddress(0x9)]
         public void Setting(char c)
