@@ -153,8 +153,11 @@
             }
             catch
             {
-                Array.Fill(regs, (ulong)0xDEAD);
-                Load(0xFFFFFFFF);
+                if (Environment.GetEnvironmentVariable("FLAME_KEEP_MEMORY") != "1")
+                {
+                    Array.Fill(regs, (ulong)0xDEAD);
+                    Load(0xFFFFFFFF);
+                }
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
         }
@@ -164,9 +167,9 @@
         {
             if (instructionID == 0xA)
             {
-                WriteLine($"  r   r   r   u   u   x   x");
-                WriteLine($"  1   2   3   1   2   1   2");
-                WriteLine($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
+                Trace($"  r   r   r   u   u   x   x");
+                Trace($"  1   2   3   1   2   1   2");
+                Trace($"0x{Registers.L2.r1:X} 0x{Registers.L2.r2:X} 0x{Registers.L2.r3:X} 0x{Registers.L2.u1:X} 0x{Registers.L2.u2:X} 0x{x1:X} 0x{Registers.L2.x2:X}");
             }
             Trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             switch (instructionID)
@@ -216,9 +219,29 @@
                     regs[r2] = regs[r1] ^ regs[r2];
                     regs[r1] ^= regs[r2];
                     break;
-                case 0x8 when u2 == 0xF: // 0x8F000F0
+                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
                     Trace($"jump_t 0x{r1:X}");
                     pc = regs[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
+                    Trace($"jump_t 0x{r1:X}");
+                    pc = regs[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
+                    Trace($"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
+                    if(regs[r2] >= regs[r3]) pc = regs[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
+                    Trace($"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
+                    if(regs[r2] > regs[r3]) pc = regs[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
+                    Trace($"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
+                    if(regs[r2] < regs[r3]) pc = regs[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
+                    Trace($"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X}");
+                    if(regs[r2] <= regs[r3]) pc = regs[r1];
                     break;
                 case 0xA: break;
                 case 0xF when x2 == 0xC: // push_a
@@ -229,16 +252,15 @@
                     Trace($"ref_t 0x{r1:X}");
                     regs[r1] = pc;
                     break;
+                case 0xF when x2 == 0xE: // push_d
+                    Trace($"push_d 0x{r1:X} 0x{r2:X} 0x{u1:X}");
+                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1] & 0xFF);
+                    break;
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
                     _bus.Cpu.Halt(0x0);
                     break;
                 case 0xB when r1 == 0x0 && r2 == 0x0 && r3 == 0xB && u1 == 0x5:
                     _bus.Cpu.Halt(0x1);
-                    break;
-                
-                case 0xF when x2 == 0xE: // push_d
-                    Trace($"push_d 0x{r1:X} 0x{r2:X} 0x{u1:X}");
-                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1]);
                     break;
                 case 0xF when x2 == 0xF: // push_x
                     Trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
