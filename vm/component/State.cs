@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using dev.Internal;
     using flame.runtime.exceptions;
     using static System.Console;
 
@@ -60,14 +61,17 @@
 
         public State(Bus bus) => _bus = bus;
 
+        
+
+        
+
+        #region Registers
+        public ShadowCache<Cache> Registers = ShadowCacheFactory.Create();
         public ulong pc
         {
             get => Registers.L1.PC;
             set => Registers.L1.PC = value;
         }
-
-        public ShadowCache<Cache> Registers = ShadowCacheFactory.Create();
-
         /// <summary>
         /// base register cell
         /// </summary>
@@ -121,20 +125,48 @@
             get => Registers.L1.IID;
             set => Registers.L1.IID = value;
         }
+
+        #endregion
+        
         /// <summary>
         /// trace flag
         /// </summary>
-        public bool tc = false;
+        public bool tc 
+        {
+            get => regs[17] == 1;
+            set => regs[17] = value ? 1ul : 0ul;
+        }
         /// <summary>
         /// Error flag
         /// </summary>
-        public bool ec = true;
+        public bool ec
+        {
+            get => regs[18] == 1;
+            set => regs[18] = value ? 1ul : 0ul;
+        }
+
+        /// <summary>
+        /// Keep memory flag
+        /// </summary>
+        public bool km
+        {
+            get => regs[19] == 1;
+            set => regs[19] = value ? 1ul : 0ul;
+        }
+        /// <summary>
+        /// fast write flag
+        /// </summary>
+        public bool fw
+        {
+            get => regs[20] == 1;
+            set => regs[20] = value ? 1ul : 0ul;
+        }
 
         public uint curAddr { get; set; } = 0xFFFF;
         public uint lastAddr { get; set; } = 0xFFFF;
 
 
-        public ulong[] regs = new ulong[16];
+        public ulong[] regs = new ulong[32];
 
         public sbyte halt { get; set; } = 0;
 
@@ -153,9 +185,9 @@
             }
             catch
             {
-                if (Environment.GetEnvironmentVariable("FLAME_KEEP_MEMORY") != "1")
+                if (!km)
                 {
-                    Array.Fill(regs, (ulong)0xDEAD);
+                    Array.Fill(regs, (ulong)0xDEAD, 0, 16);
                     Load(0xFFFFFFFF);
                 }
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
@@ -165,6 +197,7 @@
         public string pX = "";
         public void Eval()
         {
+            MemoryManagement.FastWrite = fw;
             if (instructionID == 0xA)
             {
                 Trace($"  r   r   r   u   u   x   x");
@@ -177,12 +210,19 @@
                 case 0xF when r1 == 0xF && r2 == 0xF && r3 == 0xF && u1 == 0xF && u2 == 0xF && x1 == 0xF:
                     _bus.Cpu.Halt(0xF);
                     break;
-                case 0x1:
-                    Trace($"loadi 0x{u1:X}, 0x{u2:X}");
+                case 0x1 when x2 == 0x0:
+                    Trace($"loadi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
                     if (u2 != 0)
                         regs[r1] = (ulong)((u1 << 4) | u2);
                     else
                         regs[r1] = u1;
+                    break;
+                case 0x1 when x2 == 0xA:
+                    Trace($"loadi_x 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
+                    regs[(ulong)((r1 << 4) | r2)] = (ulong)((u1 << 4) | u2);
+                    break;
+                case 0x1 when x2 == 0xF:
+                    regs = new ulong[(ulong)((u1 << 4) | u2)];
                     break;
                 case 0x2:
                     Trace($"sum 0x{r2:X}, 0x{r3:X}");

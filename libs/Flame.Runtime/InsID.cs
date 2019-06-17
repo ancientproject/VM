@@ -67,6 +67,8 @@
         warm,
         [OpCode(0x1)]
         loadi,
+        [OpCode(0x1)]
+        loadi_x,
         [OpCode(0x2)]
         add,
         [OpCode(0x4)]

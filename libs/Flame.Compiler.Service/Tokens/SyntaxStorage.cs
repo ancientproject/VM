@@ -30,6 +30,7 @@
                         .Or(RefT)
                         .Or(PushA).Or(PushD).Or(PushX)
                         .Or(LoadI)
+                        .Or(LoadI_X)
                         // jumps
                         .Or(JumpT)
                         .Or(JumpAt(InsID.jump_e))
@@ -156,6 +157,16 @@
             .Token()
             .WithPosition()
             .Named("loadi expression");
+        public static Parser<IInputToken> LoadI_X =>
+            (from dword in InstructionToken(InsID.loadi_x)
+                from space1 in Parse.WhiteSpace.Optional()
+                from cell1 in RefToken
+                from pipe in PipeRight
+                from val1 in ValueToken
+                select new InstructionExpression(new loadi_x(cell1.Cell, val1.Value)))
+            .Token()
+            .WithPosition()
+            .Named("loadi_x expression");
         public static Parser<IInputToken> JumpT =>
             (from dword in InstructionToken(InsID.jump_t)
                 from space1 in Parse.WhiteSpace.Optional()
