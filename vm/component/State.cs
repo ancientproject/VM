@@ -221,9 +221,6 @@
                     Trace($"loadi_x 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
                     regs[(ulong)((r1 << 4) | r2)] = (ulong)((u1 << 4) | u2);
                     break;
-                case 0x1 when x2 == 0xF:
-                    regs = new ulong[(ulong)((u1 << 4) | u2)];
-                    break;
                 case 0x2:
                     Trace($"sum 0x{r2:X}, 0x{r3:X}");
                     regs[r1] = regs[r2] + regs[r3];

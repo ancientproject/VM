@@ -25,13 +25,21 @@
 
             var bus = new Bus();
 
+
+            /* @0x11 */
+            bus.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
+            /* @0x12 */
+            bus.State.ec = Environment.GetEnvironmentVariable("FLAME_ERROR") != "0";
+            /* @0x13 */
+            bus.State.km = Environment.GetEnvironmentVariable("FLAME_KEEP_MEMORY") == "1";
+            /* @0x14 */
+            bus.State.fw = Environment.GetEnvironmentVariable("FLAME_MEM_FAST_WRITE") == "1";
+
             bus.Add(new Terminal(0x1));
             bus.Add(new AdvancedTerminal(0x2));
 
             var core = bus.Cpu;
 
-            core.State.Load(BIOS.GetILCode().ToArray());
-            await core.StepToEnd(true);
             //uint[] page = {
             //    0xABCDEFE0,
             //    new loadi(0x1, 0x5),  // x
