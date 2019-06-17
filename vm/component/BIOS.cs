@@ -8,9 +8,34 @@
 
     public static class BIOS
     {
+        public static IReadOnlyCollection<uint> GetILCode()
+        {
+            /* @0x11 */
+            var tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
+            /* @0x12 */
+            var ec = Environment.GetEnvironmentVariable("FLAME_ERROR") != "0";
+            /* @0x13 */
+            var km = Environment.GetEnvironmentVariable("FLAME_KEEP_MEMORY") == "1";
+            /* @0x14 */
+            var fw = Environment.GetEnvironmentVariable("FLAME_MEM_FAST_WRITE") == "1";
+
+            var list = new List<uint>
+            {
+                /* init memory */
+                new loadi_x(0xFF, 0x20, 0xF),
+                /* set flagms */
+                new loadi_x(0x11, tc),
+                new loadi_x(0x12, ec),
+                new loadi_x(0x13, km),
+                new loadi_x(0x14, fw),
+            };
+            return list.AsReadOnly();
+        }
+
+
         private const string ESC = "\x1b";
 
-        public static IReadOnlyCollection<uint> GetILCode()
+        private static IReadOnlyCollection<uint> _GetILCode()
         {
             var list = new List<uint>();
 

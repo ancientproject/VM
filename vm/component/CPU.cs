@@ -31,6 +31,19 @@
             await Task.CompletedTask;
         }
 
+        public async Task StepToEnd(bool clearMemory = true)
+        {
+            foreach (var u in State.program)
+            {
+                await Step(u);
+            }
+            if (clearMemory)
+            {
+                State.program.Clear();
+                State.pc = 0x0;
+            }
+        }
+
         public async Task Step(uint address)
         {
             State.Accept(address);

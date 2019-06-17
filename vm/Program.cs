@@ -30,12 +30,8 @@
 
             var core = bus.Cpu;
 
-            core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
-            core.State.ec = Environment.GetEnvironmentVariable("FLAME_ERROR") != "0";
-            MemoryManagement.FastWrite 
-                          = Environment.GetEnvironmentVariable("FLAME_MEM_FAST_WRITE") == "1";
-            //core.State.Load(BIOS.GetILCode().ToArray());
-
+            core.State.Load(BIOS.GetILCode().ToArray());
+            await core.StepToEnd(true);
             //uint[] page = {
             //    0xABCDEFE0,
             //    new loadi(0x1, 0x5),  // x
