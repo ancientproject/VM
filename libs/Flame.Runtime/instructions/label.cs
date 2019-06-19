@@ -2,7 +2,7 @@
 {
     public class label : Instruction
     {
-        public label(char c, bool isAuto, bool isEnd, short? cellID) : base(InsID.label)
+        public label(char c, bool isAuto, bool isEnd, short? cellID) : base(InsID.halt)
         {
         }
 
