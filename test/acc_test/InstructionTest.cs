@@ -1,5 +1,6 @@
 namespace flame.runtime.compiler.test
 {
+    using System;
     using System.Linq;
     using flame.compiler.tokens;
     using runtime;
@@ -27,20 +28,16 @@ namespace flame.runtime.compiler.test
         [InlineData(".push_j &(0x0) &(0xC) <| @string_t(\"test\")")]
         public void PushJ(string code)
         {
-            var result = SyntaxStorage.PushJ.End().Parse(code);
-            if (result is TransformationContext t)
-            {
-                Assert.Equal(4, t.Instructions.Length);
-                Assert.Equal(0xF0C0074C, (uint)t.Instructions.First().Assembly());
-                Assert.Equal(0xF0C0074C, (uint)t.Instructions.Last().Assembly());
-            }
+            var result = flame.compiler.Host.Evolve(code).Split('\n');
+            Assert.Equal(".push_a &(0x0) &(0xC) <| $(0x74)", result.First());
+            Assert.Equal(".push_a &(0x0) &(0xC) <| $(0x74)", result.Last());
         }
         [Theory]
         [InlineData(".push_a &(0x0) &(0xC) <| $(0xFF)")]
         [InlineData(".push_a &(0x0) &(0xC) <| @char_t('ÿ')")]
         public void PushA(string code)
         {
-            var result = SyntaxStorage.PushA.End().Parse(code);
+            var result = FlameAssemblerSyntax.PushA.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is push_a i)
             {
@@ -55,7 +52,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".loadi &(0x0) <| $(0xF)")]
         public void LoadI(string code)
         {
-            var result = SyntaxStorage.LoadI.End().Parse(code);
+            var result = FlameAssemblerSyntax.LoadI.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is loadi i)
             {
@@ -68,7 +65,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".jump_t &(0x0)")]
         public void JumpT(string code)
         {
-            var result = SyntaxStorage.JumpT.End().Parse(code);
+            var result = FlameAssemblerSyntax.JumpT.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is jump_t i)
             {
@@ -80,7 +77,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".ref_t &(0x0)")]
         public void RefT(string code)
         {
-            var result = SyntaxStorage.RefT.End().Parse(code);
+            var result = FlameAssemblerSyntax.RefT.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is ref_t i)
             {
@@ -92,7 +89,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".swap &(0x0) &(0xF)")]
         public void Swap(string code)
         {
-            var result = SyntaxStorage.SwapToken.End().Parse(code);
+            var result = FlameAssemblerSyntax.SwapToken.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is swap i)
             {
@@ -105,7 +102,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".halt")]
         public void Halt(string code)
         {
-            var result = SyntaxStorage.ByIIDToken(InsID.halt).End().Parse(code);
+            var result = FlameAssemblerSyntax.ByIIDToken(InsID.halt).End().Parse(code);
 
             if (result.Instruction is halt i)
                 Assert.Equal(InsID.halt, i.ID);
@@ -114,7 +111,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".warm")]
         public void Warm(string code)
         {
-            var result = SyntaxStorage.ByIIDToken(InsID.warm).End().Parse(code);
+            var result = FlameAssemblerSyntax.ByIIDToken(InsID.warm).End().Parse(code);
 
             if (result.Instruction is warm i)
                 Assert.Equal(InsID.warm, i.ID);
@@ -128,7 +125,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".jump_y &(0xF) -~ &(0x9) &(0x9)")]
         public void JumperTest(string code)
         {
-            var result = SyntaxStorage.InstructionParser.End().Parse(code).First();
+            var result = FlameAssemblerSyntax.ManyParser.End().Parse(code).First();
 
             if (result is InstructionExpression i)
             {

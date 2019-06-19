@@ -10,7 +10,7 @@
         public static Parser<OperatorKind> NamedOperator(this Parser<OperatorKind> parser, OperatorKind kind)
         {
             return parser.Named(
-                $"{kind} operator ({SyntaxStorage.Operators.First(x => x.Value == kind).Key})");
+                $"{kind} operator ({FlameAssemblerSyntax.Operators.First(x => x.Value == kind).Key})");
         }
 
         public static Parser<T> WithPosition<T>(this Parser<T> parser) where T : class, IInputToken
@@ -22,6 +22,27 @@
                     r.Value.InputPosition = new Position(i.Position, i.Line, i.Column);
 
                 return r;
+            };
+        }
+
+        public static Parser<IEnumerable<IEvolveToken>> ContinueMany(this Parser<IEvolveToken> parser)
+        {
+            if (parser == null) throw new ArgumentNullException(nameof(parser));
+
+            return i =>
+            {
+                var remainder = i;
+                var result = new List<IEvolveToken>();
+                var r = parser(i);
+
+                while (true)
+                {
+                    if (remainder.Equals(r.Remainder)) break;
+                    result.Add(r.WasSuccessful ? r.Value : new ErrorEvolveToken(r));
+                    remainder = r.Remainder;
+                    r = parser(remainder);
+                }
+                return Result.Success<IEnumerable<IEvolveToken>>(result, remainder);
             };
         }
         public static Parser<IEnumerable<IInputToken>> ContinueMany(this Parser<IInputToken> parser)
@@ -37,7 +58,7 @@
                 while (true)
                 {
                     if (remainder.Equals(r.Remainder)) break;
-                    result.Add(r.WasSuccessful ? r.Value : new ErrorToken(r));
+                    result.Add(r.WasSuccessful ? r.Value : new ErrorCompileToken(r));
                     remainder = r.Remainder;
                     r = parser(remainder);
                 }

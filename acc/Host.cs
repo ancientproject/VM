@@ -11,12 +11,13 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using exceptions;
     using runtime.emit;
     using tokens;
     using TrueColorConsole;
     using static _term;
     using static TrueColorConsole.VTConsole;
-    internal class Program
+    internal class Host
     {
         public static void Main(string[] c_args)
         {
@@ -35,7 +36,7 @@
             CursorSetVisibility(false);
             CursorSetBlinking(false);
 
-            var ver = FileVersionInfo.GetVersionInfo(typeof(Program).Assembly.Location).ProductVersion;
+            var ver = FileVersionInfo.GetVersionInfo(typeof(Host).Assembly.Location).ProductVersion;
             WriteLine($"Flame Assembler Compiler version {ver} (default)", Color.Gray);
             WriteLine($"Copyright (C) Yuuki Wesp.\n\n", Color.Gray);
             
@@ -56,8 +57,56 @@
                 return;
             }
 
+
+
             var source = File.ReadAllText(args.sourceFiles.First()).Replace("\r", "");
-            var @try = SyntaxStorage.InstructionParser.Parse(source);
+
+
+            try
+            {
+                var e = Evolve(source);
+                var c = Compile(e, args);
+
+                File.WriteAllBytes($"{args.OutFile}.dlx", c.data);
+                File.WriteAllText($"{args.OutFile}.map", c.map);
+            }
+            catch (FlameCompileException)
+            { }
+            catch (FlameEvolveException)
+            { }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public static string Evolve(string code)
+        {
+            var result = code;
+            var block = code.Replace("\r", "").Split('\n');
+            var parsed = FlameTransformerSyntax.ManyParser.Parse(code);
+            foreach (var token in parsed)
+            {
+                switch (token)
+                {
+                    case ClassicEvolve e:
+                        result = result.Replace(
+                            block[token.InputPosition.Line-1], 
+                            string.Join("\n", e.Result));
+                        break;
+                    case EmptyEvolve _:
+                        break;
+                    case ErrorEvolveToken error:
+                        Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
+                        throw new FlameEvolveException(error.ErrorResult.ToString());
+                }
+            }
+            return result;
+        }
+
+        public static (byte[] data, string map) Compile(string source, Args args)
+        {
+            var @try = FlameAssemblerSyntax.ManyParser.Parse(source);
             
             var map = new StringBuilder();
             var offset = 0;
@@ -88,9 +137,9 @@
                             CompileToken(ins);
                         break;
                     }
-                    case ErrorToken error:
+                    case ErrorCompileToken error:
                         Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
-                        return;
+                        throw new FlameCompileException(error.ErrorResult.ToString());
                     case CommentToken comment:
                         // ignore
                         break;
@@ -99,9 +148,8 @@
                         break;
                 }
             }
-            
-            File.WriteAllBytes($"{args.OutFile}.dlx", asm.GetBytes());
-            File.WriteAllText($"{args.OutFile}.map", map.ToString());
+
+            return (asm.GetBytes(), map.ToString());
         }
 
 

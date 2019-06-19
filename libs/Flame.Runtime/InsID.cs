@@ -107,8 +107,6 @@
         mov_d, // todo
         [OpCode(true)]
         push_j,
-        [OpCode(0x9)]
-        label,
 
         [OpCode(0xD)]
         halt

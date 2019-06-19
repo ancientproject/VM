@@ -4,10 +4,57 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Text;
     using runtime;
     using Sprache;
+    using static FlameAssemblerSyntax;
 
-    public class SyntaxStorage
+    public interface IEvolveToken : IInputToken { }
+
+    public class ClassicEvolve : IEvolveToken
+    {
+        public Position InputPosition { get; set; }
+        public string[] Result { get; set; }
+    }
+
+    public class PushJEvolve : ClassicEvolve
+    {
+        public PushJEvolve(string value, byte cellDev, byte ActionDev)
+        {
+            Result = value.Select(x => $".push_a &(0x{cellDev:X1}) &(0x{ActionDev:X1}) <| $(0x{(ushort)x:X})").ToArray();
+        }
+    }
+
+    public class EmptyEvolve : IEvolveToken
+    {
+        public Position InputPosition { get; set; }
+    }
+    public static class FlameTransformerSyntax
+    {
+        public static Parser<IEvolveToken> PushJ =>
+            (from dword in InstructionToken(InsID.push_j)
+                from cell1 in RefToken
+                from cell2 in RefToken
+                from op2 in PipeRight
+                from cell3 in CastStringToken
+                select new PushJEvolve(cell3, cell1.Cell, cell2.Cell))
+            .Token()
+            .WithPosition()
+            .Named("push_j transform expression");
+
+        public static Parser<IEvolveToken> Parser =>
+            FlameAssemblerSyntax.Parser.Return(new EmptyEvolve())
+                .Or(PushJ);
+
+        public static Parser<IEvolveToken[]> ManyParser => (
+                from many in
+                    Parser
+                select many)
+            .ContinueMany()
+                .Select(x => x.ToArray());
+    }
+
+    public static class FlameAssemblerSyntax
     {
         internal static readonly Dictionary<string, OperatorKind> Operators = new Dictionary<string, OperatorKind>
         {
@@ -22,33 +69,33 @@
             ["-~"] = OperatorKind.When
         };
 
-        public static Parser<IInputToken[]> InstructionParser => (
+        public static Parser<IInputToken> Parser => CommentToken
+            // base instruction token
+            .Or(SwapToken)
+            .Or(RefT)
+            .Or(PushA).Or(PushD).Or(PushX)
+            .Or(LoadI)
+            .Or(LoadI_X)
+            // jumps
+            .Or(JumpT)
+            .Or(JumpAt(InsID.jump_e))
+            .Or(JumpAt(InsID.jump_g))
+            .Or(JumpAt(InsID.jump_u))
+            .Or(JumpAt(InsID.jump_y))
+            // empty instruction token
+            .Or(ByIIDToken(InsID.halt))
+            .Or(ByIIDToken(InsID.warm))
+            // math instruction token
+            .Or(MathInstruction(InsID.add))
+            .Or(MathInstruction(InsID.mul))
+            .Or(MathInstruction(InsID.sub))
+            .Or(MathInstruction(InsID.div))
+            .Or(MathInstruction(InsID.pow))
+            .Or(SqrtToken);
+
+        public static Parser<IInputToken[]> ManyParser => (
                 from many in
-                    CommentToken
-                        // base instruction token
-                        .Or(SwapToken)
-                        .Or(RefT)
-                        .Or(PushA).Or(PushD).Or(PushX)
-                        .Or(LoadI)
-                        .Or(LoadI_X)
-                        // jumps
-                        .Or(JumpT)
-                        .Or(JumpAt(InsID.jump_e))
-                        .Or(JumpAt(InsID.jump_g))
-                        .Or(JumpAt(InsID.jump_u))
-                        .Or(JumpAt(InsID.jump_y))
-                        // empty instruction token
-                        .Or(ByIIDToken(InsID.halt))
-                        .Or(ByIIDToken(InsID.warm))
-                        // math instruction token
-                        .Or(MathInstruction(InsID.add))
-                        .Or(MathInstruction(InsID.mul))
-                        .Or(MathInstruction(InsID.sub))
-                        .Or(MathInstruction(InsID.div))
-                        .Or(MathInstruction(InsID.pow))
-                        .Or(SqrtToken)
-                        // tramsformation instruction token
-                        .Or(PushJ)
+                    Parser
                 select many)
             .ContinueMany()
             .Select(x => x.ToArray());
@@ -255,6 +302,10 @@
             .Named($"sqrt expression");
         #endregion
         #region etc tokens
+        public static Parser<string> ProcToken(string name) =>
+            from dot in Parse.Char('#')
+            from ident in Parse.String(name).Text()
+            select ident;
         public static Parser<string> InstructionToken(InsID instruction) =>
             from dot in Parse.Char('.')
             from ident in Parse.String(instruction.ToString()).Text()
@@ -270,21 +321,11 @@
 
         #region TramsformToken
 
-        public static Parser<IInputToken> PushJ =>
-            (from dword in InstructionToken(InsID.push_j)
-                from cell1 in RefToken
-                from cell2 in RefToken
-                from op2 in PipeRight
-                from cell3 in CastStringToken
-             select new TransformPushJ(cell3, cell1.Cell, cell2.Cell))
-            .Token()
-            .WithPosition()
-            .Named("push_j transform expression");
         public static Parser<IInputToken> Label => (
-                from dword in InstructionToken(InsID.label)
+                from dword in ProcToken("label")
                 from nameOfLabel in IdentifierToken
-                from auto in Keyword("auto").Optional()
                 from id in RefToken.Optional()
+                from auto in Keyword("auto").Optional()
                 select new LabelTransform(nameOfLabel, auto.IsDefined, id.GetOrDefault()?.Cell))
             .Token()
             .WithPosition()
