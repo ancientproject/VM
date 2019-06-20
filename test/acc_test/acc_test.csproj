@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\acc\acc.csproj" />
-    <ProjectReference Include="..\..\vm\vm.csproj" />
+    <ProjectReference Include="..\..\vm\csharp\vm.csproj" />
   </ItemGroup>
 
 </Project>
