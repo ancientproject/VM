@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header\abstractDevice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="header\boolinq.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -39,11 +36,11 @@
     <ClInclude Include="header\terminalDev.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="header\Device.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\abstractDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Bus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,10 +50,13 @@
     <ClCompile Include="src\State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\vm_cpp.cpp">
+    <ClCompile Include="src\terminalDev.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\terminalDev.cpp">
+    <ClCompile Include="src\host.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Device.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
