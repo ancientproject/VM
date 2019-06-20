@@ -18,11 +18,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header\abstractDevice.h" />
+    <ClInclude Include="header\boolinq.h" />
+    <ClInclude Include="header\Bus.h" />
+    <ClInclude Include="header\CPU.h" />
+    <ClInclude Include="header\State.h" />
+    <ClInclude Include="header\termcolor.hpp" />
+    <ClInclude Include="header\terminalDev.h" />
+    <ClInclude Include="header\utils.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\abstractDevice.cpp" />
+    <ClCompile Include="src\Bus.cpp" />
+    <ClCompile Include="src\CPU.cpp" />
+    <ClCompile Include="src\State.cpp" />
+    <ClCompile Include="src\terminalDev.cpp" />
+    <ClCompile Include="src\vm_cpp.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{4E6706B4-57CF-4813-A989-9B3F8FA165B0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>vmcpp</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -145,13 +164,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="abstractDevice.cpp" />
-    <ClCompile Include="vm_cpp.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="abstractDevice.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
