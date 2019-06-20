@@ -1,10 +1,8 @@
 ﻿namespace flame.compiler.tokens
 {
-    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Text;
     using runtime;
     using Sprache;
     using static FlameAssemblerSyntax;
@@ -15,6 +13,27 @@
     {
         public Position InputPosition { get; set; }
         public string[] Result { get; set; }
+    }
+
+    public class DefineLabels : IEvolveToken
+    {
+        public DefineLabel[] Labels { get; set; }
+
+        public DefineLabels(IEvolveToken[] labels) => Labels = labels.Cast<DefineLabel>().ToArray();
+        public Position InputPosition { get; set; }
+    }
+
+    public class DefineLabel : IEvolveToken
+    {
+        public string Name { get; set; }
+        public string Hex { get; set; }
+        public Position InputPosition { get; set; }
+
+        public DefineLabel(string name, string hex)
+        {
+            Name = name;
+            Hex = hex;
+        }
     }
 
     public class PushJEvolve : ClassicEvolve
@@ -42,9 +61,25 @@
             .WithPosition()
             .Named("push_j transform expression");
 
+        public static Parser<IEvolveToken[]> Group(Parser<IEvolveToken> @group) => 
+            from s in Parse.String("#{").Text()
+            from g in @group.AtLeastOnce()
+            from end in Parse.Char('}')
+                select g.ToArray();
+
+        public static Parser<IEvolveToken> Label =>
+            (from dword in ProcToken("label")
+                from name in QuoteIdentifierToken
+                from hex in HexNumber
+                from auto in Keyword("auto").Optional()
+                select new DefineLabel(name, hex))
+            .Token()
+            .Named("label token");
+
         public static Parser<IEvolveToken> Parser =>
             FlameAssemblerSyntax.Parser.Return(new EmptyEvolve())
-                .Or(PushJ);
+                .Or(PushJ)
+                .Or(Group(Label).Select(x => new DefineLabels(x)));
 
         public static Parser<IEvolveToken[]> ManyParser => (
                 from many in
@@ -113,6 +148,13 @@
              select @char)
             .Token()
             .Named("char token");
+        public static Parser<string> QuoteIdentifierToken =
+            (from open in Parse.Char('\'')
+                from @string in Parse.AnyChar.Except(Parse.Char('\'')).Many().Text()
+                from close in Parse.Char('\'')
+                select @string)
+            .Token()
+            .Named("quote string token");
 
         public static Parser<string> IdentifierToken =
             (from word in Parse.AnyChar.Except(Parse.Char(' ')).Many().Text()
@@ -132,14 +174,19 @@
                 from close in Parse.Char('"')
              select @string)
             .Token()
-            .Named("char token");
+            .Named("string token");
+
+        public static Parser<string> RefLabel =
+            from sym in Parse.Char('~')
+            from name in Parse.LetterOrDigit.Many().Text()
+            select name;
         public static Parser<string> HexNumber =
             (from zero in Parse.Char('0')
                 from x in Parse.Chars("x")
                 from number in Parse.Chars("0xABCDEF123456789").Many().Text()
                 select number)
             .Token()
-            .Named("hex number");
+            .Named("hex number").Or(RefLabel.Token().Named("label ref token"));
 
         #region Operator tokens
         public static Parser<OperatorKind> PipeLeft =>
@@ -163,7 +210,7 @@
                 from openParen in Parse.Char('(')
                 from cellID in HexNumber
                 from closeParen in Parse.Char(')')
-                select new RefExpression(byte.Parse(cellID, NumberStyles.AllowHexSpecifier)))
+                select new RefExpression(cellID))
             .Token()
             .WithPosition()
             .Named("ref_token");
@@ -172,7 +219,7 @@
                 from openParen in Parse.Char('(')
                 from value in HexNumber
                 from closeParen in Parse.Char(')')
-                select new ValueExpression(ushort.Parse(value, NumberStyles.AllowHexSpecifier)))
+                select new ValueExpression(value))
             .Token()
             .WithPosition()
             .Named("value_token");
@@ -249,7 +296,7 @@
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeRight
-                from cell3 in ValueToken.Or(CastCharToken.Select(x => new ValueExpression(x)))
+                from cell3 in ValueToken.Or(CastCharToken.Select(x => new ValueExpression($"{x:x}")))
              select new InstructionExpression(new push_a(cell1.Cell, cell2.Cell, cell3.Value)))
             .Token()
             .WithPosition()
@@ -303,9 +350,11 @@
         #endregion
         #region etc tokens
         public static Parser<string> ProcToken(string name) =>
-            from dot in Parse.Char('#')
-            from ident in Parse.String(name).Text()
-            select ident;
+            (from dot in Parse.Char('~')
+                from ident in Parse.String(name).Text()
+                select ident)
+            .Token()
+            .Named("proc token");
         public static Parser<string> InstructionToken(InsID instruction) =>
             from dot in Parse.Char('.')
             from ident in Parse.String(instruction.ToString()).Text()
@@ -318,20 +367,6 @@
             .Named($"{id} expression");
 
         #endregion
-
-        #region TramsformToken
-
-        public static Parser<IInputToken> Label => (
-                from dword in ProcToken("label")
-                from nameOfLabel in IdentifierToken
-                from id in RefToken.Optional()
-                from auto in Keyword("auto").Optional()
-                select new LabelTransform(nameOfLabel, auto.IsDefined, id.GetOrDefault()?.Cell))
-            .Token()
-            .WithPosition()
-            .Named("label transform expression");
-        #endregion
-
     }
     
     public class LabelTransform : TransformationContext
