@@ -10,7 +10,7 @@
     <Product>flame.compiler</Product>
     <Copyright>Yuuki Wesp(C) 2019</Copyright>
     <SignAssembly>false</SignAssembly>
-    <StartupObject>flame.compiler.Program</StartupObject>
+    <StartupObject>flame.compiler.Host</StartupObject>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <LangVersion>preview</LangVersion>
     <AssemblyVersion>0.6.19.0</AssemblyVersion>

@@ -10,6 +10,22 @@ namespace flame.runtime.compiler.test
     public class InstructionTest
     {
         [Fact]
+        public void TT()
+        {
+            const string str = 
+                             @"#{ 
+                                    ~label 'test' 0x2
+                                    ~label 'benis' 0x5
+                                }
+                                .push_a &(~test) &(~test) <| $(~benis)";
+            var result = FlameTransformerSyntax.ManyParser
+                .End().Parse(str);
+
+            Assert.Equal(2, result.Length);
+            Assert.IsType<EmptyEvolve>(result.Last().GetType());
+            Assert.IsType<DefineLabels>(result.First().GetType());
+        }
+        [Fact]
         public void ShiftTest()
         {
             var shifter = ShiftFactory.Create(28);
