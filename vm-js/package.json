@@ -1,0 +1,18 @@
+{
+  "name": "vm-js",
+  "version": "0.0.0",
+  "description": "Flame virtual machine",
+  "main": "index.js",
+  "repository": "https://github.com/0xF6/cpu_4bit",
+  "author": "Yuuki Wesp",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@types/lodash": "^4.14.134",
+    "@types/node": "^12.0.8",
+    "@types/ramda": "^0.26.9",
+    "lodash": "^4.17.11",
+    "ramda": "^0.26.1",
+    "typescript": "^3.5.2"
+  }
+}
