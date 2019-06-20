@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\vm\vm.csproj" />
+    <ProjectReference Include="..\..\vm\csharp\vm.csproj" />
   </ItemGroup>
 
   <ItemGroup>

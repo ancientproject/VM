@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Flame.Compiler.Service\Flame.Compiler.Service.csproj" />
-    <ProjectReference Include="..\..\vm\vm.csproj" />
+    <ProjectReference Include="..\..\vm\csharp\vm.csproj" />
   </ItemGroup>
 
 </Project>
