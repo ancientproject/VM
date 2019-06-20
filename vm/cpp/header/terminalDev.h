@@ -1,8 +1,8 @@
 #pragma once
-#include "abstractDevice.h"
+#include "Device.h"
 
 
-class termDev : public abstractDevice
+class termDev : public Device
 {
 public:
     termDev();

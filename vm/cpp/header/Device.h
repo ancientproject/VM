@@ -10,12 +10,12 @@ using namespace std;
     public: type get_##var() const { return var; } \
             void set_##var(type val) { (var) = val; }
 
-class abstractDevice  
+class Device  
 {
     GSF(short, addr);
     GSF(string, name);
 public:
-    virtual ~abstractDevice() = default;
+    virtual ~Device() = default;
     virtual void write(int address, int data);
     virtual int read(int address);
     virtual void init();

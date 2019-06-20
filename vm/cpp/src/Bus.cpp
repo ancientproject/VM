@@ -3,6 +3,8 @@
 #include "../header/State.h"
 #include <exception>
 
+map<short, Device> Bus::devices;
+
 void Bus::write(const short address, const int data) const
 {
     auto dev = this->find(address);
@@ -14,20 +16,14 @@ int Bus::read(short address)
     throw new std::exception(&"access denied: "[address]);
 }
 
-void Bus::add(const abstractDevice* dev) const
+void Bus::add(const Device* dev) const
 {
-    // FUCK
-    auto ths = *this; // FUCKING
-    // C++ COLLECTION
-    auto dict = this->devices; // FUCKIGN SHIT
-    dict.insert(make_pair(dev->get_addr(), *dev)); // FUCK IT
-    ths.devices = dict; // HATE 
+    devices.insert(make_pair(dev->get_addr(), *dev));
 }
 
-abstractDevice* Bus::find(int address) const
+Device* Bus::find(int address) const
 {
-    auto dict = this->devices;
-    return &dict.at(static_cast<short>(address));
+    return &devices.at(static_cast<short>(address));
 }
 
 void Bus::setup(CPU* cpu, State* state)
