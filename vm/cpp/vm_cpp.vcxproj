@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header\abstractDevice.h" />
+    <ClInclude Include="header\Device.h" />
     <ClInclude Include="header\boolinq.h" />
     <ClInclude Include="header\Bus.h" />
     <ClInclude Include="header\CPU.h" />
@@ -29,12 +29,12 @@
     <ClInclude Include="header\utils.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\abstractDevice.cpp" />
+    <ClCompile Include="src\Device.cpp" />
     <ClCompile Include="src\Bus.cpp" />
     <ClCompile Include="src\CPU.cpp" />
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\terminalDev.cpp" />
-    <ClCompile Include="src\vm_cpp.cpp" />
+    <ClCompile Include="src\host.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

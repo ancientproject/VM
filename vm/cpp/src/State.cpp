@@ -6,9 +6,10 @@
 #include "../header/CPU.h"
 
 using namespace boolinq;
-void State::load(uint32_t memory[])
+
+void State::load(const vector<uint32_t>& memory) const
 {
-    this->mem = memory;
+    copy(memory.begin(), memory.end(), this->mem);
 }
 
 uint32_t State::fetch()
