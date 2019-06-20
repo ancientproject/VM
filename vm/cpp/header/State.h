@@ -25,7 +25,7 @@ public:
     uint32_t* reg = new uint32_t[_32];
 
 
-    void load(uint32_t memory[]);
+    void load(const vector<uint32_t>& memory) const;
     uint32_t fetch();
     void eval() const;
     void accept(uint32_t memory);

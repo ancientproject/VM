@@ -3,7 +3,7 @@
 using namespace std;
 #ifndef __BUS__
 #define __BUS__
-#include "abstractDevice.h"
+#include "Device.h"
 #include <list>
 #include <vector>
 
@@ -15,12 +15,12 @@ public:
     State* state;
     CPU* cpu;
     int* boundaries = new int[16];
-    map<short, abstractDevice> devices = {};
+    static map<short, Device> devices;
 
     void write(short address, int data) const;
     int read(short address);
-    void add(const abstractDevice* dev) const;
-    abstractDevice* find(int address) const;
+    void add(const Device* dev) const;
+    Device* find(int address) const;
 
     void setup(CPU* cpu, State* state);
 };
