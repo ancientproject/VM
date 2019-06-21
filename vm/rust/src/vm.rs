@@ -70,9 +70,7 @@ impl State
                     _   => self.regs[self.r1] = (self.u1 << 4) | self.u2
                 }
             },
-            (0x1, _, 0xA) => {
-                self.regs[(self.r1 << 4) | self.r2] = (self.u1 << 4) | self.u2;
-            }
+            (0x1, _, 0xA) => self.regs[(self.r1 << 4) | self.r2] = (self.u1 << 4) | self.u2,
             (0x2, _, _)  => self.regs[self.r1] = self.memory[self.r2] + self.memory[self.r3],
             (0x3, _, _)  => {
                 self.regs[self.r1] ^= self.regs[self.r2];
