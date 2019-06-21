@@ -260,10 +260,6 @@
                     Trace($"jump_t 0x{r1:X}");
                     pc = regs[r1];
                     break;
-                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
-                    Trace($"jump_t 0x{r1:X}");
-                    pc = regs[r1];
-                    break;
                 case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
                     Trace(regs[r2] >= regs[r3]
                         ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
