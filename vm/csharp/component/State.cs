@@ -1,6 +1,7 @@
 ﻿namespace vm.component
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using dev.Internal;
@@ -8,7 +9,7 @@
     using flame.runtime.exceptions;
     using static System.Console;
 
-    public unsafe class State
+    public class State
     {
         private readonly Bus bus;
 
@@ -127,8 +128,6 @@
         public uint curAddr { get; set; } = 0xFFFF;
         public uint lastAddr { get; set; } = 0xFFFF;
 
-        public dynamic auto = 0;
-
         public ulong[] mem = new ulong[32];
 
         public sbyte halt { get; set; } = 0;
@@ -186,9 +185,10 @@
                 
                 case 0x1 when x2 == 0x0:
                     trace($"loadi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
-                    auto <<= u2 switch {
+                    _ = u2 switch
+                    {
                         0x0 => mem[r1] = u1,
-                        _   => mem[r1] = (ulong) ((u1 << 4) | u2)
+                        _ => mem[r1] = u64 & ((u1 << 4) | u2)
                     };
                     break;
                 case 0x1 when x2 == 0xA:
@@ -304,21 +304,28 @@
             Registers.Reflect();
         }
        
-        public void Accept(ulong mem)
+        public void Accept(BitwiseContainer mem)
         {
             trace($"fetch 0x{mem:X}");
-            iid = u16 & (mem & 0xF0000000) >> 0x1C;
-            r1  = u16 & (mem & 0x0F000000) >> 0x18;
-            r2  = u16 & (mem & 0x00F00000) >> 0x14;
-            r3  = u16 & (mem & 0x000F0000) >> 0x10;
-            u1  = u16 & (mem & 0x0000F000) >> 0x0C;
-            u2  = u16 & (mem & 0x00000F00) >> 0x08;
-            x1  = u16 & (mem & 0x000000F0) >> 0x04;
-            x2  = u16 & (mem & 0x0000000F) >> 0x00;
+            var 
+            pfx = u16 & (mem & 0xF00000000);
+            iid = u16 & (mem & 0x0F0000000);
+            r1  = u16 & (mem & 0x00F000000);
+            r2  = u16 & (mem & 0x000F00000);
+            r3  = u16 & (mem & 0x0000F0000);
+            u1  = u16 & (mem & 0x00000F000);
+            u2  = u16 & (mem & 0x000000F00);
+            x1  = u16 & (mem & 0x0000000F0);
+            x2  = u16 & (mem & 0x00000000F);
+            iid = u16 & (pfx << 0x4 | iid );
         }
+
+        
 
         public static Unicast<byte, ulong> u8 = new Unicast<byte, ulong>();
         public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
+        public static Unicast<uint, ulong> u32 = new Unicast<uint, ulong>();
+        public static Unicast<ulong, ulong> u64 = new Unicast<ulong, ulong>();
 
         
 
@@ -342,5 +349,24 @@
 
         public event Action<string> OnTrace;
         public event Action<string> OnError;
+    }
+
+    public class BitwiseContainer : IFormattable
+    {
+        private readonly ulong _value;
+
+        public BitwiseContainer(ulong mem) => _value = mem;
+
+        public static implicit operator BitwiseContainer(ulong value) => new BitwiseContainer(value);
+        public static implicit operator ulong(BitwiseContainer value) => value._value;
+        
+        public static ulong operator &(BitwiseContainer _, ulong mask)
+        {
+            var shift = new BitArray(BitConverter.GetBytes(mask)).Cast<bool>().TakeWhile(bit => !bit).Count();
+            return (_._value & mask) >> shift;
+        }
+
+        public override string ToString() => _value.ToString();
+        public string ToString(string format, IFormatProvider formatProvider) => _value.ToString(format, formatProvider);
     }
 }
