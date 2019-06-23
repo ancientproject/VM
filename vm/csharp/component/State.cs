@@ -4,62 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using dev.Internal;
+    using flame.runtime;
     using flame.runtime.exceptions;
     using static System.Console;
 
-    public interface ShadowCache<T> where T : Cache, ICloneable
-    {
-        T L1 { get; set; }
-        T L2 { get; }
-
-        void Reflect();
-    }
-
-    public class ShadowCacheFactory : ShadowCache<Cache>
-    {
-        public Cache L1 { get; set; } = new Cache();
-        public Cache L2 { get; private set; } = new Cache();
-
-        public void Reflect() => L2 = L1.Clone() as Cache;
-
-        public static ShadowCache<Cache> Create() => new ShadowCacheFactory();
-    }
-
-    public class Cache : ICloneable
-    {
-        /// <summary>
-        /// base register cell
-        /// </summary>
-        public virtual ushort r1 { get; set; }
-        public virtual ushort r2 { get; set; }
-        public virtual ushort r3 { get; set; }
-        /// <summary>
-        /// value register cell
-        /// </summary>
-        public virtual ushort u1 { get; set; }
-        public virtual ushort u2 { get; set; }
-        /// <summary>
-        /// magic cell
-        /// </summary>
-        public virtual ushort x1 { get; set; }
-        public virtual ushort x2 { get; set; }
-
-        /// <summary>
-        /// id
-        /// </summary>
-        public virtual ushort IID { get; set; }
-
-        public virtual ulong PC { get; set; }
-
-        public object Clone() => new Cache 
-            { r1 = r1, r2 = r2, r3 = r3, u1 = u1, u2 = u2, x1 = x1, x2 = x2, IID = IID, PC = PC };
-    }
-
     public unsafe class State
     {
-        private readonly Bus _bus;
+        private readonly Bus bus;
 
-        public State(Bus bus) => _bus = bus;
+        public State(Bus bus) => this.bus = bus;
 
         
 
@@ -70,8 +23,9 @@
         public ulong pc
         {
             get => Registers.L1.PC;
-            set => Registers.L1.PC = value;
+            set => Registers.L1.PC = value != 0xffff ? value : 0UL;
         }
+
         /// <summary>
         /// base register cell
         /// </summary>
@@ -120,7 +74,7 @@
         /// <summary>
         /// id
         /// </summary>
-        public ushort instructionID
+        public ushort iid
         {
             get => Registers.L1.IID;
             set => Registers.L1.IID = value;
@@ -133,16 +87,16 @@
         /// </summary>
         public bool tc 
         {
-            get => regs[17] == 1;
-            set => regs[17] = value ? 1ul : 0ul;
+            get => mem[0x11] == 1;
+            set => mem[0x11] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// Error flag
         /// </summary>
         public bool ec
         {
-            get => regs[18] == 1;
-            set => regs[18] = value ? 1ul : 0ul;
+            get => mem[0x12] == 1;
+            set => mem[0x12] = value ? 0x1UL : 0x0UL;
         }
 
         /// <summary>
@@ -150,23 +104,32 @@
         /// </summary>
         public bool km
         {
-            get => regs[19] == 1;
-            set => regs[19] = value ? 1ul : 0ul;
+            get => mem[0x13] == 1;
+            set => mem[0x13] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// fast write flag
         /// </summary>
         public bool fw
         {
-            get => regs[20] == 1;
-            set => regs[20] = value ? 1ul : 0ul;
+            get => mem[0x14] == 0x0;
+            set => mem[0x14] = value ? 0x1UL : 0x0UL;
+        }
+        /// <summary>
+        /// overflow flag
+        /// </summary>
+        public bool of
+        {
+            get => mem[0x15] == 1;
+            set => mem[0x15] = value ? 0x1UL : 0x0UL;
         }
 
         public uint curAddr { get; set; } = 0xFFFF;
         public uint lastAddr { get; set; } = 0xFFFF;
 
+        public dynamic auto = 0;
 
-        public ulong[] regs = new ulong[32];
+        public ulong[] mem = new ulong[32];
 
         public sbyte halt { get; set; } = 0;
 
@@ -176,6 +139,7 @@
 
         public uint Fetch()
         {
+            using var watcher = new StopwatchOperation("fetch operation");
             try
             {
                 lastAddr = curAddr;
@@ -187,128 +151,127 @@
             {
                 if (!km)
                 {
-                    Array.Fill(regs, (ulong)0xDEAD, 0, 16);
+                    Array.Fill(mem, 0xDEADUL, 0, 16);
                     Load(0xFFFFFFFF);
                 }
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
         }
 
-        public string pX = "";
         public void Eval()
         {
+            using var watcher = new StopwatchOperation("eval operation");
             MemoryManagement.FastWrite = fw;
-            if (instructionID == 0xA)
+            if (iid == 0xA)
             {
-                Trace($"  r   r   r   u   u   x   x");
-                Trace($"  1   2   3   1   2   1   2");
-                Trace($"0x{Registers.L2.r1:X} 0x{Registers.L2.r2:X} 0x{Registers.L2.r3:X} 0x{Registers.L2.u1:X} 0x{Registers.L2.u2:X} 0x{x1:X} 0x{Registers.L2.x2:X}");
+                trace($"  r   r   r   u   u   x   x");
+                trace($"  1   2   3   1   2   1   2");
+                trace($"0x{Registers.L2.r1:X} 0x{Registers.L2.r2:X} 0x{Registers.L2.r3:X} 0x{Registers.L2.u1:X} 0x{Registers.L2.u2:X} 0x{x1:X} 0x{Registers.L2.x2:X}");
             }
-            Trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
-            switch (instructionID)
+            trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
+            switch (iid)
             {
+
+                #region halt
                 case 0xF when r1 == 0xF && r2 == 0xF && r3 == 0xF && u1 == 0xF && u2 == 0xF && x1 == 0xF:
-                    _bus.Cpu.Halt(0xF);
-                    break;
-                case 0x1 when x2 == 0x0:
-                    Trace($"loadi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
-                    if (u2 != 0)
-                        regs[r1] = (ulong)((u1 << 4) | u2);
-                    else
-                        regs[r1] = u1;
-                    break;
-                case 0x1 when x2 == 0xA:
-                    Trace($"loadi_x 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
-                    regs[(ulong)((r1 << 4) | r2)] = (ulong)((u1 << 4) | u2);
-                    break;
-                case 0x2:
-                    Trace($"sum 0x{r2:X}, 0x{r3:X}");
-                    regs[r1] = regs[r2] + regs[r3];
-                    break;
-                case 0x4:
-                    Trace($"sub 0x{r2:X}, 0x{r3:X}");
-                    regs[r1] = regs[r2] - regs[r3];
-                    break;
-                case 0x5:
-                    Trace($"mul 0x{r2:X}, 0x{r3:X}");
-                    regs[r1] = regs[r2] * regs[r3];
-                    break;
-                case 0x6:
-                    Trace($"div 0x{r2:X}, 0x{r3:X}");
-                    if (regs[r3] == 0)
-                    {
-                        _bus.Cpu.Halt(0xC);
-                        break;
-                    }
-                    regs[r1] = regs[r2] / regs[r3];
-                    break;
-                case 0x7 when u2 == 0x0:
-                    Trace($"pow 0x{r2:X}, 0x{r3:X}");
-                    regs[r1] = (uint)Math.Pow(regs[r2], regs[r3]);
-                    break;
-                case 0x7 when u2 == 0xA:
-                    Trace($"sqrt 0x{r2:X}");
-                    regs[r1] = (uint)Math.Sqrt(regs[r2]);
-                    break;
-                case 0x3:
-                    Trace($"swap 0x{r1:X}, 0x{r2:X}");
-                    regs[r1] ^= regs[r2];
-                    regs[r2] = regs[r1] ^ regs[r2];
-                    regs[r1] ^= regs[r2];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
-                    Trace($"jump_t 0x{r1:X}");
-                    pc = regs[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
-                    Trace(regs[r2] >= regs[r3]
-                        ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(regs[r2] >= regs[r3]) 
-                        pc = regs[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
-                    Trace(regs[r2] > regs[r3]
-                        ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(regs[r2] > regs[r3])
-                        pc = regs[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
-                    Trace(regs[r2] < regs[r3]
-                        ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(regs[r2] < regs[r3])
-                        pc = regs[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
-                    Trace(regs[r2] <= regs[r3]
-                        ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(regs[r2] <= regs[r3]) pc = regs[r1];
-                    break;
-                case 0xA: break;
-                case 0xF when x2 == 0xC: // push_a
-                    Trace($"push_a 0x{r1:X} 0x{r2:X} 0x{u1:X} 0x{u2:X}");
-                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
-                    break;
-                case 0x8 when u2 == 0xC: // 0x8F000C0
-                    Trace($"ref_t 0x{r1:X}");
-                    regs[r1] = pc;
-                    break;
-                case 0xF when x2 == 0xE: // push_d
-                    Trace($"push_d 0x{r1:X} 0x{r2:X} 0x{u1:X}");
-                    _bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)regs[u1] & 0xFF);
+                    bus.cpu.halt(0xF);
                     break;
                 case 0xD when r1 == 0xE && r2 == 0xA && r3 == 0xD:
-                    _bus.Cpu.Halt(0x0);
+                    bus.cpu.halt(0x0);
                     break;
                 case 0xB when r1 == 0x0 && r2 == 0x0 && r3 == 0xB && u1 == 0x5:
-                    _bus.Cpu.Halt(0x1);
+                    bus.cpu.halt(0x1);
+                    break;
+                #endregion
+                
+                case 0x1 when x2 == 0x0:
+                    trace($"loadi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
+                    auto <<= u2 switch {
+                        0x0 => mem[r1] = u1,
+                        _   => mem[r1] = (ulong) ((u1 << 4) | u2)
+                    };
+                    break;
+                case 0x1 when x2 == 0xA:
+                    trace($"loadi_x 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
+                    mem[((r1 << 4) | r2)] = (ulong)((u1 << 4) | u2);
+                    break;
+                case 0x2:
+                    trace($"sum 0x{r2:X}, 0x{r3:X}");
+                    mem[r1] = mem[r2] + mem[r3];
+                    break;
+                case 0x4:
+                    trace($".sub 0x{r2:X}, 0x{r3:X}");
+                    mem[r1] = mem[r2] - mem[r3];
+                    break;
+                case 0x5:
+                    trace($".mul 0x{r2:X}, 0x{r3:X}");
+                    mem[r1] = mem[r2] * mem[r3];
+                    break;
+                case 0x6: // 0x6123000
+                    trace($".div 0x{r2:X}, 0x{r3:X}");
+                    auto <<= mem[r3] switch {
+                        0x0 => bus.cpu.halt(0xC),
+                        _   => mem[r1] = mem[r2] / mem[r3]
+                    };
+                    break;
+                case 0x3: // 0x3120000
+                    trace($".swap 0x{r1:X}, 0x{r2:X}");
+                    mem[r1] ^= mem[r2];
+                    mem[r2] =  mem[r1] ^ mem[r2];
+                    mem[r1] ^= mem[r2];
+                    break;
+                case 0xF when x2 == 0xE: // 0xF9988E0
+                    trace($".mv_u4 0x{r1:X} -> 0x{r2:X} -> 0x{u1:X}");
+                    bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)mem[u1] & 0xFF);
+                    break;
+                case 0xF when x2 == 0xC: // 0xF00000C
+                    trace($"mv_u8 0x{r1:X} -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
+                    bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
+                    break;
+                case 0xD when x2 == 0x3 && of && fw:
+                    trace($".ncall 0x{r1:X} 0x{r2:X} 0x{u1:X}");
+                    bus.Find(u1 & 0xFF).write(r3 & 0xF0, 0xFF);
+                    Array.Fill(mem, 0xFUL, 0, 16);
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
+                    trace($"jump_t 0x{r1:X}");
+                    pc = mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
+                    trace(mem[r2] >= mem[r3]
+                        ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] >= mem[r3]) 
+                        pc = mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
+                    trace(mem[r2] > mem[r3]
+                        ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] > mem[r3])
+                        pc = mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
+                    trace(mem[r2] < mem[r3]
+                        ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] < mem[r3])
+                        pc = mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
+                    trace(mem[r2] <= mem[r3]
+                        ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] <= mem[r3]) pc = mem[r1];
+                    break;
+                case 0xA: break;
+                case 0x8 when u2 == 0xC: // 0x8F000C0
+                    trace($"ref_t 0x{r1:X}");
+                    mem[r1] = pc;
                     break;
                 case 0xF when x2 == 0xF: // push_x
-                    Trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
-                    var x = regs[u1].ToString();
+                    trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
+                    var x = mem[u1].ToString();
                     short[] cast(string str)
                     {
                         var list = new List<int>();
@@ -321,11 +284,21 @@
                         return list.Select(x => (short)x).ToArray();
                     }
                     foreach (var uuu in cast(x))
-                        _bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
+                        bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
+                #region legacy
+                case 0x7 when u2 == 0xA:
+                    trace($"sqrt 0x{r2:X}");
+                    mem[r1] = (uint)Math.Sqrt(mem[r2]);
+                    break;
+                case 0x7 when u2 == 0x0:
+                    trace($".pow 0x{r2:X}, 0x{r3:X}");
+                    mem[r1] = (uint)Math.Pow(mem[r2], mem[r3]);
+                    break;
+                #endregion
                 default:
                     Error(
-                        $"Unk OpCode: {instructionID:X2} {Environment.NewLine}0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
+                        $"Unk OpCode: {iid:X2} {Environment.NewLine}0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
                     break;
             }
             Registers.Reflect();
@@ -333,19 +306,23 @@
        
         public void Accept(ulong mem)
         {
-            Trace($"fetch 0x{mem:X}");
-            instructionID =
-                  (ushort)((mem & 0xF0000000) >> 28);
-            r1  = (ushort)((mem & 0xF000000 ) >> 24);
-            r2  = (ushort)((mem & 0xF00000  ) >> 20);
-            r3  = (ushort)((mem & 0xF0000   ) >> 16);
-            u1  = (ushort)((mem & 0xF000    ) >> 12);
-            u2  = (ushort)((mem & 0xF00     ) >> 8);
-            x1  = (ushort)((mem & 0xF0      ) >> 4);
-            x2  = (ushort) (mem & 0xF             );
+            trace($"fetch 0x{mem:X}");
+            iid = u16 & (mem & 0xF0000000) >> 0x1C;
+            r1  = u16 & (mem & 0x0F000000) >> 0x18;
+            r2  = u16 & (mem & 0x00F00000) >> 0x14;
+            r3  = u16 & (mem & 0x000F0000) >> 0x10;
+            u1  = u16 & (mem & 0x0000F000) >> 0x0C;
+            u2  = u16 & (mem & 0x00000F00) >> 0x08;
+            x1  = u16 & (mem & 0x000000F0) >> 0x04;
+            x2  = u16 & (mem & 0x0000000F) >> 0x00;
         }
 
-        private void Trace(string str)
+        public static Unicast<byte, ulong> u8 = new Unicast<byte, ulong>();
+        public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
+
+        
+
+        private void trace(string str)
         {
             if(tc)
                 WriteLine(str);

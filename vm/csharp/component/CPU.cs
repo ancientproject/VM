@@ -51,7 +51,7 @@
             await Task.CompletedTask;
         }
 
-        public void Halt(byte code)
+        public byte halt(byte code)
         {
             Error(Environment.NewLine);
             _bus.State.halt = 1;
@@ -79,6 +79,7 @@
             var l2 = _bus.State.Registers.L2;
             Error($"L2 Cache, PC: 0x{l2.PC:X8}, OpCode: {l2.IID} [{l2.IID.getInstruction()}]");
             Error($"\t0x{l2.r1:X} 0x{l2.r2:X} 0x{l2.r3:X} 0x{l2.u1:X} 0x{l2.u2:X} 0x{l2.x1:X} 0x{l2.x2:X}");
+            return code;
         }
 
         public string getStateOfCPU()
@@ -94,7 +95,7 @@
 
             str.AppendLine("Table of memory:");
 
-            foreach (var v in _bus.State.regs.Batch(4).Select(x => x.ToArray()))
+            foreach (var v in _bus.State.mem.Batch(4).Select(x => x.ToArray()))
                 str.AppendLine($"\t 0x{v[0]:X4},0x{v[1]:X4},0x{v[2]:X4},0x{v[3]:X4}");
 
             str.AppendLine();

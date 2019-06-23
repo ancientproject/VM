@@ -112,14 +112,14 @@
             }
 
             var bus = HostContainer.Instance.bus;
-            bus.Cpu.OnError += exception =>
+            bus.cpu.OnError += exception =>
             {
                 IsPLaying = false;
                 OnPropertyChanged(nameof(IsPLaying));
                 IsLoading = false;
                 OnPropertyChanged(nameof(IsLoading));
-                System.Windows.MessageBox.Show($"Access Violation Exception\n{exception.Message}\n{bus.Cpu.getStateOfCPU()}", $"CPU HALT", MessageBoxButton.OK, MessageBoxImage.Error);
-                HostContainer.Instance.bus.Cpu.ResetMemory();
+                System.Windows.MessageBox.Show($"Access Violation Exception\n{exception.Message}\n{bus.cpu.getStateOfCPU()}", $"CPU HALT", MessageBoxButton.OK, MessageBoxImage.Error);
+                HostContainer.Instance.bus.cpu.ResetMemory();
                 err($"HALT {exception.Message}");
             };
 
@@ -139,12 +139,12 @@
             bus.Add(new LampBus(this, 
                 block_01, block_02, block_03, block_04, block_05, block_06, block_07, block_08));
 
-            var core = bus.Cpu;
+            var core = bus.cpu;
             
             
 
             core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
-            HostContainer.Instance.bus.State.instructionID = 0;
+            HostContainer.Instance.bus.State.iid = 0;
             HostContainer.Instance.bus.State.pc = 0;
         }
 
@@ -177,7 +177,7 @@
             {
                 while (IsPLaying && HostContainer.Instance.bus.State.halt == 0)
                 {
-                    await HostContainer.Instance.bus.Cpu.Step();
+                    await HostContainer.Instance.bus.cpu.Step();
                     await Task.Delay(10);
                 }
             });
@@ -230,7 +230,7 @@
                     var dyn = FlameAssembly.LoadFrom(openFileDialog.FileName);
                     WriteSystemMessage($"Assembly '{dyn.Name}-{dyn.Tag}' load success.");
                     HostContainer.Instance.bus.State.Load(CastFromBytes(dyn.GetILCode()));
-                    HostContainer.Instance.bus.State.instructionID = 0;
+                    HostContainer.Instance.bus.State.iid = 0;
                     HostContainer.Instance.bus.State.pc = 0;
                     IsLoading = false;
                     OnPropertyChanged(nameof(IsLoading));
@@ -251,16 +251,16 @@
             OnPropertyChanged(nameof(IsPLaying));
             IsLoading = false;
             OnPropertyChanged(nameof(IsLoading));
-            HostContainer.Instance.bus.Cpu.ResetMemory();
+            HostContainer.Instance.bus.cpu.ResetMemory();
             WriteSystemMessage("RESET");
         }
 
         public void Step(object sender, EventArgs e) => 
-            Task.Factory.StartNew(async () => await HostContainer.Instance.bus.Cpu.Step());
+            Task.Factory.StartNew(async () => await HostContainer.Instance.bus.cpu.Step());
 
             
         public void HardReset(object sender, EventArgs e) => 
-            Task.Factory.StartNew(() => HostContainer.Instance.bus.Cpu.ResetMemory());
+            Task.Factory.StartNew(() => HostContainer.Instance.bus.cpu.ResetMemory());
 
         public event PropertyChangedEventHandler PropertyChanged;
 

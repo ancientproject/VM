@@ -8,7 +8,7 @@
     public class Bus
     {
         public State State { get; }
-        public CPU Cpu { get; }
+        public CPU cpu { get; }
 
         public List<IDevice> Devices = new List<IDevice>();
         public int[] boundaries = new int[0];
@@ -16,7 +16,7 @@
         public Bus()
         {
             State = new State(this);
-            Cpu = new CPU(this);
+            cpu = new CPU(this);
         }
 
         public void Write(short address, int data)
@@ -46,7 +46,7 @@
         {
             var idx = Array.BinarySearch(boundaries, address);
             if (idx < 0) idx = -idx - 2;
-            if (idx < 0) return new CorruptedDevice(Cpu);
+            if (idx < 0) return new CorruptedDevice(cpu);
             return Devices[idx];
         }
     }
