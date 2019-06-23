@@ -42,9 +42,9 @@
 
             uint[] page = {
                 0xABCDEFE0,
-                new loadi(0x1, 0x5),  // x
-                new loadi(0x2, 0x7),  // y
-                new loadi(0x3, 0x8),  // z
+                new loadi(0x1, 0x50),  // x
+                new loadi(0x2, 0x72),  // y
+                new loadi(0x3, 0x03),  // z
             };
 
             core.State.Load(page);

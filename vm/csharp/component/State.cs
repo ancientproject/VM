@@ -89,7 +89,7 @@
         public bool tc 
         {
             get => mem[0x11] == 1;
-            set => mem[0x11] = value ? 0x1UL : 0x0UL;
+            set => mem[0x11] = value ? 0x1L : 0x0L;
         }
         /// <summary>
         /// Error flag
@@ -97,7 +97,7 @@
         public bool ec
         {
             get => mem[0x12] == 1;
-            set => mem[0x12] = value ? 0x1UL : 0x0UL;
+            set => mem[0x12] = value ? 0x1L : 0x0L;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@
         public bool km
         {
             get => mem[0x13] == 1;
-            set => mem[0x13] = value ? 0x1UL : 0x0UL;
+            set => mem[0x13] = value ? 0x1L : 0x0L;
         }
         /// <summary>
         /// fast write flag
@@ -114,7 +114,7 @@
         public bool fw
         {
             get => mem[0x14] == 0x0;
-            set => mem[0x14] = value ? 0x1UL : 0x0UL;
+            set => mem[0x14] = value ? 0x1L : 0x0L;
         }
         /// <summary>
         /// overflow flag
@@ -122,13 +122,29 @@
         public bool of
         {
             get => mem[0x15] == 1;
-            set => mem[0x15] = value ? 0x1UL : 0x0UL;
+            set => mem[0x15] = value ? 0x1L : 0x0L;
+        }
+        /// <summary>
+        /// negative flag
+        /// </summary>
+        public bool nf
+        {
+            get => mem[0x16] == 1;
+            set => mem[0x16] = value ? 0x1L : 0x0L;
+        }
+        /// <summary>
+        /// break flag (for next execute)
+        /// </summary>
+        public bool bf
+        {
+            get => mem[0x17] == 1;
+            set => mem[0x17] = value ? 0x1L : 0x0L;
         }
 
         public uint curAddr { get; set; } = 0xFFFF;
         public uint lastAddr { get; set; } = 0xFFFF;
 
-        public ulong[] mem = new ulong[32];
+        public long[] mem = new long[32];
 
         public sbyte halt { get; set; } = 0;
 
@@ -150,7 +166,7 @@
             {
                 if (!km)
                 {
-                    Array.Fill(mem, 0xDEADUL, 0, 16);
+                    Array.Fill(mem, 0xDEADL, 0, 16);
                     Load(0xFFFFFFFF);
                 }
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
@@ -170,7 +186,7 @@
             trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             switch (iid)
             {
-
+                case 0xA: break;
                 #region halt
                 case 0xF when r1 == 0xF && r2 == 0xF && r3 == 0xF && u1 == 0xF && u2 == 0xF && x1 == 0xF:
                     bus.cpu.halt(0xF);
@@ -188,12 +204,12 @@
                     _ = u2 switch
                     {
                         0x0 => mem[r1] = u1,
-                        _ => mem[r1] = u64 & ((u1 << 4) | u2)
+                        _   => mem[r1] = i64 & ((u2 << 4) | u1)
                     };
                     break;
                 case 0x1 when x2 == 0xA:
                     trace($"loadi_x 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
-                    mem[((r1 << 4) | r2)] = (ulong)((u1 << 4) | u2);
+                    mem[((r1 << 4) | r2)] = i64 & ((u1 << 4) | u2);
                     break;
                 case 0x2:
                     trace($"sum 0x{r2:X}, 0x{r3:X}");
@@ -209,7 +225,7 @@
                     break;
                 case 0x6: // 0x6123000
                     trace($".div 0x{r2:X}, 0x{r3:X}");
-                    auto <<= mem[r3] switch {
+                    _ = mem[r3] switch {
                         0x0 => bus.cpu.halt(0xC),
                         _   => mem[r1] = mem[r2] / mem[r3]
                     };
@@ -222,53 +238,20 @@
                     break;
                 case 0xF when x2 == 0xE: // 0xF9988E0
                     trace($".mv_u4 0x{r1:X} -> 0x{r2:X} -> 0x{u1:X}");
-                    bus.Find(r1 & 0xFF).write(r2 & 0xFF, (int)mem[u1] & 0xFF);
+                    bus.Find(r1 & 0xFF).write(r2 & 0xFF, i32 & mem[u1] & 0xFF);
                     break;
                 case 0xF when x2 == 0xC: // 0xF00000C
                     trace($"mv_u8 0x{r1:X} -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
                     bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
-                case 0xD when x2 == 0x3 && of && fw:
-                    trace($".ncall 0x{r1:X} 0x{r2:X} 0x{u1:X}");
-                    bus.Find(u1 & 0xFF).write(r3 & 0xF0, 0xFF);
-                    Array.Fill(mem, 0xFUL, 0, 16);
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
-                    trace($"jump_t 0x{r1:X}");
-                    pc = mem[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
-                    trace(mem[r2] >= mem[r3]
-                        ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(mem[r2] >= mem[r3]) 
-                        pc = mem[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
-                    trace(mem[r2] > mem[r3]
-                        ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(mem[r2] > mem[r3])
-                        pc = mem[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
-                    trace(mem[r2] < mem[r3]
-                        ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(mem[r2] < mem[r3])
-                        pc = mem[r1];
-                    break;
-                case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
-                    trace(mem[r2] <= mem[r3]
-                        ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
-                        : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
-                    if(mem[r2] <= mem[r3]) pc = mem[r1];
-                    break;
-                case 0xA: break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
                     trace($"ref_t 0x{r1:X}");
-                    mem[r1] = pc;
+                    mem[r1] = i64 & pc;
                     break;
+                
+
+                #region debug
+
                 case 0xF when x2 == 0xF: // push_x
                     trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     var x = mem[u1].ToString();
@@ -286,6 +269,43 @@
                     foreach (var uuu in cast(x))
                         bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
+
+                #endregion
+                #region jumps
+
+                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
+                    trace($"jump_t 0x{r1:X}");
+                    pc = (ulong)mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
+                    trace(mem[r2] >= mem[r3]
+                        ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] >= mem[r3]) 
+                        pc = (ulong)mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
+                    trace(mem[r2] > mem[r3]
+                        ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] > mem[r3])
+                        pc = (ulong)mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
+                    trace(mem[r2] < mem[r3]
+                        ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] < mem[r3])
+                        pc = (ulong)mem[r1];
+                    break;
+                case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
+                    trace(mem[r2] <= mem[r3]
+                        ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
+                        : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    if(mem[r2] <= mem[r3]) pc = (ulong)mem[r1];
+                    break;
+
+                #endregion
                 #region legacy
                 case 0x7 when u2 == 0xA:
                     trace($"sqrt 0x{r2:X}");
@@ -322,10 +342,12 @@
 
         
 
-        public static Unicast<byte, ulong> u8 = new Unicast<byte, ulong>();
-        public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
-        public static Unicast<uint, ulong> u32 = new Unicast<uint, ulong>();
+        public static Unicast<byte, long> u8 = new Unicast<byte, long>();
+        public static Unicast<ushort, long> u16 = new Unicast<ushort, long>();
+        public static Unicast<uint, long> u32 = new Unicast<uint, long>();
+        public static Unicast<int, long> i32 = new Unicast<int, long>();
         public static Unicast<ulong, ulong> u64 = new Unicast<ulong, ulong>();
+        public static Unicast<long, ulong> i64 = new Unicast<long, ulong>();
 
         
 
@@ -353,14 +375,14 @@
 
     public class BitwiseContainer : IFormattable
     {
-        private readonly ulong _value;
+        private readonly long _value;
 
-        public BitwiseContainer(ulong mem) => _value = mem;
+        public BitwiseContainer(long mem) => _value = mem;
 
-        public static implicit operator BitwiseContainer(ulong value) => new BitwiseContainer(value);
-        public static implicit operator ulong(BitwiseContainer value) => value._value;
+        public static implicit operator BitwiseContainer(long value) => new BitwiseContainer(value);
+        public static implicit operator long(BitwiseContainer value) => value._value;
         
-        public static ulong operator &(BitwiseContainer _, ulong mask)
+        public static long operator &(BitwiseContainer _, long mask)
         {
             var shift = new BitArray(BitConverter.GetBytes(mask)).Cast<bool>().TakeWhile(bit => !bit).Count();
             return (_._value & mask) >> shift;
