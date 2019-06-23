@@ -86,15 +86,26 @@ LightAction: 0xD
 OffAction  : 0xE
 ```
 
+##### Flags
 
-##### Env variables
-
+in env:   
 ```yaml
 - FLAME_TRACE         : 1\0 - enable or disable trace logging (default 0)
 - FLAME_ERROR         : 1\0 - enable or disable error logging (default 1)
 - FLAME_KEEP_MEMORY   : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
 - FLAME_MEM_FAST_WRITE: 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
 ```
+
+in runtime:
+```yaml
+.loadi_x &(0x11) $(0x0) - disable trace
+
+- 0x11 : 1\0 - enable or disable trace logging (default 0)
+- 0x12 : 1\0 - enable or disable error logging (default 1)
+- 0x13 : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
+- 0x14 : 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
+```
+
 ##### fast-mode addressing        
 Write speedUp to device memory (x12~ times), but disables the ability to write to certain sections of device memory.
 
