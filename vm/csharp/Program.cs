@@ -38,18 +38,21 @@
             bus.Add(new Terminal(0x1));
             bus.Add(new AdvancedTerminal(0x2));
 
-            var core = bus.Cpu;
+            var core = bus.cpu;
 
-            //uint[] page = {
-            //    0xABCDEFE0,
-            //    new loadi(0x1, 0x5),  // x
-            //    new loadi(0x2, 0x7),  // y
-            //    new loadi(0x3, 0x8),  // z
-            //};
+            uint[] page = {
+                0xABCDEFE0,
+                new loadi(0x1, 0x5),  // x
+                new loadi(0x2, 0x7),  // y
+                new loadi(0x3, 0x8),  // z
+            };
 
-            //core.State.Load(page);
-            //if(true) {}
-            //else 
+            core.State.Load(page);
+
+            core.State.Fetch();
+
+            if(true) {}
+            else 
             if (!args.Any())
                 core.State.Load(0xB00B5000);
             else
