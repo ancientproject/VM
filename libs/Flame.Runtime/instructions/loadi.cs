@@ -13,8 +13,8 @@
 
         protected override void OnCompile()
         {
-            var u1 = (byte)((_value & 0xF0) >> 4);
-            var u2 = (byte)(_value & 0xF);
+            var u2 = (byte)((_value & 0xF0) >> 4);
+            var u1 = (byte)(_value & 0x0F);
             SetRegisters(_index, 0x0, 0x0, u1, u2);
         }
     }
