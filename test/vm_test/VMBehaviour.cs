@@ -31,7 +31,12 @@ namespace vm_test
         {
             var name = RuntimeUtilities.GetFieldPath(exp);
             var selector = exp.Compile();
-            Assert.AreEqual($"[{name}] 0x{value:X}", $"[{name}] 0x{selector(state):X}");
+            var val = selector(state);
+            if (value is float)
+                Assert.AreEqual($"[{name}] {value}", $"[{name}] {val}");
+            else
+                Assert.AreEqual($"[{name}] 0x{value:X}", $"[{name}] 0x{val:X}");
+            
         }
     }
 }

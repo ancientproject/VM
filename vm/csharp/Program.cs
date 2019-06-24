@@ -3,27 +3,21 @@
     using System;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using component;
     using dev;
     using dev.Internal;
     using flame.runtime.emit;
     using MoreLinq;
-    using TrueColorConsole;
     using static System.Console;
     internal class Program
     {
         public static async Task Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { VTConsole.Disable(); };
             Title = "cpu_host";
-            //OutputEncoding = Encoding.UTF8;
-            VTConsole.Enable();
             IntToCharConverter.Register<char>();
 
             var bus = new Bus();
-
 
             /* @0x11 */
             bus.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
@@ -48,7 +42,7 @@
 
             //core.State.Load(page);
 
-            //core.State.Fetch();
+            //core.State.fetch();
 
             //if(true) {}
             //else 
@@ -77,9 +71,11 @@
 
         public static ulong[] CastFromBytes(byte[] bytes)
         {
-            if(bytes.Length % sizeof(ulong) != 0)
-                throw new Exception("invalid offset file.");
-            return bytes.Batch(sizeof(ulong)).Select(x => BitConverter.ToUInt64(x.ToArray())).Reverse().ToArray();
+            if (bytes.Length % sizeof(ulong) == 0)
+                return bytes.Batch(sizeof(ulong)).Select(x => BitConverter.ToUInt64(x.ToArray())).Reverse().ToArray();
+            if (bytes.Length % sizeof(uint) == 0)
+                return bytes.Batch(sizeof(uint)).Select(x => BitConverter.ToUInt64(x.ToArray())).Reverse().ToArray();
+            throw new Exception("invalid offset file.");
         }
 
     }

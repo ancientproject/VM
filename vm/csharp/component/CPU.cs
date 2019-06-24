@@ -21,7 +21,7 @@
         {
             try
             {
-                State.Accept(State.Fetch());
+                State.Accept(State.fetch());
                 State.Eval();
             }
             catch (Exception e)

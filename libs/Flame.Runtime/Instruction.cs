@@ -19,12 +19,12 @@
             OPCode = id.getOpCode();
         }
 
-        public long Assembly()
+        public virtual long Assembly()
         {
             OnCompile();
             Func<int> Shift = ShiftFactory.Create(32).Shift;
             
-            var op1 = ((OPCode & 0x0FL) >> 4) << Shift();
+            var op1 = ((OPCode & 0xF0L) >> 4) << Shift();
             var op2 = ((OPCode & 0x0FL) >> 0) << Shift();
             var rr1 = (_r1 << Shift());
             var rr2 = (_r2 << Shift());
