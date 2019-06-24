@@ -9,7 +9,7 @@ namespace flame.runtime.compiler.test
 
     public class InstructionTest
     {
-        [Fact]
+        [Fact(Skip = "true")]
         public void TT()
         {
             const string str = 
