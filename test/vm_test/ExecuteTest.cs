@@ -28,9 +28,9 @@ namespace vm_test
         {
             load(new push_a(0x1, 0x5, '!'));
             shot();
-            Assert.AreEqual('!', dev.stack.Pop());
             AssertRegister(x => x.iid, 0xF);
             AssertRegister(x => x.x2, 0xC);
+            Assert.AreEqual('!', dev.stack.Pop());
         }
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]

@@ -17,7 +17,7 @@ namespace vm_test
 
         protected VMBehaviour() => bus.Add(new TestDevice());
 
-        public void load(params uint[] values) => bus.State.Load(values);
+        public void load(params ulong[] values) => bus.State.Load(values);
 
         public bool IsHalt() => state.halt == 1;
         public bool IsFastWrite() => state.fw;

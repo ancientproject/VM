@@ -141,18 +141,18 @@
             set => mem[0x17] = value ? 0x1L : 0x0L;
         }
 
-        public uint curAddr { get; set; } = 0xFFFF;
-        public uint lastAddr { get; set; } = 0xFFFF;
+        public ulong curAddr { get; set; } = 0xFFFF;
+        public ulong lastAddr { get; set; } = 0xFFFF;
 
         public long[] mem = new long[32];
 
         public sbyte halt { get; set; } = 0;
 
-        public List<uint> program { get; set; } = new List<uint>();
+        public List<ulong> program { get; set; } = new List<ulong>();
 
-        public void Load(params uint[] prog) => program.AddRange(prog);
+        public void Load(params ulong[] prog) => program.AddRange(prog);
 
-        public uint Fetch()
+        public ulong Fetch()
         {
             using var watcher = new StopwatchOperation("fetch operation");
             try
@@ -349,7 +349,7 @@
         
 
         public static Unicast<byte, long> u8 = new Unicast<byte, long>();
-        public static Unicast<ushort, long> u16 = new Unicast<ushort, long>();
+        public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
         public static Unicast<uint, long> u32 = new Unicast<uint, long>();
         public static Unicast<int, long> i32 = new Unicast<int, long>();
         public static Unicast<ulong, ulong> u64 = new Unicast<ulong, ulong>();
@@ -381,14 +381,15 @@
 
     public class BitwiseContainer : IFormattable
     {
-        private readonly long _value;
+        private readonly ulong _value;
 
-        public BitwiseContainer(long mem) => _value = mem;
+        public BitwiseContainer(ulong mem) => _value = mem;
 
-        public static implicit operator BitwiseContainer(long value) => new BitwiseContainer(value);
-        public static implicit operator long(BitwiseContainer value) => value._value;
+        public static implicit operator BitwiseContainer(ulong value) => new BitwiseContainer(value);
+        public static implicit operator BitwiseContainer(long value) => new BitwiseContainer((ulong)value);
+        public static implicit operator ulong(BitwiseContainer value) => value._value;
         
-        public static long operator &(BitwiseContainer _, long mask)
+        public static ulong operator &(BitwiseContainer _, ulong mask)
         {
             var shift = new BitArray(BitConverter.GetBytes(mask)).Cast<bool>().TakeWhile(bit => !bit).Count();
             return (_._value & mask) >> shift;
