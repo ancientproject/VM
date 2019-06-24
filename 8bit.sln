@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flame.Compiler.Service", "l
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vm", "vm\csharp\vm.csproj", "{D99C3D06-C9B9-4759-BDA9-1FC433DEB33F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vm_test", "test\vm_test\vm_test.csproj", "{A1538F63-D4D4-45E8-8A97-8EA7E6073EB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{D99C3D06-C9B9-4759-BDA9-1FC433DEB33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D99C3D06-C9B9-4759-BDA9-1FC433DEB33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D99C3D06-C9B9-4759-BDA9-1FC433DEB33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1538F63-D4D4-45E8-8A97-8EA7E6073EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1538F63-D4D4-45E8-8A97-8EA7E6073EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1538F63-D4D4-45E8-8A97-8EA7E6073EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1538F63-D4D4-45E8-8A97-8EA7E6073EB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{737A19B5-7197-4B8C-82D2-2765C81D38CB} = {24CBAF1C-EBD3-47DB-89BC-AD7F407DE760}
 		{1A6A54DC-9D98-46B4-8EA9-1945CA6FCE35} = {E0B02A0F-DC1C-4475-A8B0-860630E39FC7}
 		{08396B74-082E-44BA-9A91-E62A50F172C9} = {24CBAF1C-EBD3-47DB-89BC-AD7F407DE760}
+		{A1538F63-D4D4-45E8-8A97-8EA7E6073EB8} = {24CBAF1C-EBD3-47DB-89BC-AD7F407DE760}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77DF946F-0A1C-4A24-8A58-E2136BF8FC38}

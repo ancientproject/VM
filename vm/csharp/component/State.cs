@@ -323,7 +323,13 @@
             }
             Registers.Reflect();
         }
-       
+        // future instruction map (x16 bit instruction size, x40bit data)
+        //          r     u    x f
+        //  opCode 1234  1234  1212 
+        //   |  |
+        // 0xFFFF__AAAA__DDDD__EEEE
+        //
+        //
         public void Accept(BitwiseContainer mem)
         {
             trace($"fetch 0x{mem:X}");

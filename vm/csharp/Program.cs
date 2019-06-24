@@ -40,19 +40,19 @@
 
             var core = bus.cpu;
 
-            uint[] page = {
-                0xABCDEFE0,
-                new loadi(0x1, 0x50),  // x
-                new loadi(0x2, 0x72),  // y
-                new loadi(0x3, 0x03),  // z
-            };
+            //uint[] page = {
+            //    0xABCDEFE0,
+            //    new loadi(0x1, 0x50),  // x
+            //    new loadi(0x2, 0x72),  // y
+            //    new loadi(0x3, 0x03),  // z
+            //};
 
-            core.State.Load(page);
+            //core.State.Load(page);
 
-            core.State.Fetch();
+            //core.State.Fetch();
 
-            if(true) {}
-            else 
+            //if(true) {}
+            //else 
             if (!args.Any())
                 core.State.Load(0xB00B5000);
             else

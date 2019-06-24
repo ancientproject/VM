@@ -18,7 +18,7 @@
             Assert.IsType<ILGen>(d.GetGenerator());
             d.GetGenerator().Emit(new loadi(0xF, 0xC));
             Assert.Equal(4, d.GetILCode().Length);
-            Assert.Equal($"{0x1F000C00:X}", $"{BitConverter.ToUInt32(d.GetILCode()):X}");
+            Assert.Equal($"{0x1F00C000:X}", $"{BitConverter.ToUInt32(d.GetILCode()):X}");
         }
     }
 }
