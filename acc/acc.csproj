@@ -24,12 +24,12 @@
   <ItemGroup>
     <PackageReference Include="FluentCommandLineParser-netstandard" Version="1.4.3.13" />
     <PackageReference Include="morelinq" Version="3.1.1" />
+    <PackageReference Include="Pastel" Version="1.3.0" />
     <PackageReference Include="Sprache" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\libs\Flame.Compiler.Service\Flame.Compiler.Service.csproj" />
-    <ProjectReference Include="..\libs\truecolor\TrueColorConsole\TrueColorConsole.csproj" />
   </ItemGroup>
 
 </Project>

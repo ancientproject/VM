@@ -22,11 +22,12 @@
   <ItemGroup>
     <PackageReference Include="morelinq" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Pastel" Version="1.3.0" />
+    <PackageReference Include="YummyConsole" Version="1.0.6468.21037" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Flame.Runtime\Flame.Runtime.csproj" />
-    <ProjectReference Include="..\..\libs\truecolor\TrueColorConsole\TrueColorConsole.csproj" />
   </ItemGroup>
 
 </Project>
