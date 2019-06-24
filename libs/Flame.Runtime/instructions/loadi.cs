@@ -18,6 +18,13 @@
             SetRegisters(_index, 0x0, 0x0, u1, u2);
         }
     }
+    public class loadi_s : Instruction
+    {
+        internal readonly byte _index;
+
+        public loadi_s(byte index) : base(InsID.loadi_s) => _index = index;
+        protected override void OnCompile() => SetRegisters(_index);
+    }
     public class loadi_x : Instruction
     {
         internal readonly ushort _index;

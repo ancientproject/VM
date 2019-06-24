@@ -140,11 +140,21 @@
             get => mem[0x17] == 1;
             set => mem[0x17] = value ? 0x1L : 0x0L;
         }
+        /// <summary>
+        /// float flag
+        /// </summary>
+        public bool ff
+        {
+            get => mem[0x18] == 1;
+            set => mem[0x18] = value ? 0x1L : 0x0L;
+        }
 
         public ulong curAddr { get; set; } = 0xFFFF;
         public ulong lastAddr { get; set; } = 0xFFFF;
 
         public long[] mem = new long[32];
+
+        public Stack<long> stack = new Stack<long>();
 
         public sbyte halt { get; set; } = 0;
 
@@ -152,7 +162,7 @@
 
         public void Load(params ulong[] prog) => program.AddRange(prog);
 
-        public ulong Fetch()
+        public ulong fetch()
         {
             using var watcher = new StopwatchOperation("fetch operation");
             try
@@ -213,21 +223,31 @@
                     break;
                 case 0x2:
                     trace($"sum 0x{r2:X}, 0x{r3:X}");
-                    mem[r1] = mem[r2] + mem[r3];
+                    if (ff)
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) + (i64f32 & mem[r3]);
+                    else
+                        mem[r1] = mem[r2] + mem[r3];
                     break;
                 case 0x4:
                     trace($".sub 0x{r2:X}, 0x{r3:X}");
-                    mem[r1] = mem[r2] - mem[r3];
+                    if (ff)
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) - (i64f32 & mem[r3]);
+                    else
+                        mem[r1] = mem[r2] - mem[r3];
                     break;
                 case 0x5:
                     trace($".mul 0x{r2:X}, 0x{r3:X}");
-                    mem[r1] = mem[r2] * mem[r3];
+                    if (ff)
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) * (i64f32 & mem[r3]);
+                    else
+                        mem[r1] = mem[r2] * mem[r3];
                     break;
-                case 0x6: // 0x6123000
+                case 0x6: // 0x6123000 & 0xffff6123Cfff
                     trace($".div 0x{r2:X}, 0x{r3:X}");
-                    _ = mem[r3] switch {
-                        0x0 => bus.cpu.halt(0xC),
-                        _   => mem[r1] = mem[r2] / mem[r3]
+                    _ = (mem[r3], ff) switch {
+                        (0x0, _    ) => bus.cpu.halt(0xC),
+                        (_  , false) => mem[r1] = mem[r2] / mem[r3],
+                        (_  , true ) => mem[r1] = f32i64 & (i64f32 & mem[r2]) / (i64f32 & mem[r3])
                     };
                     break;
                 case 0x3: // 0x3120000
@@ -248,7 +268,13 @@
                     trace($"ref_t 0x{r1:X}");
                     mem[r1] = i64 & pc;
                     break;
-                
+                case 0xA0:
+                    for (var i = pc + r1; pc != i;)
+                        stack.Push(i64 & fetch());
+                    break;
+                case 0xA1:
+                    mem[r1] = stack.Pop();
+                    break;
 
                 #region debug
 
@@ -309,11 +335,17 @@
                 #region legacy
                 case 0x7 when u2 == 0xA:
                     trace($"sqrt 0x{r2:X}");
-                    mem[r1] = (uint)Math.Sqrt(mem[r2]);
+                    if (ff)
+                        mem[r1] = f32i64 & MathF.Sqrt(i64f32 & mem[r2]);
+                    else
+                        mem[r1] = (uint)Math.Sqrt(mem[r2]);
                     break;
                 case 0x7 when u2 == 0x0:
                     trace($".pow 0x{r2:X}, 0x{r3:X}");
-                    mem[r1] = (uint)Math.Pow(mem[r2], mem[r3]);
+                    if (ff)
+                        mem[r1] = f32i64 & MathF.Pow(i64f32 & mem[r2], i64f32 & mem[r3]);
+                    else
+                        mem[r1] = (uint)Math.Pow(mem[r2], mem[r3]);
                     break;
                 #endregion
                 default:
@@ -323,13 +355,19 @@
             }
             Registers.Reflect();
         }
-        // future instruction map (x16 bit instruction size, x40bit data)
+        // ===
+        // :: current instruction map (x8 bit instruction size, x40bit data)
+        // reserved    r   u  x
+        //   | opCode 123 123 12
+        //   |     |   |   |  |
+        // 0xFFFF_FFCC_AAA_BBB_DD
+        // ===
+        // :: future instruction map (x16 bit instruction size, x40bit data)
         //          r     u    x f
         //  opCode 1234  1234  1212 
         //   |  |
         // 0xFFFF__AAAA__DDDD__EEEE
-        //
-        //
+        // ===
         public void Accept(BitwiseContainer mem)
         {
             trace($"fetch 0x{mem:X}");
@@ -348,12 +386,15 @@
 
         
 
-        public static Unicast<byte, long> u8 = new Unicast<byte, long>();
+        public static Unicast<byte  , long > u8  = new Unicast<byte  , long>();
         public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
-        public static Unicast<uint, long> u32 = new Unicast<uint, long>();
-        public static Unicast<int, long> i32 = new Unicast<int, long>();
-        public static Unicast<ulong, ulong> u64 = new Unicast<ulong, ulong>();
-        public static Unicast<long, ulong> i64 = new Unicast<long, ulong>();
+        public static Unicast<uint  , long > u32 = new Unicast<uint  , long>();
+        public static Unicast<int   , long > i32 = new Unicast<int   , long>();
+        public static Unicast<ulong , ulong> u64 = new Unicast<ulong , ulong>();
+        public static Unicast<long  , ulong> i64 = new Unicast<long  , ulong>();
+
+        public static Bitcast<float, long > i64f32 = new Bitcast<float, long>();
+        public static Bitcast<long , float> f32i64 = new Bitcast<long , float>();
 
         
 

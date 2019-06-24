@@ -108,6 +108,13 @@
         [OpCode(true)]
         push_j,
 
+        [OpCode(0xA0)]
+        stage_n,
+        [OpCode(0xA1)]
+        loadi_s,
+        [OpCode(0xAA)]
+        n_value,
+
         [OpCode(0xD)]
         halt
     }
