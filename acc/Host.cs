@@ -121,7 +121,7 @@
                     gen.Emit(token);
                     var value = (uint)token.Assembly();
                     var str =
-                        $"0x{value:X8} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X4}";
+                        $"0x{value:X16} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X2}";
                     map.AppendLine(str);
                     Trace($"Compile {str}");
                 }
