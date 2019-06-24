@@ -7,7 +7,7 @@
 
     public class AssemblyTag
     {
-        public static AssemblyTag Null = new AssemblyTag(SignType.UnSecurity, ArchType.Any, 0);
+        public static AssemblyTag Null = new AssemblyTag(SignType.UnSecurity, ArchType.Any, 2);
 
         public const string ElementaryFlameTag = "EF";
         public enum SignType
@@ -47,7 +47,7 @@
 
         public AssemblyTag() {}
 
-        public AssemblyTag(SignType st, ArchType at, byte ver)
+        public AssemblyTag(SignType st, ArchType at, byte ver = 2)
         {
             Sign = st;
             Arch = at;
