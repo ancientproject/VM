@@ -8,7 +8,6 @@
     using component;
     using dev;
     using dev.Internal;
-    using flame.runtime;
     using flame.runtime.emit;
     using MoreLinq;
     using TrueColorConsole;
@@ -19,7 +18,7 @@
         {
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { VTConsole.Disable(); };
             Title = "cpu_host";
-            OutputEncoding = Encoding.UTF8;
+            //OutputEncoding = Encoding.UTF8;
             VTConsole.Enable();
             IntToCharConverter.Register<char>();
 
@@ -53,6 +52,7 @@
 
             //if(true) {}
             //else 
+            //core.State.Load(BIOS._GetILCode().ToArray());
             if (!args.Any())
                 core.State.Load(0xB00B5000);
             else
@@ -75,11 +75,11 @@
             }
         }
 
-        public static uint[] CastFromBytes(byte[] bytes)
+        public static ulong[] CastFromBytes(byte[] bytes)
         {
-            if(bytes.Length % sizeof(uint) != 0)
+            if(bytes.Length % sizeof(ulong) != 0)
                 throw new Exception("invalid offset file.");
-            return bytes.Batch(sizeof(uint)).Select(x => BitConverter.ToUInt32(x.ToArray())).Reverse().ToArray();
+            return bytes.Batch(sizeof(ulong)).Select(x => BitConverter.ToUInt64(x.ToArray())).Reverse().ToArray();
         }
 
     }

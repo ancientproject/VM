@@ -35,7 +35,7 @@
 
         private const string ESC = "\x1b";
 
-        private static IReadOnlyCollection<uint> _GetILCode()
+        public static IReadOnlyCollection<uint> _GetILCode()
         {
             var list = new List<uint>();
 

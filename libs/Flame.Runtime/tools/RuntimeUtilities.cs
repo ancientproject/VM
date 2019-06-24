@@ -16,14 +16,20 @@
         /// <typeparam name="TValue">The member type</typeparam>
         /// <param name="expr">An expression path fo the member</param>
         /// <returns>A string representation of the expression path</returns>
-        public static string GetFieldPath<TType, TValue>(Expression<Func<TType, TValue>> expr)
+        public static string GetFieldPath<TType, TValue>(Expression<Func<TType, TValue>> expr) => GetFieldPath(expr.Body);
+        public static string GetFieldPath(Expression body)
         {
-            var a = expr.Body.GetType();
-            if (expr.Body is MemberExpression me)
-                return me.Member.Name;
-            if (expr.Body is BinaryExpression be)
-                return be.ToString();
-            return "<???>";
+            switch (body)
+            {
+                case UnaryExpression unary:
+                    return GetFieldPath(unary.Operand);
+                case MemberExpression me:
+                    return me.Member.Name;
+                case BinaryExpression be:
+                    return be.ToString();
+                default:
+                    return "<???>";
+            }
         }
     }
 }

@@ -44,7 +44,7 @@
             }
         }
 
-        public async Task Step(uint address)
+        public async Task Step(ulong address)
         {
             State.Accept(address);
             State.Eval();

@@ -9,8 +9,8 @@ namespace flame.runtime.compiler.test
 
     public class InstructionTest
     {
-        [Fact(Skip = "true")]
-        public void TT()
+        [Fact(Skip = "not complete transformer")]
+        public void TransformationTest()
         {
             const string str = 
                              @"#{ 
