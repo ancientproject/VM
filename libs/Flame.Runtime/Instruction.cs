@@ -19,13 +19,13 @@
             OPCode = id.getOpCode();
         }
 
-        public int Assembly()
+        public long Assembly()
         {
             OnCompile();
-            Func<int> Shift = ShiftFactory.Create(28).Shift;
-
-            //var op = (((OPCode & 0xF0) >> 4) << Shift()) | (((OPCode & 0xF) >> 0) << Shift());
-            var op =  (OPCode << Shift());
+            Func<int> Shift = ShiftFactory.Create(32).Shift;
+            
+            var op1 = ((OPCode & 0x0FL) >> 4) << Shift();
+            var op2 = ((OPCode & 0x0FL) >> 0) << Shift();
             var rr1 = (_r1 << Shift());
             var rr2 = (_r2 << Shift());
             var rr3 = (_r3 << Shift());
@@ -33,17 +33,18 @@
             var ru2 = (_u2 << Shift());
             var rx1 = (_x1 << Shift());
             var rx2 = (_x2 << Shift());
-
-            return  op | rr1 | 
+            #pragma warning disable CS0675
+            return op1 | op2 | rr1 |
                    rr2 | rr3 | 
                    ru1 | ru2 | 
                    rx1 | rx2;
+            #pragma warning restore CS0675
         }
 
 
 
-        public static implicit operator int(Instruction i) => i.Assembly();
         public static implicit operator uint(Instruction i) => (uint)i.Assembly();
+        public static implicit operator ulong(Instruction i) => (ulong)i.Assembly();
 
 
         public override byte[] GetBodyILBytes() => BitConverter.GetBytes(Assembly());
