@@ -12,16 +12,16 @@
     using System.Linq;
     using System.Text;
     using exceptions;
+    using Pastel;
     using runtime.emit;
     using tokens;
-    using TrueColorConsole;
+    using static System.Console;
     using static _term;
-    using static TrueColorConsole.VTConsole;
     internal class Host
     {
         public static void Main(string[] c_args)
         {
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { VTConsole.Disable(); };
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { ConsoleExtensions.Disable(); };
             var raw = new FluentCommandLineParser<Args>();
             raw.Setup(x => x.sourceFiles)
                 .As('s', "source")
@@ -32,13 +32,11 @@
                 .WithDescription("Out file.");
             raw.Parse(c_args);
             var args = raw.Object;
-            Enable();
-            CursorSetVisibility(false);
-            CursorSetBlinking(false);
 
             var ver = FileVersionInfo.GetVersionInfo(typeof(Host).Assembly.Location).ProductVersion;
-            WriteLine($"Flame Assembler Compiler version {ver} (default)", Color.Gray);
-            WriteLine($"Copyright (C) Yuuki Wesp.\n\n", Color.Gray);
+            
+            WriteLine($"Flame Assembler Compiler version {ver} (default)".Pastel(Color.Gray));
+            WriteLine($"Copyright (C) Yuuki Wesp.\n\n".Pastel(Color.Gray));
             
             if (!args.sourceFiles.Any())
             {

@@ -3,7 +3,8 @@
     using System;
     using System.Drawing;
     using emit;
-    using static TrueColorConsole.VTConsole;
+    using Pastel;
+    using static System.Console;
     internal class _term
     {
         private static readonly object Guarder = new object();
@@ -12,12 +13,7 @@
         {
             lock (Guarder)
             {
-                if (!IsSupported || !IsEnabled)
-                {
-                    Console.WriteLine($"trace: {message}");
-                    return;
-                }
-                WriteLine($"trace: {message}", Color.Gray);
+                WriteLine($"trace: {message}".Pastel( Color.Gray));
             }
         }
 
@@ -25,47 +21,32 @@
         {
             lock (Guarder)
             {
-                if (!IsSupported || !IsEnabled)
-                {
-                    Console.WriteLine($"[SUCCESS]: {message}");
-                    return;
-                }
-                Write("[", Color.White);
-                Write($"SUCCESS", Color.YellowGreen);
-                Write("]: ", Color.White);
-                WriteLine($" {message}", Color.White);
+                Write("[");
+                Write($"SUCCESS".Pastel(Color.YellowGreen));
+                Write("]: ");
+                WriteLine($" {message}");
             }
         }
         public static void Warn(Warning keyCode, string message)
         {
             lock (Guarder)
             {
-                if (!IsSupported || !IsEnabled)
-                {
-                    Console.WriteLine($"[WARN]: {keyCode} {message}");
-                    return;
-                }
-                Write("[", Color.White);
-                Write($"WARN", Color.Orange);
-                Write("]: ", Color.White);
-                Write($"{keyCode.Format()}", Color.Orange);
-                WriteLine($" {message}", Color.White);
+                Write("[");
+                Write($"WARN".Pastel(Color.Orange));
+                Write("]: ");
+                Write($"{keyCode.Format()}".Pastel(Color.Orange));
+                WriteLine($" {message}");
             }
         }
         public static void Error(Warning keyCode, string message)
         {
             lock (Guarder)
             {
-                if (!IsSupported || !IsEnabled)
-                {
-                    Console.WriteLine($"[ERROR]: {keyCode} {message}");
-                    return;
-                }
-                Write("[", Color.White);
-                Write($"ERROR", Color.Red);
-                Write("]: ", Color.White);
-                Write($"{keyCode.Format()}", Color.Red);
-                WriteLine($" {message}", Color.White);
+                Write("[");
+                Write($"ERROR".Pastel(Color.Red));
+                Write("]: ");
+                Write($"{keyCode.Format()}".Pastel(Color.Red));
+                WriteLine($" {message}");
             }
         }
     }
