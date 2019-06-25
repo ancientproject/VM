@@ -1,4 +1,4 @@
-﻿namespace flame.runtime.emit
+﻿namespace ancient.runtime.emit
 {
     public interface IILGenerable
     {

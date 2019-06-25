@@ -1,4 +1,4 @@
-﻿namespace flame.runtime.emit
+﻿namespace ancient.runtime.emit
 {
     using System.Collections.Generic;
     using System.Linq;

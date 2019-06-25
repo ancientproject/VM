@@ -1,4 +1,4 @@
-﻿namespace flame.compiler.tokens
+﻿namespace ancient.compiler.tokens
 {
     using runtime;
     using Sprache;
