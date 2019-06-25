@@ -5,7 +5,6 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
-    using System.Threading;
 
     [DebuggerDisplay("{ToString()}")]
     public abstract class Instruction : OpCode

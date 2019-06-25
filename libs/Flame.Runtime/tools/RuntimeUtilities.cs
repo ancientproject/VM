@@ -1,9 +1,7 @@
 ﻿namespace Flame.Runtime.tools
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq.Expressions;
-    using System.Text;
 
     public static class RuntimeUtilities
     {

@@ -1,6 +1,5 @@
 namespace flame.runtime.compiler.test
 {
-    using System;
     using System.Linq;
     using flame.compiler.tokens;
     using runtime;

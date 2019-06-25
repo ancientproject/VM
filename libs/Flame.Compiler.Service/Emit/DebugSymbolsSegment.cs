@@ -1,7 +1,6 @@
 ﻿namespace flame.compiler.emit
 {
     using System.Collections.Generic;
-    using System.Linq;
     using tokens;
 
     public class DebugSymbolsSegment : IChainSegment<string>

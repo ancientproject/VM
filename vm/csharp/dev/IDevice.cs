@@ -1,7 +1,5 @@
 ﻿namespace vm.dev
 {
-    using System.Threading.Tasks;
-
     public interface IDevice
     {
         string Name { get; }
