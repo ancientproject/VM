@@ -7,7 +7,6 @@
     using Sprache;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -17,6 +16,8 @@
     using tokens;
     using static System.Console;
     using static _term;
+    using Color = System.Drawing.Color;
+
     internal class Host
     {
         public static void Main(string[] c_args)
@@ -58,12 +59,11 @@
 
 
             var source = File.ReadAllText(args.sourceFiles.First()).Replace("\r", "");
-
-
+            
             try
             {
-                var e = Evolve(source);
-                var c = Compile(e, args);
+                //var e = Evolve(source);
+                var c = Compile(source, args);
 
                 File.WriteAllBytes($"{args.OutFile}.dlx", c.data);
                 File.WriteAllText($"{args.OutFile}.map", c.map);
@@ -101,7 +101,6 @@
             }
             return result;
         }
-
         public static (byte[] data, string map) Compile(string source, Args args)
         {
             var @try = FlameAssemblerSyntax.ManyParser.Parse(source);
@@ -136,9 +135,9 @@
                         break;
                     }
                     case ErrorCompileToken error:
-                        Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
+                        Error(error, source);
                         throw new FlameCompileException(error.ErrorResult.ToString());
-                    case CommentToken comment:
+                    case CommentToken _:
                         // ignore
                         break;
                     default:
