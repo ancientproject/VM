@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\libs\Flame.Compiler.Service\Flame.Compiler.Service.csproj" />
+    <ProjectReference Include="..\libs\Ancient.Compiler.Service\Ancient.Compiler.Service.csproj" />
   </ItemGroup>
 
 </Project>

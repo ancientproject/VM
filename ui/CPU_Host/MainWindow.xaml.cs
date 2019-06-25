@@ -13,7 +13,7 @@
     using System.Windows.Forms;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
-    using flame.runtime.emit;
+    using ancient.runtime.emit;
     using MoreLinq.Extensions;
     using vm.dev.Internal;
 
@@ -221,7 +221,7 @@
                 Task.Factory.StartNew(async () =>
                 {
                     await Task.Delay(1000);
-                    var dyn = FlameAssembly.LoadFrom(openFileDialog.FileName);
+                    var dyn = AncientAssembly.LoadFrom(openFileDialog.FileName);
                     WriteSystemMessage($"Assembly '{dyn.Name}-{dyn.Tag}' load success.");
                     HostContainer.Instance.bus.State.Load(CastFromBytes(dyn.GetILCode()));
                     HostContainer.Instance.bus.State.iid = 0;

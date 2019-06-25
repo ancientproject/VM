@@ -7,7 +7,7 @@
     using component;
     using dev;
     using dev.Internal;
-    using flame.runtime.emit;
+    using ancient.runtime.emit;
     using MoreLinq;
 
     internal class Program
@@ -54,7 +54,7 @@
                 var file = new FileInfo(args.First());
                 if (file.Exists)
                 {
-                    var bytes = FlameAssembly.LoadFrom(file.FullName).GetILCode();
+                    var bytes = AncientAssembly.LoadFrom(file.FullName).GetILCode();
                     core.State.Load(CastFromBytes(bytes));
                 }
                 else

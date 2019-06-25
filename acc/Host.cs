@@ -1,4 +1,4 @@
-﻿namespace flame.compiler
+﻿namespace ancient.compiler
 {
     using System;
     using emit;
@@ -36,7 +36,7 @@
 
             var ver = FileVersionInfo.GetVersionInfo(typeof(Host).Assembly.Location).ProductVersion;
             
-            WriteLine($"Flame Assembler Compiler version {ver} (default)".Pastel(Color.Gray));
+            WriteLine($"Ancient assembler compiler version {ver} (default)".Pastel(Color.Gray));
             WriteLine($"Copyright (C) Yuuki Wesp.\n\n".Pastel(Color.Gray));
             
             if (!args.sourceFiles.Any())
@@ -62,8 +62,8 @@
             
             try
             {
-                //var e = Evolve(source);
-                var c = Compile(source, args);
+                var e = Evolve(source);
+                var c = Compile(e, args);
 
                 File.WriteAllBytes($"{args.OutFile}.dlx", c.data);
                 File.WriteAllText($"{args.OutFile}.map", c.map);
@@ -74,7 +74,7 @@
             { }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                WriteLine(e);
             }
         }
 
@@ -95,6 +95,7 @@
                     case EmptyEvolve _:
                         break;
                     case ErrorEvolveToken error:
+                        Error(error, code);
                         Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
                         throw new FlameEvolveException(error.ErrorResult.ToString());
                 }
@@ -138,7 +139,6 @@
                         Error(error, source);
                         throw new FlameCompileException(error.ErrorResult.ToString());
                     case CommentToken _:
-                        // ignore
                         break;
                     default:
                         Warn(Warning.IgnoredToken, $"Ignored {expression} at {expression.InputPosition}");

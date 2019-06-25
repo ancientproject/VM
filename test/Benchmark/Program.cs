@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using BenchmarkDotNet.Attributes;
     using BenchmarkDotNet.Running;
-    using flame.runtime;
+    using ancient.runtime;
     using vm.component;
     using vm.dev;
     using vm.dev.Internal;

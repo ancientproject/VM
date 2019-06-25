@@ -1,7 +1,8 @@
-namespace flame.runtime.compiler.test
+namespace ancient.runtime.compiler.test
 {
     using System.Linq;
-    using flame.compiler.tokens;
+    using ancient.compiler;
+    using ancient.compiler.tokens;
     using runtime;
     using Sprache;
     using Xunit;
@@ -43,7 +44,7 @@ namespace flame.runtime.compiler.test
         [InlineData(".push_j &(0x0) &(0xC) <| @string_t(\"test\")")]
         public void PushJ(string code)
         {
-            var result = flame.compiler.Host.Evolve(code).Split('\n');
+            var result = Host.Evolve(code).Split('\n');
             Assert.Equal(".push_a &(0x0) &(0xC) <| $(0x74)", result.First());
             Assert.Equal(".push_a &(0x0) &(0xC) <| $(0x74)", result.Last());
         }
