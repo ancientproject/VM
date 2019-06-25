@@ -68,9 +68,9 @@
                 File.WriteAllBytes($"{args.OutFile}.dlx", c.data);
                 File.WriteAllText($"{args.OutFile}.map", c.map);
             }
-            catch (FlameCompileException)
+            catch (AncientCompileException)
             { }
-            catch (FlameEvolveException)
+            catch (AncientEvolveException)
             { }
             catch (Exception e)
             {
@@ -97,7 +97,7 @@
                     case ErrorEvolveToken error:
                         Error(error, code);
                         Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
-                        throw new FlameEvolveException(error.ErrorResult.ToString());
+                        throw new AncientEvolveException(error.ErrorResult.ToString());
                 }
             }
             return result;
@@ -137,7 +137,7 @@
                     }
                     case ErrorCompileToken error:
                         Error(error, source);
-                        throw new FlameCompileException(error.ErrorResult.ToString());
+                        throw new AncientCompileException(error.ErrorResult.ToString());
                     case CommentToken _:
                         break;
                     default:

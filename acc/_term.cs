@@ -1,4 +1,4 @@
-﻿namespace flame.compiler
+﻿namespace ancient.compiler
 {
     using System;
     using System.Collections.Generic;
