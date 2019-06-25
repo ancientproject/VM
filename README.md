@@ -1,4 +1,7 @@
 ## 🔥 FlameVM 
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8123add7927b4d7288ebcf2b13ae269d)](https://app.codacy.com/app/0xF6/cpu_4bit?utm_source=github.com&utm_medium=referral&utm_content=0xF6/cpu_4bit&utm_campaign=Badge_Grade_Dashboard)
+
 ##### (8bit_cpu_host and compiler combine-based-parser)
   
 ![image](https://user-images.githubusercontent.com/13326808/58775994-0597bc00-85d1-11e9-99c3-e6f7208cd37b.png)
