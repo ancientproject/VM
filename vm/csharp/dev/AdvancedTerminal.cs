@@ -1,7 +1,6 @@
 ﻿namespace vm.dev
 {
     using System;
-    using System.Runtime.InteropServices;
     using Internal;
 
     public class AdvancedTerminal : AbstractDevice

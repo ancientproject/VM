@@ -1,6 +1,5 @@
 ﻿namespace flame.runtime.emit
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 

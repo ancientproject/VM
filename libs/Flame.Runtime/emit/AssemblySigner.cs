@@ -2,13 +2,11 @@
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Security;
     using System.Security.Cryptography;
     using System.Text;
     using System.Threading;
-    using System.Threading.Tasks;
 
     public class AssemblySigner : IDisposable
     {

@@ -6,21 +6,15 @@
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using System.Text;
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Documents;
     using System.Windows.Forms;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
-    using flame.runtime;
     using flame.runtime.emit;
-    using JetBrains.Annotations;
     using MoreLinq.Extensions;
-    using vm.dev;
     using vm.dev.Internal;
 
     [ValueConversion(typeof(bool), typeof(bool))]

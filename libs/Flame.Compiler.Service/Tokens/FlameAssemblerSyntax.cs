@@ -1,7 +1,6 @@
 ﻿namespace flame.compiler.tokens
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using runtime;
     using Sprache;

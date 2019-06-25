@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using vm.dev.Internal;
 
 namespace CPU_Host
 {
-    using System.Threading;
-
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

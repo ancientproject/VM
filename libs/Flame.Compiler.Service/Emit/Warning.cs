@@ -1,6 +1,5 @@
 ﻿namespace flame.compiler.emit
 {
-    using System;
     using System.Linq;
     using Sprache;
 

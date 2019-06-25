@@ -9,16 +9,15 @@
     using dev.Internal;
     using flame.runtime.emit;
     using MoreLinq;
-    using static System.Console;
+
     internal class Program
     {
         public static async Task Main(string[] args)
         {
-            Title = "cpu_host";
+            Console.Title = "cpu_host";
             IntToCharConverter.Register<char>();
 
             var bus = new Bus();
-
             /* @0x11 */
             bus.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
             /* @0x12 */
