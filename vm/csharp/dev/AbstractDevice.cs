@@ -1,7 +1,7 @@
 ﻿namespace vm.dev
 {
     using System;
-    using flame.runtime.exceptions;
+    using ancient.runtime.exceptions;
     using Internal;
 
     public abstract class AbstractDevice : IDevice, IComparable

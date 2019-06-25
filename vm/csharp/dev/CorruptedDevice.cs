@@ -1,7 +1,7 @@
 ﻿namespace vm.dev
 {
     using component;
-    using flame.runtime.exceptions;
+    using ancient.runtime.exceptions;
 
     public class CorruptedDevice : AbstractDevice
     {

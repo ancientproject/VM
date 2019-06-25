@@ -1,4 +1,4 @@
-﻿namespace flame.runtime.compiler.test
+﻿namespace ancient.runtime.compiler.test
 {
     using System;
     using emit;

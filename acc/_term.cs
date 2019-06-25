@@ -67,7 +67,7 @@
             }
             return string.Join("", str.ToArray());
         }
-        public static void Error(ErrorCompileToken error, string source)
+        public static void Error<T>(ErrorToken<T> error, string source)
         {
             static LogEntry MakeDiagnostic(LogEntry entry) => 
                 DiagnosticExtractor.Transform(entry, new Text("program"));

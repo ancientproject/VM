@@ -1,4 +1,4 @@
-﻿namespace flame.compiler.exceptions
+﻿namespace ancient.compiler.exceptions
 {
     using System;
 
