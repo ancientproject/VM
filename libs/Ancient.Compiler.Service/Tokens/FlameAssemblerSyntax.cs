@@ -101,8 +101,11 @@
             ["^"] = OperatorKind.AltRef,
             ["("] = OperatorKind.OpenParen,
             [")"] = OperatorKind.CloseParen,
-            ["-~"] = OperatorKind.When
+            ["~-"] = OperatorKind.When
         };
+
+        internal static readonly Dictionary<OperatorKind, string> OperatorsReversed =
+            Operators.Reverse().ToDictionary(x => x.Value, x => x.Key);
 
         public static Parser<IInputToken> Parser => CommentToken
             // base instruction token
@@ -201,7 +204,7 @@
             .NamedOperator(OperatorKind.PipeRight);
 
         public static Parser<OperatorKind> When =>
-            (from _ in Parse.String("-~")
+            (from _ in Parse.String(OperatorsReversed[OperatorKind.When])
                 select OperatorKind.When)
             .Token()
             .NamedOperator(OperatorKind.When);
