@@ -4,22 +4,26 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
+    using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
     using cli;
     using cmd;
     using Microsoft.DotNet.PlatformAbstractions;
+    using Newtonsoft.Json;
     using Pastel;
     using RuntimeEnvironment = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment;
 
     internal class Host
     {
 
-        private static Dictionary<string, Func<string[], int>> s_builtIns = new Dictionary<string, Func<string[], int>>
+        private static readonly Dictionary<string, Func<string[], int>> s_builtIns = 
+            new Dictionary<string, Func<string[], int>>
         {
             ["new"] = NewCommand.Run,
-            ["help"] = HelpCommand.Run
+            ["help"] = HelpCommand.Run,
+            ["run"] = RunCommand.Run
         };
         public static int Main(string[] args)
         {
@@ -40,6 +44,12 @@
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 Console.OutputEncoding = Encoding.Unicode;
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore, 
+                Formatting = Formatting.Indented, ReferenceLoopHandling = ReferenceLoopHandling.Ignore, 
+                Culture = CultureInfo.InvariantCulture
+            };
         }
 
         internal static int ProcessArgs(string[] args)

@@ -17,7 +17,7 @@ Common Options (passed before the command):
 Common Commands:
   new           Initialize a basic Ancient project
   build         Builds a Ancient project
-  run           Compiles and immediately executes a Ancient project";
+  run           Immediately executes a script from Ancient project";
 
         public static int Run(string[] args)
         {

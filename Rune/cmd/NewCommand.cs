@@ -7,10 +7,12 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Ancient.ProjectSystem;
     using cli;
     using DustInTheWind.ConsoleTools.InputControls;
     using DustInTheWind.ConsoleTools.Musical;
     using DustInTheWind.ConsoleTools.Spinners;
+    using Newtonsoft.Json;
     using Pastel;
 
     public class NewCommand
@@ -48,9 +50,20 @@
             var version     = new ValueView<string>($"[2/4] {":boom:".Emoji()} Project Version:").WithDefault("0.0.0").Read();
             var desc        = new ValueView<string>($"[3/4] {":balloon:".Emoji()} Project Description:").WithDefault("").Read();
             var author      = new ValueView<string>($"[4/4] {":skull:".Emoji()} Project Author:").WithDefault("").Read();
+            var dir = Directory.GetCurrentDirectory();
+
+            var proj = new AncientProject
+            {
+                name = projectName,
+                version = version,
+                author = author
+            };
+
+            proj.scripts.Add($"start", "echo 1");
 
 
-            Console.WriteLine($"{":scream:".Emoji()} СВАЦК ПИДОР".Color(Color.RosyBrown));
+            File.WriteAllText($"{Path.Combine(dir, $"{projectName}.rune")}", JsonConvert.SerializeObject(proj));
+
             return 0;
         }
     }
