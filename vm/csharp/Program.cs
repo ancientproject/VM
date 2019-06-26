@@ -19,13 +19,13 @@
 
             var bus = new Bus();
             /* @0x11 */
-            bus.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
+            bus.State.tc = Environment.GetEnvironmentVariable("VM_TRACE") == "1";
             /* @0x12 */
-            bus.State.ec = Environment.GetEnvironmentVariable("FLAME_ERROR") != "0";
+            bus.State.ec = Environment.GetEnvironmentVariable("VM_ERROR") != "0";
             /* @0x13 */
-            bus.State.km = Environment.GetEnvironmentVariable("FLAME_KEEP_MEMORY") == "1";
+            bus.State.km = Environment.GetEnvironmentVariable("VM_KEEP_MEMORY") == "1";
             /* @0x14 */
-            bus.State.fw = Environment.GetEnvironmentVariable("FLAME_MEM_FAST_WRITE") == "1";
+            bus.State.fw = Environment.GetEnvironmentVariable("VM_MEM_FAST_WRITE") == "1";
 
             bus.Add(new Terminal(0x1));
             bus.Add(new AdvancedTerminal(0x2));
