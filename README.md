@@ -91,10 +91,10 @@ OffAction  : 0xE
 
 in env:   
 ```yaml
-- FLAME_TRACE         : 1\0 - enable or disable trace logging (default 0)
-- FLAME_ERROR         : 1\0 - enable or disable error logging (default 1)
-- FLAME_KEEP_MEMORY   : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
-- FLAME_MEM_FAST_WRITE: 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
+- VM_TRACE         : 1\0 - enable or disable trace logging (default 0)
+- VM_ERROR         : 1\0 - enable or disable error logging (default 1)
+- VM_KEEP_MEMORY   : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
+- VM_MEM_FAST_WRITE: 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
 ```
 
 in runtime:
