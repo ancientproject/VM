@@ -114,7 +114,7 @@
         loadi_s,
         [OpCode(0xAA)]
         n_value,
-
+        [OpCode(true)]
         raw,
 
         [OpCode(0xD)]
