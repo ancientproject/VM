@@ -1,6 +1,7 @@
 ﻿namespace ancient.compiler.tokens
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using runtime;
     using Sprache;
@@ -240,6 +241,16 @@
             .Named("string_t expression");
         #endregion
         #region Instructuions token
+        public static Parser<IInputToken> Raw =>
+            (from dword in InstructionToken(InsID.raw)
+                from space1 in Parse.WhiteSpace.Optional()
+                from val1 in HexNumber
+                select new InstructionExpression(new raw(ulong.Parse(val1, NumberStyles.AllowHexSpecifier))))
+            .Token()
+            .WithPosition()
+            .Named("raw expression");
+
+
         public static Parser<IInputToken> LoadI =>
             (from dword in InstructionToken(InsID.loadi)
                 from space1 in Parse.WhiteSpace.Optional()

@@ -1,9 +1,16 @@
 ﻿namespace Rune.cmd
 {
     using System;
+    using System.Diagnostics;
     using System.Drawing;
+    using System.IO;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using cli;
+    using DustInTheWind.ConsoleTools.InputControls;
+    using DustInTheWind.ConsoleTools.Musical;
+    using DustInTheWind.ConsoleTools.Spinners;
     using Pastel;
 
     public class NewCommand
@@ -30,13 +37,20 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString().Pastel(Color.Red));
+                Console.WriteLine(ex.ToString().Color(Color.Red));
                 return 1;
             }
         }
 
         private int CreateEmptyProject()
         {
+            var projectName = new ValueView<string>($"[1/4] {":drum:".Emoji()} Project Name:").WithDefault(Directory.GetCurrentDirectory().Split('/').Last()).Read();
+            var version     = new ValueView<string>($"[2/4] {":boom:".Emoji()} Project Version:").WithDefault("0.0.0").Read();
+            var desc        = new ValueView<string>($"[3/4] {":balloon:".Emoji()} Project Description:").WithDefault("").Read();
+            var author      = new ValueView<string>($"[4/4] {":skull:".Emoji()} Project Author:").WithDefault("").Read();
+
+
+            Console.WriteLine($"{":scream:".Emoji()} СВАЦК ПИДОР".Color(Color.RosyBrown));
             return 0;
         }
     }

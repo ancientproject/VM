@@ -3,13 +3,16 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>rune</AssemblyName>
+    <RootNamespace>Rune.CLI</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ConsoleTools" Version="0.5.2" />
+    <PackageReference Include="EmojiOne.NETStandard" Version="4.0.1" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.0.0-preview6-27804-01" />
     <PackageReference Include="Pastel" Version="1.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview6.19303.8" />
   </ItemGroup>
 
 </Project>

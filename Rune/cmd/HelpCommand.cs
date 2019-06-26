@@ -6,18 +6,18 @@
     {
         private const string UsageText = @"Usage: rune [common-options] [command] [arguments]
 
-            Arguments:
-              [command]     The command to execute
-              [arguments]   Arguments to pass to the command
+Arguments:
+  [command]     The command to execute
+  [arguments]   Arguments to pass to the command
 
-            Common Options (passed before the command):
-              --version     Display Rune CLI Version Number
-              --info        Display Rune CLI Info
+Common Options (passed before the command):
+  --version     Display Rune CLI Version Number
+  --info        Display Rune CLI Info
 
-            Common Commands:
-              new           Initialize a basic Ancient project
-              build         Builds a Ancient project
-              run           Compiles and immediately executes a Ancient project";
+Common Commands:
+  new           Initialize a basic Ancient project
+  build         Builds a Ancient project
+  run           Compiles and immediately executes a Ancient project";
 
         public static int Run(string[] args)
         {
