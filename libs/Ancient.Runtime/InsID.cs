@@ -115,6 +115,8 @@
         [OpCode(0xAA)]
         n_value,
 
+        raw,
+
         [OpCode(0xD)]
         halt
     }
