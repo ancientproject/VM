@@ -10,6 +10,8 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
+    using Ancient.Runtime.tools;
     using exceptions;
     using Pastel;
     using runtime.emit;
@@ -20,9 +22,10 @@
 
     internal class Host
     {
-        public static void Main(string[] c_args)
+        public static int Main(string[] c_args)
         {
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { ConsoleExtensions.Disable(); };
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var raw = new FluentCommandLineParser<Args>();
             raw.Setup(x => x.sourceFiles)
                 .As('s', "source")
@@ -42,18 +45,18 @@
             if (!args.sourceFiles.Any())
             {
                 Warn(Warning.NoSource, "No source files specified.");
-                return;
+                return 1;
             }
             if (string.IsNullOrEmpty(args.OutFile))
             {
                 Error(Warning.OutFileNotSpecified, "Outputs without source must have the --out option specified.");
-                return;
+                return 1;
             }
 
             if (!args.sourceFiles.Select(x => new FileInfo(x).Exists).All(x => x))
             {
                 Error(Warning.SourceFileNotFound, "One source file not found.");
-                return;
+                return 1;
             }
 
 
@@ -66,7 +69,8 @@
                 var c = Compile(e, args);
 
                 File.WriteAllBytes($"{args.OutFile}.dlx", c.data);
-                File.WriteAllText($"{args.OutFile}.map", c.map);
+                File.WriteAllBytes($"{args.OutFile}.pdb", c.map);
+                return 0;
             }
             catch (AncientCompileException)
             { }
@@ -76,15 +80,22 @@
             {
                 WriteLine(e);
             }
+
+            return 1;
         }
 
         public static string Evolve(string code)
         {
             var result = code;
             var block = code.Replace("\r", "").Split('\n');
-            var parsed = FlameTransformerSyntax.ManyParser.Parse(code);
+            var parsed = new FlameTransformerSyntax().ManyEvolver.Parse(code);
             foreach (var token in parsed)
             {
+                switch (token)
+                {
+                    case EmptyEvolve _: break;
+                    default: Trace($"evolving :: {token}"); break;
+                }
                 switch (token)
                 {
                     case ClassicEvolve e:
@@ -94,6 +105,29 @@
                         break;
                     case EmptyEvolve _:
                         break;
+                    case DefineLabels labels:
+                        var reg = new Regex(@"\!\[~(?<alias>\w+)\]");
+
+                        var usedAliases = reg.Matches(code).Select(x => x.Groups["alias"].Value).ToArray();
+                        var compiledAliases = labels.Labels.Select(x => x.Name).ToList();
+
+                        var failedFind = usedAliases.Where(x => !compiledAliases.Contains(x)).ToArray();
+
+                        if (failedFind.Any())
+                        {
+                            var msg = $"[{string.Join(",", failedFind)}] symbols not compiled.";
+                            Error(Warning.PrecompiledSymbolNotFound, msg);
+                            throw new AncientEvolveException(msg);
+                        }
+
+                        result = labels.Labels.Aggregate(result, (current, aliase) => 
+                                current.Replace($"![~{aliase.Name}]", $"0x{aliase.Hex}"));
+                        result = new Regex(@"^#\{.+\}$", 
+                            RegexOptions.Compiled | 
+                            RegexOptions.Multiline | 
+                            RegexOptions.Singleline)
+                            .Replace(result, "");
+                        break;
                     case ErrorEvolveToken error:
                         Error(error, code);
                         Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
@@ -102,11 +136,10 @@
             }
             return result;
         }
-        public static (byte[] data, string map) Compile(string source, Args args)
+        public static (byte[] data, byte[] map) Compile(string source, Args args)
         {
-            var @try = FlameAssemblerSyntax.ManyParser.Parse(source);
-            
-            var map = new StringBuilder();
+            var @try = new FlameAssemblerSyntax().ManyParser.Parse(source);
+            var map = new DebugSymbols();
             var offset = 0;
             var asm = new DynamicAssembly(args.OutFile, ("timestamp", $"{DateTime.UtcNow.Ticks}"));
             var gen = asm.GetGenerator();
@@ -115,13 +148,12 @@
             {
                 void CompileToken(Instruction token)
                 {
+                    map.symbols.Add(((short)offset, source.Split('\n')[offset]));
                     offset++;
                     gen.Emit(token);
                     var value = (uint)token.Assembly();
-                    var str =
-                        $"0x{value:X16} // Offset: 0x{offset:X8}, ID: {token.ID}, OpCode: 0x{token.OPCode:X2}";
-                    map.AppendLine(str);
-                    Trace($"Compile {str}");
+                    var str = $"0x{value:X16}, offset: 0x{offset:X3}, op-code: 0x{token.OPCode:X2}, id: {token.ID}";
+                    Trace($"compile :: {str}");
                 }
 
                 switch (expression)
@@ -146,7 +178,7 @@
                 }
             }
 
-            return (asm.GetBytes(), map.ToString());
+            return (asm.GetBytes(), DebugSymbols.ToBytes(map));
         }
 
 
