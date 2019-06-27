@@ -25,10 +25,13 @@
             app.HelpOption("-h|--help");
             var dotnetBuild = new BuildCommand();
             var vm = new VMCommand();
+            var isDebug = app.Option("-d|--debug <bool>", "Is debug mode", CommandOptionType.BoolValue);
+            var fastWrite = app.Option("-f|--fast_write <bool>", "Use fast-write mode?", CommandOptionType.BoolValue);
+            var keepMemory = app.Option("-k|--keep_memory <bool>", "Keep memory?", CommandOptionType.BoolValue);
             app.OnExecute(() =>
             {
                 var buildResult = dotnetBuild.Execute(true);
-                return buildResult != 0 ? buildResult : vm.Execute();
+                return buildResult != 0 ? buildResult : vm.Execute(isDebug, keepMemory, fastWrite);
             });
             try
             {
@@ -41,7 +44,7 @@
             }
         }
 
-        public int Execute()
+        internal int Execute(CommandOption isDebug, CommandOption keepMemory, CommandOption fastWrite)
         {
             var directory = Directory.GetCurrentDirectory();
             var projectFiles = Directory.GetFiles(directory, "*.rune.json");
@@ -75,9 +78,15 @@
 
             argBuilder.Add($"\"{files.First()}\"");
 
-            var external = new ExternalTools(vm_bin, string.Join(" ", argBuilder));
-            return external.Start().Wait().ExitCode();
 
+            var external = new ExternalTools(vm_bin, string.Join(" ", argBuilder));
+            return external
+                .WithEnv("VM_ATTACH_DEBUGGER", isDebug.BoolValue.HasValue)
+                .WithEnv("VM_KEEP_MEMORY", keepMemory.BoolValue.HasValue)
+                .WithEnv("VM_MEM_FAST_WRITE", fastWrite.BoolValue.HasValue)
+                
+                .Start()
+                .Wait().ExitCode();
         }
     }
 }
