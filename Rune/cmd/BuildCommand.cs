@@ -1,9 +1,11 @@
 ﻿namespace rune.cmd
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using Ancient.ProjectSystem;
     using cli;
     using etc;
@@ -11,6 +13,7 @@
     public class BuildCommand
     {
         public AncientProject project { get; set; }
+
 
         public static int Run(string[] args)
         {
@@ -23,9 +26,9 @@
 
 
             app.HelpOption("-h|--help");
-            var type = app.Option("-t|--type <TYPE>", "script name", CommandOptionType.SingleValue);
+            var type = app.Option("-t|--temp <bool>", "Is temp", CommandOptionType.BoolValue);
             var dotnetNew = new BuildCommand();
-            app.OnExecute(() => dotnetNew.Execute());
+            app.OnExecute(() => dotnetNew.Execute(type.BoolValue.HasValue));
 
             try
             {
@@ -38,7 +41,7 @@
             }
         }
 
-        public int Execute()
+        public int Execute(bool isTemp)
         {
             var directory = Directory.GetCurrentDirectory();
             var projectFiles = Directory.GetFiles(directory, "*.rune.json");
@@ -53,7 +56,34 @@
 
             project = AncientProject.Open(new FileInfo(p));
 
-            return 0;
+            var ancient_home = Environment.GetEnvironmentVariable("ANCIENT_HOME", EnvironmentVariableTarget.User);
+
+            if (ancient_home is null)
+                throw new InvalidOperationException($"env variable 'ANCIENT_HOME' is not set.");
+            if (!new DirectoryInfo(ancient_home).Exists)
+                throw new InvalidOperationException($"Env variable 'ANCIENT_HOME' is invalid.");
+
+            var acc_home = Path.Combine(ancient_home, "compiler");
+            var acc_bin = Path.Combine(acc_home, "acc.exe");
+
+            if (!new DirectoryInfo(acc_home).Exists || !new FileInfo(acc_bin).Exists)
+                throw new InvalidOperationException($"Ancient compiler is not installed.");
+
+            var argBuilder = new List<string>();
+
+            var files = Directory.GetFiles(directory, "*.asm");
+
+            var outputDir = "bin";
+
+            if (isTemp)
+                outputDir = "obj";
+
+            argBuilder.Add($"-o ./{outputDir}/{project.name}");
+            argBuilder.Add($"-s \"{files.First()}\"");
+
+            var external = new ExternalTools(acc_bin, string.Join(" ", argBuilder));
+            Directory.CreateDirectory(Path.Combine(directory, outputDir));
+            return external.Start().Wait().ExitCode();
 
         }
     }
