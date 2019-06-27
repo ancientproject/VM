@@ -3,11 +3,13 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using component;
     using dev;
     using dev.Internal;
     using ancient.runtime.emit;
+    using Ancient.Runtime.tools;
     using MoreLinq;
 
     internal class Program
@@ -16,6 +18,8 @@
         {
             Console.Title = "cpu_host";
             IntToCharConverter.Register<char>();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
 
             var bus = new Bus();
             /* @0x11 */
@@ -29,6 +33,8 @@
 
             bus.Add(new Terminal(0x1));
             bus.Add(new AdvancedTerminal(0x2));
+
+            
 
             var core = bus.cpu;
 
@@ -52,6 +58,11 @@
             {
                 
                 var file = new FileInfo(args.First());
+
+                var pdb = new FileInfo($"{args.First().Replace(".dlx", ".pdb")}");
+
+                if (Environment.GetEnvironmentVariable("VM_ATTACH_DEBUGGER") == "1" && pdb.Exists)
+                    bus.AttachDebugger(new Debugger(DebugSymbols.Open(File.ReadAllBytes(pdb.FullName))));
                 if (file.Exists)
                 {
                     var bytes = AncientAssembly.LoadFrom(file.FullName).GetILCode();
