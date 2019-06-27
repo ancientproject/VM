@@ -12,6 +12,7 @@
         OutFileNotSpecified = 4,
         SourceFileNotFound = 5,
         UnexpectedToken = 6,
+        PrecompiledSymbolNotFound = 7,
         IgnoredToken
     }
     public static class WarningEx
