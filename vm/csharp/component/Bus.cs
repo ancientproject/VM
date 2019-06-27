@@ -9,6 +9,8 @@
         public State State { get; }
         public CPU cpu { get; }
 
+        public Debugger debugger { get; set; }
+
         public List<IDevice> Devices = new List<IDevice>();
         public int[] boundaries = new int[0];
 
@@ -16,18 +18,7 @@
         {
             State = new State(this);
             cpu = new CPU(this);
-        }
-
-        public void Write(short address, int data)
-        {
-            var device = Find(address);
-            device.write((short)(address - device.StartAddress), data);
-        }
-
-        public int Read(short address)
-        {
-            var device = Find(address);
-            return device.read((short)(address - device.StartAddress)) & 0xff;
+            Add(new BIOS(cpu,this));
         }
 
         public void Add(IDevice device)
@@ -39,6 +30,7 @@
             Array.Sort(newBoundaries);
             Devices.Sort();
             boundaries = newBoundaries;
+            device.Init();
         }
 
         public IDevice Find(int address)
@@ -48,5 +40,7 @@
             if (idx < 0) return new CorruptedDevice(cpu);
             return Devices[idx];
         }
+
+        internal void AttachDebugger(Debugger dbg) => this.debugger = dbg;
     }
 }
