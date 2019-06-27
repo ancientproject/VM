@@ -49,7 +49,7 @@
         </ListBox>
         <Label ToolTip="Program Counter" Name="PC" Foreground="Wheat" Content="PC: 0x000000C2" Margin="100,185,0,0" FontFamily="{StaticResource FiraCode}" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
         <Label ToolTip="Instruction ID" Name="IC" Foreground="Wheat" Content="IC: 0x000000FF" Margin="221,185,0,0" FontFamily="{StaticResource FiraCode}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
-        <Label Foreground="Coral" Content="Led Sector" Margin="186,-2,0,0" FontFamily="Fira Code" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="86" d:LayoutOverrides="HorizontalAlignment"/>
+        <Label Foreground="Coral" Content="Led Sector" Margin="186,-2,0,0"  FontFamily="{StaticResource FiraCode}" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="86" d:LayoutOverrides="HorizontalAlignment"/>
         <Slider IsEnabled="False" Name="speed" Margin="378,14,0,0" Minimum="100" Maximum="700" Value="600" Orientation="Vertical" TickPlacement="TopLeft" Height="335" VerticalAlignment="Top" HorizontalAlignment="Left" TickFrequency="50" />
         <Grid Margin="80,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="298" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment" >
             <Grid.ColumnDefinitions>
@@ -194,8 +194,8 @@
             </FlowDocument>
         </RichTextBox>
         <Button Click="ResetLED" IsEnabled="{Binding IsLoading, Converter={StaticResource invertBoolConverter}}" ToolTip="reset led panel" Foreground="MediumPurple" Content="{iconPacks:Material Reload, Height=16, Width=16}" MinHeight="32" MinWidth="32" Margin="10,321,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65" Height="33"/>
-        <Label ToolTip="Last Address" x:Name="LastAddr" Foreground="Wheat" Content="LA: 0x000000C2" Margin="100,200,0,0" FontFamily="Fira Code" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116"/>
-        <Label ToolTip="Current Address" x:Name="CurAddr" Foreground="Wheat" Content="CA: 0x000000C2" Margin="221,200,0,0" FontFamily="Fira Code" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116"/>
+        <Label FontFamily="{StaticResource FiraCode}" ToolTip="Last Address" x:Name="LastAddr" Foreground="Wheat" Content="LA: 0x000000C2" Margin="100,200,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116"/>
+        <Label FontFamily="{StaticResource FiraCode}" ToolTip="Current Address" x:Name="CurAddr" Foreground="Wheat" Content="CA: 0x000000C2" Margin="221,200,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="116"/>
         <Button Click="ResetMemory" IsEnabled="{Binding IsLoading, Converter={StaticResource invertBoolConverter}}" ToolTip="reset memory and PC register" Foreground="DeepSkyBlue" Content="{iconPacks:Material Memory, Height=16, Width=16}" MinHeight="32" MinWidth="32" Margin="10,354,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65" Height="33"/>
     </Grid>
 </Window>
