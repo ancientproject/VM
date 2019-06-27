@@ -1,4 +1,4 @@
-﻿namespace Rune.cli
+﻿namespace rune.cli
 {
     using System;
     using System.Collections;

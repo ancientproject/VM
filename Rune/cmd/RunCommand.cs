@@ -1,12 +1,14 @@
-﻿namespace Rune.cmd
+﻿namespace rune.cmd
 {
     using System;
     using System.Diagnostics;
     using System.Drawing;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using Ancient.ProjectSystem;
     using cli;
+    using etc;
 
     public class RunCommand
     {
@@ -21,10 +23,9 @@
 
 
             app.HelpOption("-h|--help");
-
-            var type = app.Option("<SCRIPT>", "script name", CommandOptionType.SingleValue);
+            var type =  app.Argument("<script>", "script name");
             var dotnetNew = new RunCommand();
-            app.OnExecute(() => dotnetNew.Execute(type.Value()));
+            app.OnExecute(() => dotnetNew.Execute(type.Value));
 
             try
             {
@@ -56,25 +57,38 @@
 
             if(script is null)
                 throw new InvalidOperationException($"Command '{value}' not found.");
-
-            var proc = new Process
+            Console.WriteLine($"trace :: call :> cmd /c '{script}'".Color(Color.DimGray));
+            var proc = default(Process);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                StartInfo = new ProcessStartInfo("cmd.exe", $"/c '{script}'")
+                proc = new Process
                 {
-                    RedirectStandardError = true, 
-                    RedirectStandardOutput = true
-                }
-            };
+                    StartInfo = new ProcessStartInfo("cmd.exe", $"/c \"{script}\"")
+                    {
+                        RedirectStandardError = true, 
+                        RedirectStandardOutput = true
+                    }
+                };
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                proc = new Process
+                {
+                    StartInfo = new ProcessStartInfo("bash", $"-c \"{script}\"")
+                    {
+                        RedirectStandardError = true, 
+                        RedirectStandardOutput = true
+                    }
+                };
+            }
 
             proc.Start();
             proc.WaitForExit();
 
             var err = proc.StandardError.ReadToEnd();
             var @out = proc.StandardOutput.ReadToEnd();
-            if(!string.IsNullOrEmpty(err))
-                Console.WriteLine($"{err}".Color(Color.Red));
-            if(!string.IsNullOrEmpty(@out))
-                Console.WriteLine($"{@out}".Color(Color.DarkGray));
+            if(!string.IsNullOrEmpty(err )) Console.WriteLine($"{err}".Color(Color.Red));
+            if(!string.IsNullOrEmpty(@out)) Console.WriteLine($"{@out}".Color(Color.DarkGray));
 
             return proc.ExitCode;
         }

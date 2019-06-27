@@ -1,4 +1,4 @@
-﻿namespace Rune.cmd
+﻿namespace rune.cmd
 {
     using System;
     using System.Diagnostics;
@@ -12,6 +12,7 @@
     using DustInTheWind.ConsoleTools.InputControls;
     using DustInTheWind.ConsoleTools.Musical;
     using DustInTheWind.ConsoleTools.Spinners;
+    using etc;
     using Newtonsoft.Json;
     using Pastel;
 

@@ -1,4 +1,4 @@
-﻿namespace Rune
+﻿namespace rune
 {
     using System;
     using System.Collections.Generic;
@@ -8,11 +8,10 @@
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
-    using cli;
     using cmd;
+    using etc;
     using Microsoft.DotNet.PlatformAbstractions;
     using Newtonsoft.Json;
-    using Pastel;
     using RuntimeEnvironment = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment;
 
     internal class Host
@@ -35,12 +34,19 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message.Pastel(Color.OrangeRed));
+                Console.WriteLine(e.Message.Color(Color.OrangeRed));
                 return 1;
             }
         }
         private static void InitializeProcess()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+            {
+                Console.WriteLine("Platform is not supported.");
+                Environment.Exit(-0xFFFFFFF);
+                return;
+            }
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 Console.OutputEncoding = Encoding.Unicode;
@@ -86,7 +92,6 @@
                 }
                 else
                 {
-                    // It's the command, and we're done!
                     command = args[lastArg];
                     break;
                 }
@@ -97,13 +102,16 @@
                 return 1;
             }
 
-            var appArgs = (lastArg + 1) >= args.Length ? Enumerable.Empty<string>() : args.Skip(lastArg + 1).ToArray();
+            var appArgs = (lastArg + 1) >= 
+                          args.Length ? 
+                Enumerable.Empty<string>() : 
+                args.Skip(lastArg + 1).ToArray();
 
 
             if (string.IsNullOrEmpty(command))
                 command = "help";
 
-            Stopwatch watch = Stopwatch.StartNew();
+            var watch = Stopwatch.StartNew();
 
             int exitCode;
             if (s_builtIns.TryGetValue(command, out var builtIn))
@@ -111,7 +119,8 @@
             else
                 exitCode = -1;
             watch.Stop();
-            Console.WriteLine($"{":sparkles:".Emoji()} Done in {watch.Elapsed.TotalSeconds:##.000}s.");
+
+            Console.WriteLine($"{":sparkles:".Emoji()} Done in {watch.Elapsed.TotalSeconds:00.000}s.");
 
             return exitCode;
         }

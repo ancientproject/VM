@@ -1,4 +1,4 @@
-﻿namespace Rune.cli
+﻿namespace rune.etc
 {
     using System;
     using System.Drawing;

@@ -5,6 +5,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>rune</AssemblyName>
     <RootNamespace>Rune.CLI</RootNamespace>
+    <ApplicationIcon>resource\icon.ico</ApplicationIcon>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

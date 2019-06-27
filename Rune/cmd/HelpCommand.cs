@@ -1,4 +1,4 @@
-﻿namespace Rune.cmd
+﻿namespace rune.cmd
 {
     using System;
 
