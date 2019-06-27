@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using dev.Internal;
     using ancient.runtime;
@@ -193,6 +194,11 @@
                 trace($"  1   2   3   1   2   1   2");
                 trace($"0x{Registers.L2.r1:X} 0x{Registers.L2.r2:X} 0x{Registers.L2.r3:X} 0x{Registers.L2.u1:X} 0x{Registers.L2.u2:X} 0x{x1:X} 0x{Registers.L2.x2:X}");
             }
+            if (bf)
+            {
+                bus.debugger.handleBreak(u16 & pc, bus.cpu);
+                mem[0x17] = 0x0;
+            }
             trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             switch (iid)
             {
@@ -281,6 +287,10 @@
                 case 0xF when x2 == 0xF: // push_x
                     trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     var x = mem[u1].ToString();
+
+                    if (ff)
+                        x = (i64f32 & mem[u1]).ToString(CultureInfo.InvariantCulture);
+
                     short[] cast(string str)
                     {
                         var list = new List<int>();
@@ -296,6 +306,16 @@
                         bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
 
+                case 0xC1 when x2 == 0x1: /* @break :: now */
+                    bus.debugger.handleBreak(u16 & pc, bus.cpu);
+                    mem[0x17] = 0x0;
+                    break;
+                case 0xC1 when x2 == 0x2: /* @break :: next */
+                    mem[0x17] = 0x1;
+                    break;
+                case 0xC1 when x2 == 0x3: /* @break :: after */
+                    mem[0x17] = 0x3;
+                    break;
                 #endregion
                 #region jumps
 
@@ -353,6 +373,14 @@
                         $"Unk OpCode: {iid:X2} {Environment.NewLine}0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
                     break;
             }
+
+            if (mem[0x17] == 0x3) mem[0x17] = 0x2;
+            if (mem[0x17] == 0x2)
+            {
+                bus.debugger.handleBreak(u16 & pc, bus.cpu);
+                mem[0x17] = 0x0;
+            }
+
             Registers.Reflect();
         }
         // ===
