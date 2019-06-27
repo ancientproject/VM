@@ -9,7 +9,18 @@ namespace ancient.runtime.compiler.test
 
     public class InstructionTest
     {
-        [Fact(Skip = "not complete transformer")]
+        [Theory]
+        [InlineData(".n_value @float_t(14.56)")]
+        public void FloatParseTest(string code)
+        {
+            var result = new FlameAssemblerSyntax().NValue.End().Parse(code);
+
+            if (result is InstructionExpression exp && exp.Instruction is n_value i)
+            {
+                Assert.Equal(14.56f, i._data);
+            }
+        }
+        [Fact()]
         public void TransformationTest()
         {
             const string str = 
@@ -17,13 +28,11 @@ namespace ancient.runtime.compiler.test
                                     ~label 'test' 0x2
                                     ~label 'benis' 0x5
                                 }
-                                .push_a &(~test) &(~test) <| $(~benis)";
-            var result = FlameTransformerSyntax.ManyParser
+                                .push_a &(![~test]) &(![~beniz]) <| $(![~beniz])";
+            var result = new FlameTransformerSyntax().ManyEvolver
                 .End().Parse(str);
 
             Assert.Equal(2, result.Length);
-            Assert.IsType<EmptyEvolve>(result.Last().GetType());
-            Assert.IsType<DefineLabels>(result.First().GetType());
         }
         [Fact]
         public void ShiftTest()
@@ -53,7 +62,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".push_a &(0x0) &(0xC) <| @char_t('ÿ')")]
         public void PushA(string code)
         {
-            var result = FlameAssemblerSyntax.PushA.End().Parse(code);
+            var result = new FlameAssemblerSyntax().PushA.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is push_a i)
             {
@@ -68,7 +77,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".loadi &(0x0) <| $(0xF)")]
         public void LoadI(string code)
         {
-            var result = FlameAssemblerSyntax.LoadI.End().Parse(code);
+            var result = new FlameAssemblerSyntax().LoadI.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is loadi i)
             {
@@ -81,7 +90,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".jump_t &(0x0)")]
         public void JumpT(string code)
         {
-            var result = FlameAssemblerSyntax.JumpT.End().Parse(code);
+            var result = new FlameAssemblerSyntax().JumpT.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is jump_t i)
             {
@@ -93,7 +102,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".ref_t &(0x0)")]
         public void RefT(string code)
         {
-            var result = FlameAssemblerSyntax.RefT.End().Parse(code);
+            var result = new FlameAssemblerSyntax().RefT.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is ref_t i)
             {
@@ -105,7 +114,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".swap &(0x0) &(0xF)")]
         public void Swap(string code)
         {
-            var result = FlameAssemblerSyntax.SwapToken.End().Parse(code);
+            var result = new FlameAssemblerSyntax().SwapToken.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is swap i)
             {
@@ -118,7 +127,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".halt")]
         public void Halt(string code)
         {
-            var result = FlameAssemblerSyntax.ByIIDToken(InsID.halt).End().Parse(code);
+            var result = new FlameAssemblerSyntax().ByIIDToken(InsID.halt).End().Parse(code);
 
             if (result.Instruction is halt i)
                 Assert.Equal(InsID.halt, i.ID);
@@ -127,7 +136,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".warm")]
         public void Warm(string code)
         {
-            var result = FlameAssemblerSyntax.ByIIDToken(InsID.warm).End().Parse(code);
+            var result = new FlameAssemblerSyntax().ByIIDToken(InsID.warm).End().Parse(code);
 
             if (result.Instruction is warm i)
                 Assert.Equal(InsID.warm, i.ID);
@@ -141,7 +150,7 @@ namespace ancient.runtime.compiler.test
         [InlineData(".jump_y &(0xF) -~ &(0x9) &(0x9)")]
         public void JumperTest(string code)
         {
-            var result = FlameAssemblerSyntax.ManyParser.End().Parse(code).First();
+            var result = new FlameAssemblerSyntax().ManyParser.End().Parse(code).First();
 
             if (result is InstructionExpression i)
             {
