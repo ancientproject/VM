@@ -16,13 +16,13 @@
 
     internal class Host
     {
-
-        private static readonly Dictionary<string, Func<string[], int>> s_builtIns = 
-            new Dictionary<string, Func<string[], int>>
+        private static readonly Dictionary<string, Func<string[], int>> s_builtIns = new Dictionary<string, Func<string[], int>>
         {
-            ["new"] = NewCommand.Run,
-            ["help"] = HelpCommand.Run,
-            ["run"] = RunCommand.Run
+            ["new"]     = NewCommand.Run,
+            ["help"]    = HelpCommand.Run,
+            ["run"]     = RunCommand.Run,
+            ["build"]   = BuildCommand.Run,
+            ["vm"]      = VMCommand.Run
         };
         public static int Main(string[] args)
         {
@@ -117,7 +117,11 @@
             if (s_builtIns.TryGetValue(command, out var builtIn))
                 exitCode = builtIn(appArgs.ToArray());
             else
+            {
+                Console.WriteLine("Could not execute because the specified command or file was not found.".Color(Color.Red));
                 exitCode = -1;
+            }
+                
             watch.Stop();
 
             Console.WriteLine($"{":sparkles:".Emoji()} Done in {watch.Elapsed.TotalSeconds:00.000}s.");

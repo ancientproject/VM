@@ -7,6 +7,22 @@
     <RootNamespace>Rune.CLI</RootNamespace>
     <ApplicationIcon>resource\icon.ico</ApplicationIcon>
     <StartupObject></StartupObject>
+    <Version>0.21.98</Version>
+    <AssemblyVersion>0.21.100.0</AssemblyVersion>
+    <FileVersion>0.21.100.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <ShouldCreateLogs>False</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+    <UpdatePackageVersion>False</UpdatePackageVersion>
+    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+    <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.Increment.None</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.Increment.None</AssemblyFileVersionSettings>
   </PropertyGroup>
 
   <ItemGroup>
