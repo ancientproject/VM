@@ -30,7 +30,6 @@
 
             app.HelpOption("-h|--help");
 
-            var type = app.Option("-t|--type <TYPE>", "Type of project", CommandOptionType.SingleValue);
             var dotnetNew = new NewCommand();
             app.OnExecute(() => dotnetNew.CreateEmptyProject());
 
@@ -63,7 +62,7 @@
             proj.scripts.Add($"start", "echo 1");
 
 
-            File.WriteAllText($"{Path.Combine(dir, $"{projectName}.rune")}", JsonConvert.SerializeObject(proj));
+            File.WriteAllText($"{Path.Combine(dir, $"{projectName}.rune.json")}", JsonConvert.SerializeObject(proj));
 
             return 0;
         }

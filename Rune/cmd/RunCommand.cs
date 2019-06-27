@@ -41,7 +41,7 @@
         public int Execute(string value)
         {
             var directory = Directory.GetCurrentDirectory();
-            var projectFiles = Directory.GetFiles(directory, "*.rune");
+            var projectFiles = Directory.GetFiles(directory, "*.rune.json");
 
             if (projectFiles.Length == 0)
             {

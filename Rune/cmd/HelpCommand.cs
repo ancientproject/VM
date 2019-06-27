@@ -35,7 +35,7 @@ Common Commands:
 
         public static void PrintVersionHeader()
         {
-            Console.WriteLine("Rune v0.17 x64");
+            Console.WriteLine("Rune v0.18 x64 [Ancient SDK]");
         }
     }
 }

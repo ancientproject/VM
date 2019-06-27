@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\libs\Ancient.Compiler.Service\Ancient.Compiler.Service.csproj" />
     <ProjectReference Include="..\libs\Ancient.ProjectSystem\Ancient.ProjectSystem.csproj" />
   </ItemGroup>
 
