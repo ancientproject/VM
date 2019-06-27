@@ -17,7 +17,8 @@ Common Options (passed before the command):
 Common Commands:
   new           Initialize a basic Ancient project
   build         Builds a Ancient project
-  run           Immediately executes a script from Ancient project";
+  run           Immediately executes a script from Ancient project
+  vm            Immediately build and execute project in Ancient VM";
 
         public static int Run(string[] args)
         {
@@ -35,7 +36,7 @@ Common Commands:
 
         public static void PrintVersionHeader()
         {
-            Console.WriteLine("Rune v0.18 x64 [Ancient SDK]");
+            Console.WriteLine("Rune v0.21 x64 [Ancient SDK]");
         }
     }
 }
