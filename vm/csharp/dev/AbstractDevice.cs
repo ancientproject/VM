@@ -43,5 +43,12 @@
         public override int GetHashCode() => 
             StartAddress.GetHashCode() ^ 42 * 
             Name.GetHashCode() ^ 42;
+
+
+        protected CorruptedMemoryException ThrowMemoryWrite(ulong curAddr, int toAddr) => 
+            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X4}. Memory could not be write.");
+        protected CorruptedMemoryException ThrowMemoryRead(ulong curAddr, int toAddr) => 
+            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X4}. Memory could not be read.");
+
     }
 }
