@@ -52,20 +52,27 @@
         }
         public static string getFromMiddle(string value, int indexMiddle, int count, bool isStopWhenEmptySpace = false)
         {
-            var str = new List<char>();
-            for (var i = indexMiddle; i != indexMiddle + count + 1; i++)
+            try
             {
-                if(value[i] == ' ' && isStopWhenEmptySpace)
-                    break;
-                str.Add(value[i]);
+                var str = new List<char>();
+                for (var i = indexMiddle; i != indexMiddle + count + 1; i++)
+                {
+                    if(value[i] == ' ' && isStopWhenEmptySpace)
+                        break;
+                    str.Add(value[i]);
+                }
+                for (var i = indexMiddle-1; i != indexMiddle - count - 1; i--)
+                {
+                    if(value[i] == ' ' && isStopWhenEmptySpace)
+                        break;
+                    str.Insert(0, value[i]);
+                }
+                return string.Join("", str.ToArray());
             }
-            for (var i = indexMiddle-1; i != indexMiddle - count - 1; i--)
+            catch
             {
-                if(value[i] == ' ' && isStopWhenEmptySpace)
-                    break;
-                str.Insert(0, value[i]);
+                return value;
             }
-            return string.Join("", str.ToArray());
         }
         public static void Error<T>(ErrorToken<T> error, string source)
         {
