@@ -63,61 +63,38 @@
     }
     public enum InsID : short
     {
-        [OpCode(0xA)]
-        warm,
-        [OpCode(0x1)]
-        loadi,
-        [OpCode(0x1)]
-        loadi_x,
-        [OpCode(0x2)]
-        add,
-        [OpCode(0x4)]
-        sub,
-        [OpCode(0x6)]
-        div,
-        [OpCode(0x5)]
-        mul,
-        [OpCode(0x7)]
-        pow,
-        [OpCode(0x7)]
-        sqrt,
-        [OpCode(0xF)]
-        push_a,
-        [OpCode(0xF)]
-        push_d,
-        [OpCode(0xF)]
-        push_x,
-        [OpCode(0x3)]
-        swap,
+        [OpCode(0xA)] warm,
+        [OpCode(0x1)] loadi,
+        [OpCode(0x1)] loadi_x,
+        [OpCode(0x2)] add,
+        [OpCode(0x4)] sub,
+        [OpCode(0x6)] div,
+        [OpCode(0x5)] mul,
+        [OpCode(0x7)] pow,
+        [OpCode(0x7)] sqrt,
+        [OpCode(0xF)] push_a,
+        [OpCode(0xF)] push_d,
+        [OpCode(0xF)] push_x,
+        [OpCode(0x3)] swap,
+        [OpCode(0xD)] halt,
 
-        [OpCode(0x8)]
-        ref_t,
-        [OpCode(0x8)]
-        jump_t,
-        [OpCode(0x8)]
-        jump_e,
-        [OpCode(0x8)]
-        jump_g,
-        [OpCode(0x8)]
-        jump_u,
-        [OpCode(0x8)]
-        jump_y,
+        [OpCode(0x8)] ref_t,
+        [OpCode(0x8)] jump_t,
+        [OpCode(0x8)] jump_e,
+        [OpCode(0x8)] jump_g,
+        [OpCode(0x8)] jump_u,
+        [OpCode(0x8)] jump_y,
 
-        [OpCode(true)]
-        mov_d, // todo
-        [OpCode(true)]
-        push_j,
+        [OpCode(true)] push_j,
+        [OpCode(true)] raw,
 
-        [OpCode(0xA0)]
-        stage_n,
-        [OpCode(0xA1)]
-        loadi_s,
-        [OpCode(0xAA)]
-        n_value,
-        [OpCode(true)]
-        raw,
-
-        [OpCode(0xD)]
-        halt
+        [OpCode(0xA0)] stage_n,
+        [OpCode(0xA1)] loadi_s,
+        [OpCode(0xAA)] n_value,
+       
+        [OpCode(0xA2)] ou_t,
+        [OpCode(0xC1)] brk_s,
+        [OpCode(0xC1)] brk_n,
+        [OpCode(0xC1)] brk_a
     }
 }
