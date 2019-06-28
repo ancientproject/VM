@@ -149,6 +149,14 @@
             get => mem[0x18] == 1;
             set => mem[0x18] = value ? 0x1L : 0x0L;
         }
+        /// <summary>
+        /// caller opcode
+        /// </summary>
+        public long caller
+        {
+            get => mem[0x25];
+            set => mem[0x25] = value;
+        }
 
         public ulong curAddr { get; set; } = 0xFFFF;
         public ulong lastAddr { get; set; } = 0xFFFF;
@@ -163,6 +171,12 @@
 
         public void Load(params ulong[] prog) => program.AddRange(prog);
 
+        public ulong? next(ulong pc_ref)
+        {
+            if (program.Count >= (int) pc) 
+                return program.ElementAt((int) pc_ref);
+            return null;
+        }
         public ulong fetch()
         {
             using var watcher = new StopwatchOperation("fetch operation");
@@ -216,7 +230,7 @@
                 #endregion
                 
                 case 0x1 when x2 == 0x0:
-                    trace($"loadi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
+                    trace($"ldi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
                     _ = u2 switch
                     {
                         0x0 => mem[r1] = u1,
@@ -224,7 +238,7 @@
                     };
                     break;
                 case 0x1 when x2 == 0xA:
-                    trace($"loadi_x 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
+                    trace($"ldx 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
                     mem[((r1 << 4) | r2)] = i64 & ((u1 << 4) | u2);
                     break;
                 case 0x2:
@@ -281,11 +295,27 @@
                 case 0xA1:
                     mem[r1] = stack.Pop();
                     break;
+                case 0xA5: /* @sig */
+                    stack.Push(mem[r2] = i64 & pc);
+                    var frag = default(ulong?);
+                    while (AcceptOpCode(frag) != InsID.ret.getOpCode())
+                    {
+                        var pc_r = stack.Pop();
+                        frag = next(i64 | pc_r++);
+                        if (frag is null) 
+                            bus.cpu.halt(0xA1);
+                        stack.Push(pc_r);
+                    }
+                    mem[r2 + 1] = stack.Pop();
+                    break;
+                case 0xB1: mem[r1]++; break; /* @inc */
+                case 0xB2: mem[r1]--; break; /* @dec */
+
 
                 #region debug
 
-                case 0xF when x2 == 0xF: // push_x
-                    trace($"push_x 0x{r1:X} 0x{r2:X} 0x{u1:X}");
+                case 0xF when x2 == 0xF: // mvx
+                    trace($"mvx 0x{r1:X} 0x{r2:X} 0x{u1:X}");
                     var x = mem[u1].ToString();
 
                     if (ff)
@@ -328,7 +358,7 @@
                         ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(mem[r2] >= mem[r3]) 
-                        pc = (ulong)mem[r1];
+                        pc = i64 | mem[r1];
                     break;
                 case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
                     trace(mem[r2] > mem[r3]
@@ -410,6 +440,13 @@
             x1  = u16 & (mem & 0x0000000F0);
             x2  = u16 & (mem & 0x00000000F);
             iid = u16 & (pfx << 0x4 | iid );
+        }
+
+        public ushort AcceptOpCode(BitwiseContainer mem)
+        {
+            var o1 = u16 & (mem & 0xF00000000);
+            var o2 = u16 & (mem & 0x0F0000000);
+            return u16 & (o1 << 0x4 | o2);
         }
 
         
