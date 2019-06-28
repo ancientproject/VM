@@ -6,17 +6,17 @@
         internal readonly byte _x2 = 0xA;
         internal readonly ushort _value;
 
-        public ldx(ushort index, ushort value) : base(InsID.ldx)
+        public ldx(ushort index, ushort value) : base(IID.ldx)
         {
             _index = index;
             _value = value;
         }
-        public ldx(ushort index, bool value) : base(InsID.ldx)
+        public ldx(ushort index, bool value) : base(IID.ldx)
         {
             _index = index;
             _value = (ushort)(value ? 1 : 0);
         }
-        public ldx(ushort index, ushort value, byte x2) : base(InsID.ldx)
+        public ldx(ushort index, ushort value, byte x2) : base(IID.ldx)
         {
             _index = index;
             _value = value;

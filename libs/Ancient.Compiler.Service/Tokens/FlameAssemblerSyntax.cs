@@ -39,23 +39,23 @@
             .Or(Raw)
             // jumps
             .Or(JumpT)
-            .Or(JumpAt(InsID.jump_e))
-            .Or(JumpAt(InsID.jump_g))
-            .Or(JumpAt(InsID.jump_u))
-            .Or(JumpAt(InsID.jump_y))
+            .Or(JumpAt(IID.jump_e))
+            .Or(JumpAt(IID.jump_g))
+            .Or(JumpAt(IID.jump_u))
+            .Or(JumpAt(IID.jump_y))
             // empty instruction token
-            .Or(ByIIDToken(InsID.halt))
-            .Or(ByIIDToken(InsID.warm))
+            .Or(ByIIDToken(IID.halt))
+            .Or(ByIIDToken(IID.warm))
             // break instruction
-            .Or(ByIIDToken(InsID.brk_a))
-            .Or(ByIIDToken(InsID.brk_n))
-            .Or(ByIIDToken(InsID.brk_s))
+            .Or(ByIIDToken(IID.brk_a))
+            .Or(ByIIDToken(IID.brk_n))
+            .Or(ByIIDToken(IID.brk_s))
             // math instruction token
-            .Or(MathInstruction(InsID.add))
-            .Or(MathInstruction(InsID.mul))
-            .Or(MathInstruction(InsID.sub))
-            .Or(MathInstruction(InsID.div))
-            .Or(MathInstruction(InsID.pow))
+            .Or(MathInstruction(IID.add))
+            .Or(MathInstruction(IID.mul))
+            .Or(MathInstruction(IID.sub))
+            .Or(MathInstruction(IID.div))
+            .Or(MathInstruction(IID.pow))
             .Or(SqrtToken);
 
         public virtual Parser<IInputToken[]> ManyParser => (
@@ -184,7 +184,7 @@
         #endregion
         #region Instructuions token
         public virtual Parser<IInputToken> Raw =>
-            (from dword in InstructionToken(InsID.raw)
+            (from dword in InstructionToken(IID.raw)
                 from space1 in Parse.WhiteSpace.Optional()
                 from val1 in HexNumber
                 select new InstructionExpression(new raw(ulong.Parse(val1, NumberStyles.AllowHexSpecifier))))
@@ -193,7 +193,7 @@
             .Named("raw expression");
 
         public virtual Parser<IInputToken> StageN =>
-            (from dword in InstructionToken(InsID.orb)
+            (from dword in InstructionToken(IID.orb)
                 from val1 in RefToken
                 select new InstructionExpression(new orb(val1.Cell)))
             .Token()
@@ -201,7 +201,7 @@
             .Named("orb expression");
 
         public virtual Parser<IInputToken> NValue =>
-            (from dword in InstructionToken(InsID.val)
+            (from dword in InstructionToken(IID.val)
                 from val1 in CastFloat
                 select new InstructionExpression(new val(val1)))
             .Token()
@@ -210,7 +210,7 @@
 
 
         public virtual Parser<IInputToken> LoadI =>
-            (from dword in InstructionToken(InsID.ldi)
+            (from dword in InstructionToken(IID.ldi)
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
                 from pipe in PipeRight
@@ -220,7 +220,7 @@
             .WithPosition()
             .Named("ldi expression");
         public virtual Parser<IInputToken> LoadI_X =>
-            (from dword in InstructionToken(InsID.ldx)
+            (from dword in InstructionToken(IID.ldx)
                 from cell1 in RefToken
                 from pipe in PipeRight
                 from val1 in ValueToken
@@ -230,14 +230,14 @@
             .Named("ldx expression");
 
         public virtual Parser<IInputToken> LoadI_S =>
-            (from dword in InstructionToken(InsID.pull)
+            (from dword in InstructionToken(IID.pull)
                 from cell1 in RefToken
                 select new InstructionExpression(new pull(cell1.Cell)))
             .Token()
             .WithPosition()
             .Named("pull expression");
         public virtual Parser<IInputToken> JumpT =>
-            (from dword in InstructionToken(InsID.jump_t)
+            (from dword in InstructionToken(IID.jump_t)
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
                 select new InstructionExpression(new jump_t(cell1.Cell)))
@@ -245,7 +245,7 @@
             .WithPosition()
             .Named("jump_t expression");
 
-        public virtual Parser<IInputToken> JumpAt(InsID id) =>
+        public virtual Parser<IInputToken> JumpAt(IID id) =>
             (from dword in InstructionToken(id)
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell0 in RefToken
@@ -257,7 +257,7 @@
             .WithPosition()
             .Named("jump_t expression");
         public virtual Parser<IInputToken> SwapToken =>
-            (from dword in InstructionToken(InsID.swap)
+            (from dword in InstructionToken(IID.swap)
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
                 from space2 in Parse.WhiteSpace.Optional()
@@ -267,7 +267,7 @@
             .WithPosition()
             .Named("swap expression");
         public virtual Parser<IInputToken> OuT =>
-            (from dword in InstructionToken(InsID.mvt)
+            (from dword in InstructionToken(IID.mvt)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
@@ -277,7 +277,7 @@
             .WithPosition()
             .Named("mva expression");
         public virtual Parser<IInputToken> PushA =>
-            (from dword in InstructionToken(InsID.mva)
+            (from dword in InstructionToken(IID.mva)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeRight
@@ -287,7 +287,7 @@
             .WithPosition()
             .Named("mva expression");
         public virtual Parser<IInputToken> PushD =>
-            (from dword in InstructionToken(InsID.mvd)
+            (from dword in InstructionToken(IID.mvd)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
@@ -297,7 +297,7 @@
             .WithPosition()
             .Named("mvd expression");
         public virtual Parser<IInputToken> PushX =>
-            (from dword in InstructionToken(InsID.mvx)
+            (from dword in InstructionToken(IID.mvx)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
@@ -307,14 +307,14 @@
             .WithPosition()
             .Named("mvx expression");
         public virtual Parser<IInputToken> RefT => (
-                from dword in InstructionToken(InsID.ref_t)
+                from dword in InstructionToken(IID.ref_t)
                 from cell1 in RefToken
                 select new InstructionExpression(new ref_t(cell1.Cell)))
             .Token()
             .WithPosition()
             .Named("ref_t expression");
 
-        public virtual Parser<IInputToken> MathInstruction(InsID id) => (
+        public virtual Parser<IInputToken> MathInstruction(IID id) => (
                 from dword in InstructionToken(id)
                 from cell0 in RefToken
                 from cell1 in RefToken
@@ -325,10 +325,10 @@
             .Named($"{id} expression");
 
         public virtual Parser<IInputToken> SqrtToken => (
-                from dword in InstructionToken(InsID.sqrt)
+                from dword in InstructionToken(IID.sqrt)
                 from cell0 in RefToken
                 from cell1 in RefToken
-                select new InstructionExpression(Instruction.Summon(InsID.sqrt, cell0.Cell, cell1.Cell)))
+                select new InstructionExpression(Instruction.Summon(IID.sqrt, cell0.Cell, cell1.Cell)))
             .Token()
             .WithPosition()
             .Named($"sqrt expression");
@@ -340,11 +340,11 @@
                 select ident)
             .Token()
             .Named("~ident");
-        public virtual Parser<string> InstructionToken(InsID instruction) =>
+        public virtual Parser<string> InstructionToken(IID instruction) =>
             from dot in Parse.Char('.')
             from ident in Parse.String(instruction.ToString()).Text()
             select ident;
-        public virtual Parser<InstructionExpression> ByIIDToken(InsID id) =>
+        public virtual Parser<InstructionExpression> ByIIDToken(IID id) =>
             (from dword in InstructionToken(id)
                 select new InstructionExpression(Instruction.Summon(id)))
             .Token()

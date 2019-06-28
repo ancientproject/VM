@@ -6,7 +6,7 @@
         private readonly byte _addressDev;
         private readonly byte _cellIndex;
 
-        public mvx(byte addressBus, byte addressDev, byte cellIndex) : base(InsID.mvd)
+        public mvx(byte addressBus, byte addressDev, byte cellIndex) : base(IID.mvd)
         {
             _addressBus = addressBus;
             _addressDev = addressDev;

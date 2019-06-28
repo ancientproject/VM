@@ -9,10 +9,10 @@
     [DebuggerDisplay("{ToString()}")]
     public abstract class Instruction : OpCode
     {
-        public InsID ID { get; }
+        public IID ID { get; }
         public short OPCode { get; }
 
-        protected Instruction(InsID id)
+        protected Instruction(IID id)
         {
             ID = id;
             OPCode = id.getOpCode();
@@ -69,7 +69,7 @@
 
         public static readonly object Guarder = new object();
 
-        public static Instruction Summon(InsID id, params object[] args)
+        public static Instruction Summon(IID id, params object[] args)
         {
             var currentAsm = typeof(Instruction).Assembly;
             var classes =

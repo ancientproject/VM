@@ -4,7 +4,7 @@
     {
         internal readonly byte _index;
 
-        public pull(byte index) : base(InsID.pull) => _index = index;
+        public pull(byte index) : base(IID.pull) => _index = index;
         protected override void OnCompile() => SetRegisters(_index);
     }
 }

@@ -7,7 +7,7 @@
     public class FlameTransformerSyntax : FlameAssemblerSyntax
     {
         public virtual Parser<IEvolveToken> PushJ =>
-            (from dword in InstructionToken(InsID.mvj)
+            (from dword in InstructionToken(IID.mvj)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeRight

@@ -2,31 +2,31 @@
 {
     public class sum : _math
     {
-        public sum(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, InsID.add) { }
+        public sum(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.add) { }
     }
     public class sub : _math
     {
-        public sub(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, InsID.sub) { }
+        public sub(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.sub) { }
     }
     public class div : _math
     {
-        public div(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, InsID.div) { }
+        public div(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.div) { }
     }
     public class mul : _math
     {
-        public mul(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, InsID.mul) { }
+        public mul(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.mul) { }
     }
 
     public class pow : _math
     {
-        public pow(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, InsID.pow) { }
+        public pow(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.pow) { }
     }
     public class sqrt : Instruction
     {
         private readonly byte _cell;
         private readonly byte _ref1;
 
-        public sqrt(byte cell, byte ref1) : base(InsID.sqrt)
+        public sqrt(byte cell, byte ref1) : base(IID.sqrt)
         {
             _cell = cell;
             _ref1 = ref1;
@@ -41,7 +41,7 @@
         private readonly byte _ref1;
         private readonly byte _ref2;
 
-        protected _math(byte cell, byte ref1, byte ref2, InsID id) : base(id)
+        protected _math(byte cell, byte ref1, byte ref2, IID id) : base(id)
         {
             _cell = cell;
             _ref1 = ref1;

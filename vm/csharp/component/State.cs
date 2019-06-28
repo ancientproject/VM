@@ -298,7 +298,7 @@
                 case 0xA5: /* @sig */
                     stack.Push(mem[r2] = i64 & pc);
                     var frag = default(ulong?);
-                    while (AcceptOpCode(frag) != InsID.ret.getOpCode())
+                    while (AcceptOpCode(frag) != IID.ret.getOpCode())
                     {
                         var pc_r = stack.Pop();
                         frag = next(i64 | pc_r++);

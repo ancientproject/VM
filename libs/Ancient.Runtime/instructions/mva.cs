@@ -10,7 +10,7 @@
         internal readonly byte _addressDev;
         internal readonly ushort _value;
 
-        public mva(byte addressBus, byte addressDev, ushort value) : base(InsID.mva)
+        public mva(byte addressBus, byte addressDev, ushort value) : base(IID.mva)
         {
             _addressBus = addressBus;
             _addressDev = addressDev;

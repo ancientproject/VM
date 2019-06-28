@@ -25,9 +25,9 @@
 
     public static class InsIDEx
     {
-        public static short getOpCode(this InsID id)
+        public static short getOpCode(this IID id)
         {
-            var member = typeof(InsID).GetMember(id.ToString()).FirstOrDefault(m => m.DeclaringType == typeof(InsID));
+            var member = typeof(IID).GetMember(id.ToString()).FirstOrDefault(m => m.DeclaringType == typeof(IID));
 
             if(member is null)
                 throw new InvalidOperationException();
@@ -38,37 +38,37 @@
             if(attr is null)
                 throw new 
                     InvalidOperationException(
-                        $"Field '{id}' of type '{nameof(InsID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
+                        $"Field '{id}' of type '{nameof(IID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
 
             return attr.OpCode;
         }
-        public static InsID getInstruction(this ushort id)
+        public static IID getInstruction(this ushort id)
         {
-            var member = typeof(InsID).GetMembers().Where(m => m.DeclaringType == typeof(InsID));
+            var member = typeof(IID).GetMembers().Where(m => m.DeclaringType == typeof(IID));
 
             if (member is null)
                 throw new InvalidOperationException();
 
 
-            var attr = member.Select(x => new { x , atr= x.GetCustomAttributes(typeof(OpCodeAttribute), false).FirstOrDefault() as OpCodeAttribute });
+            var attr = member.Select(x => new { x , atr= x.GetCustomAttributes(typeof(OpCodeAttribute), true).FirstOrDefault() as OpCodeAttribute });
 
             if (attr is null)
                 throw new
                     InvalidOperationException(
-                        $"Field '{id}' of type '{nameof(InsID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
+                        $"Field '{id}' of type '{nameof(IID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
 
             foreach (var op in attr)
             {
                 if(op.atr is null)
                     continue;
                 if (op.atr.OpCode == id)
-                    return (InsID)Enum.Parse(typeof(InsID), op.x.Name, true);
+                    return (IID)Enum.Parse(typeof(IID), op.x.Name, true);
             }
 
-            return InsID.halt;
+            return IID.halt;
         }
     }
-    public enum InsID : short
+    public enum IID : short
     {
         [OpCode(0xA)] warm,
         [OpCode(0xD)] halt,
