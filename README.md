@@ -1,6 +1,21 @@
-## 🔥 FlameVM 
+##  
 
-##### (8bit_cpu_host and compiler combine-based-parser)
+<!-- Logo -->
+<p align="center">
+  <a href="#">
+    <img height="128" width="128" src="https://raw.githubusercontent.com/0xF6/ancient_cpu/master/Rune/resource/icon.png">
+  </a>
+</p>
+
+<!-- Name -->
+<h1 align="center">
+  AncientVM 🔥
+</h1>
+<!-- desc -->
+<h4 align="center">
+  8bit CPU Virtual Machine & Ancient Assembler-style language
+</h4>
+
   
 ![image](https://user-images.githubusercontent.com/13326808/58775994-0597bc00-85d1-11e9-99c3-e6f7208cd37b.png)
 
