@@ -51,7 +51,7 @@
             await Task.CompletedTask;
         }
 
-        public byte halt(byte code)
+        public ushort halt(ushort code)
         {
             Error(Environment.NewLine);
             _bus.State.halt = 1;
@@ -68,6 +68,9 @@
                     break;
                 case 0xF:
                     Error($"HALT: Corrupted memory.");
+                    break;
+                case 0xA1:
+                    Error($"HALT: Overflow exception.");
                     break;
                 default:
                     Error($"HALT: Unknown state 0x{code:X}");
