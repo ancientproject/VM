@@ -19,6 +19,8 @@
   
 ![image](https://user-images.githubusercontent.com/13326808/60311909-e71fa900-9961-11e9-96f0-bf4c4a45681c.png)
 
+[![Build Status](https://dev.azure.com/0xF6/AncientVM/_apis/build/status/0xF6.ancient_cpu?branchName=master)](https://dev.azure.com/0xF6/AncientVM/_build/latest?definitionId=3&branchName=master)
+
 ##### Flags
 
 in env:   
