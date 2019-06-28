@@ -10,7 +10,7 @@ namespace ancient.runtime.compiler.test
     public class InstructionTest
     {
         [Theory]
-        [InlineData(".val @float_t(14.56)")]
+        [InlineData(".val @float_t(\"14.56\")")]
         public void FloatParseTest(string code)
         {
             var result = new FlameAssemblerSyntax().NValue.End().Parse(code);
@@ -144,10 +144,10 @@ namespace ancient.runtime.compiler.test
 
         [Theory]
         [InlineData(".jump_t &(0xF)")]
-        [InlineData(".jump_e &(0xF) -~ &(0x9) &(0x9)")]
-        [InlineData(".jump_g &(0xF) -~ &(0x9) &(0x9)")]
-        [InlineData(".jump_u &(0xF) -~ &(0x9) &(0x9)")]
-        [InlineData(".jump_y &(0xF) -~ &(0x9) &(0x9)")]
+        [InlineData(".jump_e &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump_g &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump_u &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump_y &(0xF) ~- &(0x9) &(0x9)")]
         public void JumperTest(string code)
         {
             var result = new FlameAssemblerSyntax().ManyParser.End().Parse(code).First();
