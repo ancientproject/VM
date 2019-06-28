@@ -17,58 +17,30 @@
 </h4>
 
   
-![image](https://user-images.githubusercontent.com/13326808/58775994-0597bc00-85d1-11e9-99c3-e6f7208cd37b.png)
+![image](https://user-images.githubusercontent.com/13326808/60311909-e71fa900-9961-11e9-96f0-bf4c4a45681c.png)
 
+##### Flags
 
-and
-
-##### 8bit_cpu_ui_host
-
-![image](https://user-images.githubusercontent.com/13326808/59545647-ce5ad080-8f29-11e9-8e2a-700cca936d82.png)
-
-
-
-##### Try
-
-🌧 Download lates release
-
-💥 Save it to file 'test.asm'
-```asm
-
-; set label to index in cell 0xC
-.ref_t &(0xC)
-; push to device char 'n'(0x6E)
-.push_a &(0x1) &(0x6) <| @char_t('n')
-; push to device char 'a'(0x79)
-.push_a &(0x1) &(0x6) <| @char_t('a')
-; push to device char 'y'(0x61)
-.push_a &(0x1) &(0x6) <| @char_t('y')
-; push to device char ' '(0x20)
-.push_a &(0x1) &(0x6) <| @char_t(' ')
-; push to device char '\n'(0x0A)
-.push_a &(0x1) &(0x6) <| $(0x0A)
-
-; stash memory in device
-.push_a &(0x1) &(0x7) <| $(0x00)
-; clear memory in device
-.push_a &(0x1) &(0x3) <| $(0x00)
-
-; jump to label by index in cell 0xC
-.jump_t &(0xC)
-
+in env:   
+```yaml
+- VM_TRACE         : 1\0 - enable or disable trace logging (default 0)
+- VM_ERROR         : 1\0 - enable or disable error logging (default 1)
+- VM_KEEP_MEMORY   : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
+- VM_MEM_FAST_WRITE: 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
 ```
 
-🐝 Compile binary: `acc.exe -o superBinary -s test.asm`    
-⚡️ Execute result: `vm.exe superBinary.exf`    
+in runtime:
+```yaml
+.ldx &(0x11) $(0x0) - disable trace
 
-👑 Complete! You're beautiful!✨ 
+- 0x11 : 1\0 - enable or disable trace logging (default 0)
+- 0x12 : 1\0 - enable or disable error logging (default 1)
+- 0x13 : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
+- 0x14 : 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
+```
 
-##### Samples
-See `~/samples/*.asm` files
-
-##### Compiler instruction implemented:
-Complete: `.ref_t, .jump_t, .addi, .push_a, .swap, .push_t, .push_x, .push_d, .div, .add, .sub, .pow, .mul, .warm, .halt`    
-Todo: `.push_y, .push_b, .move_t, and etc`    
+##### fast-mode addressing        
+Write speedUp to device memory (x12~ times), but disables the ability to write to certain sections of device memory.
 
 ##### Registers
 
@@ -101,27 +73,4 @@ AddressDev : 0xB
 LightAction: 0xD
 OffAction  : 0xE
 ```
-
-##### Flags
-
-in env:   
-```yaml
-- VM_TRACE         : 1\0 - enable or disable trace logging (default 0)
-- VM_ERROR         : 1\0 - enable or disable error logging (default 1)
-- VM_KEEP_MEMORY   : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
-- VM_MEM_FAST_WRITE: 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
-```
-
-in runtime:
-```yaml
-.loadi_x &(0x11) $(0x0) - disable trace
-
-- 0x11 : 1\0 - enable or disable trace logging (default 0)
-- 0x12 : 1\0 - enable or disable error logging (default 1)
-- 0x13 : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
-- 0x14 : 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
-```
-
-##### fast-mode addressing        
-Write speedUp to device memory (x12~ times), but disables the ability to write to certain sections of device memory.
 
