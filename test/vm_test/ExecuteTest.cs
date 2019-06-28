@@ -27,7 +27,7 @@ namespace vm_test
         [Description("load instruction to device and assert result")]
         public void WriteToDevTest()
         {
-            load(new push_a(0x1, 0x5, '!'));
+            load(new mva(0x1, 0x5, '!'));
             shot();
             AssertRegister(x => x.iid, 0xF);
             AssertRegister(x => x.x2, 0xC);
@@ -38,7 +38,7 @@ namespace vm_test
         [Description("load memory and assert it")]
         public void MemoryTest()
         {
-            load(new loadi(0x1, 0x5), new loadi(0x2, 0x4));
+            load(new ldi(0x1, 0x5), new ldi(0x2, 0x4));
             shot(2);
             AssertRegister(x => x.mem[0x1], 0x5);
             AssertRegister(x => x.mem[0x2], 0x4);
@@ -51,17 +51,17 @@ namespace vm_test
         {
             var mem = new ulong[] {
                 // load to stack next 2 values
-                new stage_n(0x2),
+                new absorb(0x2),
                 // value
-                new n_value(3.14f), 
+                new val(3.14f), 
                 // value
-                new n_value(0.14f), 
+                new val(0.14f), 
                 // load from stack to 0x2 cell memory
-                new loadi_s(0x2),
+                new pull(0x2),
                 // load from stack to 0x2 cell memory
-                new loadi_s(0x1),
+                new pull(0x1),
                 // enable float-point-flag  
-                new loadi_x(0x18, 0x1),
+                new ldx(0x18, 0x1),
                 // substract 0x1 cell value & 0x2 cell value, and stage result to 0x3 cell value
                 new sub(0x3, 0x1, 0x2)
             };

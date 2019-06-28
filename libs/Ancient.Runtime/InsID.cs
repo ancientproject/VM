@@ -16,6 +16,13 @@
         }
     }
 
+    public class UnfCode : OpCodeAttribute
+    {
+        public UnfCode() : base(true)
+        {
+        }
+    }
+
     public static class InsIDEx
     {
         public static short getOpCode(this InsID id)
@@ -64,37 +71,39 @@
     public enum InsID : short
     {
         [OpCode(0xA)] warm,
-        [OpCode(0x1)] loadi,
-        [OpCode(0x1)] loadi_x,
-        [OpCode(0x2)] add,
-        [OpCode(0x4)] sub,
-        [OpCode(0x6)] div,
-        [OpCode(0x5)] mul,
-        [OpCode(0x7)] pow,
-        [OpCode(0x7)] sqrt,
-        [OpCode(0xF)] push_a,
-        [OpCode(0xF)] push_d,
-        [OpCode(0xF)] push_x,
-        [OpCode(0x3)] swap,
         [OpCode(0xD)] halt,
 
-        [OpCode(0x8)] ref_t,
-        [OpCode(0x8)] jump_t,
-        [OpCode(0x8)] jump_e,
-        [OpCode(0x8)] jump_g,
-        [OpCode(0x8)] jump_u,
-        [OpCode(0x8)] jump_y,
+        [OpCode(0x01)] ldi,
+        [OpCode(0x01)] ldx,
 
-        [OpCode(true)] push_j,
-        [OpCode(true)] raw,
+        [OpCode(0x02)] add, [OpCode(0x04)] sub,
+        [OpCode(0x06)] div, [OpCode(0x05)] mul,
+        [OpCode(0x07)] pow, [OpCode(0x07)] sqrt,
 
-        [OpCode(0xA0)] stage_n,
-        [OpCode(0xA1)] loadi_s,
-        [OpCode(0xAA)] n_value,
-       
-        [OpCode(0xA2)] ou_t,
+        [OpCode(0x0F)] mva, [OpCode(0x0F)] mvd,
+        [OpCode(0x0F)] mvx, [OpCode(0xA2)] mvt,
+
+        [OpCode(0x03)] swap,
+
+        [OpCode(0x08)] ref_t , [OpCode(0x08)] jump_t, 
+        [OpCode(0x08)] jump_e, [OpCode(0x08)] jump_g,
+        [OpCode(0x08)] jump_u, [OpCode(0x08)] jump_y,
+
+        [UnfCode] mvj, [UnfCode] raw,
+
+        [OpCode(0xA0)] orb,
+        [OpCode(0xA1)] pull,
+        [OpCode(0xAA)] val,
+
         [OpCode(0xC1)] brk_s,
         [OpCode(0xC1)] brk_n,
-        [OpCode(0xC1)] brk_a
+        [OpCode(0xC1)] brk_a,
+
+        [OpCode(0xA4)] inv,
+        [OpCode(0xA5)] sig, 
+        [OpCode(0xA6)] ret,
+
+        [OpCode(0xB1)] inc,
+        [OpCode(0xB2)] dec
     }
 }

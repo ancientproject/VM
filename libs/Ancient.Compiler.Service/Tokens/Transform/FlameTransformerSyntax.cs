@@ -7,7 +7,7 @@
     public class FlameTransformerSyntax : FlameAssemblerSyntax
     {
         public virtual Parser<IEvolveToken> PushJ =>
-            (from dword in InstructionToken(InsID.push_j)
+            (from dword in InstructionToken(InsID.mvj)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeRight
@@ -15,7 +15,7 @@
                 select new PushJEvolve(cell3, cell1.Cell, cell2.Cell))
             .Token()
             .WithPosition()
-            .Named("push_j transform expression");
+            .Named("mvj transform expression");
 
         public virtual Parser<IEvolveToken[]> Group(Parser<IEvolveToken> @group) => 
             from s in Parse.String("#{").Text()

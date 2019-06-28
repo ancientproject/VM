@@ -193,49 +193,49 @@
             .Named("raw expression");
 
         public virtual Parser<IInputToken> StageN =>
-            (from dword in InstructionToken(InsID.stage_n)
+            (from dword in InstructionToken(InsID.orb)
                 from val1 in RefToken
-                select new InstructionExpression(new stage_n(val1.Cell)))
+                select new InstructionExpression(new orb(val1.Cell)))
             .Token()
             .WithPosition()
-            .Named("stage_n expression");
+            .Named("orb expression");
 
         public virtual Parser<IInputToken> NValue =>
-            (from dword in InstructionToken(InsID.n_value)
+            (from dword in InstructionToken(InsID.val)
                 from val1 in CastFloat
-                select new InstructionExpression(new n_value(val1)))
+                select new InstructionExpression(new val(val1)))
             .Token()
             .WithPosition()
-            .Named("n_value expression");
+            .Named("val expression");
 
 
         public virtual Parser<IInputToken> LoadI =>
-            (from dword in InstructionToken(InsID.loadi)
+            (from dword in InstructionToken(InsID.ldi)
                 from space1 in Parse.WhiteSpace.Optional()
                 from cell1 in RefToken
                 from pipe in PipeRight
                 from val1 in ValueToken
-                select new InstructionExpression(new loadi(cell1.Cell, val1.Value)))
+                select new InstructionExpression(new ldi(cell1.Cell, val1.Value)))
             .Token()
             .WithPosition()
-            .Named("loadi expression");
+            .Named("ldi expression");
         public virtual Parser<IInputToken> LoadI_X =>
-            (from dword in InstructionToken(InsID.loadi_x)
+            (from dword in InstructionToken(InsID.ldx)
                 from cell1 in RefToken
                 from pipe in PipeRight
                 from val1 in ValueToken
-                select new InstructionExpression(new loadi_x(cell1.Cell, val1.Value)))
+                select new InstructionExpression(new ldx(cell1.Cell, val1.Value)))
             .Token()
             .WithPosition()
-            .Named("loadi_x expression");
+            .Named("ldx expression");
 
         public virtual Parser<IInputToken> LoadI_S =>
-            (from dword in InstructionToken(InsID.loadi_s)
+            (from dword in InstructionToken(InsID.pull)
                 from cell1 in RefToken
-                select new InstructionExpression(new loadi_s(cell1.Cell)))
+                select new InstructionExpression(new pull(cell1.Cell)))
             .Token()
             .WithPosition()
-            .Named("loadi_s expression");
+            .Named("pull expression");
         public virtual Parser<IInputToken> JumpT =>
             (from dword in InstructionToken(InsID.jump_t)
                 from space1 in Parse.WhiteSpace.Optional()
@@ -267,45 +267,45 @@
             .WithPosition()
             .Named("swap expression");
         public virtual Parser<IInputToken> OuT =>
-            (from dword in InstructionToken(InsID.ou_t)
+            (from dword in InstructionToken(InsID.mvt)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
                 from cell3 in RefToken
-                select new InstructionExpression(new ou_t(cell1.Cell, cell2.Cell, cell3.Cell)))
+                select new InstructionExpression(new mvt(cell1.Cell, cell2.Cell, cell3.Cell)))
             .Token()
             .WithPosition()
-            .Named("push_a expression");
+            .Named("mva expression");
         public virtual Parser<IInputToken> PushA =>
-            (from dword in InstructionToken(InsID.push_a)
+            (from dword in InstructionToken(InsID.mva)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeRight
                 from cell3 in ValueToken.Or(CastCharToken.Select(x => new ValueExpression($"{x:x}")))
-             select new InstructionExpression(new push_a(cell1.Cell, cell2.Cell, cell3.Value)))
+             select new InstructionExpression(new mva(cell1.Cell, cell2.Cell, cell3.Value)))
             .Token()
             .WithPosition()
-            .Named("push_a expression");
+            .Named("mva expression");
         public virtual Parser<IInputToken> PushD =>
-            (from dword in InstructionToken(InsID.push_d)
+            (from dword in InstructionToken(InsID.mvd)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
                 from cell3 in RefToken
-                select new InstructionExpression(new push_d(cell1.Cell, cell2.Cell, cell3.Cell)))
+                select new InstructionExpression(new mvd(cell1.Cell, cell2.Cell, cell3.Cell)))
             .Token()
             .WithPosition()
-            .Named("push_d expression");
+            .Named("mvd expression");
         public virtual Parser<IInputToken> PushX =>
-            (from dword in InstructionToken(InsID.push_x)
+            (from dword in InstructionToken(InsID.mvx)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
                 from cell3 in RefToken
-                select new InstructionExpression(new push_x_debug(cell1.Cell, cell2.Cell, cell3.Cell)))
+                select new InstructionExpression(new mvx(cell1.Cell, cell2.Cell, cell3.Cell)))
             .Token()
             .WithPosition()
-            .Named("push_x expression");
+            .Named("mvx expression");
         public virtual Parser<IInputToken> RefT => (
                 from dword in InstructionToken(InsID.ref_t)
                 from cell1 in RefToken
