@@ -118,10 +118,12 @@ Write speedUp to device memory (x12~ times), but disables the ability to write t
 
 ##### Devices spec
 
+// todo
+
 ###### UI-LED
 ```CSharp
-AddressDev : 0xB
-LightAction: 0xD
-OffAction  : 0xE
+Device Address : 0xB
+Set ON         : 0xD
+Set OFF        : 0xE
 ```
 
