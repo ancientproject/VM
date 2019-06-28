@@ -5,12 +5,14 @@
     using System.Diagnostics;
 
     [DebuggerDisplay("{ToString()}")]
-    public class Unicast<TOut, TIn> where TOut : struct where TIn : struct
+    public class Unicast<TOutF, TIn> where TOutF : struct where TIn : struct
     {
-        public static TOut operator &(Unicast<TOut, TIn> _, TIn q) => q.To<TOut>();
-        public static TOut operator &(Unicast<TOut, TIn> _, int q) => q.To<TOut>();
+        public static TOutF operator &(Unicast<TOutF, TIn> _, TIn q) => q.To<TOutF>();
+        public static TOutF operator &(Unicast<TOutF, TIn> _, int q) => q.To<TOutF>();
 
-        public override string ToString() => $"static_cast<{typeof(TIn).Name}, {typeof(TOut).Name}>";
+        public static TIn operator |(Unicast<TOutF, TIn> _, TOutF q) => q.To<TIn>();
+
+        public override string ToString() => $"static_cast<{typeof(TIn).Name}, {typeof(TOutF).Name}>";
     }
 
     [DebuggerDisplay("{ToString()}")]
