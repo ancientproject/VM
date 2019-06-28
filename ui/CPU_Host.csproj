@@ -8,7 +8,7 @@
     <Authors>Yuuki Wesp</Authors>
     <Product>AncientVM CPU Host</Product>
     <Copyright>2019 (С) Yuuki Wesp</Copyright>
-    <Version>0.4.14</Version>
+    <Version>0.31.101</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -13,9 +13,6 @@
             _cellValue = cellValue;
         }
 
-        protected override void OnCompile()
-        {
-            SetRegisters(_addressBus, _addressDev, 0, _cellValue);
-        }
+        protected override void OnCompile() => SetRegisters(_addressBus, _addressDev, 0, _cellValue);
     }
 }
