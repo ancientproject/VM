@@ -1,0 +1,47 @@
+trigger:
+- master
+pr:
+- master
+jobs:
+  - job: Windows
+    pool:
+      vmImage: 'windows-latest'
+
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+    steps:
+    - checkout: self
+      submodules: "true"
+
+    - task: UseDotNet@2
+      displayName: "Install Preview .NET Core SDK"
+      inputs:
+        packageType: 'sdk'
+        version: '3.0.100-preview6-012264'
+        includePreviewVersions: true
+
+    - task: NuGetToolInstaller@0
+      displayName: "Install NuGet"
+
+    - task: NuGetCommand@2
+      displayName: "NuGet Restore"
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task:  DotNetCoreCLI@2
+      displayName: "Build"
+      name: "Build"
+      inputs:
+        command: 'build'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+
+    - task:  DotNetCoreCLI@2
+      displayName: "Test"
+      name: "Test"
+      inputs:
+        command: 'test'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
