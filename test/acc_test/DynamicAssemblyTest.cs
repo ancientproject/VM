@@ -16,7 +16,7 @@
             Assert.Throws<InvalidOperationException>(() => { d.GetBytes(); });
             Assert.NotNull(d.GetGenerator());
             Assert.IsType<ILGen>(d.GetGenerator());
-            d.GetGenerator().Emit(new loadi(0xF, 0xC));
+            d.GetGenerator().Emit(new ldi(0xF, 0xC));
             Assert.Equal(sizeof(ulong), d.GetILCode().Length);
             Assert.Equal($"{0x1F00C000:X}", $"{BitConverter.ToUInt32(d.GetILCode()):X}");
         }

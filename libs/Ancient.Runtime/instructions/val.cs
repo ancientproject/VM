@@ -2,12 +2,12 @@
 {
     using System;
 
-    public class n_value : Instruction
+    public class val : Instruction
     {
         internal object _data;
-        public n_value(float value) : base(InsID.n_value) => _data = value;
+        public val(float value) : base(InsID.val) => _data = value;
 
-        public n_value(double value) : base(InsID.n_value) => _data = value;
+        public val(double value) : base(InsID.val) => _data = value;
 
         protected override void OnCompile() { }
 

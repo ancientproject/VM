@@ -19,19 +19,19 @@
         private uint push_a_to_rel;
         private uint loadi;
 
-        [Benchmark(Description = ".loadi")]
+        [Benchmark(Description = ".ldi")]
         public async Task S1() => await bus.cpu.Step(loadi);
 
-        [Benchmark(Description = ".push_a <null-dev> fast-off")]
+        [Benchmark(Description = ".mva <null-dev> fast-off")]
         public async Task S2() => await bus.cpu.Step(push_a_to_null);
 
-        [Benchmark(Description = ".push_a <rel-dev> fast-off")]
+        [Benchmark(Description = ".mva <rel-dev> fast-off")]
         public async Task S3() => await bus.cpu.Step(push_a_to_rel);
 
-        [Benchmark(Description = ".push_a <null-dev> fast-on")]
+        [Benchmark(Description = ".mva <null-dev> fast-on")]
         public async Task S4() => await bus.cpu.Step(push_a_to_null);
 
-        [Benchmark(Description = ".push_a <rel-dev> fast-on")]
+        [Benchmark(Description = ".mva <rel-dev> fast-on")]
         public async Task S5() => await bus.cpu.Step(push_a_to_rel);
 
         [GlobalSetup(Targets = new[] {nameof(S5), nameof(S4)})]
@@ -54,9 +54,9 @@
             bus = new Bus();
             bus.Add(new NullDevice());
             bus.Add(new RelDevice());
-            push_a_to_rel = (uint)new push_a(0x4, 0x6, 'x').Assembly();
-            push_a_to_null = (uint)new push_a(0x5, 0x6, 'x').Assembly();
-            loadi = (uint)new loadi(0x5, 0x6).Assembly();
+            push_a_to_rel = (uint)new mva(0x4, 0x6, 'x').Assembly();
+            push_a_to_null = (uint)new mva(0x5, 0x6, 'x').Assembly();
+            loadi = (uint)new ldi(0x5, 0x6).Assembly();
         }
     }
     public class RelDevice : AbstractDevice

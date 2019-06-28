@@ -7,7 +7,7 @@
     {
         public TransformPushJ(string value, byte cellDev, byte ActionDev)
         {
-            Instructions = value.Select(x => new push_a(cellDev, ActionDev, x)).Cast<Instruction>().ToArray();
+            Instructions = value.Select(x => new mva(cellDev, ActionDev, x)).Cast<Instruction>().ToArray();
         }
     }
 }

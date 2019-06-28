@@ -6,7 +6,7 @@
     {
         public PushJEvolve(string value, byte cellDev, byte ActionDev)
         {
-            Result = value.Select(x => $".push_a &(0x{cellDev:X1}) &(0x{ActionDev:X1}) <| $(0x{(ushort)x:X})").ToArray();
+            Result = value.Select(x => $".mva &(0x{cellDev:X1}) &(0x{ActionDev:X1}) <| $(0x{(ushort)x:X})").ToArray();
         }
     }
 }

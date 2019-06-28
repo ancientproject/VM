@@ -11,6 +11,7 @@
     using ancient.runtime.emit;
     using Ancient.Runtime.tools;
     using MoreLinq;
+    using ancient.runtime;
 
     internal class Program
     {
@@ -38,19 +39,28 @@
 
             var core = bus.cpu;
 
-            //uint[] page = {
-            //    0xABCDEFE0,
-            //    new loadi(0x1, 0x50),  // x
-            //    new loadi(0x2, 0x72),  // y
-            //    new loadi(0x3, 0x03),  // z
-            //};
+            ulong[] page = {
+                new warm(), 
+                new sig(0x15),
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ldi(0x1, 0x2), 
+                new ret(), 
+                new warm(), 
 
-            //core.State.Load(page);
+            };
 
-            //core.State.fetch();
+            core.State.Load(page);
 
-            //if(true) {}
-            //else 
+
+            if(true) {}
+            else 
             //core.State.Load(BIOS._GetILCode().ToArray());
             if (!args.Any())
                 core.State.Load(0xB00B5000);

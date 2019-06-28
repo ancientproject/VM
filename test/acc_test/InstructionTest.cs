@@ -10,12 +10,12 @@ namespace ancient.runtime.compiler.test
     public class InstructionTest
     {
         [Theory]
-        [InlineData(".n_value @float_t(14.56)")]
+        [InlineData(".val @float_t(14.56)")]
         public void FloatParseTest(string code)
         {
             var result = new FlameAssemblerSyntax().NValue.End().Parse(code);
 
-            if (result is InstructionExpression exp && exp.Instruction is n_value i)
+            if (result is InstructionExpression exp && exp.Instruction is val i)
             {
                 Assert.Equal(14.56f, i._data);
             }
@@ -28,7 +28,7 @@ namespace ancient.runtime.compiler.test
                                     ~label 'test' 0x2
                                     ~label 'benis' 0x5
                                 }
-                                .push_a &(![~test]) &(![~beniz]) <| $(![~beniz])";
+                                .mva &(![~test]) &(![~beniz]) <| $(![~beniz])";
             var result = new FlameTransformerSyntax().ManyEvolver
                 .End().Parse(str);
 
@@ -50,23 +50,23 @@ namespace ancient.runtime.compiler.test
         }
 
         [Theory]
-        [InlineData(".push_j &(0x0) &(0xC) <| @string_t(\"test\")")]
+        [InlineData(".mvj &(0x0) &(0xC) <| @string_t(\"test\")")]
         public void PushJ(string code)
         {
             var result = Host.Evolve(code).Split('\n');
-            Assert.Equal(".push_a &(0x0) &(0xC) <| $(0x74)", result.First());
-            Assert.Equal(".push_a &(0x0) &(0xC) <| $(0x74)", result.Last());
+            Assert.Equal(".mva &(0x0) &(0xC) <| $(0x74)", result.First());
+            Assert.Equal(".mva &(0x0) &(0xC) <| $(0x74)", result.Last());
         }
         [Theory]
-        [InlineData(".push_a &(0x0) &(0xC) <| $(0xFF)")]
-        [InlineData(".push_a &(0x0) &(0xC) <| @char_t('ÿ')")]
+        [InlineData(".mva &(0x0) &(0xC) <| $(0xFF)")]
+        [InlineData(".mva &(0x0) &(0xC) <| @char_t('ÿ')")]
         public void PushA(string code)
         {
             var result = new FlameAssemblerSyntax().PushA.End().Parse(code);
 
-            if(result is InstructionExpression exp && exp.Instruction is push_a i)
+            if(result is InstructionExpression exp && exp.Instruction is mva i)
             {
-                Assert.Equal(InsID.push_a, i.ID);
+                Assert.Equal(InsID.mva, i.ID);
                 Assert.Equal(0x0, i._addressBus);
                 Assert.Equal(0xC, i._addressDev);
                 Assert.Equal(0xFF, i._value);
@@ -74,14 +74,14 @@ namespace ancient.runtime.compiler.test
             }
         }
         [Theory]
-        [InlineData(".loadi &(0x0) <| $(0xF)")]
+        [InlineData(".ldi &(0x0) <| $(0xF)")]
         public void LoadI(string code)
         {
             var result = new FlameAssemblerSyntax().LoadI.End().Parse(code);
 
-            if(result is InstructionExpression exp && exp.Instruction is loadi i)
+            if(result is InstructionExpression exp && exp.Instruction is ldi i)
             {
-                Assert.Equal(InsID.loadi, i.ID);
+                Assert.Equal(InsID.ldi, i.ID);
                 Assert.Equal(0x0, i._index);
                 Assert.Equal(0xF, i._value);
             }

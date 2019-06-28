@@ -1,12 +1,12 @@
 ﻿namespace ancient.runtime
 {
-    public class ou_t : Instruction
+    public class mvt : Instruction
     {
         internal readonly byte _addressBus;
         internal readonly byte _addressDev;
         internal readonly byte _cellValue;
 
-        public ou_t(byte addressBus, byte addressDev, byte cellValue) : base(InsID.ou_t)
+        public mvt(byte addressBus, byte addressDev, byte cellValue) : base(InsID.mvt)
         {
             _addressBus = addressBus;
             _addressDev = addressDev;
