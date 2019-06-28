@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <PackageId>flame.compiler</PackageId>
     <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
-    <Version>6.19.0</Version>
+    <Version>0.24.86</Version>
     <Authors>Yuuki Wesp</Authors>
     <Product>flame.compiler</Product>
     <Copyright>Yuuki Wesp(C) 2019</Copyright>
@@ -13,7 +13,7 @@
     <StartupObject>ancient.compiler.Host</StartupObject>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <LangVersion>preview</LangVersion>
-    <AssemblyVersion>0.6.19.0</AssemblyVersion>
+    <AssemblyVersion>0.24.86.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
