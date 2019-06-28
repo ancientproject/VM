@@ -354,14 +354,6 @@
         #endregion
     }
     
-    public class LabelTransform : TransformationContext
-    {
-        public LabelTransform(string name, bool isAuto, byte? cell_id)
-        {
-            Instructions = name.Select((v, i) => new label(v, isAuto, i == name.Length, cell_id)).Cast<Instruction>().ToArray();
-        }
-    }
-
     public class CommentToken : IInputToken
     {
         public readonly string _comment;
