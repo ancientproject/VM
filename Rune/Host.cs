@@ -130,7 +130,7 @@
         }
         private static void PrintVersion()
         {
-            Console.WriteLine("v1.0");
+            Console.WriteLine("v0.31");
         }
 
         private static void PrintInfo()
@@ -140,10 +140,10 @@
             Console.WriteLine($" OS Platform: {RuntimeEnvironment.OperatingSystemPlatform}");
             Console.WriteLine($" Base Path:   {ApplicationEnvironment.ApplicationBasePath}");
         }
-        private static bool IsArg(string candidate, string longName) => IsArg(candidate, shortName: null, longName: longName);
-
+        private static bool IsArg(string candidate, string longName) 
+            => IsArg(candidate, null, longName);
         private static bool IsArg(string candidate, string shortName, string longName) =>
-            (shortName != null && candidate.Equals("-" + shortName, StringComparison.OrdinalIgnoreCase)) ||
-            (longName != null && candidate.Equals("--" + longName, StringComparison.OrdinalIgnoreCase));
+            (shortName != null && candidate.Equals($"-{shortName}", StringComparison.OrdinalIgnoreCase)) ||
+            (longName != null && candidate.Equals($"--{longName}", StringComparison.OrdinalIgnoreCase));
     }
 }

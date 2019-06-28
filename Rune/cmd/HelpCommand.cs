@@ -1,6 +1,7 @@
 ﻿namespace rune.cmd
 {
     using System;
+    using System.Linq;
 
     public class HelpCommand
     {
@@ -22,8 +23,8 @@ Common Commands:
 
         public static int Run(string[] args)
         {
-            if (args.Length != 0) 
-                return Host.Main(new[] {args[0], "--help"});
+            if (args.Any())
+                return Host.Main(new[] { args[0], "--help" });
             PrintHelp();
             return 0;
         }
@@ -36,7 +37,7 @@ Common Commands:
 
         public static void PrintVersionHeader()
         {
-            Console.WriteLine("Rune v0.24 x64 [Ancient SDK]");
+            Console.WriteLine("Rune v0.31 x64 [Ancient SDK]");
         }
     }
 }
