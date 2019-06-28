@@ -5,7 +5,7 @@
         internal readonly byte _index;
         internal readonly ushort _value;
 
-        public ldi(byte index, ushort value) : base(InsID.ldi)
+        public ldi(byte index, ushort value) : base(IID.ldi)
         {
             _index = index;
             _value = value;

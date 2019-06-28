@@ -5,9 +5,9 @@
     public class val : Instruction
     {
         internal object _data;
-        public val(float value) : base(InsID.val) => _data = value;
+        public val(float value) : base(IID.val) => _data = value;
 
-        public val(double value) : base(InsID.val) => _data = value;
+        public val(double value) : base(IID.val) => _data = value;
 
         protected override void OnCompile() { }
 

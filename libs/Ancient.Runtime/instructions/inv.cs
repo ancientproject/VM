@@ -4,7 +4,7 @@
     {
         private readonly byte _sigId;
 
-        public inv(byte sigID) : base(InsID.inv) => _sigId = sigID;
+        public inv(byte sigID) : base(IID.inv) => _sigId = sigID;
         protected override void OnCompile() => SetRegisters(r2: _sigId);
     }
 
@@ -12,13 +12,13 @@
     {
         private readonly byte _sigId;
 
-        public sig(byte sigID) : base(InsID.sig) => _sigId = sigID;
+        public sig(byte sigID) : base(IID.sig) => _sigId = sigID;
         protected override void OnCompile() => SetRegisters(r2: _sigId);
     }
 
     public class ret : Instruction
     {
-        public ret() : base(InsID.ret) { }
+        public ret() : base(IID.ret) { }
         protected override void OnCompile() { }
     }
 }

@@ -66,7 +66,7 @@ namespace ancient.runtime.compiler.test
 
             if(result is InstructionExpression exp && exp.Instruction is mva i)
             {
-                Assert.Equal(InsID.mva, i.ID);
+                Assert.Equal(IID.mva, i.ID);
                 Assert.Equal(0x0, i._addressBus);
                 Assert.Equal(0xC, i._addressDev);
                 Assert.Equal(0xFF, i._value);
@@ -81,7 +81,7 @@ namespace ancient.runtime.compiler.test
 
             if(result is InstructionExpression exp && exp.Instruction is ldi i)
             {
-                Assert.Equal(InsID.ldi, i.ID);
+                Assert.Equal(IID.ldi, i.ID);
                 Assert.Equal(0x0, i._index);
                 Assert.Equal(0xF, i._value);
             }
@@ -94,7 +94,7 @@ namespace ancient.runtime.compiler.test
 
             if(result is InstructionExpression exp && exp.Instruction is jump_t i)
             {
-                Assert.Equal(InsID.jump_t, i.ID);
+                Assert.Equal(IID.jump_t, i.ID);
                 Assert.Equal(0x0, i._cell);
             }
         }
@@ -106,7 +106,7 @@ namespace ancient.runtime.compiler.test
 
             if(result is InstructionExpression exp && exp.Instruction is ref_t i)
             {
-                Assert.Equal(InsID.ref_t, i.ID);
+                Assert.Equal(IID.ref_t, i.ID);
                 Assert.Equal(0x0, i._cell);
             }
         }
@@ -118,7 +118,7 @@ namespace ancient.runtime.compiler.test
 
             if(result is InstructionExpression exp && exp.Instruction is swap i)
             {
-                Assert.Equal(InsID.swap, i.ID);
+                Assert.Equal(IID.swap, i.ID);
                 Assert.Equal(0x0, i._index1);
                 Assert.Equal(0xF, i._index2);
             }
@@ -127,19 +127,19 @@ namespace ancient.runtime.compiler.test
         [InlineData(".halt")]
         public void Halt(string code)
         {
-            var result = new FlameAssemblerSyntax().ByIIDToken(InsID.halt).End().Parse(code);
+            var result = new FlameAssemblerSyntax().ByIIDToken(IID.halt).End().Parse(code);
 
             if (result.Instruction is halt i)
-                Assert.Equal(InsID.halt, i.ID);
+                Assert.Equal(IID.halt, i.ID);
         }
         [Theory]
         [InlineData(".warm")]
         public void Warm(string code)
         {
-            var result = new FlameAssemblerSyntax().ByIIDToken(InsID.warm).End().Parse(code);
+            var result = new FlameAssemblerSyntax().ByIIDToken(IID.warm).End().Parse(code);
 
             if (result.Instruction is warm i)
-                Assert.Equal(InsID.warm, i.ID);
+                Assert.Equal(IID.warm, i.ID);
         }
 
         [Theory]

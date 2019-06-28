@@ -51,7 +51,7 @@ namespace vm_test
         {
             var mem = new ulong[] {
                 // load to stack next 2 values
-                new absorb(0x2),
+                new orb(0x2),
                 // value
                 new val(3.14f), 
                 // value

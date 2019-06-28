@@ -4,7 +4,7 @@
     {
         private readonly ulong _value;
 
-        public raw(ulong value) : base(InsID.raw) => _value = value;
+        public raw(ulong value) : base(IID.raw) => _value = value;
 
         protected override void OnCompile()
         {
