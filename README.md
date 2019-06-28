@@ -45,29 +45,80 @@ Write speedUp to device memory (x12~ times), but disables the ability to write t
 ##### Registers
 
 ```csharp
-.ref_t &(cell_id)                                 // set current program offset to shared memory at cell_id
-.push_a &($device_id) &(action_id) <| &(params)  // push params to device_id.action_id 
-.swap &(cell_id_source) &(cell_id_target)         // swap memory at two cell index
-.halt                                             // shutdown cpu_host
-.warm                                             // up cpu_host (warm up cpu cells)
-// math instruction
-.mul &(cellResult) &(cellValue1) &(cellValue2)
-.add &(cellResult) &(cellValue1) &(cellValue2)
-.div &(cellResult) &(cellValue1) &(cellValue2)
-.sub &(cellResult) &(cellValue1) &(cellValue2)
-.pow &(cellResult) &(cellValue1) &(cellValue2)
-.sqrt &(cellResult) &(cellValue)
-// jump instruction
-.jump_t &(cell_id)                  // get program offset in shared memory at cell_id and goto to offset
+-- legend:
+
+- cell_id  - memory cell in processor cache
+- value    - hex number
+- &()      - reference cell id
+- $()      - value
+- ![~name] - reference label define
+- <| and |>- pipe operator
+- ~-       - when operator
+```
+
+
+```csharp
+// refer and jumper
+
+// set reference current program offset to cell_id
+.ref_t &(cell_id)
+// read from cell_id offset program and go to
+.jump_t &(cell_id)
+
+// other jumper
 .jump_e &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more or equal 0x6 cell value
 .jump_g &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more 0x6 cell value 
 .jump_u &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less 0x6 cell value 
 .jump_y &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less or equal 0x6 cell value 
 
-.push_j &($device_id) &(action_id) <| @string_t("test string") // transform instruction, casted to array push_a
+
+// manage processor
+
+.halt  // halting cpu
+.warm  // warm-up cpu
+
+
+// etc
+
+.swap &(source) &(target) // swap value
+
+// math instruction
+.mul &(result_cell) &(cellValue1) &(cellValue2)
+.add &(result_cell) &(cellValue1) &(cellValue2)
+.div &(result_cell) &(cellValue1) &(cellValue2)
+.sub &(result_cell) &(cellValue1) &(cellValue2)
+.pow &(result_cell) &(cellValue1) &(cellValue2)
+.sqrt &(result_cell) &(cellValue)
+                              
+// manage device and etc
+.mvt &($device_id) &(action_id) <| $(value)       // push raw value to device_id.action_id in bus
+.mvd &($device_id) &(action_id) <| &(cell_value)  // push value from cell to device_id.action_id in bus
+.mvx &($device_id) &(action_id) <| &(value_ref)   // encode memory and send char-data to device
+
+// float-point
+.ldx &(0x18) <| $(0x1) // set float mode
+// remark: all math operation support float mode
+.orb &(n)             // grub next 'n'-count values and stage to stack
+.val @float_t("10.4") // encode float value
+.pull &(target_cell)  // read from stack float value and insert to target_cell
+
+// debugger
+.brk_s // standard break - now break
+.brk_n // break on next cycle execute
+.brk_a // break on after next cycle execute
+
+// other
+.inc &(cell) // cell++
+.dec &(cell) // cell--
+// raw write instruction
+.raw 0xABCDEFE0 // (warm)
+
+.mvj &($device_id) &(action_id) <| @string_t("test string") // cast string to mvt instruction
 ```
 
-##### LED Device in CPU UI Host
+##### Devices spec
+
+###### UI-LED
 ```CSharp
 AddressDev : 0xB
 LightAction: 0xD
