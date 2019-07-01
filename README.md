@@ -32,7 +32,7 @@
     <img src="https://forthebadge.com/images/badges/designed-in-ms-paint.svg">
     <img src="https://forthebadge.com/images/badges/ages-18.svg">
     <img src="https://ForTheBadge.com/images/badges/winter-is-coming.svg">
-    
+    <img src="https://forthebadge.com/images/badges/gluten-free.svg">
   </a>
 </p>
 
