@@ -10,6 +10,7 @@
     using ancient.runtime;
     using ancient.runtime.exceptions;
     using static System.Console;
+    using static System.MathF;
 
     public class State
     {
@@ -151,12 +152,12 @@
             set => mem[0x18] = value ? 0x1L : 0x0L;
         }
         /// <summary>
-        /// caller opcode
+        /// stack forward flag
         /// </summary>
-        public long caller
+        public bool sf
         {
-            get => mem[0x25];
-            set => mem[0x25] = value;
+            get => mem[0x19] == 1;
+            set => mem[0x19] = value ? 0x1L : 0x0L;
         }
 
         public ulong curAddr { get; set; } = 0xFFFF;
@@ -215,9 +216,48 @@
                 mem[0x17] = 0x0;
             }
             trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
+           
             switch (iid)
             {
-                case 0xA: break;
+                case ushort opcode when opcode.In(0xD0..0xE8):
+                    /* need @float-flag */
+                    if(mem[0x18] != 0x0) bus.cpu.halt(0xA9);
+                    trace($"call [0xD0..0xE8]::0x{iid:X}");
+                    var result = iid switch {
+                        0xD0 => f32i64 & Abs(i64f32 & mem[r1]),
+                        0xD1 => f32i64 & Acos(i64f32 & mem[r1]),
+                        0xD2 => f32i64 & Atan(i64f32 & mem[r1]),
+                        0xD3 => f32i64 & Acosh(i64f32 & mem[r1]),
+                        0xD4 => f32i64 & Atanh(i64f32 & mem[r1]),
+                        0xD5 => f32i64 & Asin(i64f32 & mem[r1]),
+                        0xD6 => f32i64 & Asinh(i64f32 & mem[r1]),
+                        0xD7 => f32i64 & Cbrt(i64f32 & mem[r1]),
+                        0xD8 => f32i64 & Ceiling(i64f32 & mem[r1]),
+                        0xD9 => f32i64 & Cos(i64f32 & mem[r1]),
+                        0xDA => f32i64 & Cosh(i64f32 & mem[r1]),
+                       
+                        0xDB => f32i64 & Floor(i64f32 & mem[r1]),
+                        0xDC => f32i64 & Exp(i64f32 & mem[r1]),
+                        0xDD => f32i64 & Log(i64f32 & mem[r1]),
+                        0xDE => f32i64 & Log10(i64f32 & mem[r1]),
+                        0xDF => f32i64 & Tan(i64f32 & mem[r1]),
+                        0xE0 => f32i64 & Tanh(i64f32 & mem[r1]),
+                        0xE1 => f32i64 & Truncate(i64f32 & mem[r1]),
+                        0xE2 => f32i64 & BitDecrement(i64f32 & mem[r1]),
+                        0xE3 => f32i64 & BitIncrement(i64f32 & mem[r1]),
+                        0xE4 => f32i64 & Atan2(i64f32 & mem[r1], i64f32 & mem[r2]),
+                        0xE5 => f32i64 & Min(i64f32 & mem[r1], i64f32 & mem[r2]),
+                        0xE6 => f32i64 & Max(i64f32 & mem[r1], i64f32 & mem[r2]),
+
+                        0xE7 => f32i64 & Sin(i64f32 & mem[r1]),
+                        0xE8 => f32i64 & Sinh(i64f32 & mem[r1]),
+                    };
+                    /* @stack-forward-flag */
+                    if (sf)  stack.Push(result);
+                    else     mem[r1] = result;
+                    break;
+                case 0xA:
+                    break;
                 #region halt
                 case 0xF when r1 == 0xF && r2 == 0xF && r3 == 0xF && u1 == 0xF && u2 == 0xF && x1 == 0xF:
                     bus.cpu.halt(0xF);
@@ -229,7 +269,6 @@
                     bus.cpu.halt(0x1);
                     break;
                 #endregion
-                
                 case 0x1 when x2 == 0x0:
                     trace($"ldi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
                     _ = u2 switch
@@ -354,29 +393,23 @@
                     break;
 
                 #endregion
-                #region math
-                case 0xE9:
+                // 0xD0-0xEC
+                #region math 
+                case 0xCA:
                     trace($"sum 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & (i64f32 & mem[r2]) + (i64f32 & mem[r3]);
                     else
                         mem[r1] = mem[r2] + mem[r3];
                     break;
-                case 0xEA:
+                case 0xCB:
                     trace($".sub 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & (i64f32 & mem[r2]) - (i64f32 & mem[r3]);
                     else
                         mem[r1] = mem[r2] - mem[r3];
                     break;
-                case 0xEC:
-                    trace($".mul 0x{r2:X}, 0x{r3:X}");
-                    if (ff)
-                        mem[r1] = f32i64 & (i64f32 & mem[r2]) * (i64f32 & mem[r3]);
-                    else
-                        mem[r1] = mem[r2] * mem[r3];
-                    break;
-                case 0xEB:
+                case 0xCC:
                     trace($".div 0x{r2:X}, 0x{r3:X}");
                     _ = (mem[r3], ff) switch {
                         (0x0, _    ) => bus.cpu.halt(0xC),
@@ -384,20 +417,29 @@
                         (_  , true ) => mem[r1] = f32i64 & (i64f32 & mem[r2]) / (i64f32 & mem[r3])
                         };
                     break;
-                case 0xE8A:
-                    trace($"sqrt 0x{r2:X}");
+                case 0xCD:
+                    trace($".mul 0x{r2:X}, 0x{r3:X}");
                     if (ff)
-                        mem[r1] = f32i64 & MathF.Sqrt(i64f32 & mem[r2]);
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) * (i64f32 & mem[r3]);
                     else
-                        mem[r1] = (uint)Math.Sqrt(mem[r2]);
+                        mem[r1] = mem[r2] * mem[r3];
                     break;
-                case 0xE7:
+                
+                case 0xCE:
                     trace($".pow 0x{r2:X}, 0x{r3:X}");
                     if (ff)
-                        mem[r1] = f32i64 & MathF.Pow(i64f32 & mem[r2], i64f32 & mem[r3]);
+                        mem[r1] = f32i64 & Pow(i64f32 & mem[r2], i64f32 & mem[r3]);
                     else
                         mem[r1] = (uint)Math.Pow(mem[r2], mem[r3]);
                     break;
+                case 0xCF:
+                    trace($"sqrt 0x{r2:X}");
+                    if (ff)
+                        mem[r1] = f32i64 & Sqrt(i64f32 & mem[r2]);
+                    else
+                        mem[r1] = (uint)Math.Sqrt(mem[r2]);
+                    break;
+                
                 #endregion
                 default:
                     Error(

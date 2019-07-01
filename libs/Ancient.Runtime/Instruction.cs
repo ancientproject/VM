@@ -1,7 +1,6 @@
 ﻿namespace ancient.runtime
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
@@ -107,27 +106,5 @@
             }
             throw new InvalidOperationException($"Not found class for '{id}' operation.");
         }
-    }
-
-    public class ShiftFactory : IShifter
-    {
-        private int prev;
-        private int index;
-
-        private ShiftFactory() {}
-
-        public static IShifter Create(int bitIndex) => new ShiftFactory {index = bitIndex};
-
-        public int Shift()
-        {
-            prev = index;
-            index -= 4;
-            if (index < 0) index = 0;
-            return prev;
-        }
-    }
-    public interface IShifter
-    {
-        int Shift();
     }
 } 

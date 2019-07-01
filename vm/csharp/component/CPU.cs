@@ -51,11 +51,11 @@
             await Task.CompletedTask;
         }
 
-        public ushort halt(ushort code)
+        public int halt(int reason)
         {
             Error(Environment.NewLine);
             _bus.State.halt = 1;
-            switch (code)
+            switch (reason)
             {
                 case 0x0:
                     Error("HALT");
@@ -72,8 +72,11 @@
                 case 0xA1:
                     Error($"HALT: Overflow exception.");
                     break;
+                case 0xA9:
+                    Error($"HALT: x9 float exception");
+                    break;
                 default:
-                    Error($"HALT: Unknown state 0x{code:X}");
+                    Error($"HALT: Unknown state 0x{reason:X}");
                     break;
             }
             var l1 = _bus.State.Registers.L1;
@@ -82,7 +85,7 @@
             var l2 = _bus.State.Registers.L2;
             Error($"L2 Cache, PC: 0x{l2.PC:X8}, OpCode: {l2.IID} [{l2.IID.getInstruction()}]");
             Error($"\t0x{l2.r1:X} 0x{l2.r2:X} 0x{l2.r3:X} 0x{l2.u1:X} 0x{l2.u2:X} 0x{l2.x1:X} 0x{l2.x2:X}");
-            return code;
+            return reason;
         }
 
         public string getStateOfCPU()
