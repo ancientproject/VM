@@ -56,7 +56,28 @@
             .Or(MathInstruction(IID.sub))
             .Or(MathInstruction(IID.div))
             .Or(MathInstruction(IID.pow))
-            .Or(SqrtToken);
+            .Or(SqrtToken)
+            // advanced math
+            .Or(Adv2MathInstruction(IID.min)).Or(Adv2MathInstruction(IID.max)).Or(Adv2MathInstruction(IID.atan2))
+            .Or(AdvMathInstruction(IID.abs))
+            .Or(AdvMathInstruction(IID.atan))
+            .Or(AdvMathInstruction(IID.atanh))
+            .Or(AdvMathInstruction(IID.cell))
+            .Or(AdvMathInstruction(IID.flr))
+            .Or(AdvMathInstruction(IID.acos))
+            .Or(AdvMathInstruction(IID.acosh))
+            .Or(AdvMathInstruction(IID.asin))
+            .Or(AdvMathInstruction(IID.asinh))
+            .Or(AdvMathInstruction(IID.cbrt))
+            .Or(AdvMathInstruction(IID.inc))
+            .Or(AdvMathInstruction(IID.dec))
+            .Or(AdvMathInstruction(IID.bitd))
+            .Or(AdvMathInstruction(IID.biti))
+            .Or(AdvMathInstruction(IID.exp))
+            .Or(AdvMathInstruction(IID.cos))
+            .Or(AdvMathInstruction(IID.sin))
+
+        ;
 
         public virtual Parser<IInputToken[]> ManyParser => (
                 from many in
@@ -320,6 +341,22 @@
                 from cell1 in RefToken
                 from cell2 in RefToken
                 select new InstructionExpression(Instruction.Summon(id, cell0.Cell, cell1.Cell, cell2.Cell)))
+            .Token()
+            .WithPosition()
+            .Named($"{id} expression");
+
+        public virtual Parser<IInputToken> AdvMathInstruction(IID id) => (
+                from dword in InstructionToken(id)
+                from cell0 in RefToken
+                select new InstructionExpression(Instruction.Summon(id, cell0.Cell)))
+            .Token()
+            .WithPosition()
+            .Named($"{id} expression");
+        public virtual Parser<IInputToken> Adv2MathInstruction(IID id) => (
+                from dword in InstructionToken(id)
+                from cell0 in RefToken
+                from cell1 in RefToken
+                select new InstructionExpression(Instruction.Summon(id, cell0.Cell, cell1.Cell)))
             .Token()
             .WithPosition()
             .Named($"{id} expression");

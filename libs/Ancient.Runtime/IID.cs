@@ -1,80 +1,5 @@
 ﻿namespace ancient.runtime
 {
-    using System;
-    using System.Linq;
-
-    [AttributeUsage(AttributeTargets.Field)]
-    public class OpCodeAttribute : Attribute
-    {
-        private readonly bool _isIgnore;
-        public readonly short OpCode;
-        public OpCodeAttribute(short op) => OpCode = op;
-        public OpCodeAttribute(bool isIgnore)
-        {
-            _isIgnore = isIgnore;
-            OpCode = short.MinValue;
-        }
-    }
-
-    public class UnfCode : OpCodeAttribute
-    {
-        public UnfCode() : base(true)
-        {
-        }
-    }
-
-    public static class InsIDEx
-    {
-        public static short getOpCode(this IID id)
-        {
-            var member = typeof(IID).GetMember(id.ToString()).FirstOrDefault(m => m.DeclaringType == typeof(IID));
-
-            if(member is null)
-                throw new InvalidOperationException();
-
-
-            var attr = member.GetCustomAttributes(typeof(OpCodeAttribute), false).FirstOrDefault() as OpCodeAttribute;
-
-            if(attr is null)
-                throw new 
-                    InvalidOperationException(
-                        $"Field '{id}' of type '{nameof(IID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
-
-            return attr.OpCode;
-        }
-        public static IID getInstruction(this ushort id)
-        {
-            var member = typeof(IID).GetMembers().Where(m => m.DeclaringType == typeof(IID));
-
-            if (member is null)
-                throw new InvalidOperationException();
-
-
-            var attr = member.Select(x => new { x , atr= x.GetCustomAttributes(typeof(OpCodeAttribute), true).FirstOrDefault() as OpCodeAttribute });
-
-            if (attr is null)
-                throw new
-                    InvalidOperationException(
-                        $"Field '{id}' of type '{nameof(IID)}' not found '{nameof(OpCodeAttribute)}' attribute. ");
-
-            foreach (var op in attr)
-            {
-                if(op.atr is null)
-                    continue;
-                if (op.atr.OpCode == id)
-                    return (IID)Enum.Parse(typeof(IID), op.x.Name, true);
-            }
-
-            return IID.halt;
-        }
-    }
-
-    public class IIDAliase : Attribute
-    {
-        public readonly IID[] IID;
-
-        public IIDAliase(params IID[] iid) => IID = iid;
-    }
     public enum IID : short
     {
         [OpCode(0x0A)] warm,
@@ -112,6 +37,15 @@
         // 1x, abs, acos, atan, acosh, atanh, asin, asinh, cbrt, cell, cos, cosh, flr, exp, log, log10, tan, tanh, trc, bitd, biti
         // 2x, atan2, min, max
 
+
+        [OpCode(0xCA)] add, 
+        [OpCode(0xCB)] sub,
+        [OpCode(0xCC)] div, 
+        [OpCode(0xCD)] mul,
+
+        [OpCode(0xCE)] pow, 
+        [OpCode(0xCF)] sqrt,
+
         [OpCode(0xD0)] abs, 
         [OpCode(0xD1)] acos, 
         [OpCode(0xD2)] atan,
@@ -136,15 +70,9 @@
         [OpCode(0xE4)] atan2,
         [OpCode(0xE5)] min,
         [OpCode(0xE6)] max,
+        [OpCode(0xE7)] sin,
+        [OpCode(0xE8)] sinh,
 
-        [OpCode(0xE7)] pow, 
-        [OpCode(0xE8)] sqrt,
-
-
-        [OpCode(0xE9)] add, 
-        [OpCode(0xEA)] sub,
-        [OpCode(0xEB)] div, 
-        [OpCode(0xEC)] mul,
         
     }
 }
