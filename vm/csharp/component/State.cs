@@ -224,33 +224,35 @@
                     if(mem[0x18] != 0x0) bus.cpu.halt(0xA9);
                     trace($"call [0xD0..0xE8]::0x{iid:X}");
                     var result = iid switch {
-                        0xD0 => f32i64 & Abs(i64f32 & mem[r1]),
-                        0xD1 => f32i64 & Acos(i64f32 & mem[r1]),
-                        0xD2 => f32i64 & Atan(i64f32 & mem[r1]),
-                        0xD3 => f32i64 & Acosh(i64f32 & mem[r1]),
-                        0xD4 => f32i64 & Atanh(i64f32 & mem[r1]),
-                        0xD5 => f32i64 & Asin(i64f32 & mem[r1]),
-                        0xD6 => f32i64 & Asinh(i64f32 & mem[r1]),
-                        0xD7 => f32i64 & Cbrt(i64f32 & mem[r1]),
+                        0xD0 => f32i64 & Abs    (i64f32 & mem[r1]),
+                        0xD1 => f32i64 & Acos   (i64f32 & mem[r1]),
+                        0xD2 => f32i64 & Atan   (i64f32 & mem[r1]),
+                        0xD3 => f32i64 & Acosh  (i64f32 & mem[r1]),
+                        0xD4 => f32i64 & Atanh  (i64f32 & mem[r1]),
+                        0xD5 => f32i64 & Asin   (i64f32 & mem[r1]),
+                        0xD6 => f32i64 & Asinh  (i64f32 & mem[r1]),
+                        0xD7 => f32i64 & Cbrt   (i64f32 & mem[r1]),
                         0xD8 => f32i64 & Ceiling(i64f32 & mem[r1]),
-                        0xD9 => f32i64 & Cos(i64f32 & mem[r1]),
-                        0xDA => f32i64 & Cosh(i64f32 & mem[r1]),
+                        0xD9 => f32i64 & Cos    (i64f32 & mem[r1]),
+                        0xDA => f32i64 & Cosh   (i64f32 & mem[r1]),
                        
-                        0xDB => f32i64 & Floor(i64f32 & mem[r1]),
-                        0xDC => f32i64 & Exp(i64f32 & mem[r1]),
-                        0xDD => f32i64 & Log(i64f32 & mem[r1]),
-                        0xDE => f32i64 & Log10(i64f32 & mem[r1]),
-                        0xDF => f32i64 & Tan(i64f32 & mem[r1]),
-                        0xE0 => f32i64 & Tanh(i64f32 & mem[r1]),
+                        0xDB => f32i64 & Floor  (i64f32 & mem[r1]),
+                        0xDC => f32i64 & Exp    (i64f32 & mem[r1]),
+                        0xDD => f32i64 & Log    (i64f32 & mem[r1]),
+                        0xDE => f32i64 & Log10  (i64f32 & mem[r1]),
+                        0xDF => f32i64 & Tan    (i64f32 & mem[r1]),
+                        0xE0 => f32i64 & Tanh   (i64f32 & mem[r1]),
+                        
+                        0xE4 => f32i64 & Atan2  (i64f32 & mem[r1], i64f32 & mem[r2]),
+                        0xE5 => f32i64 & Min    (i64f32 & mem[r1], i64f32 & mem[r2]),
+                        0xE6 => f32i64 & Max    (i64f32 & mem[r1], i64f32 & mem[r2]),
+
+                        0xE7 => f32i64 & Sin    (i64f32 & mem[r1]),
+                        0xE8 => f32i64 & Sinh   (i64f32 & mem[r1]),
+
                         0xE1 => f32i64 & Truncate(i64f32 & mem[r1]),
                         0xE2 => f32i64 & BitDecrement(i64f32 & mem[r1]),
                         0xE3 => f32i64 & BitIncrement(i64f32 & mem[r1]),
-                        0xE4 => f32i64 & Atan2(i64f32 & mem[r1], i64f32 & mem[r2]),
-                        0xE5 => f32i64 & Min(i64f32 & mem[r1], i64f32 & mem[r2]),
-                        0xE6 => f32i64 & Max(i64f32 & mem[r1], i64f32 & mem[r2]),
-
-                        0xE7 => f32i64 & Sin(i64f32 & mem[r1]),
-                        0xE8 => f32i64 & Sinh(i64f32 & mem[r1]),
                     };
                     /* @stack-forward-flag */
                     if (sf)  stack.Push(result);
