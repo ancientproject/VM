@@ -42,7 +42,6 @@ namespace vm_test
             load(mem);
 
             shot(12 - 2);
-
             Assert.AreEqual((15.14f - 5.52f), State.i64f32 & state.mem[0x3]);
             Assert.AreEqual(15.14f * 5.52f, State.i64f32 & state.mem[0x4]);
             Assert.AreEqual(15.14f / 5.52f, State.i64f32 & state.mem[0x5]);

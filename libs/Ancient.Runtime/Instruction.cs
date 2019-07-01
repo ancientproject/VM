@@ -9,10 +9,17 @@
     [DebuggerDisplay("{ToString()}")]
     public abstract class Instruction : OpCode
     {
-        public IID ID { get; }
-        public short OPCode { get; }
+        public IID ID { get; protected set; }
+        public short OPCode { get; protected set; }
 
+        protected Instruction() { }
         protected Instruction(IID id)
+        {
+            ID = id;
+            OPCode = id.getOpCode();
+        }
+
+        public void SetOpCode(IID id)
         {
             ID = id;
             OPCode = id.getOpCode();
@@ -49,7 +56,6 @@
         public override byte[] GetBodyILBytes() => BitConverter.GetBytes(Assembly());
         public override string ToString() => $"{ID} [{string.Join(" ", GetBodyILBytes().Select(x => x.ToString("X2")))}]";
 
-        public List<string> Single = new List<string>(new []{"28"});
 
         public void SetRegisters(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0,
             byte x2 = 0)
@@ -67,7 +73,6 @@
 
         protected abstract void OnCompile();
 
-        public static readonly object Guarder = new object();
 
         public static Instruction Summon(IID id, params object[] args)
         {
@@ -93,6 +98,7 @@
                         return Activator.CreateInstance(t, args, null) as T;
                     return default;
                 }
+
                 if(!args.Any())
                     args = @class.GetConstructors().First().GetParameters().Select(@default).ToArray();
                 var inst = Activate<Instruction>(@class, args);

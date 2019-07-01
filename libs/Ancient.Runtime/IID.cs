@@ -68,17 +68,20 @@
             return IID.halt;
         }
     }
+
+    public class IIDAliase : Attribute
+    {
+        public readonly IID[] IID;
+
+        public IIDAliase(params IID[] iid) => IID = iid;
+    }
     public enum IID : short
     {
-        [OpCode(0xA)] warm,
-        [OpCode(0xD)] halt,
+        [OpCode(0x0A)] warm,
+        [OpCode(0x0D)] halt,
 
         [OpCode(0x01)] ldi,
         [OpCode(0x01)] ldx,
-
-        [OpCode(0x02)] add, [OpCode(0x04)] sub,
-        [OpCode(0x06)] div, [OpCode(0x05)] mul,
-        [OpCode(0x07)] pow, [OpCode(0x07)] sqrt,
 
         [OpCode(0x0F)] mva, [OpCode(0x0F)] mvd,
         [OpCode(0x0F)] mvx, [OpCode(0xA2)] mvt,
@@ -104,6 +107,44 @@
         [OpCode(0xA6)] ret,
 
         [OpCode(0xB1)] inc,
-        [OpCode(0xB2)] dec
+        [OpCode(0xB2)] dec,
+
+        // 1x, abs, acos, atan, acosh, atanh, asin, asinh, cbrt, cell, cos, cosh, flr, exp, log, log10, tan, tanh, trc, bitd, biti
+        // 2x, atan2, min, max
+
+        [OpCode(0xD0)] abs, 
+        [OpCode(0xD1)] acos, 
+        [OpCode(0xD2)] atan,
+        [OpCode(0xD3)] acosh, 
+        [OpCode(0xD4)] atanh, 
+        [OpCode(0xD5)] asin, 
+        [OpCode(0xD6)] asinh,
+        [OpCode(0xD7)] cbrt,
+        [OpCode(0xD8)] cell,
+        [OpCode(0xD9)] cos,
+        [OpCode(0xDA)] cosh,
+        [OpCode(0xDB)] flr,
+        [OpCode(0xDC)] exp,
+        [OpCode(0xDD)] log,
+        [OpCode(0xDE)] log10,
+        [OpCode(0xDF)] tan,
+        [OpCode(0xE0)] tanh,
+        [OpCode(0xE1)] trc,
+        [OpCode(0xE2)] bitd,
+        [OpCode(0xE3)] biti, 
+
+        [OpCode(0xE4)] atan2,
+        [OpCode(0xE5)] min,
+        [OpCode(0xE6)] max,
+
+        [OpCode(0xE7)] pow, 
+        [OpCode(0xE8)] sqrt,
+
+
+        [OpCode(0xE9)] add, 
+        [OpCode(0xEA)] sub,
+        [OpCode(0xEB)] div, 
+        [OpCode(0xEC)] mul,
+        
     }
 }

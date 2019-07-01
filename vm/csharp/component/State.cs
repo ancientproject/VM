@@ -242,35 +242,6 @@
                     trace($"ldx 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
                     mem[((r1 << 4) | r2)] = i64 & ((u1 << 4) | u2);
                     break;
-                case 0x2:
-                    trace($"sum 0x{r2:X}, 0x{r3:X}");
-                    if (ff)
-                        mem[r1] = f32i64 & (i64f32 & mem[r2]) + (i64f32 & mem[r3]);
-                    else
-                        mem[r1] = mem[r2] + mem[r3];
-                    break;
-                case 0x4:
-                    trace($".sub 0x{r2:X}, 0x{r3:X}");
-                    if (ff)
-                        mem[r1] = f32i64 & (i64f32 & mem[r2]) - (i64f32 & mem[r3]);
-                    else
-                        mem[r1] = mem[r2] - mem[r3];
-                    break;
-                case 0x5:
-                    trace($".mul 0x{r2:X}, 0x{r3:X}");
-                    if (ff)
-                        mem[r1] = f32i64 & (i64f32 & mem[r2]) * (i64f32 & mem[r3]);
-                    else
-                        mem[r1] = mem[r2] * mem[r3];
-                    break;
-                case 0x6: // 0x6123000 & 0xffff6123Cfff
-                    trace($".div 0x{r2:X}, 0x{r3:X}");
-                    _ = (mem[r3], ff) switch {
-                        (0x0, _    ) => bus.cpu.halt(0xC),
-                        (_  , false) => mem[r1] = mem[r2] / mem[r3],
-                        (_  , true ) => mem[r1] = f32i64 & (i64f32 & mem[r2]) / (i64f32 & mem[r3])
-                    };
-                    break;
                 case 0x3: // 0x3120000
                     trace($".swap 0x{r1:X}, 0x{r2:X}");
                     mem[r1] ^= mem[r2];
@@ -383,15 +354,44 @@
                     break;
 
                 #endregion
-                #region legacy
-                case 0x7 when u2 == 0xA:
+                #region math
+                case 0xE9:
+                    trace($"sum 0x{r2:X}, 0x{r3:X}");
+                    if (ff)
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) + (i64f32 & mem[r3]);
+                    else
+                        mem[r1] = mem[r2] + mem[r3];
+                    break;
+                case 0xEA:
+                    trace($".sub 0x{r2:X}, 0x{r3:X}");
+                    if (ff)
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) - (i64f32 & mem[r3]);
+                    else
+                        mem[r1] = mem[r2] - mem[r3];
+                    break;
+                case 0xEC:
+                    trace($".mul 0x{r2:X}, 0x{r3:X}");
+                    if (ff)
+                        mem[r1] = f32i64 & (i64f32 & mem[r2]) * (i64f32 & mem[r3]);
+                    else
+                        mem[r1] = mem[r2] * mem[r3];
+                    break;
+                case 0xEB:
+                    trace($".div 0x{r2:X}, 0x{r3:X}");
+                    _ = (mem[r3], ff) switch {
+                        (0x0, _    ) => bus.cpu.halt(0xC),
+                        (_  , false) => mem[r1] = mem[r2] / mem[r3],
+                        (_  , true ) => mem[r1] = f32i64 & (i64f32 & mem[r2]) / (i64f32 & mem[r3])
+                        };
+                    break;
+                case 0xE8A:
                     trace($"sqrt 0x{r2:X}");
                     if (ff)
                         mem[r1] = f32i64 & MathF.Sqrt(i64f32 & mem[r2]);
                     else
                         mem[r1] = (uint)Math.Sqrt(mem[r2]);
                     break;
-                case 0x7 when u2 == 0x9:
+                case 0xE7:
                     trace($".pow 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & MathF.Pow(i64f32 & mem[r2], i64f32 & mem[r3]);
