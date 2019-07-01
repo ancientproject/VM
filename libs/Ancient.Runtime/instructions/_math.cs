@@ -17,9 +17,18 @@
         public mul(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.mul) { }
     }
 
-    public class pow : _math
+    public class pow : Instruction
     {
-        public pow(byte cell, byte ref1, byte ref2) : base(cell, ref1, ref2, IID.pow) { }
+        internal readonly byte _cell;
+        private readonly byte _ref1;
+        private readonly byte _ref2;
+        public pow(byte cell, byte ref1, byte ref2) : base(IID.pow)
+        {
+            _cell = cell;
+            _ref1 = ref1;
+            _ref2 = ref2;
+        }
+        protected override void OnCompile() => SetRegisters(_cell, _ref1, _ref2, u2: 0x9);
     }
     public class sqrt : Instruction
     {
@@ -32,7 +41,7 @@
             _ref1 = ref1;
         }
         protected override void OnCompile() 
-            => SetRegisters(_cell, _ref1);
+            => SetRegisters(_cell, _ref1, u2: 0xA);
     }
 
     public abstract class _math : Instruction
