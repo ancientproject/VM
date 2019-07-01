@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using dev.Internal;
@@ -390,7 +391,7 @@
                     else
                         mem[r1] = (uint)Math.Sqrt(mem[r2]);
                     break;
-                case 0x7 when u2 == 0x0:
+                case 0x7 when u2 == 0x9:
                     trace($".pow 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & MathF.Pow(i64f32 & mem[r2], i64f32 & mem[r3]);
@@ -467,6 +468,7 @@
         {
             if(tc)
                 WriteLine(str);
+            Trace.WriteLine(str);
             OnTrace?.Invoke(str);
         }
 
