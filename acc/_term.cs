@@ -79,16 +79,23 @@
             static LogEntry MakeDiagnostic(LogEntry entry) => 
                 DiagnosticExtractor.Transform(entry, new Text("program"));
 
-            ILog log = TerminalLog.Acquire().WithRenderers(new HighlightedSourceRenderer(5));
-            log = new Pixie.TransformLog(
-                log,
-                new Func<LogEntry, LogEntry>[]
-                {
-                    MakeDiagnostic
-                });
+            ILog log = TerminalLog.
+                Acquire().
+                WithRenderers(new HighlightedSourceRenderer(10, Colors.Red));
+
+            log = new TransformLog(log, new Func<LogEntry, LogEntry>[] { MakeDiagnostic });
+
             foreach (Match match in new Regex(@"\;.*").Matches(source))
                 source = source.Replace(match.Value, match.Value.Pastel(Color.DarkOliveGreen));
-                        
+
+            // shit-code, fucking bug Pixie
+
+            var bgColor = Color.FromName($"{BackgroundColor}");
+            source = source.Replace("\n", $"{"-".Pastel(bgColor)}\n");
+
+            // end shit-code
+
+
             var col = error.ErrorResult.Remainder.Column;
             var lin = error.ErrorResult.Remainder.Line;
             var exp = error.ErrorResult.Expectations.First();
@@ -100,8 +107,7 @@
             var ctorNameOffset = source.IndexOf(fuck, StringComparison.InvariantCultureIgnoreCase);
 
             var doc2 = new StringDocument("", source);
-            var highlightRegion = new SourceRegion(new SourceSpan(doc2, ctorStartOffset, nestedLine.Length))
-                .ExcludeCharacters(char.IsWhiteSpace);
+            var highlightRegion = new SourceRegion(new SourceSpan(doc2, ctorStartOffset, nestedLine.Length));
 
             var focusRegion = new SourceRegion(
                 new SourceSpan(doc2, ctorNameOffset, fuck.Length));
