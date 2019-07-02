@@ -212,13 +212,12 @@
                 bus.debugger.handleBreak(u16 & pc, bus.cpu);
                 mem[0x17] = 0x0;
             }
-            trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
            
             switch (iid)
             {
                 case ushort opcode when opcode.In(0xD0..0xE8):
                     /* need @float-flag */
-                    if(mem[0x18] != 0x0) bus.cpu.halt(0xA9);
+                    if(!ff) bus.cpu.halt(0xA9);
                     trace($"call :: [0xD0..0xE8]::0x{iid:X}");
                     var result = iid switch {
                         0xD0 => f32i64 & Abs    (i64f32 & mem[r1]),
@@ -314,7 +313,7 @@
                 case 0xA5: /* @sig */
                     stack.Push(mem[r2] = i64 & pc);
                     var frag = default(ulong?);
-                    while (AcceptOpCode(frag) != IID.ret.getOpCode())
+                    while (AcceptOpCode(frag) != 0xA6 /* @ret */)
                     {
                         var pc_r = stack.Pop();
                         frag = next(i64 | pc_r++);
@@ -427,7 +426,7 @@
                         (0x0, _    ) => bus.cpu.halt(0xC),
                         (_  , false) => mem[r1] = mem[r2] / mem[r3],
                         (_  , true ) => mem[r1] = f32i64 & (i64f32 & mem[r2]) / (i64f32 & mem[r3])
-                        };
+                    };
                     break;
                 case 0xCD:
                     trace($"call :: mul 0x{r2:X}, 0x{r3:X}");

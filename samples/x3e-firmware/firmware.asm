@@ -17,7 +17,7 @@
 
 ; |x arctan(x) cos(x)|
 .cos &(![~buffer])
-.atan &(![~buffer])
+.atan &(![~bufferd)
 
 .pull &(0x2) 
 .pull &(0x3)
@@ -27,7 +27,7 @@
 .ldi &(0x3) <| $(![~false])
 .swap &(0x1) &(0x2)
 .mul &(![~buffer]) &(![~buffer]) &(0x1)
-.ldx &(![~fast_forward]) &(![~true])
+.ldx &(![~fast_forward]) <| $(![~true])
 .abs &(![~buffer])
 ; result in ~buffer cell
 .brk_s

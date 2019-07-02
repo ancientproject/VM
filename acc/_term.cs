@@ -2,16 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
-    using System.Text.RegularExpressions;
+    using System.Text;
     using emit;
     using Pastel;
     using Pixie;
     using Pixie.Code;
     using Pixie.Markup;
     using Pixie.Terminal;
+    using Pixie.Terminal.Devices;
     using Pixie.Terminal.Render;
-    using Pixie.Transforms;
     using runtime;
     using tokens;
     using static System.Console;
@@ -54,9 +55,12 @@
         {
             try
             {
+                indexMiddle -= 1;
                 var str = new List<char>();
                 for (var i = indexMiddle; i != indexMiddle + count + 1; i++)
                 {
+                    if(value.Length <= i)
+                        break;
                     if(value[i] == ' ' && isStopWhenEmptySpace)
                         break;
                     str.Add(value[i]);
@@ -69,57 +73,67 @@
                 }
                 return string.Join("", str.ToArray());
             }
-            catch
+            catch (Exception e)
             {
                 return value;
             }
         }
+
+        #region shit-code
+
         public static void Error<T>(ErrorToken<T> error, string source)
         {
-            static LogEntry MakeDiagnostic(LogEntry entry) => 
-                DiagnosticExtractor.Transform(entry, new Text("program"));
-
-            ILog log = TerminalLog.
-                Acquire().
-                WithRenderers(new HighlightedSourceRenderer(10, Colors.Red));
-
-            log = new TransformLog(log, new Func<LogEntry, LogEntry>[] { MakeDiagnostic });
-
-            foreach (Match match in new Regex(@"\;.*").Matches(source))
-                source = source.Replace(match.Value, match.Value.Pastel(Color.DarkOliveGreen));
-
-            // shit-code, fucking bug Pixie
-
-            var bgColor = Color.FromName($"{BackgroundColor}");
-            source = source.Replace("\n", $"{"-".Pastel(bgColor)}\n");
-
-            // end shit-code
-
-
+            lock(Guarder) { }
             var col = error.ErrorResult.Remainder.Column;
             var lin = error.ErrorResult.Remainder.Line;
             var exp = error.ErrorResult.Expectations.First();
             var rem = error.ErrorResult.Remainder.Current;
 
             var nestedLine = source.Split('\n')[lin-1];
-            var fuck = getFromMiddle(nestedLine, col, 2, true);
-            var ctorStartOffset = source.IndexOf(nestedLine, StringComparison.InvariantCultureIgnoreCase);
-            var ctorNameOffset = source.IndexOf(fuck, StringComparison.InvariantCultureIgnoreCase);
+            var fuck = getFromMiddle(nestedLine, col, nestedLine.Length - col, true);
+            var startOffset = source.IndexOf(nestedLine, StringComparison.InvariantCultureIgnoreCase);
+            var nameOffset = (startOffset + col - 1);
 
             var doc2 = new StringDocument("", source);
-            var highlightRegion = new SourceRegion(new SourceSpan(doc2, ctorStartOffset, nestedLine.Length));
+            var highlightRegion = new SourceRegion(new SourceSpan(doc2, startOffset, nestedLine.Length));
 
             var focusRegion = new SourceRegion(
-                new SourceSpan(doc2, ctorNameOffset, fuck.Length));
+                new SourceSpan(doc2, nameOffset, fuck.Length));
             var title = $"{error.ErrorResult.getWarningCode().To<string>().Pastel(Color.Orange)}";
             var message = $"character '{exp}' expected".Pastel(Color.Orange);
-            log.Log(
-                new LogEntry(
-                    Severity.Error,
-                    "", 
-                    new Text($"{title} - {message}"),
-                    new HighlightedSource(highlightRegion, focusRegion)));
+
+            string Render(MarkupNode node, params NodeRenderer[] extraRenderers)
+            {
+                var writer = new StringWriter();
+                var terminal = new TextWriterTerminal(writer, 160, Encoding.ASCII);
+                var log = new TerminalLog(terminal).WithRenderers(extraRenderers);
+                log.Log(node);
+                return writer.ToString();
+            }
+
+            var result = Render(
+                new HighlightedSource(highlightRegion, focusRegion), 
+                new HighlightedSourceRenderer(3, Colors.Red));
+            WriteLine($" :: {title} - {message}");
+            var ses = result.Split('\n');
+            var flag1 = false;
+            foreach (var (value, index) in ses.Select((value, index) => (value, index)))
+            {
+                var next = ses.Select((value, index) => new {value, index}).FirstOrDefault(x => x.index == index + 1);
+                if (next != null && (next.value.Contains('~') && next.value.Contains('^')) && !flag1)
+                    WriteLine(value.Replace(fuck, fuck.Pastel(Color.Red)));
+                else if (value.Contains('~') && value.Contains('^'))
+                {
+                    if (flag1) 
+                        continue;
+                    WriteLine(value.Pastel(Color.Red));
+                    flag1 = true;
+                }
+                else
+                    WriteLine($"{value} ");
+            }
         }
+        #endregion
         public static void Error(Warning keyCode, string message)
         {
             lock (Guarder)

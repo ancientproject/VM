@@ -130,7 +130,6 @@
                         break;
                     case ErrorEvolveToken error:
                         Error(error, code);
-                        Error(error.ErrorResult.getWarningCode(), error.ErrorResult.ToString());
                         throw new AncientEvolveException(error.ErrorResult.ToString());
                 }
             }

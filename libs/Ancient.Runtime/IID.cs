@@ -28,9 +28,9 @@
         [OpCode(0xC1)] brk_n,
         [OpCode(0xC1)] brk_a,
 
-        [OpCode(0xA4)] inv,
-        [OpCode(0xA5)] sig, 
-        [OpCode(0xA6)] ret,
+        //[OpCode(0xA4)] inv,
+        //[OpCode(0xA5)] sig, 
+        //[OpCode(0xA6)] ret,
 
         [OpCode(0xB1)] inc,
         [OpCode(0xB2)] dec,
