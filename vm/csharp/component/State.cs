@@ -19,9 +19,6 @@
         public State(Bus bus) => this.bus = bus;
 
         
-
-        
-
         #region Registers
         public ShadowCache<Cache> Registers = ShadowCacheFactory.Create();
         public ulong pc
@@ -222,7 +219,7 @@
                 case ushort opcode when opcode.In(0xD0..0xE8):
                     /* need @float-flag */
                     if(mem[0x18] != 0x0) bus.cpu.halt(0xA9);
-                    trace($"call [0xD0..0xE8]::0x{iid:X}");
+                    trace($"call :: [0xD0..0xE8]::0x{iid:X}");
                     var result = iid switch {
                         0xD0 => f32i64 & Abs    (i64f32 & mem[r1]),
                         0xD1 => f32i64 & Acos   (i64f32 & mem[r1]),
@@ -272,7 +269,7 @@
                     break;
                 #endregion
                 case 0x1 when x2 == 0x0:
-                    trace($"ldi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
+                    trace($"call :: ldi 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}");
                     _ = u2 switch
                     {
                         0x0 => mem[r1] = u1,
@@ -280,32 +277,38 @@
                     };
                     break;
                 case 0x1 when x2 == 0xA:
-                    trace($"ldx 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
+                    trace($"call :: ldx 0x{u1:X}, 0x{u2:X} -> 0x{r1:X}-0x{r2:X}");
                     mem[((r1 << 4) | r2)] = i64 & ((u1 << 4) | u2);
                     break;
                 case 0x3: // 0x3120000
-                    trace($".swap 0x{r1:X}, 0x{r2:X}");
+                    trace($"call :: swap, 0x{r1:X}, 0x{r2:X}");
                     mem[r1] ^= mem[r2];
                     mem[r2] =  mem[r1] ^ mem[r2];
                     mem[r1] ^= mem[r2];
                     break;
                 case 0xF when x2 == 0xE: // 0xF9988E0
-                    trace($".mv_u4 0x{r1:X} -> 0x{r2:X} -> 0x{u1:X}");
+                    trace($"call :: move, 0x{r1:X} -> 0x{r2:X} -> 0x{u1:X}");
                     bus.Find(r1 & 0xFF).write(r2 & 0xFF, i32 & mem[u1] & 0xFF);
                     break;
                 case 0xF when x2 == 0xC: // 0xF00000C
-                    trace($"mv_u8 0x{r1:X} -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
+                    trace($"call :: move, 0x{r1:X} -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
                     bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
+                case 0xA4:
+                    trace($"call :: rfd 0x{r1:X}, 0x{r2:X}");
+                    stack.Push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
+                    break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
-                    trace($"ref_t 0x{r1:X}");
+                    trace($"call :: ref_t 0x{r1:X}");
                     mem[r1] = i64 & pc;
                     break;
                 case 0xA0:
+                    trace($"call :: orb '{r1}' times");
                     for (var i = pc + r1; pc != i;)
                         stack.Push(i64 & fetch());
                     break;
                 case 0xA1:
+                    trace($"call :: pull -> 0x{r1:X}");
                     mem[r1] = stack.Pop();
                     break;
                 case 0xA5: /* @sig */
@@ -321,14 +324,19 @@
                     }
                     mem[r2 + 1] = stack.Pop();
                     break;
-                case 0xB1: mem[r1]++; break; /* @inc */
-                case 0xB2: mem[r1]--; break; /* @dec */
+                case 0xB1: /* @inc */
+                    trace($"call :: increment 0x{r1:X}++");
+                    unchecked { mem[r1]++; } 
+                    break; 
+                case 0xB2:  /* @dec */
+                    trace($"call :: decrement 0x{r1:X}--");
+                    unchecked { mem[r1]--; } 
+                    break; 
 
 
                 #region debug
 
-                case 0xF when x2 == 0xF: // mvx
-                    trace($"mvx 0x{r1:X} 0x{r2:X} 0x{u1:X}");
+                case 0xF when x2 == 0xF:
                     var x = mem[u1].ToString();
 
                     if (ff)
@@ -350,13 +358,16 @@
                     break;
 
                 case 0xC1 when x2 == 0x1: /* @break :: now */
+                    trace($"[0x{iid:X}] @break :: now");
                     bus.debugger.handleBreak(u16 & pc, bus.cpu);
                     mem[0x17] = 0x0;
                     break;
                 case 0xC1 when x2 == 0x2: /* @break :: next */
+                    trace($"[0x{iid:X}] @break :: next");
                     mem[0x17] = 0x1;
                     break;
                 case 0xC1 when x2 == 0x3: /* @break :: after */
+                    trace($"[0x{iid:X}] @break :: after");
                     mem[0x17] = 0x3;
                     break;
                 #endregion
@@ -395,24 +406,23 @@
                     break;
 
                 #endregion
-                // 0xD0-0xEC
                 #region math 
                 case 0xCA:
-                    trace($"sum 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: sum 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & (i64f32 & mem[r2]) + (i64f32 & mem[r3]);
                     else
                         mem[r1] = mem[r2] + mem[r3];
                     break;
                 case 0xCB:
-                    trace($".sub 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: sub 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & (i64f32 & mem[r2]) - (i64f32 & mem[r3]);
                     else
                         mem[r1] = mem[r2] - mem[r3];
                     break;
                 case 0xCC:
-                    trace($".div 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: div 0x{r2:X}, 0x{r3:X}");
                     _ = (mem[r3], ff) switch {
                         (0x0, _    ) => bus.cpu.halt(0xC),
                         (_  , false) => mem[r1] = mem[r2] / mem[r3],
@@ -420,7 +430,7 @@
                         };
                     break;
                 case 0xCD:
-                    trace($".mul 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: mul 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & (i64f32 & mem[r2]) * (i64f32 & mem[r3]);
                     else
@@ -428,14 +438,14 @@
                     break;
                 
                 case 0xCE:
-                    trace($".pow 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: pow 0x{r2:X}, 0x{r3:X}");
                     if (ff)
                         mem[r1] = f32i64 & Pow(i64f32 & mem[r2], i64f32 & mem[r3]);
                     else
                         mem[r1] = (uint)Math.Pow(mem[r2], mem[r3]);
                     break;
                 case 0xCF:
-                    trace($"sqrt 0x{r2:X}");
+                    trace($"call :: sqrt 0x{r2:X}");
                     if (ff)
                         mem[r1] = f32i64 & Sqrt(i64f32 & mem[r2]);
                     else
@@ -444,8 +454,8 @@
                 
                 #endregion
                 default:
-                    Error(
-                        $"Unk OpCode: {iid:X2} {Environment.NewLine}0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
+                    bus.cpu.halt(0xFC);
+                    Error($"call :: unknown opCode -> {iid:X2}");
                     break;
             }
 

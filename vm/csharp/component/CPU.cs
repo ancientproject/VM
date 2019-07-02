@@ -72,8 +72,11 @@
                 case 0xA1:
                     Error($"HALT: Overflow exception.");
                     break;
+                case 0xFC:
+                    Error($"HALT: Invalid Opcode.");
+                    break;
                 case 0xA9:
-                    Error($"HALT: x9 float exception");
+                    Error($"HALT: x87 float exception");
                     break;
                 default:
                     Error($"HALT: Unknown state 0x{reason:X}");
