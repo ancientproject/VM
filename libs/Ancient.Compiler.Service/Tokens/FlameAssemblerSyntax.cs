@@ -32,7 +32,7 @@
             .Or(LoadI)
             .Or(LoadI_X)
             .Or(LoadI_S)
-            .Or(OuT)
+            .Or(RFD)
             //etc
             .Or(StageN)
             .Or(NValue)
@@ -296,13 +296,13 @@
             .Token()
             .WithPosition()
             .Named("swap expression");
-        public virtual Parser<IInputToken> OuT =>
-            (from dword in InstructionToken(IID.mvt)
+        public virtual Parser<IInputToken> RFD =>
+            (from dword in InstructionToken(IID.rfd)
                 from cell1 in RefToken
                 from cell2 in RefToken
                 from op2 in PipeLeft
                 from cell3 in RefToken
-                select new InstructionExpression(new mvt(cell1.Cell, cell2.Cell, cell3.Cell)))
+                select new InstructionExpression(new rfd(cell1.Cell, cell2.Cell)))
             .Token()
             .WithPosition()
             .Named("mva expression");
