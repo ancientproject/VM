@@ -4,7 +4,6 @@
     using System.Diagnostics;
     using System.Threading;
     using dev;
-    using static State;
     public class BIOS : AbstractDevice
     {
         private readonly CPU _cpu;
@@ -12,7 +11,7 @@
         public Stopwatch systemTimer;
         private DateTime startTime;
 
-        private ulong[] mem = new ulong[32];
+        private readonly ulong[] mem = new ulong[32];
 
         public bool hpet
         {
@@ -29,18 +28,18 @@
             _bus = bus;
         }
 
-        public override int read(int address) => (address, _bus.State.ff) switch
+        public override long read(long address) => (address, _bus.State.ff) switch
             {
                 (0x0, _) => unchecked((int)Ticks),
             _        => throw ThrowMemoryRead(_bus.State.curAddr, address)
             };
 
-        public override void write(int address, int data)
+        public override void write(long address, long data)
         {
             _ = address switch {
                 0x1 => X(() => hpet = data == 0x1),
                 0xF => X(Init),
-                0xD => X(() => Thread.Sleep(data)),
+                0xD => X(() => Thread.Sleep((int)data)),
                 _   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
         }

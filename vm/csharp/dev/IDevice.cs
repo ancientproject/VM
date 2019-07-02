@@ -4,10 +4,10 @@
     {
         string Name { get; }
         short StartAddress { get; }
-        void write(int address, int data);
-        int read(int address);
+        void write(long address, long data);
+        long read(long address);
 
-        int this[int address] { get; set; }
+        long this[long address] { get; set; }
 
         void Init();
         void Shutdown();

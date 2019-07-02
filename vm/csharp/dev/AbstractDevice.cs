@@ -17,16 +17,16 @@
             Name = name;
         }
 
-        public int this[int address]
+        public long this[long address]
         {
             get => read(address);
             set => write(address, value);
         }
 
-        public virtual void write(int address, int data) =>
+        public virtual void write(long address, long data) =>
             (this as IDevice).WriteMemory(address, data);
 
-        public virtual int read(int address) 
+        public virtual long read(long address) 
             => throw new DeviceReadonlyException();
 
         public virtual void Init() { }
@@ -45,10 +45,10 @@
             Name.GetHashCode() ^ 42;
 
 
-        protected CorruptedMemoryException ThrowMemoryWrite(ulong curAddr, int toAddr) => 
-            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X4}. Memory could not be write.");
-        protected CorruptedMemoryException ThrowMemoryRead(ulong curAddr, int toAddr) => 
-            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X4}. Memory could not be read.");
+        protected CorruptedMemoryException ThrowMemoryWrite(ulong curAddr, long toAddr) => 
+            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X}. Memory could not be write.");
+        protected CorruptedMemoryException ThrowMemoryRead(ulong curAddr, long toAddr) => 
+            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X}. Memory could not be read.");
 
     }
 }
