@@ -13,6 +13,8 @@
                     || sourceType == typeof(ushort)
                     || sourceType == typeof(sbyte)
                     || sourceType == typeof(uint)
+                    || sourceType == typeof(long)
+                    || sourceType == typeof(ulong)
                     || base.CanConvertFrom(context, sourceType));
         }
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
@@ -23,6 +25,8 @@
                 return (char)s;
             if (value is byte b)
                 return (char)b;
+            if (value is long l)
+                return (char) l;
             return base.ConvertFrom(context, culture, value);
         }
 
