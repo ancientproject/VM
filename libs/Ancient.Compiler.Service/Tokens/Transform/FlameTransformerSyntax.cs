@@ -41,7 +41,7 @@
             .Named("hex number").Or(RefLabel);
         public virtual Parser<string> RefLabel =>
             (from sym in Parse.String("![~")
-                from name in Parse.LetterOrDigit.Many().Text()
+                from name in Parse.LetterOrDigit.Or(Parse.Char('_')).Many().Text()
                 from end in  Parse.String("]")
                 select name).Token().Named("ref_label token");
         public Parser<IEvolveToken> Evolver =>
