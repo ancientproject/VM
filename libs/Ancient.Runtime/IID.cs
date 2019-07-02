@@ -9,7 +9,8 @@
         [OpCode(0x01)] ldx,
 
         [OpCode(0x0F)] mva, [OpCode(0x0F)] mvd,
-        [OpCode(0x0F)] mvx, [OpCode(0xA2)] mvt,
+        [OpCode(0x0F)] mvx,
+        [OpCode(0xA4)] rfd,
 
         [OpCode(0x03)] swap,
 
