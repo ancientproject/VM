@@ -39,28 +39,8 @@
 
             var core = bus.cpu;
 
-            ulong[] page = {
-                new warm(), 
-                new sig(0x15),
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ldi(0x1, 0x2), 
-                new ret(), 
-                new warm(), 
-
-            };
-
-            core.State.Load(page);
-
-
-            if(true) {}
-            else 
+            //if(true) {}
+            //else 
             //core.State.Load(BIOS._GetILCode().ToArray());
             if (!args.Any())
                 core.State.Load(0xB00B5000);

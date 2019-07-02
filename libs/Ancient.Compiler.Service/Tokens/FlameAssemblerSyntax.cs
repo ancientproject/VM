@@ -58,7 +58,6 @@
             .Or(MathInstruction(IID.pow))
             .Or(SqrtToken)
             // advanced math
-            .Or(Adv2MathInstruction(IID.min)).Or(Adv2MathInstruction(IID.max)).Or(Adv2MathInstruction(IID.atan2))
             .Or(AdvMathInstruction(IID.abs))
             .Or(AdvMathInstruction(IID.acos))
             .Or(AdvMathInstruction(IID.atan))
@@ -85,7 +84,9 @@
             .Or(AdvMathInstruction(IID.inc))
             .Or(AdvMathInstruction(IID.dec))
 
-
+            .Or(Adv2MathInstruction(IID.min))
+            .Or(Adv2MathInstruction(IID.max))
+            .Or(Adv2MathInstruction(IID.atan2))
         ;
 
         public virtual Parser<IInputToken[]> ManyParser => (
@@ -300,8 +301,6 @@
             (from dword in InstructionToken(IID.rfd)
                 from cell1 in RefToken
                 from cell2 in RefToken
-                from op2 in PipeLeft
-                from cell3 in RefToken
                 select new InstructionExpression(new rfd(cell1.Cell, cell2.Cell)))
             .Token()
             .WithPosition()
