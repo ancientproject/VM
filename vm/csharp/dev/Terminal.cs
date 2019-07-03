@@ -61,7 +61,7 @@
         }
 
         [ActionAddress(0x3)]
-        public override void Init() => ClearRel();
+        public override void WarmUp() => ClearRel();
 
         [ActionAddress(0x4)]
         public override void Shutdown() => relMemory = null;

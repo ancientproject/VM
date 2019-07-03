@@ -29,7 +29,7 @@
         public virtual long read(long address) 
             => throw new DeviceReadonlyException();
 
-        public virtual void Init() { }
+        public virtual void WarmUp() { }
 
         public virtual void Shutdown() { }
 

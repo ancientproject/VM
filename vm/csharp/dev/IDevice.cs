@@ -9,7 +9,7 @@
 
         long this[long address] { get; set; }
 
-        void Init();
+        void WarmUp();
         void Shutdown();
     }
 }
