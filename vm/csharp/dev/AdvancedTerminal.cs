@@ -3,7 +3,7 @@
     using System;
     using Internal;
 
-    public class AdvancedTerminal : AbstractDevice
+    public class AdvancedTerminal : Device
     {
         public AdvancedTerminal(short startAddr) : base(startAddr, "24bit-terminal") {}
 

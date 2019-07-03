@@ -9,7 +9,7 @@
     using vm.dev;
     using vm.dev.Internal;
 
-    public class LampBus : AbstractDevice
+    public class LampBus : Device
     {
         private readonly Window _window;
         private readonly LampControl[] _stack;
