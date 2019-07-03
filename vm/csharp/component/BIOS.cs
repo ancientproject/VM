@@ -3,13 +3,14 @@
     using System;
     using System.Diagnostics;
     using System.Threading;
+    using ancient.runtime;
     using dev;
     public class BIOS : AbstractDevice
     {
         private readonly CPU _cpu;
         private readonly Bus _bus;
         public Stopwatch systemTimer;
-        private DateTime startTime;
+        public DateTime startTime;
 
         private readonly ulong[] mem = new ulong[32];
 
@@ -26,6 +27,7 @@
         {
             _cpu = cpu;
             _bus = bus;
+            this.hpet = AppFlag.GetVariable("c69_bios_hpet");
         }
 
         public override long read(long address) => (address, _bus.State.ff) switch
@@ -38,7 +40,7 @@
         {
             _ = address switch {
                 0x1 => X(() => hpet = data == 0x1),
-                0xF => X(Init),
+                0xF => X(WarmUp),
                 0xD => X(() => Thread.Sleep((int)data)),
                 _   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
@@ -50,7 +52,7 @@
             return 0;
         }
 
-        public override void Init()
+        public override void WarmUp()
         {
             systemTimer = Stopwatch.StartNew();
             startTime = DateTime.UtcNow;
