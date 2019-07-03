@@ -71,8 +71,8 @@
             bus.Add(new AdvancedTerminal(0x2));
 
 
-            if(AppFlag.GetVariable("VM_USE_EXTERNAL_DEVICES"))
-                DeviceLoader.Grub(bus.Add, Environment.GetEnvironmentVariable("VM_DEV_IMAGE"));
+            if(AppFlag.GetVariable("VM_USE_EXD"))
+                DeviceLoader.Grub(bus.Add, Environment.GetEnvironmentVariable("VM_DEV_IMAGE")?.Split('|'));
 
             InitializeMemory(bus, args);
 
