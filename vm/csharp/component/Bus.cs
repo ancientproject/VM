@@ -15,7 +15,6 @@
         public Debugger debugger { get; set; }
 
         public List<IDevice> Devices = new List<IDevice>();
-        public int[] boundaries = new int[0];
 
         public bool WarmUpDevices { get; set; } = AppFlag.GetVariable("VM_WARMUP_DEV", true);
         public bool ShutdownDevices { get; set; } = AppFlag.GetVariable("VM_SHUTDOWN_DEV", true);
@@ -30,23 +29,14 @@
         public void Add(IDevice device)
         {
             Devices.Add(device);
-            var newBoundaries = new int[boundaries.Length + 1];
-            Array.Copy(boundaries, 0, newBoundaries, 1, boundaries.Length);
-            newBoundaries[0] = device.startAddress;
-            Array.Sort(newBoundaries);
             Devices.Sort();
-            boundaries = newBoundaries;
             if(WarmUpDevices)
                 device.warmUp();
         }
 
-        public IDevice Find(int address)
-        {
-            var idx = Array.BinarySearch(boundaries, address);
-            if (idx < 0) idx = -idx - 2;
-            if (idx < 0) return new CorruptedDevice(cpu);
-            return Devices[idx];
-        }
+        public IDevice Find(int address) 
+            => Devices.FirstOrDefault(x => x.startAddress == address) 
+               ?? new CorruptedDevice(cpu);
 
         internal void AttachDebugger(Debugger dbg) => this.debugger = dbg;
 
