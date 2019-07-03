@@ -112,7 +112,7 @@
             str.AppendLine("bus:");
 
             foreach (var v in _bus.Devices)
-                str.AppendLine($"\tDevice: {v.Name}, 0x{v.StartAddress:X8}");
+                str.AppendLine($"\tDevice: {v.name}, 0x{v.startAddress:X8}");
 
             str.AppendLine();
 

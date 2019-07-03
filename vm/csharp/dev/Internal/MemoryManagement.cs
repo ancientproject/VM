@@ -4,6 +4,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
+    using ancient.runtime;
     using ancient.runtime.exceptions;
 
     public static class MemoryManagement
@@ -22,7 +23,7 @@
 
         internal static void WriteMemory(this IDevice dev, long address, long memory)
         {
-            var key = $"{dev.Name}-{dev.StartAddress:X}-{address:X}";
+            var key = $"{dev.name}-{dev.startAddress:X}-{address:X}";
             if (FastWrite)
             {
                 if (storage.ContainsKey(key))
@@ -52,11 +53,11 @@
                 }
                 if(method.Method.GetParameters().Length > 1)
                     throw new CorruptedMemoryException(
-                        $"Method '{method.Method.Name}' is not valid signature at calling '0x{method.Address:X}' in '{dev.Name}' device. [too many arg]");
+                        $"Method '{method.Method.Name}' is not valid signature at calling '0x{method.Address:X}' in '{dev.name}' device. [too many arg]");
                 var typeDesc = TypeDescriptor.GetConverter(method.Method.GetParameters().First().ParameterType);
                 if (!typeDesc.CanConvertFrom(typeof(int)))
                     throw new CorruptedMemoryException(
-                        $"Method '{method.Method.Name}' is not valid signature at calling '0x{method.Address:X}' in '{dev.Name}' device. [invalid first arg]");
+                        $"Method '{method.Method.Name}' is not valid signature at calling '0x{method.Address:X}' in '{dev.name}' device. [invalid first arg]");
                 method.Method.Invoke(dev, new[] {typeDesc.ConvertFrom(memory)});
                 var addr = method;
                 addr.IsArgs = true;
@@ -78,7 +79,7 @@
                 prop.prop.SetValue(dev, TypeDescriptor.GetConverter(prop.prop.PropertyType).ConvertFrom(memory));
                 return;
             }
-            throw new CorruptedMemoryException($"Invalid memory address signature '0x{address:X}' in '{dev.Name}' device.");
+            throw new CorruptedMemoryException($"Invalid memory address signature '0x{address:X}' in '{dev.name}' device.");
         }
     }
 }

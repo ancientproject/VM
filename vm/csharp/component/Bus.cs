@@ -32,12 +32,12 @@
             Devices.Add(device);
             var newBoundaries = new int[boundaries.Length + 1];
             Array.Copy(boundaries, 0, newBoundaries, 1, boundaries.Length);
-            newBoundaries[0] = device.StartAddress;
+            newBoundaries[0] = device.startAddress;
             Array.Sort(newBoundaries);
             Devices.Sort();
             boundaries = newBoundaries;
             if(WarmUpDevices)
-                device.WarmUp();
+                device.warmUp();
         }
 
         public IDevice Find(int address)
@@ -53,7 +53,7 @@
         public void Unload()
         {
             if(ShutdownDevices)
-                Devices.Pipe(x => x.Shutdown()).ToArray();
+                Devices.Pipe(x => x.shutdown()).ToArray();
         }
     }
 }

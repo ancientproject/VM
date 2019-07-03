@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\Ancient.Runtime.Context\Ancient.Runtime.Context.csproj" />
     <ProjectReference Include="..\..\libs\Ancient.Runtime\Ancient.Runtime.csproj" />
   </ItemGroup>
 
