@@ -6,13 +6,13 @@
     using System.Reflection;
     using System.Runtime.Loader;
 
-    public class DeviceLoadContext : AssemblyLoadContext
+    public class DeviceImageLoadContext : AssemblyLoadContext
     {
-        public DeviceLoadContext() : base("dev-loader", true) { }
+        public DeviceImageLoadContext() : base("dev-loader", true) { }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            var devName = $"{assemblyName.FullName}|-managed.dll";
+            var devName = $"{assemblyName.Name}.image";
             var file = new[]
             {
                 new FileInfo($"./dev/{devName}"),
@@ -22,11 +22,11 @@
             }.FirstOrDefault(x => x.Exists);
 
             if (file is null)
-                return null;
+                throw new Exception($"can't load '{assemblyName.Name}|0.0.0-managed.image' - [not found].");
             return Assembly.LoadFile(file.FullName);
         }
 
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName) 
-            => throw new Exception($"can't load '{unmanagedDllName}|0.0.0-unmanaged.dll' - loader is not supported.");
+            => throw new Exception($"can't load '{unmanagedDllName}|0.0.0-unmanaged.image' - loader is not supported.");
     }
 }

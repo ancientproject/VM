@@ -40,7 +40,7 @@
         {
             _ = address switch {
                 0x1 => X(() => hpet = data == 0x1),
-                0xF => X(WarmUp),
+                0xF => X(warmUp),
                 0xD => X(() => Thread.Sleep((int)data)),
                 _   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
@@ -52,7 +52,7 @@
             return 0;
         }
 
-        public override void WarmUp()
+        public override void warmUp()
         {
             systemTimer = Stopwatch.StartNew();
             startTime = DateTime.UtcNow;

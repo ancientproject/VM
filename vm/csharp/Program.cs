@@ -4,15 +4,15 @@
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using System.Runtime.Loader;
     using System.Text;
     using System.Threading.Tasks;
     using ancient.runtime;
+    using ancient.runtime.context;
     using component;
     using dev;
     using dev.Internal;
     using ancient.runtime.emit;
-    using Ancient.Runtime.tools;
+    using ancient.runtime.tools;
     using MoreLinq;
 
     internal class Program
@@ -71,6 +71,8 @@
             bus.Add(new AdvancedTerminal(0x2));
 
 
+            if(AppFlag.GetVariable("VM_USE_EXTERNAL_DEVICES"))
+                DeviceLoader.Grub(bus.Add, Environment.GetEnvironmentVariable("VM_DEV_IMAGE"));
 
             InitializeMemory(bus, args);
 

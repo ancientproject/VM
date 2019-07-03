@@ -33,6 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{3E153A17-E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ancient.Runtime.Context", "libs\Ancient.Runtime.Context\Ancient.Runtime.Context.csproj", "{00506E30-C4CB-4734-BA64-920CEE5CE926}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devices", "devices", "{84758BDD-CD28-47DE-9DBD-52628428C9BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "terminal", "vm\devices\terminal\terminal.csproj", "{E65C933A-4314-425A-9F5A-DC64FB868DCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +87,10 @@ Global
 		{00506E30-C4CB-4734-BA64-920CEE5CE926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00506E30-C4CB-4734-BA64-920CEE5CE926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00506E30-C4CB-4734-BA64-920CEE5CE926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E65C933A-4314-425A-9F5A-DC64FB868DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E65C933A-4314-425A-9F5A-DC64FB868DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E65C933A-4314-425A-9F5A-DC64FB868DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E65C933A-4314-425A-9F5A-DC64FB868DCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +108,8 @@ Global
 		{9F2A5C1D-8E3C-487E-8F49-1F9AEBC4B41E} = {E0B02A0F-DC1C-4475-A8B0-860630E39FC7}
 		{36E99B8C-9BE2-4D15-913A-7E185F8DC37A} = {3E153A17-EBC1-4471-BD65-0C306499D3F2}
 		{00506E30-C4CB-4734-BA64-920CEE5CE926} = {3E153A17-EBC1-4471-BD65-0C306499D3F2}
+		{84758BDD-CD28-47DE-9DBD-52628428C9BA} = {F619DE0B-A984-43B2-B873-29651B48C549}
+		{E65C933A-4314-425A-9F5A-DC64FB868DCB} = {84758BDD-CD28-47DE-9DBD-52628428C9BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77DF946F-0A1C-4A24-8A58-E2136BF8FC38}

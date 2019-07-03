@@ -3,7 +3,7 @@ namespace vm_test
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-    using Flame.Runtime.tools;
+    using ancient.runtime.tools;
     using MoreLinq;
     using NUnit.Framework;
     using vm.component;

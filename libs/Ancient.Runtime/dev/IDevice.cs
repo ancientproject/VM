@@ -1,15 +1,17 @@
 ﻿namespace ancient.runtime
 {
-    public interface IDevice
+    using System;
+
+    public interface IDevice : IComparable
     {
-        string Name { get; }
-        short StartAddress { get; }
+        string name { get; }
+        short startAddress { get; }
         void write(long address, long data);
         long read(long address);
 
         long this[long address] { get; set; }
 
-        void WarmUp();
-        void Shutdown();
+        void warmUp();
+        void shutdown();
     }
 }
