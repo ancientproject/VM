@@ -1,4 +1,4 @@
-﻿namespace vm.dev.Internal
+﻿namespace ancient.runtime.hardware
 {
     using System;
     [AttributeUsage(AttributeTargets.Method)]
