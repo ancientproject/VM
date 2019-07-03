@@ -2,7 +2,7 @@
 {
     using System;
 
-    public interface IDevice : IComparable
+    public interface IDevice : IComparable, IBusGate
     {
         string name { get; }
         short startAddress { get; }
@@ -13,5 +13,9 @@
 
         void warmUp();
         void shutdown();
+    }
+    public interface IBusGate
+    {
+        void assignBus(dynamic bus);
     }
 }
