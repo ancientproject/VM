@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>Yuuki Wesp</Authors>
     <AssemblyVersion>0.31.101.603</AssemblyVersion>
     <Version>0.31.101</Version>
