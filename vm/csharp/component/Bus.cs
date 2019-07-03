@@ -2,7 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using ancient.runtime;
     using dev;
+    using MoreLinq;
 
     public class Bus
     {
@@ -13,6 +16,9 @@
 
         public List<IDevice> Devices = new List<IDevice>();
         public int[] boundaries = new int[0];
+
+        public bool WarmUpDevices { get; set; } = AppFlag.GetVariable("VM_WARMUP_DEV", true);
+        public bool ShutdownDevices { get; set; } = AppFlag.GetVariable("VM_SHUTDOWN_DEV", true);
 
         public Bus()
         {
@@ -30,7 +36,8 @@
             Array.Sort(newBoundaries);
             Devices.Sort();
             boundaries = newBoundaries;
-            device.Init();
+            if(WarmUpDevices)
+                device.WarmUp();
         }
 
         public IDevice Find(int address)
@@ -42,5 +49,11 @@
         }
 
         internal void AttachDebugger(Debugger dbg) => this.debugger = dbg;
+
+        public void Unload()
+        {
+            if(ShutdownDevices)
+                Devices.Pipe(x => x.Shutdown()).ToArray();
+        }
     }
 }
