@@ -59,7 +59,7 @@
             loadi = (uint)new ldi(0x5, 0x6).Assembly();
         }
     }
-    public class RelDevice : AbstractDevice
+    public class RelDevice : Device
     {
         public RelDevice() : base(0x4, "<null-device>") { }
 
@@ -77,7 +77,7 @@
                 relMemory.Clear();
         }
     }
-    public class NullDevice : AbstractDevice
+    public class NullDevice : Device
     {
         public NullDevice() : base(0x5, "<null-device>") { }
 

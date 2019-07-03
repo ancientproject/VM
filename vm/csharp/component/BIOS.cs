@@ -5,7 +5,7 @@
     using System.Threading;
     using ancient.runtime;
     using dev;
-    public class BIOS : AbstractDevice
+    public class BIOS : Device
     {
         private readonly CPU _cpu;
         private readonly Bus _bus;

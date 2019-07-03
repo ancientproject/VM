@@ -18,14 +18,14 @@ public class TerminalDevice : IDevice
         switch (address)
         {
             case 0x5:
-                char c1 = (char)data;
+                var c1 = (char)data;
                 if(c1 == 0xA)
                     Write(Environment.NewLine);
                 else 
                     Write(c1);
                 break;
             case 0x6:
-                char c2 = (char)data;
+                var c2 = (char)data;
                 if (c2 == 0xA)
                     relMemory.Append(Environment.NewLine);
                 else 
