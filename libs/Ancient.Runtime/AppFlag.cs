@@ -8,7 +8,7 @@
         {
             if (code == null) throw new ArgumentNullException(nameof(code));
 
-            var result = Environment.GetEnvironmentVariable(code)?.ToLowerInvariant();
+            var result = Environment.GetEnvironmentVariable(code.ToUpperInvariant())?.ToLowerInvariant();
 
             if (result is null && @default is null)
                 return false;
