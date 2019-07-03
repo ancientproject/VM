@@ -3,70 +3,85 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Runtime.Loader;
     using System.Text;
     using System.Threading.Tasks;
+    using ancient.runtime;
     using component;
     using dev;
     using dev.Internal;
     using ancient.runtime.emit;
     using Ancient.Runtime.tools;
     using MoreLinq;
-    using ancient.runtime;
 
     internal class Program
     {
-        public static async Task Main(string[] args)
+        public static void InitializeProcess()
         {
-            Console.Title = "cpu_host";
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                Console.Title = "cpu_host";
             IntToCharConverter.Register<char>();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
 
-
-            var bus = new Bus();
+        public static void InitializeFlags(Bus bus)
+        {
             /* @0x11 */
-            bus.State.tc = Environment.GetEnvironmentVariable("VM_TRACE") == "1";
+            bus.State.tc = AppFlag.GetVariable("VM_TRACE");
             /* @0x12 */
-            bus.State.ec = Environment.GetEnvironmentVariable("VM_ERROR") != "0";
+            bus.State.ec = AppFlag.GetVariable("VM_ERROR", true);
             /* @0x13 */
-            bus.State.km = Environment.GetEnvironmentVariable("VM_KEEP_MEMORY") == "1";
+            bus.State.km = AppFlag.GetVariable("VM_KEEP_MEMORY");
             /* @0x14 */
-            bus.State.fw = Environment.GetEnvironmentVariable("VM_MEM_FAST_WRITE") == "1";
+            bus.State.fw = AppFlag.GetVariable("VM_MEM_FAST_WRITE");
+        }
 
-            bus.Add(new Terminal(0x1));
-            bus.Add(new AdvancedTerminal(0x2));
-
-            
-
-            var core = bus.cpu;
-
-            //if(true) {}
-            //else 
-            //core.State.Load(BIOS._GetILCode().ToArray());
+        public static void InitializeMemory(Bus bus, params string[] args)
+        {
             if (!args.Any())
-                core.State.Load(0xB00B5000);
+                bus.State.Load(0xB00B5000);
             else
             {
-                
                 var file = new FileInfo(args.First());
 
                 var pdb = new FileInfo($"{args.First().Replace(".dlx", ".pdb")}");
 
-                if (Environment.GetEnvironmentVariable("VM_ATTACH_DEBUGGER") == "1" && pdb.Exists)
+                if (AppFlag.GetVariable("VM_ATTACH_DEBUGGER") && pdb.Exists)
                     bus.AttachDebugger(new Debugger(DebugSymbols.Open(File.ReadAllBytes(pdb.FullName))));
                 if (file.Exists)
                 {
                     var bytes = AncientAssembly.LoadFrom(file.FullName).GetILCode();
-                    core.State.Load(CastFromBytes(bytes));
+                    bus.State.Load(CastFromBytes(bytes));
                 }
                 else
-                    core.State.Load(0xB00B5000);
+                    bus.State.Load(0xB00B5000);
             }
+        }
 
-            while (core.State.halt == 0)
+        public static async Task Main(string[] args)
+        {
+            InitializeProcess();
+
+            var bus = new Bus();
+
+            InitializeFlags(bus);
+
+            bus.Add(new Terminal(0x1));
+            bus.Add(new AdvancedTerminal(0x2));
+
+
+
+            InitializeMemory(bus, args);
+
+
+            while (bus.State.halt == 0)
             {
-                await core.Step();
+                await bus.cpu.Step();
                 await Task.Delay(1);
             }
+
+            bus.Unload();
         }
 
         public static ulong[] CastFromBytes(byte[] bytes)
