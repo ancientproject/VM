@@ -23,7 +23,9 @@
         {
             State = new State(this);
             cpu = new CPU(this);
+
             Add(new BIOS(cpu,this));
+            Add(new Memory(0x0, 0x90000, this));
         }
 
         public void Add(IDevice device)
