@@ -52,6 +52,7 @@ in env:
 - VM_SHUTDOWN_DEV  : 1\0    - enable shutdown devices on halting processor (default 1)
 - VM_USE_EXD       : 1\0    - enable loading external device images (default 0)
 - VM_DEV_IMAGE     : list   - list of name device images (divider '|' symbol)
+- VM_SYM_ENCODING  : "utf8" - set encoding of debug symbols (default "IBM037")
 ```
 
 in runtime:
