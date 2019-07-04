@@ -27,22 +27,11 @@
             catch (Exception e)
             {
                 OnError?.Invoke(e);
+                halt(0xFFFF, e.Message.ToLowerInvariant());
             }
             await Task.CompletedTask;
         }
 
-        public async Task StepToEnd(bool clearMemory = true)
-        {
-            foreach (var u in State.program)
-            {
-                await Step(u);
-            }
-            if (clearMemory)
-            {
-                State.program.Clear();
-                State.pc = 0x0;
-            }
-        }
 
         public async Task Step(ulong address)
         {
@@ -51,20 +40,20 @@
             await Task.CompletedTask;
         }
 
-        public int halt(int reason)
+        public int halt(int reason, string text = "")
         {
             Error(Environment.NewLine);
             _bus.State.halt = 1;
             switch (reason)
             {
                 case 0x0:
-                    Error("HALT");
+                    Error("HALT: Power off");
                     break;
                 case 0x1:
-                    Error("HALT: Bootable sector not found.");
+                    Error($"HALT: Bootable sector not found.");
                     break;
                 case 0xC:
-                    Error("HALT: Divide by zero - YOU JUST CREATED A BLACK HOLE!");
+                    Error($"HALT: Divide by zero - YOU JUST CREATED A BLACK HOLE!");
                     break;
                 case 0xF:
                     Error($"HALT: Corrupted memory.");
@@ -72,35 +61,44 @@
                 case 0xA1:
                     Error($"HALT: Overflow exception.");
                     break;
+                case 0xA2:
+                    Error($"HALT: Overflow stack exception.");
+                    break;
+                case 0xA3:
+                    Error($"HALT: Low stack exception.");
+                    break;
                 case 0xFC:
                     Error($"HALT: Invalid Opcode.");
                     break;
                 case 0xA9:
                     Error($"HALT: x87 float exception");
                     break;
+                case 0xBD:
+                    Error($"HALT: Overflow heap memory exception");
+                    break;
+                case 0xD6:
+                    Error($"HALT: x9 segmentation fault");
+                    break;
+                case 0xFFFF:
+                    Error($"HALT: shift fault, {text}");
+                    break;
                 default:
                     Error($"HALT: Unknown state 0x{reason:X}");
                     break;
             }
-            var l1 = _bus.State.Registers.L1;
-            Error($"L1 Cache, PC: 0x{l1.PC:X8}, OpCode: {l1.IID} [{l1.IID.getInstruction()}]");
+            var l1 = _bus.State;
+            Error($"L1 Cache, PC: 0x{l1.pc:X8}, OpCode: {l1.iid} [{l1.iid.getInstruction()}]");
             Error($"\t0x{l1.r1:X} 0x{l1.r2:X} 0x{l1.r3:X} 0x{l1.u1:X} 0x{l1.u2:X} 0x{l1.x1:X} 0x{l1.x2:X}");
-            var l2 = _bus.State.Registers.L2;
-            Error($"L2 Cache, PC: 0x{l2.PC:X8}, OpCode: {l2.IID} [{l2.IID.getInstruction()}]");
-            Error($"\t0x{l2.r1:X} 0x{l2.r2:X} 0x{l2.r3:X} 0x{l2.u1:X} 0x{l2.u2:X} 0x{l2.x1:X} 0x{l2.x2:X}");
             return reason;
         }
 
         public string getStateOfCPU()
         {
             var str = new StringBuilder();
-            var l1 = _bus.State.Registers.L1;
-            var l2 = _bus.State.Registers.L2;
+            var l1 = _bus.State;
 
-            str.AppendLine($"L1 Cache, PC: 0x{l1.PC:X8}, OpCode: {l1.IID} [{l1.IID.getInstruction()}]");
+            str.AppendLine($"L1 Cache, PC: 0x{l1.pc:X8}, OpCode: {l1.iid} [{l1.iid.getInstruction()}]");
             str.AppendLine($"\t0x{l1.r1:X} 0x{l1.r2:X} 0x{l1.r3:X} 0x{l1.u1:X} 0x{l1.u2:X} 0x{l1.x1:X} 0x{l1.x2:X}");
-            str.AppendLine($"L2 Cache, PC: 0x{l2.PC:X8}, OpCode: {l2.IID} [{l2.IID.getInstruction()}]");
-            str.AppendLine($"\t0x{l2.r1:X} 0x{l2.r2:X} 0x{l2.r3:X} 0x{l2.u1:X} 0x{l2.u2:X} 0x{l2.x1:X} 0x{l2.x2:X}");
 
             str.AppendLine("Table of memory:");
 
@@ -125,9 +123,5 @@
             WriteLine(str);
             ForegroundColor = ConsoleColor.White;
         }
-
-
-        public void ResetCache() => _bus.State.Registers.L1 = new Cache();
-        public void ResetMemory() => _bus.State.program.Clear();
     }
 }
