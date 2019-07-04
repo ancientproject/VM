@@ -1,5 +1,3 @@
-##  
-
 <!-- Logo -->
 <p align="center">
   <a href="#">
@@ -24,7 +22,6 @@
   <a href="https://t.me/ivysola">
     <img src="https://img.shields.io/badge/Ask%20Me-Anything-1f425f.svg">
   </a>
-  
 </p>
 <p align="center">
   <a href="#">
@@ -55,6 +52,7 @@ in env:
 - VM_SHUTDOWN_DEV  : 1\0    - enable shutdown devices on halting processor (default 1)
 - VM_USE_EXD       : 1\0    - enable loading external device images (default 0)
 - VM_DEV_IMAGE     : list   - list of name device images (divider '|' symbol)
+- VM_SYM_ENCODING  : "utf8" - set encoding of debug symbols (default "IBM037")
 ```
 
 in runtime:
@@ -154,4 +152,10 @@ Device Address : 0xB
 Set ON         : 0xD
 Set OFF        : 0xE
 ```
+
+<p align="center">
+   <a href="https://ko-fi.com/P5P7YFY5">
+    <img src="https://www.ko-fi.com/img/githubbutton_sm.svg">
+  </a>
+</p>
 
