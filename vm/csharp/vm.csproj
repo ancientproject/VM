@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Context\Ancient.Runtime.Context.csproj" />
+    <ProjectReference Include="..\..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
     <ProjectReference Include="..\..\libs\Ancient.Runtime\Ancient.Runtime.csproj" />
   </ItemGroup>
 

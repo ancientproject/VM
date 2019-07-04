@@ -30,8 +30,8 @@
         {
             Devices.Add(device);
             Devices.Sort();
-            if(WarmUpDevices)
-                device.warmUp();
+            device.assignBus(this);
+            if(WarmUpDevices) device.warmUp();
         }
 
         public IDevice Find(int address) 

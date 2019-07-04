@@ -1,10 +1,10 @@
 namespace vm_test
 {
     using System.Collections.Generic;
-    using vm.dev;
-    using vm.dev.Internal;
+    using ancient.runtime;
+    using ancient.runtime.hardware;
 
-    public class TestDevice : AbstractDevice
+    public class TestDevice : Device
     {
         public TestDevice() : base(0x1, "<???>") { }
 

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows;
-using vm.dev.Internal;
 
 namespace CPU_Host
 {
+    using ancient.runtime.hardware;
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

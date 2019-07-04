@@ -82,7 +82,6 @@
 
         private void MaxButtonClick(object sender, RoutedEventArgs e)
         {
-            return;
             sender.ForWindowFromTemplate(w => w.WindowState = (w.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized);
         }
 

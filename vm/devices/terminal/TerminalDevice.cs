@@ -6,14 +6,11 @@ using static System.Console;
 
 
 [Guid("2F380069-1951-41DF-9500-3FE4610FA924")]
-public class TerminalDevice : IDevice
+public class TerminalDevice : Device
 {
     private StringBuilder relMemory = new StringBuilder();
 
-
-    public string name { get; } = "term";
-    public short startAddress { get; } = 0x1;
-    public void write(long address, long data)
+    public override void write(long address, long data)
     {
         switch (address)
         {
@@ -60,29 +57,7 @@ public class TerminalDevice : IDevice
         }
     }
 
-    public long read(long address)
-    {
-        throw new NotImplementedException();
-    }
 
-    public long this[long address]
-    {
-        get => read(address);
-        set => write(address, value);
-    }
-
-    public void warmUp() {}
-
-    public void shutdown() => relMemory = null;
-
-    public int CompareTo(object obj)
-    {
-        if (!(obj is IDevice dev)) return 0;
-        if (startAddress > dev.startAddress)
-            return 1;
-        return -1;
-    }
-    public override int GetHashCode() => 
-        startAddress.GetHashCode() ^ 42 * 
-        name.GetHashCode() ^ 42;
+    public override void shutdown() => relMemory = null;
+    public TerminalDevice() : base(0x1, "term") { }
 }

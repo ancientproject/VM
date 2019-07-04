@@ -6,9 +6,9 @@
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
-    using dev.Internal;
     using ancient.runtime;
     using ancient.runtime.exceptions;
+    using ancient.runtime.hardware;
     using static System.Console;
     using static System.MathF;
 
@@ -250,6 +250,7 @@
                         0xE1 => f32i64 & Truncate(i64f32 & mem[r1]),
                         0xE2 => f32i64 & BitDecrement(i64f32 & mem[r1]),
                         0xE3 => f32i64 & BitIncrement(i64f32 & mem[r1]),
+                        _ => throw new CorruptedMemoryException($"")
                     };
                     /* @stack-forward-flag */
                     if (sf)  stack.Push(result);
