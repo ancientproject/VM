@@ -1,4 +1,4 @@
-namespace ancient.runtime
+﻿namespace ancient.runtime
 {
     public enum IID : short
     {
@@ -18,6 +18,7 @@ namespace ancient.runtime
         [OpCode(0x08)] jump_e, [OpCode(0x08)] jump_g,
         [OpCode(0x08)] jump_u, [OpCode(0x08)] jump_y,
         [OpCode(0x09)] jump_p,
+        [OpCode(0x33)] page,
 
         [UnfCode] mvj, [UnfCode] raw,
 
