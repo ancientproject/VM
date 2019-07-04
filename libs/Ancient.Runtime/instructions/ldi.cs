@@ -1,5 +1,7 @@
 ﻿namespace ancient.runtime
 {
+    using emit.@unsafe;
+
     public class ldi : Instruction
     {
         internal readonly byte _index;
@@ -13,8 +15,7 @@
 
         protected override void OnCompile()
         {
-            var u2 = (byte)((_value & 0xF0) >> 4);
-            var u1 = (byte)(_value & 0x0F);
+            var (u2, u1) = new d16u((short)_value);
             SetRegisters(_index, 0x0, 0x0, u1, u2);
         }
     }
