@@ -10,8 +10,8 @@
     using ancient.runtime.context;
     using component;
     using dev;
-    using dev.Internal;
     using ancient.runtime.emit;
+    using ancient.runtime.hardware;
     using ancient.runtime.tools;
     using MoreLinq;
 
@@ -67,7 +67,7 @@
 
             InitializeFlags(bus);
 
-            bus.Add(new Terminal(0x1));
+            //bus.Add(new Terminal(0x1));
             bus.Add(new AdvancedTerminal(0x2));
 
 

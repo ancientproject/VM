@@ -14,8 +14,8 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using ancient.runtime.emit;
+    using ancient.runtime.hardware;
     using MoreLinq.Extensions;
-    using vm.dev.Internal;
     using JetBrains.Annotations;
 
     [ValueConversion(typeof(bool), typeof(bool))]
@@ -54,7 +54,6 @@
         {
             InitializeComponent();
             WriteSystemMessage("Booting bios...");
-            MemoryManagement.FastWrite = Environment.GetEnvironmentVariable("FLAME_MEM_FAST_WRITE") == "1";
             if(MemoryManagement.FastWrite)
                 WriteSystemMessage($"FastWrite: Enabled");
             Singleton = this;
@@ -76,7 +75,7 @@
         {
             WriteSystemMessage($"Booting LED device...");
             var block = arr.Length;
-            var col = arr.First().Diods.Length;
+            var col = arr.First().LEDs.Length;
             for (var u = 0; u != block; u++)
             for (var v = 0; v != col; v++)
             {
@@ -134,11 +133,6 @@
             bus.Add(new LampBus(this, 
                 block_01, block_02, block_03, block_04, block_05, block_06, block_07, block_08));
 
-            var core = bus.cpu;
-            
-            
-
-            core.State.tc = Environment.GetEnvironmentVariable("FLAME_TRACE") == "1";
             HostContainer.Instance.bus.State.iid = 0;
             HostContainer.Instance.bus.State.pc = 0;
         }
@@ -146,7 +140,7 @@
         public void ResetLED(object sender, EventArgs e)
         {
             var block = LED.Length;
-            var col = LED.First().Diods.Length;
+            var col = LED.First().LEDs.Length;
             for (var u = 0; u != block; u++)
             for (var v = 0; v != col; v++)
                 LED[u].TurnOff(v);

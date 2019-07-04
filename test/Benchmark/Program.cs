@@ -6,9 +6,8 @@
     using BenchmarkDotNet.Attributes;
     using BenchmarkDotNet.Running;
     using ancient.runtime;
+    using ancient.runtime.hardware;
     using vm.component;
-    using vm.dev;
-    using vm.dev.Internal;
 
     [InProcess]
     [RPlotExporter, RankColumn]

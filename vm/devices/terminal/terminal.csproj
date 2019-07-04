@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libs\Ancient.Runtime\Ancient.Runtime.csproj" />
+    <ProjectReference Include="..\..\..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
   </ItemGroup>
 
 </Project>

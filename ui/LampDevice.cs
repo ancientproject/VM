@@ -5,9 +5,9 @@
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Shapes;
+    using ancient.runtime;
     using ancient.runtime.exceptions;
-    using vm.dev;
-    using vm.dev.Internal;
+    using ancient.runtime.hardware;
 
     public class LampBus : Device
     {
@@ -16,26 +16,26 @@
 
         public class LampControl
         {
-            public Ellipse[] Diods { get; }
+            public Ellipse[] LEDs { get; }
             public int StackIndex { get; set; }
 
             public LampControl(int i, params Ellipse[] el)
             {
                 StackIndex = i;
-                Diods = el;
+                LEDs = el;
             }
 
             public void TurnOff(int index)
             {
-                if(Diods.Length <= index)
+                if(LEDs.Length <= index)
                     throw new CorruptedMemoryException($"LED 0x{index:X} not found in 0x{StackIndex:X} stack.");
-                Diods[index].Dispatcher.Invoke(() => { Diods[index].Fill = Brushes.Gray; });
+                LEDs[index].Dispatcher.Invoke(() => { LEDs[index].Fill = Brushes.Gray; });
             }
             public void TurnOn(int index)
             {
-                if(Diods.Length <= index)
+                if(LEDs.Length <= index)
                     throw new CorruptedMemoryException($"LED 0x{index:X} not found in 0x{StackIndex:X} stack.");
-                Diods[index].Dispatcher.Invoke(() => { Diods[index].Fill = Brushes.Yellow; });
+                LEDs[index].Dispatcher.Invoke(() => { LEDs[index].Fill = Brushes.Yellow; });
             }
         }
 

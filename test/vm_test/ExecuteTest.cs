@@ -2,9 +2,9 @@ namespace vm_test
 {
     using System;
     using ancient.runtime;
+    using ancient.runtime.hardware;
     using NUnit.Framework;
     using vm.component;
-    using vm.dev.Internal;
 
     [TestFixture]
     public class ExecuteTest : VMBehaviour

@@ -1,7 +1,8 @@
 ﻿namespace vm.dev
 {
     using System;
-    using Internal;
+    using ancient.runtime;
+    using ancient.runtime.hardware;
 
     public class AdvancedTerminal : Device
     {

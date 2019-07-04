@@ -45,6 +45,8 @@
 
         private dynamic connectedBus;
 
+        private ulong currentAddress => connectedBus.State.curAddr;
+
         void IBusGate.assignBus(dynamic bus)
         {
             try
@@ -55,9 +57,8 @@
             catch (RuntimeBinderException e)
             {
                 throw new CorruptedMemoryException(
-                    $"Instruction at address <???> accessed memory <0x{startAddress:X}-???>. Memory could not be write.", e);
+                    $"Instruction at address <???> accessed memory <0x{startAddress:X}-?assignBus*>. Memory could not be write.", e);
             }
-
             connectedBus = bus;
         }
 
@@ -67,11 +68,24 @@
 
 
 
-        protected CorruptedMemoryException ThrowMemoryWrite(ulong curAddr, long toAddr) => 
-            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X}. Memory could not be write.");
-        protected CorruptedMemoryException ThrowMemoryRead(ulong curAddr, long toAddr) => 
-            new CorruptedMemoryException($"Instruction at address 0x{curAddr:X4} accessed memory 0x{toAddr:X}. Memory could not be read.");
+        protected CorruptedMemoryException ThrowMemoryWrite(ulong? curAddr, long? toAddr = null, Exception inner = null)
+        {
+            var current = curAddr switch { null => "???", _ => $"0x{curAddr:X4}" };
+            var target  = toAddr   switch { null => $"0x{currentAddress:X4}", -1 => "???", _ => $"0x{toAddr:X4}" };
 
+
+            return new CorruptedMemoryException(
+                $"Instruction at address {current} accessed memory {target}. Memory could not be write.", inner);
+        }
+
+        protected CorruptedMemoryException ThrowMemoryRead(ulong? curAddr, long? toAddr = null, Exception inner = null)
+        {
+            var current = curAddr switch { null => "???", _ => $"0x{curAddr:X4}" };
+            var target = toAddr   switch { null => $"0x{currentAddress:X4}", -1 => "???", _ => $"0x{toAddr:X4}" };
+
+            return new CorruptedMemoryException(
+                $"Instruction at address {current} accessed memory 0x{toAddr:X}. Memory could not be read.", inner);
+        }
 
 
         #region def
