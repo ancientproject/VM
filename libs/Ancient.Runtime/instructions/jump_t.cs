@@ -1,5 +1,19 @@
 ﻿namespace ancient.runtime
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using emit.@unsafe;
+
+    public static class Ex
+    {
+        public static IEnumerable<TResult> GeographicalScheme<TSource, TResult>(this IEnumerable<TSource> source,
+            Func<TSource, int, TResult> selector)
+        {
+            return source.Select(selector);
+        }
+    }
+
     public class jump_t : jump
     {
         public jump_t(byte cell) : base(cell, 0x0, 0x0, 0x0, IID.jump_t) {}
@@ -19,6 +33,19 @@
     public class jump_y : jump
     {
         public jump_y(byte cell, byte f_cell, byte t_cell) : base(cell, f_cell, t_cell, 0x4, IID.jump_y) {}
+    }
+
+    public class jump_p : Instruction
+    {
+        private readonly int _point;
+
+        public jump_p(int point) : base(IID.jump_p) => _point = point;
+
+        protected override void OnCompile()
+        {
+            var (n1, n2, n3, n4) = new d32u(_point);
+            SetRegisters(n1, n2, n3, n4);
+        }
     }
 
     public abstract class jump : Instruction
