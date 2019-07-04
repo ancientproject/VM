@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "echo 1"
+  },
+  "name": "bios",
+  "version": "0.31.101",
+  "author": "Yuuki Wesp"
+}
