@@ -13,6 +13,8 @@
         /// </summary>
         public object author { get; set; }
 
+        public string extension { get; set; }
+
         public Dictionary<string, string> scripts = new Dictionary<string, string>();
 
 

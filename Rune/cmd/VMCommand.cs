@@ -74,9 +74,10 @@
 
             var argBuilder = new List<string>();
 
-            var files = Directory.GetFiles(Path.Combine("obj"), "*.dlx");
+            var files = Directory.GetFiles(Path.Combine("obj"), "*.*")
+                .Where(x => x.EndsWith(".dlx") || x.EndsWith(".bios"));
 
-            argBuilder.Add($"\"{files.First()}\"");
+            argBuilder.Add($"\"{Path.Combine("obj", Path.GetFileNameWithoutExtension(files.First()))}\"");
 
 
             var external = new ExternalTools(vm_bin, string.Join(" ", argBuilder));

@@ -34,6 +34,10 @@
             raw.Setup(x => x.OutFile)
                 .As('o', "out")
                 .WithDescription("Out file.");
+            raw.Setup(x => x.extension)
+                .As('e', "ext")
+                .WithDescription("Extension of file.")
+                .SetDefault("dlx");
             raw.Parse(c_args);
             var args = raw.Object;
 
@@ -68,7 +72,7 @@
                 var e = Evolve(source);
                 var c = Compile(e, args);
 
-                File.WriteAllBytes($"{args.OutFile}.dlx", c.data);
+                File.WriteAllBytes($"{args.OutFile}.{args.extension}", c.data);
                 File.WriteAllBytes($"{args.OutFile}.pdb", c.map);
                 return 0;
             }
@@ -185,6 +189,7 @@
         {
             public List<string> sourceFiles { get; set; }
             public string OutFile { get; set; }
+            public string extension { get; set; }
         }
     }
 }

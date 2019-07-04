@@ -4,5 +4,6 @@
   },
   "name": "bios",
   "version": "0.31.101",
-  "author": "Yuuki Wesp"
+  "author": "Yuuki Wesp",
+  "extension": "bios"
 }

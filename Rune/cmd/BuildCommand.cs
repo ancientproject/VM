@@ -79,6 +79,8 @@
                 outputDir = "obj";
 
             argBuilder.Add($"-o ./{outputDir}/{project.name}");
+            if(project.extension != null)
+                argBuilder.Add($"-e {project.extension}");
             argBuilder.Add($"-s \"{files.First()}\"");
 
             var external = new ExternalTools(acc_bin, string.Join(" ", argBuilder));

@@ -43,9 +43,10 @@
                 bus.State.Load("<chip>", 0xB00B5000);
             else
             {
-                var file = new FileInfo(args.First());
-                var bios = new FileInfo($"{args.First().Replace(".dlx", ".bios")}");
-                var pdb = new FileInfo($"{args.First().Replace(".dlx", ".pdb")}");
+                var nameFile = Path.GetFileNameWithoutExtension(args.First());
+                var file = new FileInfo($"{nameFile}.dlx");
+                var bios = new FileInfo($"{nameFile}.bios");
+                var pdb = new FileInfo($"{nameFile}.pdb");
 
                 if (AppFlag.GetVariable("VM_ATTACH_DEBUGGER") && pdb.Exists)
                     bus.AttachDebugger(new Debugger(DebugSymbols.Open(File.ReadAllBytes(pdb.FullName))));
@@ -66,6 +67,7 @@
 
         public static async Task Main(string[] args)
         {
+            ulong p = new page(0x600);
             InitializeProcess();
             var bus = new Bus();
 
