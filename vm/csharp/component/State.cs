@@ -340,8 +340,7 @@
                 case 0xF when x2 == 0xF:
                     var x = mem[u1].ToString();
 
-                    if (ff)
-                        x = (i64f32 & mem[u1]).ToString(CultureInfo.InvariantCulture);
+                    if (ff) x = (i64f32 & mem[u1]).ToString(CultureInfo.InvariantCulture);
 
                     short[] cast(string str)
                     {
@@ -352,7 +351,7 @@
                             var uu2 = (c & 0xF);
                             list.Add((uu1 << 4 | uu2) & 0xFFFFFFF);
                         }
-                        return list.Select(x => (short)x).ToArray();
+                        return list.Select(i32i16.auto).ToArray();
                     }
                     foreach (var uuu in cast(x))
                         bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
@@ -482,40 +481,50 @@
         //   |  |
         // 0xFFFF__AAAA__DDDD__EEEE
         // ===
-        public void Accept(BitwiseContainer mem)
+        public void Accept(BitwiseContainer container)
         {
             trace($"fetch 0x{mem:X}");
             var 
-            pfx = u16 & (mem & 0xF00000000);
-            iid = u16 & (mem & 0x0F0000000);
-            r1  = u16 & (mem & 0x00F000000);
-            r2  = u16 & (mem & 0x000F00000);
-            r3  = u16 & (mem & 0x0000F0000);
-            u1  = u16 & (mem & 0x00000F000);
-            u2  = u16 & (mem & 0x000000F00);
-            x1  = u16 & (mem & 0x0000000F0);
-            x2  = u16 & (mem & 0x00000000F);
+            pfx = u16 & (container & 0xF00000000);
+            iid = u16 & (container & 0x0F0000000);
+            r1  = u16 & (container & 0x00F000000);
+            r2  = u16 & (container & 0x000F00000);
+            r3  = u16 & (container & 0x0000F0000);
+            u1  = u16 & (container & 0x00000F000);
+            u2  = u16 & (container & 0x000000F00);
+            x1  = u16 & (container & 0x0000000F0);
+            x2  = u16 & (container & 0x00000000F);
             iid = u16 & (pfx << 0x4 | iid );
         }
 
-        public ushort AcceptOpCode(BitwiseContainer mem)
+        public ushort AcceptOpCode(BitwiseContainer container)
         {
-            var o1 = u16 & (mem & 0xF00000000);
-            var o2 = u16 & (mem & 0x0F0000000);
+            var o1 = u16 & (container & 0xF00000000);
+            var o2 = u16 & (container & 0x0F0000000);
             return u16 & (o1 << 0x4 | o2);
         }
 
         
-
+        /// <summary><see cref="byte"/> to <see cref="long"/></summary>
         public static Unicast<byte  , long > u8  = new Unicast<byte  , long>();
+        /// <summary><see cref="ushort"/> to <see cref="ulong"/></summary>
         public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
+        /// <summary><see cref="uint"/> to <see cref="long"/></summary>
         public static Unicast<uint  , long > u32 = new Unicast<uint  , long>();
+        /// <summary><see cref="int"/> to <see cref="long"/></summary>
         public static Unicast<int   , long > i32 = new Unicast<int   , long>();
-        public static Unicast<ulong , ulong> u64 = new Unicast<ulong , ulong>();
+        /// <summary><see cref="long"/> to <see cref="ulong"/></summary>
         public static Unicast<long  , ulong> i64 = new Unicast<long  , ulong>();
 
+        /// <summary>bytecast <see cref="float"/> to <see cref="long"/></summary>
         public static Bitcast<float, long > i64f32 = new Bitcast<float, long>();
+        /// <summary>bytecast <see cref="long"/> to <see cref="float"/></summary>
         public static Bitcast<long , float> f32i64 = new Bitcast<long , float>();
+
+
+        /// <summary><see cref="int"/> to <see cref="short"/></summary>
+        public static Unicast<int  , short> i32i16 = new Unicast<int  , short>();
+
 
         
 
