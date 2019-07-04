@@ -1,5 +1,3 @@
-##  
-
 <!-- Logo -->
 <p align="center">
   <a href="#">
