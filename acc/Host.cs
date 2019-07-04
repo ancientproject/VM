@@ -150,7 +150,7 @@
                     map.symbols.Add(((short)offset, source.Split('\n')[offset]));
                     offset++;
                     gen.Emit(token);
-                    var value = (uint)token.Assembly();
+                    var value = token.Assembly();
                     var str = $"0x{value:X16}, offset: 0x{offset:X3}, op-code: 0x{token.OPCode:X2}, id: {token.ID}";
                     Trace($"compile :: {str}");
                 }
