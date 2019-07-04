@@ -9,6 +9,7 @@
     using ancient.runtime;
     using ancient.runtime.exceptions;
     using ancient.runtime.hardware;
+    using MoreLinq;
     using static System.Console;
     using static System.MathF;
 
@@ -16,70 +17,42 @@
     {
         private readonly Bus bus;
 
-        public State(Bus bus) => this.bus = bus;
-
-        
-        #region Registers
-        public ShadowCache<Cache> Registers = ShadowCacheFactory.Create();
-        public ulong pc
+        public State(Bus bus)
         {
-            get => Registers.L1.PC;
-            set => Registers.L1.PC = value != 0xffff ? value : 0UL;
+            this.bus = bus;
+            this.stack = new Stack(bus);
         }
+
+
+        #region Registers
+        public long SP { get; set; }
+
+        public ulong pc { get; set; }
 
         /// <summary>
         /// base register cell
         /// </summary>
-        public ushort r1
-        {
-            get => Registers.L1.r1;
-            set => Registers.L1.r1 = value;
-        }
-        public ushort r2
-        {
-            get => Registers.L1.r2;
-            set => Registers.L1.r2 = value;
-        }
-        public ushort r3
-        {
-            get => Registers.L1.r3;
-            set => Registers.L1.r3 = value;
-        }
+        public ushort r1 { get; set; }
+        public ushort r2 { get; set; }
+        public ushort r3 { get; set; }
         /// <summary>
         /// value register cell
         /// </summary>
-        public ushort u1
-        {
-            get => Registers.L1.u1;
-            set => Registers.L1.u1 = value;
-        }
-        public ushort u2
-        {
-            get => Registers.L1.u2;
-            set => Registers.L1.u2 = value;
-        }
+        public ushort u1 { get; set; }
+        public ushort u2 { get; set; }
         /// <summary>
         /// magic cell
         /// </summary>
-        public ushort x1
-        {
-            get => Registers.L1.x1;
-            set => Registers.L1.x1 = value;
-        }
-        public ushort x2
-        {
-            get => Registers.L1.x2;
-            set => Registers.L1.x2 = value;
-        }
+        public ushort x1 { get; set; }
+        public ushort x2 { get; set; }
         
         /// <summary>
         /// id
         /// </summary>
-        public ushort iid
-        {
-            get => Registers.L1.IID;
-            set => Registers.L1.IID = value;
-        }
+        public ushort iid { get; set; }
+
+
+        public sbyte memoryChannel { get; set; }
 
         #endregion
         
@@ -156,43 +129,84 @@
             get => mem[0x19] == 1;
             set => mem[0x19] = value ? 0x1L : 0x0L;
         }
+        /// <summary>
+        /// memory step forward flag
+        /// </summary>
+        public bool northFlag
+        {
+            get => mem[0x20] == 1;
+            set => mem[0x20] = value ? 0x1L : 0x0L;
+        }
+        /// <summary>
+        /// memory forward flag
+        /// </summary>
+        public bool eastFlag
+        {
+            get => mem[0x21] == 1;
+            set => mem[0x21] = value ? 0x1L : 0x0L;
+        }
+        /// <summary>
+        /// memory forward flag
+        /// </summary>
+        public bool southFlag
+        {
+            get => mem[0x22] == 1;
+            set => mem[0x22] = value ? 0x1L : 0x0L;
+        }
 
         public ulong curAddr { get; set; } = 0xFFFF;
         public ulong lastAddr { get; set; } = 0xFFFF;
 
+        public ulong step { get; set; } = 0x0;
+
         public long[] mem = new long[32];
 
-        public Stack<long> stack = new Stack<long>();
+        public Stack stack { get; set; }
 
         public sbyte halt { get; set; } = 0;
 
-        public List<ulong> program { get; set; } = new List<ulong>();
 
-        public void Load(params ulong[] prog) => program.AddRange(prog);
+        public List<(string block, uint address)> sectors = new List<(string block, uint address)>(16);
+
+
+        public void Load(string name, params ulong[] prog)
+        {
+            var pin = 0x600;
+            var set = 0x599;
+            if (AcceptOpCode(prog.First()) == 0x33)
+            {
+                Func<int> shift = ShiftFactory.Create(sizeof(int) * 0b100 - 0b100).Shift;
+                Accept(prog.First());
+                prog = prog.Skip(1).ToArray();
+                pin = (r1 << shift()) | (r2 << shift()) | (r3 << shift()) | (u1 << shift());
+                set = pin - 0b1;
+            }
+            foreach (var (@ulong, index) in prog.Select((x, i) => (x, i)))
+                bus.Find(0x0).write(pin + index, i64 & @ulong);
+            bus.Find(0x0).write(set, prog.Length);
+            sectors.Add((name, u32 & pin));
+            if(pc == 0x0) pc = i64 | pin;
+        }
 
         public ulong? next(ulong pc_ref)
         {
-            if (program.Count >= (int) pc) 
-                return program.ElementAt((int) pc_ref);
+            if (bus.Find(0x0).read(0x599) >= (i64 & pc) && ++step != 0x90000) 
+                return i64 | bus.Find(0x0).read(0x600 + (i64 & pc_ref));
             return null;
         }
         public ulong fetch()
         {
-            using var watcher = new StopwatchOperation("fetch operation");
             try
             {
                 lastAddr = curAddr;
-                if (program.Count != (int) pc || halt != 0) 
-                    return (curAddr = program.ElementAt((int) pc++));
-                return (curAddr = program.ElementAt((int) pc++));
+                if (bus.Find(0x0).read(0x599) != (i64 & pc) && halt == 0 && ++step != 0x90000) 
+                    return (curAddr = i64 | bus.Find(0x0).read(0x600 + (i64 & pc++)));
+                throw new Exception();
             }
             catch
             {
                 if (!km)
-                {
                     Array.Fill(mem, 0xDEADL, 0, 16);
-                    Load(0xFFFFFFFF);
-                }
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
         }
@@ -205,7 +219,7 @@
             {
                 trace($"  r   r   r   u   u   x   x");
                 trace($"  1   2   3   1   2   1   2");
-                trace($"0x{Registers.L2.r1:X} 0x{Registers.L2.r2:X} 0x{Registers.L2.r3:X} 0x{Registers.L2.u1:X} 0x{Registers.L2.u2:X} 0x{x1:X} 0x{Registers.L2.x2:X}");
+                trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
             }
             if (bf)
             {
@@ -253,7 +267,7 @@
                         _ => throw new CorruptedMemoryException($"")
                     };
                     /* @stack-forward-flag */
-                    if (sf)  stack.Push(result);
+                    if (sf)  stack.push(result);
                     else     mem[r1] = result;
                     break;
                 case 0xA:
@@ -297,7 +311,7 @@
                     break;
                 case 0xA4:
                     trace($"call :: rfd 0x{r1:X}, 0x{r2:X}");
-                    stack.Push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
+                    stack.push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
                     trace($"call :: ref_t 0x{r1:X}");
@@ -306,24 +320,24 @@
                 case 0xA0:
                     trace($"call :: orb '{r1}' times");
                     for (var i = pc + r1; pc != i;)
-                        stack.Push(i64 & fetch());
+                        stack.push(i64 & fetch());
                     break;
                 case 0xA1:
                     trace($"call :: pull -> 0x{r1:X}");
-                    mem[r1] = stack.Pop();
+                    mem[r1] = stack.pop();
                     break;
                 case 0xA5: /* @sig */
-                    stack.Push(mem[r2] = i64 & pc);
+                    stack.push(mem[r2] = i64 & pc);
                     var frag = default(ulong?);
                     while (AcceptOpCode(frag) != 0xA6 /* @ret */)
                     {
-                        var pc_r = stack.Pop();
+                        var pc_r = stack.pop();
                         frag = next(i64 | pc_r++);
                         if (frag is null) 
                             bus.cpu.halt(0xA1);
-                        stack.Push(pc_r);
+                        stack.push(pc_r);
                     }
-                    mem[r2 + 1] = stack.Pop();
+                    mem[r2 + 1] = stack.pop();
                     break;
                 case 0xB1: /* @inc */
                     trace($"call :: increment 0x{r1:X}++");
@@ -404,6 +418,9 @@
                         : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(mem[r2] <= mem[r3]) pc = (ulong)mem[r1];
                     break;
+                case 0x09:
+                    pc = (ulong)((r1 << 4) | r2);
+                    break;
 
                 #endregion
                 #region math 
@@ -465,8 +482,6 @@
                 bus.debugger.handleBreak(u16 & pc, bus.cpu);
                 mem[0x17] = 0x0;
             }
-
-            Registers.Reflect();
         }
         // ===
         // :: current instruction map (x8 bit instruction size, x40bit data)
