@@ -97,9 +97,11 @@
                 return 1;
             return -1;
         }
-        public override int GetHashCode() => 
-            startAddress.GetHashCode() ^ 42 * 
-            name.GetHashCode() ^ 42;
+        public override int GetHashCode()
+        {
+            var hash = unchecked(startAddress.GetHashCode() ^ 0x2A * name.GetHashCode() ^ 0x2A);
+            return (hash & 0xFF) ^ ((hash >> 16) & 0xFF) ^ ((hash >> 8) & 0xFF) ^ ((hash >> 24) & 0xFF);
+        }
 
         #endregion
     }
