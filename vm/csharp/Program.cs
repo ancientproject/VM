@@ -40,29 +40,33 @@
         public static void InitializeMemory(Bus bus, params string[] args)
         {
             if (!args.Any())
-                bus.State.Load(0xB00B5000);
+                bus.State.Load("<chip>", 0xB00B5000);
             else
             {
                 var file = new FileInfo(args.First());
-
+                var bios = new FileInfo($"{args.First().Replace(".dlx", ".bios")}");
                 var pdb = new FileInfo($"{args.First().Replace(".dlx", ".pdb")}");
 
                 if (AppFlag.GetVariable("VM_ATTACH_DEBUGGER") && pdb.Exists)
                     bus.AttachDebugger(new Debugger(DebugSymbols.Open(File.ReadAllBytes(pdb.FullName))));
+                if (bios.Exists)
+                {
+                    var bytes = AncientAssembly.LoadFrom(bios.FullName).GetILCode();
+                    bus.State.Load("<bios>",CastFromBytes(bytes));
+                }
                 if (file.Exists)
                 {
                     var bytes = AncientAssembly.LoadFrom(file.FullName).GetILCode();
-                    bus.State.Load(CastFromBytes(bytes));
+                    bus.State.Load("<exec>",CastFromBytes(bytes));
                 }
                 else
-                    bus.State.Load(0xB00B5000);
+                    bus.State.Load("<chip>",0xB00B5000);
             }
         }
 
         public static async Task Main(string[] args)
         {
             InitializeProcess();
-
             var bus = new Bus();
 
             InitializeFlags(bus);
