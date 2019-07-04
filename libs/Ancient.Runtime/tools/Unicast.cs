@@ -7,10 +7,31 @@
     [DebuggerDisplay("{ToString()}")]
     public class Unicast<TOutF, TIn> where TOutF : struct where TIn : struct
     {
+        /// <summary>
+        /// cast <typeparamref name="TOutF"/> to <typeparamref name="TOutF"/>
+        /// </summary>
         public static TOutF operator &(Unicast<TOutF, TIn> _, TIn q) => q.To<TOutF>();
+        /// <summary>
+        /// cast <see cref="int"/> to <typeparamref name="TOutF"/>
+        /// </summary>
         public static TOutF operator &(Unicast<TOutF, TIn> _, int q) => q.To<TOutF>();
-
+        /// <summary>
+        /// cast <typeparamref name="TOutF"/> to <typeparamref name="TIn"/>
+        /// </summary>
         public static TIn operator |(Unicast<TOutF, TIn> _, TOutF q) => q.To<TIn>();
+
+
+        public static implicit operator Func<TIn, TOutF>(Unicast<TOutF, TIn> u) => q => u & q;
+        public static implicit operator Func<TOutF, TIn>(Unicast<TOutF, TIn> u) => q => u | q;
+
+        public static implicit operator Func<TIn, int, TOutF>(Unicast<TOutF, TIn> u) => (q,i) => u & q;
+        public static implicit operator Func<TOutF, int, TIn>(Unicast<TOutF, TIn> u) => (q,i) => u | q;
+
+
+        public Func<TOutF, TIn> auto => this;
+
+        //
+
 
         public override string ToString() => $"static_cast<{typeof(TIn).Name}, {typeof(TOutF).Name}>";
     }
