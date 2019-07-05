@@ -5,7 +5,7 @@
     public class Stack
     {
         private readonly Bus _bus;
-        private State getState() => _bus.State;
+        private State state => _bus.State;
         private CPU getCPU() => _bus.cpu;
         public Stack(Bus bus) => _bus = bus;
 
@@ -14,32 +14,45 @@
         
         public void push(long data)
         {
-            switch (getState().northFlag, getState().eastFlag, getState().southFlag)
+            if (state.SP >= 0x400)
+                getCPU().halt(0xA2);
+
+            state.southFlag = true;
+            if (state.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
             {
-                case (false, false, false):
-                case (true, false, false):
+                _bus.Find(0x0).write( 0x100 + state.SP++, data);
+                return;
+            }
+            if (state.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
+            {
+                stack.Push(data);
+                state.SP++;
+                return;
+            }
+
+            switch (state.northFlag, state.eastFlag)
+            {
+                case (true, false):
                     push8(data);
-                    break;
-                case (true, true, false):
+                    return;
+                case (true, true):
                     push4(data);
-                    break;
-                case (true, true, true):
+                    return;
+                case (false, false):
                     push2(data);
-                    break;
+                    return;
             }
             getCPU().halt(0xD6);
         }
 
         internal void push2(long data)
         {
-            if (getState().SP <= 0)
-                getCPU().halt(0xA3);
-            if (getState().SP >= 0x400)
+            if (state.SP >= 0x400)
                 getCPU().halt(0xA2);
             data &= 0xFF;
-            getState().SP++;
+            state.SP++;
             stack.Push(data);
-            _bus.Find(0x0).write(getState().SP + 0x100, data);
+            _bus.Find(0x0).write(state.SP + 0x100, data);
         }
         internal void push4(long data)
         {
@@ -54,14 +67,22 @@
 
         public long pop()
         {
-            switch (getState().northFlag, getState().eastFlag, getState().southFlag)
+            if (state.SP <= 0)
+                getCPU().halt(0xA3);
+            if (state.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
+                return _bus.Find(0x0).read( 0x100 + state.SP--);
+            if (state.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
             {
-                case (false, false, false):
-                case (true, false, false):
+                state.SP--;
+                return stack.Pop();
+            }
+            switch (state.northFlag, state.eastFlag)
+            {
+                case (true, false):
                     return pop8();
-                case (true, true, false):
+                case (true, true):
                     return pop4();
-                case (true, true, true):
+                case (false, false):
                     return pop2();
             }
             return getCPU().halt(0xD6);
@@ -69,11 +90,11 @@
 
         internal long pop2()
         {
-            if (getState().SP <= 0)
+            if (state.SP <= 0)
                 getCPU().halt(0xA3);
-            if (getState().SP >= 0x400)
+            if (state.SP >= 0x400)
                 getCPU().halt(0xA2);
-            return _bus.Find(0x0).read(--getState().SP + 0x100);
+            return _bus.Find(0x0).read(--state.SP + 0x100);
         }
 
         internal long pop4() => pop2() | (pop2() << 8);

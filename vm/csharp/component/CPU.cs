@@ -1,6 +1,7 @@
 ﻿namespace vm.component
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -17,7 +18,7 @@
 
         public event Action<Exception> OnError;
 
-        public async Task Step()
+        public void Step()
         {
             try
             {
@@ -28,20 +29,20 @@
             {
                 OnError?.Invoke(e);
                 halt(0xFFFF, e.Message.ToLowerInvariant());
+                Trace.TraceError(e.ToString());
             }
-            await Task.CompletedTask;
         }
 
 
-        public async Task Step(ulong address)
+        public void Step(ulong address)
         {
             State.Accept(address);
             State.Eval();
-            await Task.CompletedTask;
         }
 
         public int halt(int reason, string text = "")
         {
+            if (State.halt != 0) return reason;
             Error(Environment.NewLine);
             _bus.State.halt = 1;
             switch (reason)
@@ -119,6 +120,7 @@
         }
         private void Error(string str)
         {
+            Trace.TraceError(str);
             ForegroundColor = ConsoleColor.Red;
             WriteLine(str);
             ForegroundColor = ConsoleColor.White;

@@ -5,7 +5,9 @@
     using System.Drawing;
     using System.Threading;
     using ancient.runtime;
+    using ancient.runtime.emit.@unsafe;
     using Pastel;
+    using static State;
 
     public class BIOS : Device
     {
@@ -21,6 +23,16 @@
             set => mem[0x1] = value ? 0x1UL : 0x0UL;
             get => mem[0x1] == 0x1;
         }
+        public bool virtual_stack
+        {
+            set => mem[0x2] = value ? 0x1UL : 0x0UL;
+            get => mem[0x2] == 0x1;
+        }
+        public bool memory_stack_forward
+        {
+            set => mem[0x3] = value ? 0x1UL : 0x0UL;
+            get => mem[0x3] == 0x1;
+        }
 
         public long Ticks 
             => hpet ? systemTimer.ElapsedTicks : Environment.TickCount;
@@ -32,12 +44,21 @@
             this.hpet = AppFlag.GetVariable("c69_bios_hpet");
         }
 
-        public override long read(long address) => (address, _bus.State.ff) switch {
-                    (0x0, _) => unchecked((int) Ticks),
-                    (0x1, _) => hpet ? 0x1 : 0x0,
-                    (0x2, _) => _bus.State.memoryChannel,
-            _        => throw ThrowMemoryRead(_bus.State.curAddr, address)
-            };
+        public override long read(long address)
+        {
+            var (u1, u2) = new d8u((byte) address);
+            switch (u1, _bus.State.southFlag) {
+                case (0x0, _):
+                    return unchecked((int) Ticks);
+                case (0x1, _):
+                    return hpet ? 0x1 : 0x0;
+                case (0x2, _):
+                    return _bus.State.memoryChannel;
+                case (0xA, true):
+                    return i64 & mem[u2];
+                default: throw ThrowMemoryRead(_bus.State.curAddr, address);
+            }
+        }
 
         public override void write(long address, long data)
         {
