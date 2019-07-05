@@ -9,7 +9,7 @@
 
     public class Bus
     {
-        public State State { get; }
+        public State State { get; set; }
         public CPU cpu { get; }
 
         public Debugger debugger { get; set; }
