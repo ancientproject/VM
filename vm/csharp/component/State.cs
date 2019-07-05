@@ -157,7 +157,7 @@
         public ulong curAddr { get; set; } = 0xFFFF;
         public ulong lastAddr { get; set; } = 0xFFFF;
 
-        public ulong step { get; set; } = 0x0;
+        public virtual ulong step { get; set; } = 0x0;
 
         public long[] mem = new long[64];
 
