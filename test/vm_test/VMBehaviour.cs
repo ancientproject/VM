@@ -15,7 +15,14 @@ namespace vm_test
         public State state => bus.State;
         public TestDevice dev => bus.Find(0x1) as TestDevice;
 
-        protected VMBehaviour() => bus.Add(new TestDevice());
+        protected VMBehaviour()
+        {
+            bus.Add(new TestDevice());
+            state.northFlag = true;
+            state.southFlag = true;
+            var bios = bus.Find(0x45) as BIOS;
+            bios.virtual_stack = true;
+        }
 
         public void load(params ulong[] values) => bus.State.Load("<exec>",values);
 
