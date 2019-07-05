@@ -130,7 +130,7 @@
             set => mem[0x19] = value ? 0x1L : 0x0L;
         }
         /// <summary>
-        /// memory step forward flag
+        /// control stack flag
         /// </summary>
         public bool northFlag
         {
@@ -138,7 +138,7 @@
             set => mem[0x20] = value ? 0x1L : 0x0L;
         }
         /// <summary>
-        /// memory forward flag
+        /// control stack flag
         /// </summary>
         public bool eastFlag
         {
@@ -146,7 +146,7 @@
             set => mem[0x21] = value ? 0x1L : 0x0L;
         }
         /// <summary>
-        /// memory forward flag
+        /// bios read-access
         /// </summary>
         public bool southFlag
         {
@@ -159,7 +159,7 @@
 
         public ulong step { get; set; } = 0x0;
 
-        public long[] mem = new long[32];
+        public long[] mem = new long[64];
 
         public Stack stack { get; set; }
 
@@ -176,7 +176,7 @@
             if (AcceptOpCode(prog.First()) == 0x33)
             {
                 Func<int> shift = ShiftFactory.Create(sizeof(int) * 0b100 - 0b100).Shift;
-                Accept(prog.First());
+                Accept((ulong)prog.First());
                 prog = prog.Skip(1).ToArray();
                 pin = (r1 << shift()) | (r2 << shift()) | (r3 << shift()) | (u1 << shift());
                 set = pin - 0b1;
@@ -198,9 +198,10 @@
         {
             try
             {
+                if (halt != 0) return 0;
                 lastAddr = curAddr;
-                if (bus.Find(0x0).read(0x599) != (i64 & pc) && halt == 0 && ++step != 0x90000) 
-                    return (curAddr = i64 | bus.Find(0x0).read(0x600 + (i64 & pc++)));
+                if (bus.Find(0x0).read(0x599) != (i64 & pc) && ++step != 0x90000) 
+                    return (curAddr = i64 | bus.Find(0x0).read((i64 & pc++)));
                 throw new Exception();
             }
             catch
@@ -498,7 +499,7 @@
         // ===
         public void Accept(BitwiseContainer container)
         {
-            trace($"fetch 0x{mem:X}");
+            trace($"fetch 0x{container:X}");
             var 
             pfx = u16 & (container & 0xF00000000);
             iid = u16 & (container & 0x0F0000000);

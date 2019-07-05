@@ -17,7 +17,7 @@ namespace vm_test
 
         protected VMBehaviour() => bus.Add(new TestDevice());
 
-        public void load(params ulong[] values) => bus.State.Load(values);
+        public void load(params ulong[] values) => bus.State.Load("<exec>",values);
 
         public bool IsHalt() => state.halt == 1;
         public bool IsFastWrite() => state.fw;
@@ -25,7 +25,7 @@ namespace vm_test
         public bool IsNegative() => state.nf;
 
         public void shot(uint count = 1) => 
-            Enumerable.Range(0, (int) count).Pipe(x => cpu.Step().Wait()).ToArray();
+            Enumerable.Range(0, (int) count).Pipe(x => cpu.Step()).ToArray();
 
         public void AssertRegister<T>(Expression<Func<State, T>> exp, T value) where T : struct, IFormattable
         {

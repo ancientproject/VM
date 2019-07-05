@@ -85,7 +85,7 @@
 
             while (bus.State.halt == 0)
             {
-                await bus.cpu.Step();
+                bus.cpu.Step();
                 await Task.Delay(1);
             }
 

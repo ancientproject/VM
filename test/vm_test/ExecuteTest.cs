@@ -88,6 +88,8 @@ namespace vm_test
         public void FloatTest()
         {
             var mem = new ulong[] {
+                // enable northFlag
+                new ldx(0x20, 0x1), 
                 // load to stack next 2 values
                 new orb(0x2),
                 // value
@@ -105,6 +107,7 @@ namespace vm_test
             };
             load(mem);
             shot(7 - 2);
+            Assert.AreEqual(7, state.step);
             AssertRegister(x => State.i64f32 & x.mem[0x3], 3f);
         }
     }

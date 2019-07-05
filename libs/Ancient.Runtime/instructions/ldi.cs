@@ -15,7 +15,7 @@
 
         protected override void OnCompile()
         {
-            var (u2, u1) = new d16u((short)_value);
+            var (u2, u1) = new d8u((byte)_value);
             SetRegisters(_index, 0x0, 0x0, u1, u2);
         }
     }

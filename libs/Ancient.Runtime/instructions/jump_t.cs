@@ -37,13 +37,13 @@
 
     public class jump_p : Instruction
     {
-        private readonly int _point;
+        private readonly ushort _point;
 
-        public jump_p(int point) : base(IID.jump_p) => _point = point;
+        public jump_p(ushort point) : base(IID.jump_p) => _point = point;
 
         protected override void OnCompile()
         {
-            var (n1, n2, n3, n4) = new d32u(_point);
+            var (n1, n2, n3, n4) = new d16u(_point);
             SetRegisters(n1, n2, n3, n4);
         }
     }
