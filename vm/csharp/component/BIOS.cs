@@ -34,6 +34,12 @@
             get => mem[0x3] == 0x1;
         }
 
+        public bool bios_guard
+        {
+            set => mem[0x4] = value ? 0x1UL : 0x0UL;
+            get => mem[0x4] == 0x1;
+        }
+
         public long Ticks 
             => hpet ? systemTimer.ElapsedTicks : Environment.TickCount;
 
@@ -41,6 +47,7 @@
         {
             _cpu = cpu;
             _bus = bus;
+            bios_guard = true;
             this.hpet = AppFlag.GetVariable("c69_bios_hpet");
         }
 
@@ -62,14 +69,22 @@
 
         public override void write(long address, long data)
         {
-            _ = address switch {
-                0x1 => X(() => hpet = data == 0x1),
-                0xF => X(warmUp),
-                0xD => X(() => Thread.Sleep((int)data)),
-                _   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
+            var (adr, u2) = new d8u((byte)address);
+            _ = (adr, bios_guard, _bus.State.southFlag) switch {
+                (0x1, _, _)         => X(() => hpet = data == 0x1),
+                (0xF, _, _)         => X(warmUp),
+                (0xC, true, false)  => X(clearRAM),
+                (0xD, _, _)         => X(() => Thread.Sleep((int)data)),
+                (0xA, _, true)      => X(() => mem[u2] = i64 | data),
+                _                   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
         }
 
+        private void clearRAM()
+        {
+            if(_bus.Find(0x0) is Memory slot)
+                Array.Fill(slot.mem, 0L);
+        }
         public override void shutdown()
         {
             systemTimer.Stop();
