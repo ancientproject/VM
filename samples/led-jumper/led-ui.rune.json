@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "echo 1"
+  },
+  "name": "led-ui",
+  "version": "0.0",
+  "author": "Yuuki Wesp"
+}
