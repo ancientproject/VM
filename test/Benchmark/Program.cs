@@ -19,19 +19,19 @@
         private uint loadi;
 
         [Benchmark(Description = ".ldi")]
-        public async Task S1() => await bus.cpu.Step(loadi);
+        public void S1() => bus.cpu.Step(loadi);
 
         [Benchmark(Description = ".mva <null-dev> fast-off")]
-        public async Task S2() => await bus.cpu.Step(push_a_to_null);
+        public void S2() => bus.cpu.Step(push_a_to_null);
 
         [Benchmark(Description = ".mva <rel-dev> fast-off")]
-        public async Task S3() => await bus.cpu.Step(push_a_to_rel);
+        public void S3() => bus.cpu.Step(push_a_to_rel);
 
         [Benchmark(Description = ".mva <null-dev> fast-on")]
-        public async Task S4() => await bus.cpu.Step(push_a_to_null);
+        public void S4() => bus.cpu.Step(push_a_to_null);
 
         [Benchmark(Description = ".mva <rel-dev> fast-on")]
-        public async Task S5() => await bus.cpu.Step(push_a_to_rel);
+        public void S5() => bus.cpu.Step(push_a_to_rel);
 
         [GlobalSetup(Targets = new[] {nameof(S5), nameof(S4)})]
         public void EnableFastWrite()
