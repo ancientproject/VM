@@ -9,7 +9,6 @@
     using ancient.runtime;
     using ancient.runtime.exceptions;
     using ancient.runtime.hardware;
-    using MoreLinq;
     using static System.Console;
     using static System.MathF;
 
@@ -202,12 +201,12 @@
                 lastAddr = curAddr;
                 if (bus.Find(0x0).read(0x599) != (i64 & pc) && ++step != 0x90000) 
                     return (curAddr = i64 | bus.Find(0x0).read((i64 & pc++)));
-                throw new Exception();
+                bus.cpu.halt(0x77);
+                return 0xDEAD;
             }
             catch
             {
-                if (!km)
-                    Array.Fill(mem, 0xDEADL, 0, 16);
+                if (!km) Array.Fill(mem, 0xDEADL, 0, 16);
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
         }
@@ -230,7 +229,9 @@
            
             switch (iid)
             {
-                //
+                case 0x0:
+                    trace("call :: skip");
+                    break;
                 case ushort opcode when opcode.In(0xD0..0xE8):
                     /* need @float-flag */
                     if(!ff) bus.cpu.halt(0xA9);
