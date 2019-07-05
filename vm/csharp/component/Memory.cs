@@ -8,7 +8,7 @@
     public class Memory : Device
     {
         private readonly CPU _cpu;
-        private readonly long[] mem;
+        internal readonly long[] mem;
 
         public Memory(int startAddress, int endAddress, Bus bus) : base(0x0, "<ddr>")
         {
@@ -36,7 +36,6 @@
             _cpu.halt(0xBD);
             return 0;
         }
-
 
         public void load(byte[] binary, int memOffset, int maxLen)
         {
