@@ -80,6 +80,9 @@
                 case 0xD6:
                     Error($"HALT: x9 segmentation fault");
                     break;
+                case 0x77:
+                    Error($"HALT: unexpected end of executable memory");
+                    break;
                 case 0xFFFF:
                     Error($"HALT: shift fault, {text}");
                     break;
