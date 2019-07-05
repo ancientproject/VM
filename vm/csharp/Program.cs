@@ -67,7 +67,6 @@
 
         public static async Task Main(string[] args)
         {
-            ulong p = new page(0x600);
             InitializeProcess();
             var bus = new Bus();
 
