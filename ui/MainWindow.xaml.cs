@@ -17,6 +17,7 @@
     using ancient.runtime.hardware;
     using MoreLinq.Extensions;
     using JetBrains.Annotations;
+    using vm.component;
 
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter: IValueConverter
@@ -113,7 +114,7 @@
                 IsLoading = false;
                 OnPropertyChanged(nameof(IsLoading));
                 System.Windows.MessageBox.Show($"Access Violation Exception\n{exception.Message}\n{bus.cpu.getStateOfCPU()}", $"CPU HALT", MessageBoxButton.OK, MessageBoxImage.Error);
-                HostContainer.Instance.bus.cpu.ResetMemory();
+                ResetMemory(HostContainer.Instance.bus);
                 err($"HALT {exception.Message}");
             };
 
@@ -128,7 +129,6 @@
                 WriteToDebug($"]: ", Brushes.Gray);
                 WriteToDebug($"{s}\r\n", Brushes.Gray);
             };
-            bus.State.Registers = new WPFShadowCacheFactory();
 
             bus.Add(new LampBus(this, 
                 block_01, block_02, block_03, block_04, block_05, block_06, block_07, block_08));
@@ -166,7 +166,7 @@
             {
                 while (IsPLaying && HostContainer.Instance.bus.State.halt == 0)
                 {
-                    await HostContainer.Instance.bus.cpu.Step();
+                    HostContainer.Instance.bus.cpu.Step();
                     await Task.Delay(10);
                 }
             });
@@ -218,7 +218,7 @@
                     await Task.Delay(1000);
                     var dyn = AncientAssembly.LoadFrom(openFileDialog.FileName);
                     WriteSystemMessage($"Assembly '{dyn.Name}-{dyn.Tag}' load success.");
-                    HostContainer.Instance.bus.State.Load(CastFromBytes(dyn.GetILCode()));
+                    HostContainer.Instance.bus.State.Load("<execute>",CastFromBytes(dyn.GetILCode()));
                     HostContainer.Instance.bus.State.iid = 0;
                     HostContainer.Instance.bus.State.pc = 0;
                     IsLoading = false;
@@ -242,16 +242,37 @@
             OnPropertyChanged(nameof(IsPLaying));
             IsLoading = false;
             OnPropertyChanged(nameof(IsLoading));
-            HostContainer.Instance.bus.cpu.ResetMemory();
+            ResetMemory(HostContainer.Instance.bus);
             WriteSystemMessage("RESET");
         }
 
+        public static void ResetMemory(Bus bus)
+        {
+            if (bus.Find(0x45) is BIOS bios)
+            {
+                // enable bios allow read internal memory
+                bus.State.southFlag = true;
+                // disable bios_guard
+                bios.write(0xA4, 0x0);
+                // disable bios allow read internal memory
+                bus.State.southFlag = false;
+                // call clear RAM
+                bios.write(0xC, 0x0);
+                // enable bios allow read internal memory
+                bus.State.southFlag = true;
+                // enable bios_guard
+                bios.write(0xA4, 0x1);
+                // disable bios allow read internal memory
+                bus.State.southFlag = false;
+            }
+        }
+
         public void Step(object sender, EventArgs e) => 
-            Task.Factory.StartNew(async () => await HostContainer.Instance.bus.cpu.Step());
+            Task.Factory.StartNew(HostContainer.Instance.bus.cpu.Step);
 
             
         public void HardReset(object sender, EventArgs e) => 
-            Task.Factory.StartNew(() => HostContainer.Instance.bus.cpu.ResetMemory());
+            Task.Factory.StartNew(() => ResetMemory(HostContainer.Instance.bus));
 
         public event PropertyChangedEventHandler PropertyChanged;
 
