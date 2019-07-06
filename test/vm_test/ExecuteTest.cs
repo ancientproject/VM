@@ -9,6 +9,7 @@ namespace vm_test
     [TestFixture]
     public class ExecuteTest : VMBehaviour
     {
+
         [OneTimeSetUp]
         public void Setup() => IntToCharConverter.Register<char>();
 

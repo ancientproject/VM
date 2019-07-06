@@ -10,13 +10,19 @@ namespace vm_test
 
     public abstract class VMBehaviour
     {
-        public Bus bus { get; } = new Bus();
+        public Bus bus { get; private set; }
         public CPU cpu => bus.cpu;
         public State state => bus.State;
         public TestDevice dev => bus.Find(0x1) as TestDevice;
 
         protected VMBehaviour()
         {
+            reset();
+        }
+        [TearDown]
+        public void reset()
+        {
+            bus = new Bus();
             bus.Add(new TestDevice());
             state.northFlag = true;
             state.southFlag = true;
