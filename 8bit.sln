@@ -35,8 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "terminal", "vm\devices\term
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ancient.Runtime.Hardware", "libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj", "{512BCC36-966F-4761-900F-BFB608582282}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CPU_Host", "ui\CPU_Host.csproj", "{B55540D4-C015-44B0-8473-DFCBB163263D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,10 +89,6 @@ Global
 		{512BCC36-966F-4761-900F-BFB608582282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{512BCC36-966F-4761-900F-BFB608582282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{512BCC36-966F-4761-900F-BFB608582282}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B55540D4-C015-44B0-8473-DFCBB163263D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B55540D4-C015-44B0-8473-DFCBB163263D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B55540D4-C015-44B0-8473-DFCBB163263D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B55540D4-C015-44B0-8473-DFCBB163263D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,7 +107,6 @@ Global
 		{84758BDD-CD28-47DE-9DBD-52628428C9BA} = {F619DE0B-A984-43B2-B873-29651B48C549}
 		{E65C933A-4314-425A-9F5A-DC64FB868DCB} = {84758BDD-CD28-47DE-9DBD-52628428C9BA}
 		{512BCC36-966F-4761-900F-BFB608582282} = {3E153A17-EBC1-4471-BD65-0C306499D3F2}
-		{B55540D4-C015-44B0-8473-DFCBB163263D} = {F619DE0B-A984-43B2-B873-29651B48C549}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77DF946F-0A1C-4A24-8A58-E2136BF8FC38}
