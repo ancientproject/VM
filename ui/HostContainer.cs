@@ -1,5 +1,7 @@
 ﻿namespace CPU_Host
 {
+    using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Windows.Controls;
     using System.Windows.Media;
@@ -8,7 +10,17 @@
 
     public class HostContainer
     {
-        public static readonly HostContainer Instance = new HostContainer();
+        private static HostContainer h { get; set; }
+
+        public static HostContainer Instance
+        {
+            get
+            {
+                if(h is null)
+                    return h = new HostContainer();
+                return h;
+            }
+        }
 
         public HostContainer()
         {
@@ -43,14 +55,21 @@
                 var s = MainWindow.Singleton;
                 s.Dispatcher.Invoke(() =>
                 {
-                    s.IC.Content = $"IC: 0x{iid:X8}";
-                    s.CurAddr.Content = $"CA: 0x{curAddr:X}";
-                    s.LastAddr.Content = $"LA: 0x{lastAddr:X}";
-                    s.PC.Content = $"PC: 0x{pc:X8}";
-                    _ = new[] {r1, r2, r3, u1, u2, x1, x2}
-                        .Select((value, index) => (value, index))
-                        .Pipe(x => Trigger(s.regBox.Items.OfType<ListBoxItem>().ToArray()[x.index], x.value))
-                        .ToArray();
+                    try
+                    {
+                        s.IC.Content = $"IC: 0x{state.iid:X8}";
+                        s.CurAddr.Content = $"CA: 0x{state.curAddr:X}";
+                        s.LastAddr.Content = $"LA: 0x{state.lastAddr:X}";
+                        s.PC.Content = $"PC: 0x{state.pc:X8}";
+                        _ = new[] {state.r1, state.r2, state.r3, state.u1, state.u2, state.x1, state.x2}
+                            .Select((val, index) => (val, index))
+                            .Pipe(x => Trigger(s.regBox.Items.OfType<ListBoxItem>().ToArray()[x.index], x.val))
+                            .ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError(e.ToString());
+                    }
                 });
             }
         }
