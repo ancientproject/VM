@@ -48,7 +48,10 @@
             switch (reason)
             {
                 case 0x0:
-                    Error("HALT: Power off");
+                    Error($"HALT: Power off");
+                    break;
+                case 0x4:
+                    Error($"HALT: bus offset conflict. {text}");
                     break;
                 case 0x1:
                     Error($"HALT: Bootable sector not found.");
