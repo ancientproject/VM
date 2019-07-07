@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class CommandOption
+    public class CommandOption
     {
-        public CommandOption(string template, CommandOptionType optionType)
+        internal CommandOption(string template, CommandOptionType optionType)
         {
             Template = template;
             OptionType = optionType;
@@ -44,7 +44,7 @@
         public string Description { get; set; }
         public List<string> Values { get; }
         public bool? BoolValue { get; private set; }
-        public CommandOptionType OptionType { get; }
+        internal CommandOptionType OptionType { get; }
 
         public bool TryParse(string value)
         {

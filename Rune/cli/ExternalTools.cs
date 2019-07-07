@@ -1,23 +1,17 @@
 ﻿namespace rune.cli
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
 
     public class ExternalTools
     {
-        private readonly string _cmd;
-        private readonly string _args;
         private readonly Process proc;
         public ExternalTools(string cmd, string args, IDictionary<string, string> env = null)
         {
-            _cmd = cmd;
-            _args = args;
             proc = new Process
             {
-                StartInfo = new ProcessStartInfo(cmd, args)
-                {
-                    
-                }
+                StartInfo = new ProcessStartInfo(cmd, args) { }
             };
             if (env is null) 
                 return;
@@ -30,7 +24,11 @@
             proc.StartInfo.Environment.Add(flagName, value ? "1" : "0");
             return this;
         }
-
+        public ExternalTools WithEnv(string flagName, string value)
+        {
+            proc.StartInfo.Environment.Add(flagName, value);
+            return this;
+        }
         public ExternalTools Start()
         {
             proc.Start();
@@ -40,6 +38,7 @@
         public ExternalTools Wait()
         {
             proc.WaitForExit();
+            Console.WriteLine();
             return this;
         }
 

@@ -16,13 +16,18 @@
 
     internal class Host
     {
-        private static readonly Dictionary<string, Func<string[], int>> s_builtIns = new Dictionary<string, Func<string[], int>>
+        private static readonly Dictionary<string, Func<string[], int>> s_builtIns 
+            = new Dictionary<string, Func<string[], int>>
         {
-            ["new"]     = NewCommand.Run,
-            ["help"]    = HelpCommand.Run,
-            ["run"]     = RunCommand.Run,
-            ["build"]   = BuildCommand.Run,
-            ["vm"]      = VMCommand.Run
+            ["new"]         = NewCommand.Run,
+            ["help"]        = HelpCommand.Run,
+            ["run"]         = RunCommand.Run,
+            ["build"]       = BuildCommand.Run,
+            ["vm"]          = VMCommand.Run,
+            ["new-scheme"]  = SchemeCommand.Run,
+            ["install"]     = InstallCommand.Run,
+            ["clear"]       = ClearCommand.Run,
+            ["remove"]      = RemoveCommand.Run
         };
         public static int Main(string[] args)
         {

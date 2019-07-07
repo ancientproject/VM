@@ -48,8 +48,8 @@
 
             if (projectFiles.Length == 0)
             {
-                throw new InvalidOperationException(
-                    $"Couldn't find a project to run. Ensure a project exists in {directory}.");
+                Console.WriteLine($"{":cd:".Emoji()} {"Couldn't".Color(Color.Red)} find a project to run. {"Ensure".Nier(0)} a project exists in '{directory}'.");
+                return 1;
             }
 
             var p = projectFiles.Single();
