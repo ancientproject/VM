@@ -14,10 +14,10 @@
     <ROW Property="ARPNOREPAIR" Value="1"/>
     <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
     <ROW Property="Manufacturer" Value="Yuuki Wesp"/>
-    <ROW Property="ProductCode" Value="1033:{42C683A3-F3E2-47FE-A885-B3F01E11BE9E} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{E61F8BE4-339D-4AA4-82B0-C89424EF22A1} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="ancient-sdk"/>
-    <ROW Property="ProductVersion" Value="0.24.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="0.47.278" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{7D3B4BF5-C5CA-4208-90D7-9529CAC2549D}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -37,16 +37,32 @@
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="compiler_Dir" Directory_Parent="APPDIR" DefaultDir="compiler"/>
+    <ROW Directory="cs_Dir" Directory_Parent="rune_Dir" DefaultDir="cs"/>
+    <ROW Directory="de_Dir" Directory_Parent="rune_Dir" DefaultDir="de"/>
+    <ROW Directory="es_Dir" Directory_Parent="rune_Dir" DefaultDir="es"/>
     <ROW Directory="fr_Dir" Directory_Parent="rune_Dir" DefaultDir="fr"/>
+    <ROW Directory="it_Dir" Directory_Parent="rune_Dir" DefaultDir="it"/>
+    <ROW Directory="ja_Dir" Directory_Parent="rune_Dir" DefaultDir="ja"/>
+    <ROW Directory="ko_Dir" Directory_Parent="rune_Dir" DefaultDir="ko"/>
+    <ROW Directory="pl_Dir" Directory_Parent="rune_Dir" DefaultDir="pl"/>
+    <ROW Directory="ptBR_Dir" Directory_Parent="rune_Dir" DefaultDir="pt-BR"/>
     <ROW Directory="ro_Dir" Directory_Parent="rune_Dir" DefaultDir="ro"/>
+    <ROW Directory="ru_Dir" Directory_Parent="rune_Dir" DefaultDir="ru"/>
     <ROW Directory="rune_Dir" Directory_Parent="APPDIR" DefaultDir="rune"/>
+    <ROW Directory="tr_Dir" Directory_Parent="rune_Dir" DefaultDir="tr"/>
     <ROW Directory="vm_Dir" Directory_Parent="APPDIR" DefaultDir="vm"/>
+    <ROW Directory="zhHans_Dir" Directory_Parent="rune_Dir" DefaultDir="zh-Hans"/>
+    <ROW Directory="zhHant_Dir" Directory_Parent="rune_Dir" DefaultDir="zh-Hant"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AI_CustomARPName" ComponentId="{3851DDFB-BB02-4AE5-98B3-FCBFBEF77CEA}" Directory_="APPDIR" Attributes="4" KeyPath="DisplayName" Options="1"/>
+    <ROW Component="AI_CustomARPName" ComponentId="{5E9BD630-F3AE-417C-BF40-F48C88918452}" Directory_="APPDIR" Attributes="4" KeyPath="DisplayName" Options="1"/>
     <ROW Component="Ancient.Compiler.Service.dll" ComponentId="{17DFC5EA-EB79-4E09-9202-069947AEDD03}" Directory_="rune_Dir" Attributes="0" KeyPath="Ancient.Compiler.Service.dll"/>
     <ROW Component="Ancient.Compiler.Service.dll_1" ComponentId="{394DC9D3-CFE2-44D3-9210-7C6299417320}" Directory_="compiler_Dir" Attributes="0" KeyPath="Ancient.Compiler.Service.dll_1"/>
     <ROW Component="Ancient.ProjectSystem.dll" ComponentId="{D7740845-C37F-4183-BCF2-BE30522E5C4B}" Directory_="rune_Dir" Attributes="0" KeyPath="Ancient.ProjectSystem.dll"/>
+    <ROW Component="Ancient.ProjectSystem.dll_1" ComponentId="{1F507006-FA7C-4E45-A61A-D662B103839E}" Directory_="vm_Dir" Attributes="0" KeyPath="Ancient.ProjectSystem.dll_1"/>
+    <ROW Component="Ancient.Runtime.Context.dll" ComponentId="{7866B20D-B10F-4FA4-8C9F-DD8E6A9D011A}" Directory_="vm_Dir" Attributes="0" KeyPath="Ancient.Runtime.Context.dll"/>
+    <ROW Component="Ancient.Runtime.Hardware.dll" ComponentId="{9B363354-F005-46F8-A067-754FBB76CFA7}" Directory_="vm_Dir" Attributes="0" KeyPath="Ancient.Runtime.Hardware.dll"/>
+    <ROW Component="Ancient.Runtime.Hardware.dll_1" ComponentId="{5949087B-0EF9-4A32-AF11-B40A403DEF30}" Directory_="rune_Dir" Attributes="0" KeyPath="Ancient.Runtime.Hardware.dll_1"/>
     <ROW Component="Ancient.Runtime.dll" ComponentId="{214E02FD-922D-4069-8410-0C370791CB3B}" Directory_="rune_Dir" Attributes="0" KeyPath="Ancient.Runtime.dll"/>
     <ROW Component="Ancient.Runtime.dll_1" ComponentId="{05385BEC-C096-4DB9-956F-669E206FF0FA}" Directory_="vm_Dir" Attributes="0" KeyPath="Ancient.Runtime.dll_1"/>
     <ROW Component="Ancient.Runtime.dll_2" ComponentId="{D6737B16-CED8-4102-B4AC-943651DA6869}" Directory_="compiler_Dir" Attributes="0" KeyPath="Ancient.Runtime.dll_2"/>
@@ -55,12 +71,100 @@
     <ROW Component="DustInTheWind.ConsoleTools.resources.dll_1" ComponentId="{0E224FBD-3A95-48CE-A0D2-97DD9B9EA69B}" Directory_="ro_Dir" Attributes="0" KeyPath="DustInTheWind.ConsoleTools.resources.dll_1"/>
     <ROW Component="EmojiOne.dll" ComponentId="{BF72322A-1D72-426D-9440-B9F5B94B2400}" Directory_="rune_Dir" Attributes="0" KeyPath="EmojiOne.dll"/>
     <ROW Component="FluentCommandLineParser.dll" ComponentId="{9EF8A1B4-299D-40F9-9F79-EFDC5ABB774F}" Directory_="compiler_Dir" Attributes="0" KeyPath="FluentCommandLineParser.dll"/>
+    <ROW Component="Flurl.Http.dll" ComponentId="{903C711E-8DF2-4E62-A84D-05347DF6C5A4}" Directory_="rune_Dir" Attributes="0" KeyPath="Flurl.Http.dll"/>
+    <ROW Component="Flurl.dll" ComponentId="{FB3E4DAE-FD74-47A5-8C74-9C219BF32CEB}" Directory_="rune_Dir" Attributes="0" KeyPath="Flurl.dll"/>
     <ROW Component="Microsoft.CSharp.dll" ComponentId="{CA55E62A-811E-457B-9E18-BB6CDCED924F}" Directory_="rune_Dir" Attributes="256" KeyPath="Microsoft.CSharp.dll"/>
     <ROW Component="Microsoft.CSharp.dll_1" ComponentId="{C1937820-89C2-44AF-AC8E-DA15F0256A37}" Directory_="vm_Dir" Attributes="256" KeyPath="Microsoft.CSharp.dll_1"/>
     <ROW Component="Microsoft.CSharp.dll_2" ComponentId="{639F7B9E-7B22-4792-9B7C-EE53CF9FF87F}" Directory_="compiler_Dir" Attributes="256" KeyPath="Microsoft.CSharp.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.dll" ComponentId="{906A0BDD-3423-4A82-AD55-E2883750AD8A}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll" ComponentId="{2FAEF999-48CB-4A3D-97DE-817A3487DD9A}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_1" ComponentId="{4519C095-92F9-4374-AEB6-544F342AF008}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_1"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_10" ComponentId="{295A4EA2-0B66-4A11-9C1B-99ACA50893FE}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_10"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_11" ComponentId="{3F2FB9CC-3E9A-4C9C-945B-5467C2F40966}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_11"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_12" ComponentId="{9C5EB8F3-BF8E-4B33-9EC5-4442815B9863}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_2" ComponentId="{AF2D7A8B-5813-4234-8E5C-36515759B007}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_3" ComponentId="{CA82D1FB-153B-425A-B03D-2E41E809788D}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_3"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_4" ComponentId="{978830B5-358C-4C71-91E7-95D4B38DEC90}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_4"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_5" ComponentId="{E3F83A33-255B-4D08-AC7E-EC860B951FF6}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_5"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_6" ComponentId="{409695CE-6F61-4991-9796-FBAC05288832}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_6"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_7" ComponentId="{F204895B-6E36-40F9-BC79-AFFDE628EE57}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_8" ComponentId="{E9ABA5FC-A7F4-4B6C-A843-E57AA4068CA4}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_9" ComponentId="{16C4CF95-1877-425E-98E2-5A3A76775B53}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" ComponentId="{C25CC4B2-E906-4455-8903-B44C3E890FF8}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" ComponentId="{472B3D30-DFB8-4D66-89A5-AEE95BC1C2FE}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_1" ComponentId="{85FFC21E-9ADB-46B8-AD9A-9A6A1BFF1C90}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_1"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_10" ComponentId="{DD971536-EB12-4F81-8B8B-7ABB7B239E06}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_10"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_11" ComponentId="{2CFC2400-4968-40B8-95EB-9B0972D624AA}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_11"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" ComponentId="{E24C4EFE-DAF2-4DC9-BA72-C0ABCCAD4474}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_2" ComponentId="{B4905253-DD1A-402D-87D6-AF3D7C0824E5}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_3" ComponentId="{ED36C36F-C68B-47F8-86BB-87584ABD6CED}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_3"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_4" ComponentId="{28773F81-3FE5-49A2-B20F-F8B7896D0147}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_4"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_5" ComponentId="{6FCCFC9E-63A5-48AF-B279-60921C3EC74F}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_5"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_6" ComponentId="{17635B93-9602-4A2F-8AC1-03D2EE33CF42}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_6"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" ComponentId="{3DD62D9D-2C4E-4389-A889-2A50E6EEF746}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" ComponentId="{9C37BFE2-016F-4518-BA64-66059CBA6F39}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" ComponentId="{A667CE8E-8F5A-4373-8E5E-54AA97945355}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.dll" ComponentId="{1CAC08E4-1CA7-46C0-B68B-15CAC9F8F31B}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll" ComponentId="{48851692-4F84-4BFA-AA87-F73AE3FEC483}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_1" ComponentId="{A42E3667-7204-4974-8EF4-40AA4F085AD3}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_1"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_10" ComponentId="{9381A2F1-6309-46A5-A4F7-9E53E9765623}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_10"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_11" ComponentId="{07880184-4D7A-4CC2-885D-16DA2C623B6C}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_11"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_12" ComponentId="{3FBFCEE7-5405-40BD-8ABD-1660A236553E}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_2" ComponentId="{303825E4-7BD5-4FCA-A027-45303200F74B}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_3" ComponentId="{9A337945-263F-46B7-A9B8-BEE7B120AE79}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_3"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_4" ComponentId="{650058E0-EAD2-4B50-BABA-D67A046FE220}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_4"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_5" ComponentId="{39976F16-4B06-46FA-A02B-87450D9AA930}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_5"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_6" ComponentId="{19D02869-58D2-451A-A3F6-DDA166D84EA6}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_6"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_7" ComponentId="{5E574491-FC6B-4C49-880E-6E7AD52F40D4}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_8" ComponentId="{1898D6AB-5120-4FFC-BDED-AFEE4376F1E8}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.CSharp.resources.dll_9" ComponentId="{6BC03F81-F99C-4EF2-A31B-833F3A413195}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.CSharp.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.dll" ComponentId="{CBE359C7-C953-4349-8115-9BB05B28401E}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll" ComponentId="{72F50CC8-CA47-4E31-BA86-48FE0A54CE08}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_1" ComponentId="{01D61C58-0730-45A7-8054-805779F67E68}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_1"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_10" ComponentId="{8AE118E1-ACC3-48C3-B3EE-988132B7A04E}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_10"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_11" ComponentId="{AE391C23-B572-4849-92C6-D476E29B5C0A}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_11"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_12" ComponentId="{C488B2F9-9CEA-4FD7-AB77-BF9DEA82B5A1}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_2" ComponentId="{878B502D-40FE-4D4C-88FA-089A6EF1991C}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_3" ComponentId="{71F0558C-9895-4B33-B303-81403629281A}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_3"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_4" ComponentId="{6819C7C2-3896-420F-9432-71088FD032B2}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_4"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_5" ComponentId="{9871BC71-F405-4E8F-939B-CEED74655DCB}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_5"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_6" ComponentId="{55932E3F-F8B8-42EC-B4E3-EDEC1E7A6787}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_6"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_7" ComponentId="{721E90EC-0C82-48DF-8539-CF628BA5FB11}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_8" ComponentId="{D220D505-6FAA-4DE7-853E-0A078DF9DC12}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.Features.resources.dll_9" ComponentId="{3C6AA6C2-1489-4301-8FD4-B9ABF4B94D6E}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Features.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" ComponentId="{8666EDC5-5A4A-486B-8984-5E06D7A711D4}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.dll" ComponentId="{4E7D499E-9C07-499B-A061-733B99664C31}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll" ComponentId="{E5F8C545-16B8-4E0B-BEE9-FB016771AE5E}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_1" ComponentId="{0276CC2E-4166-429D-A383-7237CFCCF9C6}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_1"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_10" ComponentId="{F6B90C49-33E9-4EC7-883A-A04C943A257C}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_10"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_11" ComponentId="{614E80E1-BE24-4A21-A95A-EEBC7254EA0A}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_11"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" ComponentId="{289DCF89-C6E8-44BE-B8E9-607774C5F213}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_2" ComponentId="{8A2331D6-01B3-44C3-8D49-0575E433EF39}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_3" ComponentId="{08522F24-FA88-4B21-8CA4-3DC868670CA4}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_3"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_4" ComponentId="{1A98888F-F1F0-41CF-916C-BEB9F5492661}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_4"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_5" ComponentId="{E71889E8-706B-436E-8E5C-AC388D94C3AF}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_5"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_6" ComponentId="{191F4880-00B7-4B75-9C95-702AD0804D2B}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_6"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" ComponentId="{93D445E4-5E9C-4678-948A-2C9185489932}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" ComponentId="{A7DF2718-BA18-4D5C-B44D-CFB67693A010}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" ComponentId="{D44E4F02-5CB8-4798-9A4D-3903C312012E}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.Workspaces.resources.dll_9"/>
+    <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{A386DE63-293E-4326-9405-2F30F9377FE8}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll" ComponentId="{8CAC2F6D-E7EC-43CD-AC0F-24EE0C144B28}" Directory_="cs_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_1" ComponentId="{CABEA3F5-DDF2-423C-9C73-A415E0044D9A}" Directory_="de_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_1"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_10" ComponentId="{730EDBC4-4284-45A3-948E-C2293E4485C6}" Directory_="tr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_10"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_11" ComponentId="{64777C2A-157B-4A9F-A17E-857224BCDF65}" Directory_="zhHans_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_11"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_12" ComponentId="{4CB1B017-1D62-4832-A983-545120225141}" Directory_="zhHant_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_12"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_2" ComponentId="{35B7CD8C-D3F0-4419-833D-590AB211DF65}" Directory_="es_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_2"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_3" ComponentId="{D5BF18E6-D50E-4026-9B2E-7EE0102DEDD7}" Directory_="fr_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_3"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_4" ComponentId="{FC03CD9E-D709-4D4E-86AA-BE2B18887CED}" Directory_="it_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_4"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_5" ComponentId="{C904A199-3DB4-40AF-A733-F0CEA8A42DA5}" Directory_="ja_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_5"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_6" ComponentId="{01ADA814-BE41-4A5A-9E2D-06B5EC3A8872}" Directory_="ko_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_6"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_7" ComponentId="{F0528C56-D350-4205-BC13-AC147D5E0B1E}" Directory_="pl_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_7"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_8" ComponentId="{C9D65682-D325-460F-AF63-17008768083E}" Directory_="ptBR_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_8"/>
+    <ROW Component="Microsoft.CodeAnalysis.resources.dll_9" ComponentId="{8984EA78-21A5-4289-9C91-40A8B9DAA1AF}" Directory_="ru_Dir" Attributes="0" KeyPath="Microsoft.CodeAnalysis.resources.dll_9"/>
     <ROW Component="Microsoft.DiaSymReader.Native.amd64.dll" ComponentId="{11D34D7F-E237-419B-9F5D-0BCE51C460CE}" Directory_="rune_Dir" Attributes="256" KeyPath="Microsoft.DiaSymReader.Native.amd64.dll"/>
     <ROW Component="Microsoft.DiaSymReader.Native.amd64.dll_1" ComponentId="{BD5693A5-8025-433C-9DD5-AAEEEA5EED79}" Directory_="vm_Dir" Attributes="256" KeyPath="Microsoft.DiaSymReader.Native.amd64.dll_1"/>
     <ROW Component="Microsoft.DiaSymReader.Native.amd64.dll_2" ComponentId="{7B08B01C-56F8-4FF3-BA8D-503C5D59B5E7}" Directory_="compiler_Dir" Attributes="256" KeyPath="Microsoft.DiaSymReader.Native.amd64.dll_2"/>
+    <ROW Component="Microsoft.DiaSymReader.dll" ComponentId="{F29FE3CC-20D6-4F7B-AA0F-BB32FAEE7ABA}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.DiaSymReader.dll"/>
     <ROW Component="Microsoft.DotNet.PlatformAbstractions.dll" ComponentId="{76AD1F37-C3F4-4D49-8D33-73674991C2E9}" Directory_="rune_Dir" Attributes="0" KeyPath="Microsoft.DotNet.PlatformAbstractions.dll"/>
     <ROW Component="Microsoft.VisualBasic.Core.dll" ComponentId="{7FAC0298-FD11-4A72-B279-A5A02A3410C9}" Directory_="rune_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Core.dll"/>
     <ROW Component="Microsoft.VisualBasic.Core.dll_1" ComponentId="{9FA1785A-4D31-4762-9082-141A476877D3}" Directory_="vm_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Core.dll_1"/>
@@ -81,6 +185,7 @@
     <ROW Component="Newtonsoft.Json.dll_1" ComponentId="{D0BDFB2A-28E2-40B1-B013-AB4BE18D368B}" Directory_="vm_Dir" Attributes="0" KeyPath="Newtonsoft.Json.dll_1"/>
     <ROW Component="Newtonsoft.Json.dll_2" ComponentId="{E115ACEE-9B10-46E9-BA4C-508B91F9F488}" Directory_="compiler_Dir" Attributes="0" KeyPath="Newtonsoft.Json.dll_2"/>
     <ROW Component="ObjectDumping.dll" ComponentId="{79D62B0D-47AD-4552-977D-1BD27FF4D654}" Directory_="vm_Dir" Attributes="0" KeyPath="ObjectDumping.dll"/>
+    <ROW Component="Octokit.dll" ComponentId="{B8021F6A-B057-42B8-9AEB-51FD0D987B1F}" Directory_="rune_Dir" Attributes="0" KeyPath="Octokit.dll"/>
     <ROW Component="Pastel.dll" ComponentId="{62192A0C-1DD3-45EE-B270-38F69BF25D86}" Directory_="rune_Dir" Attributes="0" KeyPath="Pastel.dll"/>
     <ROW Component="Pastel.dll_1" ComponentId="{218EE341-F35B-44FD-A222-F6010031383D}" Directory_="vm_Dir" Attributes="0" KeyPath="Pastel.dll_1"/>
     <ROW Component="Pastel.dll_2" ComponentId="{1BE84361-AF97-46E8-BD85-B8004BBFCFB7}" Directory_="compiler_Dir" Attributes="0" KeyPath="Pastel.dll_2"/>
@@ -131,6 +236,11 @@
     <ROW Component="System.ComponentModel.dll" ComponentId="{E945DFA3-270E-4DD7-8672-F4ECA87D367C}" Directory_="rune_Dir" Attributes="256" KeyPath="System.ComponentModel.dll"/>
     <ROW Component="System.ComponentModel.dll_1" ComponentId="{814C05D8-4F6E-407C-BD18-2044FF549794}" Directory_="vm_Dir" Attributes="256" KeyPath="System.ComponentModel.dll_1"/>
     <ROW Component="System.ComponentModel.dll_2" ComponentId="{410A0238-BEB6-4B4C-9532-544F6EB2F199}" Directory_="compiler_Dir" Attributes="256" KeyPath="System.ComponentModel.dll_2"/>
+    <ROW Component="System.Composition.AttributedModel.dll" ComponentId="{F25FDECC-BD91-4199-A04D-3B547266D44C}" Directory_="rune_Dir" Attributes="0" KeyPath="System.Composition.AttributedModel.dll"/>
+    <ROW Component="System.Composition.Convention.dll" ComponentId="{40EDA06A-C223-498B-805A-B5E1F2A27F1B}" Directory_="rune_Dir" Attributes="0" KeyPath="System.Composition.Convention.dll"/>
+    <ROW Component="System.Composition.Hosting.dll" ComponentId="{01661763-811D-4864-B566-DAAC164F8B8F}" Directory_="rune_Dir" Attributes="0" KeyPath="System.Composition.Hosting.dll"/>
+    <ROW Component="System.Composition.Runtime.dll" ComponentId="{432ABFEB-6030-44F3-A946-5D363F38436E}" Directory_="rune_Dir" Attributes="0" KeyPath="System.Composition.Runtime.dll"/>
+    <ROW Component="System.Composition.TypedParts.dll" ComponentId="{89D768CA-2CE8-4BA7-ACEC-60602E89A22B}" Directory_="rune_Dir" Attributes="0" KeyPath="System.Composition.TypedParts.dll"/>
     <ROW Component="System.Configuration.dll" ComponentId="{7794175C-517B-4946-8D55-EDAC9329C961}" Directory_="rune_Dir" Attributes="256" KeyPath="System.Configuration.dll"/>
     <ROW Component="System.Configuration.dll_1" ComponentId="{9EACEF56-0BCE-4A91-BFF5-62B8D89F2AE8}" Directory_="vm_Dir" Attributes="256" KeyPath="System.Configuration.dll_1"/>
     <ROW Component="System.Configuration.dll_2" ComponentId="{BD298682-DCDD-43CA-BD55-959521102F71}" Directory_="compiler_Dir" Attributes="256" KeyPath="System.Configuration.dll_2"/>
@@ -1459,6 +1569,108 @@
     <ROW File="acc.runtimeconfig.json" Component_="acc.deps.json" FileName="ACCRUN~1.JSO|acc.runtimeconfig.json" Attributes="0" SourcePath="..\..\acc\bin\Debug\netcoreapp3.0\win10-x64\publish\acc.runtimeconfig.json" SelfReg="false"/>
     <ROW File="Ancient.Compiler.Service.dll_1" Component_="Ancient.Compiler.Service.dll_1" FileName="ANCIEN~2.DLL|Ancient.Compiler.Service.dll" Attributes="0" SourcePath="..\..\acc\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Compiler.Service.dll" SelfReg="false"/>
     <ROW File="Ancient.Compiler.Service.pdb_1" Component_="Ancient.Compiler.Service.dll_1" FileName="ANCIEN~2.PDB|Ancient.Compiler.Service.pdb" Attributes="0" SourcePath="..\..\acc\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Compiler.Service.pdb" SelfReg="false"/>
+    <ROW File="Ancient.ProjectSystem.dll_1" Component_="Ancient.ProjectSystem.dll_1" FileName="ANCIEN~2.DLL|Ancient.ProjectSystem.dll" Attributes="0" SourcePath="..\..\vm\csharp\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.ProjectSystem.dll" SelfReg="false"/>
+    <ROW File="Ancient.ProjectSystem.pdb_1" Component_="Ancient.ProjectSystem.dll_1" FileName="ANCIEN~2.PDB|Ancient.ProjectSystem.pdb" Attributes="0" SourcePath="..\..\vm\csharp\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.ProjectSystem.pdb" SelfReg="false"/>
+    <ROW File="Ancient.Runtime.Context.dll" Component_="Ancient.Runtime.Context.dll" FileName="ANCIEN~3.DLL|Ancient.Runtime.Context.dll" Attributes="0" SourcePath="..\..\vm\csharp\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Runtime.Context.dll" SelfReg="false"/>
+    <ROW File="Ancient.Runtime.Context.pdb" Component_="Ancient.Runtime.Context.dll" FileName="ANCIEN~3.PDB|Ancient.Runtime.Context.pdb" Attributes="0" SourcePath="..\..\vm\csharp\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Runtime.Context.pdb" SelfReg="false"/>
+    <ROW File="Ancient.Runtime.Hardware.dll" Component_="Ancient.Runtime.Hardware.dll" FileName="ANCIEN~4.DLL|Ancient.Runtime.Hardware.dll" Attributes="0" SourcePath="..\..\vm\csharp\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Runtime.Hardware.dll" SelfReg="false"/>
+    <ROW File="Ancient.Runtime.Hardware.pdb" Component_="Ancient.Runtime.Hardware.dll" FileName="ANCIEN~4.PDB|Ancient.Runtime.Hardware.pdb" Attributes="0" SourcePath="..\..\vm\csharp\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Runtime.Hardware.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\cs\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\cs\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll" Component_="Microsoft.CodeAnalysis.Features.resources.dll" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\cs\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll" Component_="Microsoft.CodeAnalysis.resources.dll" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\cs\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_1" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_1" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\de\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_1" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_1" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\de\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_1" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_1" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_1" Component_="Microsoft.CodeAnalysis.Features.resources.dll_1" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\de\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_1" Component_="Microsoft.CodeAnalysis.resources.dll_1" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\de\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_1" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_1" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\de\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_2" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_2" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\es\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_2" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_2" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\es\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_2" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_2" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_2" Component_="Microsoft.CodeAnalysis.Features.resources.dll_2" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\es\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_2" Component_="Microsoft.CodeAnalysis.resources.dll_2" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\es\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_2" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_2" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\es\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_3" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_3" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\fr\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_3" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_3" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\fr\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_3" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_3" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_3" Component_="Microsoft.CodeAnalysis.Features.resources.dll_3" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\fr\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_3" Component_="Microsoft.CodeAnalysis.resources.dll_3" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\fr\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_3" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_3" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_4" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_4" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\it\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_4" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_4" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\it\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_4" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_4" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_4" Component_="Microsoft.CodeAnalysis.Features.resources.dll_4" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\it\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_4" Component_="Microsoft.CodeAnalysis.resources.dll_4" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\it\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_4" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_4" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\it\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_5" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_5" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ja\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_5" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_5" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ja\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_5" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_5" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_5" Component_="Microsoft.CodeAnalysis.Features.resources.dll_5" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ja\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_5" Component_="Microsoft.CodeAnalysis.resources.dll_5" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ja\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_5" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_5" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_6" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_6" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ko\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_6" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_6" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ko\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_6" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_6" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_6" Component_="Microsoft.CodeAnalysis.Features.resources.dll_6" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ko\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_6" Component_="Microsoft.CodeAnalysis.resources.dll_6" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ko\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_6" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_6" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_7" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pl\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_7" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pl\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_7" Component_="Microsoft.CodeAnalysis.Features.resources.dll_7" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pl\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_7" Component_="Microsoft.CodeAnalysis.resources.dll_7" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pl\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_7" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_8" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pt-BR\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_8" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_8" Component_="Microsoft.CodeAnalysis.Features.resources.dll_8" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pt-BR\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_8" Component_="Microsoft.CodeAnalysis.resources.dll_8" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pt-BR\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_8" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_9" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ru\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_9" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ru\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_9" Component_="Microsoft.CodeAnalysis.Features.resources.dll_9" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ru\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_9" Component_="Microsoft.CodeAnalysis.resources.dll_9" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ru\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_9" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_10" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_10" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\tr\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_10" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_10" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\tr\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_10" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_10" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_10" Component_="Microsoft.CodeAnalysis.Features.resources.dll_10" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\tr\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_10" Component_="Microsoft.CodeAnalysis.resources.dll_10" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\tr\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_10" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_10" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_11" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_11" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hans\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_11" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_11" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_11" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_11" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_11" Component_="Microsoft.CodeAnalysis.Features.resources.dll_11" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hans\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_11" Component_="Microsoft.CodeAnalysis.resources.dll_11" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hans\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_11" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_11" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_12" FileName="MICROS~1.DLL|Microsoft.CodeAnalysis.CSharp.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hant\Microsoft.CodeAnalysis.CSharp.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_12" FileName="MICROS~2.DLL|Microsoft.CodeAnalysis.CSharp.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12" FileName="MICROS~3.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.resources.dll_12" Component_="Microsoft.CodeAnalysis.Features.resources.dll_12" FileName="MICROS~4.DLL|Microsoft.CodeAnalysis.Features.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hant\Microsoft.CodeAnalysis.Features.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.resources.dll_12" Component_="Microsoft.CodeAnalysis.resources.dll_12" FileName="MICROS~5.DLL|Microsoft.CodeAnalysis.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hant\Microsoft.CodeAnalysis.resources.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_12" FileName="MICROS~6.DLL|Microsoft.CodeAnalysis.Workspaces.resources.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll" SelfReg="false"/>
+    <ROW File="Ancient.Runtime.Hardware.dll_1" Component_="Ancient.Runtime.Hardware.dll_1" FileName="ANCIEN~4.DLL|Ancient.Runtime.Hardware.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Runtime.Hardware.dll" SelfReg="false"/>
+    <ROW File="Ancient.Runtime.Hardware.pdb_1" Component_="Ancient.Runtime.Hardware.dll_1" FileName="ANCIEN~4.PDB|Ancient.Runtime.Hardware.pdb" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Ancient.Runtime.Hardware.pdb" SelfReg="false"/>
+    <ROW File="Flurl.dll" Component_="Flurl.dll" FileName="Flurl.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Flurl.dll" SelfReg="false"/>
+    <ROW File="Flurl.Http.dll" Component_="Flurl.Http.dll" FileName="FLURLH~1.DLL|Flurl.Http.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Flurl.Http.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.dll" Component_="Microsoft.CodeAnalysis.CSharp.dll" FileName="MICROS~8.DLL|Microsoft.CodeAnalysis.CSharp.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.CSharp.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Features.dll" Component_="Microsoft.CodeAnalysis.CSharp.Features.dll" FileName="MICROS~9.DLL|Microsoft.CodeAnalysis.CSharp.Features.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.CSharp.Features.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.dll" FileName="MICRO~10.DLL|Microsoft.CodeAnalysis.CSharp.Workspaces.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.dll" Component_="Microsoft.CodeAnalysis.dll" FileName="MICRO~11.DLL|Microsoft.CodeAnalysis.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Features.dll" Component_="Microsoft.CodeAnalysis.Features.dll" FileName="MICRO~12.DLL|Microsoft.CodeAnalysis.Features.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.Features.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" Component_="Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" FileName="MICRO~13.DLL|Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" SelfReg="false"/>
+    <ROW File="Microsoft.CodeAnalysis.Workspaces.dll" Component_="Microsoft.CodeAnalysis.Workspaces.dll" FileName="MICRO~14.DLL|Microsoft.CodeAnalysis.Workspaces.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.CodeAnalysis.Workspaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.DiaSymReader.dll" Component_="Microsoft.DiaSymReader.dll" FileName="MICRO~15.DLL|Microsoft.DiaSymReader.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Microsoft.DiaSymReader.dll" SelfReg="false"/>
+    <ROW File="Octokit.dll" Component_="Octokit.dll" FileName="Octokit.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\Octokit.dll" SelfReg="false"/>
+    <ROW File="System.Composition.AttributedModel.dll" Component_="System.Composition.AttributedModel.dll" FileName="SYST~156.DLL|System.Composition.AttributedModel.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\System.Composition.AttributedModel.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Convention.dll" Component_="System.Composition.Convention.dll" FileName="SYST~157.DLL|System.Composition.Convention.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\System.Composition.Convention.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Hosting.dll" Component_="System.Composition.Hosting.dll" FileName="SYST~158.DLL|System.Composition.Hosting.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\System.Composition.Hosting.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Runtime.dll" Component_="System.Composition.Runtime.dll" FileName="SYST~159.DLL|System.Composition.Runtime.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\System.Composition.Runtime.dll" SelfReg="false"/>
+    <ROW File="System.Composition.TypedParts.dll" Component_="System.Composition.TypedParts.dll" FileName="SYST~160.DLL|System.Composition.TypedParts.dll" Attributes="0" SourcePath="..\..\Rune\bin\Debug\netcoreapp3.0\win10-x64\publish\System.Composition.TypedParts.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -2247,6 +2459,104 @@
     <ROW Feature_="MainFeature" Component_="acc.dll"/>
     <ROW Feature_="MainFeature" Component_="acc.exe"/>
     <ROW Feature_="MainFeature" Component_="Ancient.Compiler.Service.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Ancient.ProjectSystem.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Ancient.Runtime.Context.dll"/>
+    <ROW Feature_="MainFeature" Component_="Ancient.Runtime.Hardware.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_6"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_6"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_6"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_6"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_6"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_6"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_7"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_8"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_9"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_10"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_10"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_10"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_10"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_10"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_10"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_11"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_11"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_11"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_11"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_11"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_11"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.resources.dll_12"/>
+    <ROW Feature_="MainFeature" Component_="Ancient.Runtime.Hardware.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Flurl.dll"/>
+    <ROW Feature_="MainFeature" Component_="Flurl.Http.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Features.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.CSharp.Workspaces.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Features.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.CodeAnalysis.Workspaces.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.DiaSymReader.dll"/>
+    <ROW Feature_="MainFeature" Component_="Octokit.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.AttributedModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Convention.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Runtime.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.TypedParts.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
