@@ -1,20 +1,20 @@
 ﻿namespace vm.component
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Ancient.ProjectSystem;
     using ancient.runtime;
-    using dev;
     using MoreLinq;
 
     public class Bus
     {
         public State State { get; set; }
         public CPU cpu { get; }
+        public DeviceScheme scheme { get; }
 
         public Debugger debugger { get; set; }
 
-        public List<IDevice> Devices = new List<IDevice>();
+        public List<IDevice> Devices = new List<IDevice>(16);
 
         public bool WarmUpDevices { get; set; } = AppFlag.GetVariable("VM_WARMUP_DEV", true);
         public bool ShutdownDevices { get; set; } = AppFlag.GetVariable("VM_SHUTDOWN_DEV", true);
@@ -26,10 +26,19 @@
 
             Add(new BIOS(cpu,this));
             Add(new Memory(0x0, 0x90000, this));
+
+            scheme = DeviceScheme.Default;
         }
 
         public void Add(IDevice device)
         {
+            device.startAddress = scheme.getOffsetByDevice(device.name, device.startAddress);
+
+            if (Devices.FirstOrDefault(x => x.startAddress == device.startAddress) != null)
+            {
+                cpu.halt(0x4, $"<0x{device.startAddress:X}>");
+                return;
+            }
             Devices.Add(device);
             Devices.Sort();
             device.assignBus(this);
@@ -47,5 +56,7 @@
             if(ShutdownDevices)
                 Devices.Pipe(x => x.shutdown()).ToArray();
         }
+
+        public override string ToString() => $"bus [{Devices.Count:00}/{Devices.Capacity:00}]";
     }
 }
