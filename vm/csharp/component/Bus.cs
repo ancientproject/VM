@@ -24,10 +24,10 @@
             State = new State(this);
             cpu = new CPU(this);
 
+            scheme = DeviceScheme.Default;
+
             Add(new BIOS(cpu,this));
             Add(new Memory(0x0, 0x90000, this));
-
-            scheme = DeviceScheme.Default;
         }
 
         public void Add(IDevice device)
