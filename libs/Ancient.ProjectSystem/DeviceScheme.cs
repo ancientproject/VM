@@ -1,6 +1,8 @@
 ﻿namespace Ancient.ProjectSystem
 {
+    using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using Newtonsoft.Json;
@@ -28,17 +30,23 @@
         {
             get
             {
-                var f = new FileInfo($"./device.scheme");
+                var str = $"./device.scheme";
+                var workPath = Environment.GetEnvironmentVariable("CLI_WORK_PATH");
+                if (workPath != null)
+                    str = Path.Combine(workPath, "device.scheme");
+
+                var f = new FileInfo(str);
                 if(!f.Exists)
-                    File.WriteAllText($"./device.scheme",JsonConvert.SerializeObject(new DeviceScheme()));
+                    File.WriteAllText(str,JsonConvert.SerializeObject(new DeviceScheme()));
                 return Open(f);
             }
         }
 
         public short getOffsetByDevice(string id, short @default)
         {
-            if (scheme.ContainsKey(id))
-                return short.Parse(scheme[id]);
+            if (scheme.ContainsKey(id) && 
+                short.TryParse(scheme[id].Replace("0x", ""), NumberStyles.AllowHexSpecifier, null, out var result))
+                return result;
             return @default;
         }
     }
