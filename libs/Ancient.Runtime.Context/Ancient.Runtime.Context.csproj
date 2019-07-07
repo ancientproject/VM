@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ancient.ProjectSystem\Ancient.ProjectSystem.csproj" />
     <ProjectReference Include="..\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
     <ProjectReference Include="..\Ancient.Runtime\Ancient.Runtime.csproj" />
   </ItemGroup>
