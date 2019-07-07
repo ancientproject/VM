@@ -1,10 +1,11 @@
 ﻿namespace rune.etc
 {
     using System;
+    using System.Collections.Generic;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.Loader;
     using System.Text;
     using ancient.runtime;
     using Microsoft.CodeAnalysis;
@@ -12,18 +13,27 @@
 
     public class CSharpCompile
     {
-        public static Assembly Build(string id, string code)
+        public static byte[] Build(string id, string code)
         {
+            Console.Write($"{":thought_balloon:".Emoji()} Mount '{id}'...".Color(Color.DimGray));
             var dd = typeof(Enumerable).GetTypeInfo().Assembly.Location;
             var coreDir = Directory.GetParent(dd);
 
-            var refs = coreDir.GetFiles("*.dll").Select(x => MetadataReference.CreateFromFile(x.FullName)).ToList();
+            var refs = new List<MetadataReference>();
 
             refs.AddRange(new []
             {
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+
+                MetadataReference.CreateFromFile($"{Path.Combine(coreDir.FullName, "netstandard.dll")}"),
+                MetadataReference.CreateFromFile($"{Path.Combine(coreDir.FullName, "System.Runtime.dll")}"),
+                MetadataReference.CreateFromFile($"{Path.Combine(coreDir.FullName, "System.Runtime.Extensions.dll")}"),
+                MetadataReference.CreateFromFile($"{Path.Combine(coreDir.FullName, "Microsoft.CSharp.dll")}"),
+
+
                 MetadataReference.CreateFromFile(typeof(ldx).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(IDevice).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Console).GetTypeInfo().Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(Console).GetTypeInfo().Assembly.Location),
             });
 
             var compilation = CSharpCompilation.Create($"{id}.image")
@@ -33,15 +43,21 @@
 
             using var ms = new MemoryStream();		
             var result = compilation.Emit(ms);
+
+            if(result.Success)
+                Console.WriteLine($".. OK".Color(Color.DimGray));
+            else 
+                Console.WriteLine($".. FAIL".Color(Color.DimGray));
+
             if (!result.Success)
             {
                 var b = new StringBuilder();
                 foreach (var diagnostic in result.Diagnostics)
-                    b.AppendLine(diagnostic.ToString());
-                throw new Exception(b.ToString());
+                    Console.WriteLine(diagnostic.ToString().Color(Color.Red));
+                return null;
             }
             ms.Seek(0, SeekOrigin.Begin);
-            return AssemblyLoadContext.Default.LoadFromStream(ms);
+            return ms.ToArray();
         }
     }
 }
