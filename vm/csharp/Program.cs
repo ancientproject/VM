@@ -39,6 +39,8 @@
 
         public static void InitializeMemory(Bus bus, params string[] args)
         {
+            if(bus.State.halt != 0)
+                return;
             if (!args.Any())
                 bus.State.Load("<chip>", 0xB00B5000);
             else
@@ -75,9 +77,10 @@
             //bus.Add(new Terminal(0x1));
             bus.Add(new AdvancedTerminal(0x2));
 
+            if(AppFlag.GetVariable("VM_TRACE"))
+                DeviceLoader.OnTrace += Console.WriteLine;
 
-            if(AppFlag.GetVariable("VM_USE_EXD"))
-                DeviceLoader.Grub(bus.Add, Environment.GetEnvironmentVariable("VM_DEV_IMAGE")?.Split('|'));
+            DeviceLoader.AutoGrub(bus.Add);
 
             InitializeMemory(bus, args);
 
