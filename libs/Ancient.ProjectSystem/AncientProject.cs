@@ -18,10 +18,8 @@
         public Dictionary<string, string> scripts = new Dictionary<string, string>();
 
 
-        public static AncientProject Open(FileInfo file)
-        {
-            return JsonConvert.DeserializeObject<AncientProject>(File.ReadAllText(file.FullName));
-        }
+        public static AncientProject Open(FileInfo file) 
+            => JsonConvert.DeserializeObject<AncientProject>(File.ReadAllText(file.FullName));
     }
 
 
