@@ -10,6 +10,9 @@ public class TerminalDevice : Device
 {
     private StringBuilder relMemory = new StringBuilder();
 
+    public override void shutdown() => relMemory = null;
+    public TerminalDevice() : base(0x1, "term") { }
+
     public override void write(long address, long data)
     {
         switch (address)
@@ -56,8 +59,4 @@ public class TerminalDevice : Device
                 break;
         }
     }
-
-
-    public override void shutdown() => relMemory = null;
-    public TerminalDevice() : base(0x1, "term") { }
 }
