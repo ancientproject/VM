@@ -10,7 +10,7 @@
     {
         [StringAddress(0xE, 0xF)]
         public string name { get; private set; }
-        public short startAddress { get; private set; }
+        public short startAddress { get; set; }
 
 
         protected Device(short address, string name)

@@ -5,7 +5,7 @@
     public interface IDevice : IComparable, IBusGate
     {
         string name { get; }
-        short startAddress { get; }
+        short startAddress { get; set; }
         void write(long address, long data);
         long read(long address);
 
