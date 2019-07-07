@@ -1,22 +1,60 @@
 ﻿namespace ancient.runtime.context
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using Ancient.ProjectSystem;
+    using Newtonsoft.Json;
 
     public static class DeviceLoader
     {
         public static DeviceImageLoadContext Context { get; internal set; }
         public static event Action<string> OnTrace;
 
-        public static void Grub(Action<IDevice> hook, params string[] additionalImage) => Grub(hook, null, additionalImage);
-        public static void Grub(Action<IDevice> hook, Action<string> trace, params string[] additionalImage)
+        static DeviceLoader() => OnTrace += x => Trace.WriteLine(x);
+
+        public static void AutoGrub(Action<IDevice> hook)
+        {
+            if(!Directory.Exists("deps"))
+            {
+                trace($"[device-loader] directory '{new DirectoryInfo("deps").FullName}' not found");
+                return;
+            }
+            if(!new FileInfo("./deps/ancient.lock").Exists)
+            {
+                trace($"[device-loader] lock file not found.");
+                return;
+            }
+            var locks = new List<AncientLockFile>();
+            try
+            {
+                locks = JsonConvert.DeserializeObject<AncientLockFile[]>(File.ReadAllText("./deps/ancient.lock")).ToList();
+            }
+            catch (Exception e)
+            {
+                trace($"[device-loader] {e}");
+            }
+
+            if (!locks.Any())
+            {
+                trace($"[device-loader] lock file is empty.");
+                return;
+            }
+
+            Grub(hook, locks.Select(x => 
+                    new AssemblyName($"{x.id}, Version={x.version}, Culture=neutral, PublicKeyToken=null"))
+                    .ToArray());
+        }
+        public static void Grub(Action<IDevice> hook, params AssemblyName[] additionalImage)
         {
             if(Context is null)
                 Context = new DeviceImageLoadContext(trace);
 
             var asmList = additionalImage
-                .Select(imageName => Context.LoadFromAssemblyName(new AssemblyName(imageName)))
+                .Select(imageName => Context.LoadFromAssemblyName(imageName))
                 .ToList();
 
             var devList = asmList
