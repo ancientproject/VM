@@ -85,6 +85,8 @@
                 .WithEnv("VM_ATTACH_DEBUGGER", isDebug.BoolValue.HasValue)
                 .WithEnv("VM_KEEP_MEMORY", keepMemory.BoolValue.HasValue)
                 .WithEnv("VM_MEM_FAST_WRITE", fastWrite.BoolValue.HasValue)
+                .WithEnv("CLI", true)
+                .WithEnv("CLI_WORK_PATH", directory)
                 
                 .Start()
                 .Wait().ExitCode();
