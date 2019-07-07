@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Yuuki Wesp</Authors>
+    <Version>0.24</Version>
   </PropertyGroup>
 
   <ItemGroup>
