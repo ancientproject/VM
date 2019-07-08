@@ -18,7 +18,6 @@
             Console.Write($"{":thought_balloon:".Emoji()} Mount '{id}'...".Color(Color.DimGray));
             var dd = typeof(Enumerable).GetTypeInfo().Assembly.Location;
             var coreDir = Directory.GetParent(dd);
-
             var refs = new List<MetadataReference>();
 
             refs.AddRange(new []
@@ -30,20 +29,17 @@
                 MetadataReference.CreateFromFile($"{Path.Combine(coreDir.FullName, "System.Runtime.Extensions.dll")}"),
                 MetadataReference.CreateFromFile($"{Path.Combine(coreDir.FullName, "Microsoft.CSharp.dll")}"),
 
-
                 MetadataReference.CreateFromFile(typeof(ldx).GetTypeInfo().Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(IDevice).GetTypeInfo().Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Console).GetTypeInfo().Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Console).GetTypeInfo().Assembly.Location)
             });
 
-            var compilation = CSharpCompilation.Create($"{id}.image")
-                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true))
+            var compilation = CSharpCompilation.Create($"{id}")
+                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary).WithOptimizationLevel(OptimizationLevel.Debug))
                 .AddReferences(refs)
                 .AddSyntaxTrees(CSharpSyntaxTree.ParseText(code));
-
-            using var ms = new MemoryStream();		
-            var result = compilation.Emit(ms);
-
+            var temp = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+            var result = compilation.Emit(temp);
             if(result.Success)
                 Console.WriteLine($".. OK".Color(Color.DimGray));
             else 
@@ -56,8 +52,8 @@
                     Console.WriteLine(diagnostic.ToString().Color(Color.Red));
                 return null;
             }
-            ms.Seek(0, SeekOrigin.Begin);
-            return ms.ToArray();
+
+            return File.ReadAllBytes(temp);
         }
     }
 }
