@@ -25,7 +25,7 @@
 
         #region Registers
         public long SP { get; set; }
-
+        
         public ulong pc { get; set; }
 
         /// <summary>
@@ -304,15 +304,15 @@
                     mem[r1] ^= mem[r2];
                     break;
                 case 0xF when x2 == 0xE: // 0xF9988E0
-                    trace($"call :: move, 0x{r1:X} -> 0x{r2:X} -> 0x{u1:X}");
+                    trace($"call :: move, dev[0x{r1:X}] -> 0x{r2:X} -> 0x{u1:X}");
                     bus.Find(r1 & 0xFF).write(r2 & 0xFF, i32 & mem[u1] & 0xFF);
                     break;
                 case 0xF when x2 == 0xC: // 0xF00000C
-                    trace($"call :: move, 0x{r1:X} -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
+                    trace($"call :: move, dev[0x{r1:X}] -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
                     bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
                 case 0xA4:
-                    trace($"call :: rfd 0x{r1:X}, 0x{r2:X}");
+                    trace($"call :: rfd dev[0x{r1:X}], 0x{r2:X}");
                     stack.push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
