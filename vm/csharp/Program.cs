@@ -45,7 +45,7 @@
                 bus.State.Load("<chip>", 0xB00B5000);
             else
             {
-                var nameFile = Path.GetFileNameWithoutExtension(args.First());
+                var nameFile = Path.Combine(Path.GetDirectoryName(args.First()),Path.GetFileNameWithoutExtension(args.First()));
                 var file = new FileInfo($"{nameFile}.dlx");
                 var bios = new FileInfo($"{nameFile}.bios");
                 var pdb = new FileInfo($"{nameFile}.pdb");
