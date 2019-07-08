@@ -2,11 +2,11 @@
 {
     using MoreLinq;
     using System;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Loader;
+    using System.Threading;
 
     public class DeviceImageLoadContext : AssemblyLoadContext
     {
@@ -19,6 +19,7 @@
         {
             get
             {
+                Console.Beep(400, 2);
                 var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ancient");
                 return Directory.CreateDirectory(dir).CreateSubdirectory("packages");
             }
@@ -28,15 +29,16 @@
 
         public FileSystemInfo FindImage(string devName, Version version)
         {
-            var corePath = $"deps/{version.Major}.{version.Minor}.{version.Build}/any/{devName}.image";
+            var corePath = $"deps/{devName}/{version.ToString(2)}/any/{devName}.image";
             return new FileSystemInfo[]
             {
-                new FileInfo($"./{corePath}"),
-                new FileInfo($"./../{corePath}"),
-                new FileInfo($"./../../{corePath}"),
+                new VMFileInfo(Path.Combine(CacheDir.FullName, corePath).Replace("\\", "/")),
                 new FileInfo($"{Environment.GetEnvironmentVariable("VM_DEV_HOME") ?? "vm:/home"}/{corePath}"),
-                new VMFileInfo(Path.Combine(CacheDir.FullName, corePath).Replace("\\", "/"))
+                new FileInfo($"./../../{corePath}"),
+                new FileInfo($"./../{corePath}"),
+                new FileInfo($"./{corePath}")
             }.Pipe(x => log($"try find '{devName}' in '{x}'")).FirstOrDefault(x => x.Exists);
+            
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
@@ -48,10 +50,11 @@
             if (file is null)
                 throw new Exception($"can't load '{fullImageName}' - [not found].");
             log($"'{fullImageName}' was found in '{file}' and success loaded");
-            return Assembly.LoadFile(file.FullName);
+            var asm = Assembly.Load(File.ReadAllBytes(file.FullName));
+            return asm;
         }
 
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName) 
-            => throw new Exception($"can't load '{unmanagedDllName}|0.0.0-unmanaged.image' - loader is not supported.");
+            => throw new Exception($"can't load '{unmanagedDllName}.native' - loader is not supported.");
     }
 }

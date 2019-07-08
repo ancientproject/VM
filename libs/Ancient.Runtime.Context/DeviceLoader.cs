@@ -45,17 +45,18 @@
             }
 
             Grub(hook, locks.Select(x => 
-                    new AssemblyName($"{x.id}, Version={x.version}, Culture=neutral, PublicKeyToken=null"))
+                    new AssemblyName($"{x.id}, Version={x.version}"))
                     .ToArray());
         }
         public static void Grub(Action<IDevice> hook, params AssemblyName[] additionalImage)
         {
             if(Context is null)
                 Context = new DeviceImageLoadContext(trace);
-
             var asmList = additionalImage
                 .Select(imageName => Context.LoadFromAssemblyName(imageName))
                 .ToList();
+
+            
 
             var devList = asmList
                 .SelectMany(x => x.GetExportedTypes())
