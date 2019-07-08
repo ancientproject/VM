@@ -27,7 +27,8 @@
             ["new-scheme"]  = SchemeCommand.Run,
             ["install"]     = InstallCommand.Run,
             ["clear"]       = ClearCommand.Run,
-            ["remove"]      = RemoveCommand.Run
+            ["remove"]      = RemoveCommand.Run,
+            ["restore"]     = RestoreCommand.Run
         };
         public static int Main(string[] args)
         {
@@ -63,16 +64,17 @@
             };
         }
 
+        internal static bool Verbose { get; set; }
+
         internal static int ProcessArgs(string[] args)
         {
-            bool? verbose = null;
             var success = true;
             var command = string.Empty;
             var lastArg = 0;
             for (; lastArg < args.Length; lastArg++)
             {
                 if (IsArg(args[lastArg], "d", "diagnostics"))
-                    verbose = true;
+                    Verbose = true;
                 else if (IsArg(args[lastArg], "version"))
                 {
                     PrintVersion();
