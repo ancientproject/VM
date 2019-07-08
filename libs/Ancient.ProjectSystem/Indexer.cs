@@ -55,7 +55,7 @@
                 .CreateSubdirectory($"{asm.GetName().Version.ToString(2)}")
                 .CreateSubdirectory("any");
 
-            File.WriteAllBytes(Path.Combine(depDir.FullName, $"{asm.GetName().Name}"), assemblyBytes);
+            File.WriteAllBytes(Path.Combine(depDir.FullName, $"{asm.GetName().Name}.image"), assemblyBytes);
 
             if (useLockFile)
             {
