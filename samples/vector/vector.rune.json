@@ -3,6 +3,10 @@
     "start": "echo 1"
   },
   "name": "vector",
-  "version": "0.0",
-  "author": "Yuuki Wesp"
+  "version": "1.0",
+  "author": "Yuuki Wesp",
+  "deps": {
+    "terminal": "^0.0.0.0",
+    "beep": "^0.0.0.0"
+  }
 }
