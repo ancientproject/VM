@@ -6,8 +6,9 @@
     using Ancient.ProjectSystem;
     using cli;
     using etc;
+    using Internal;
 
-    public class InstallCommand
+    public class InstallCommand : WithProject
     {
         public static int Run(string[] args)
         {
@@ -23,7 +24,14 @@
             var package = app.Argument("<package>", "package name");
             var registry = app.Option("--registry <url>", "registry url", CommandOptionType.SingleValue);
             var cmd = new InstallCommand();
-            app.OnExecute(() => cmd.Execute(package.Value, registry));
+            var restore = new RestoreCommand();
+            app.OnExecute(() =>
+            {
+                var result = cmd.Execute(package.Value, registry);
+                if (result != 0)
+                    return result;
+                return restore.Execute(registry);
+            });
 
             try
             {
@@ -40,6 +48,9 @@
         {
             var registry = registryOption.HasValue() ? registryOption.Value() : "github+https://github.com/ancientproject";
             var dir = Directory.GetCurrentDirectory();
+
+            if (!Validate(dir))
+                return 1;
 
             if (Indexer.FromLocal().UseLock().Exist(package))
             {
@@ -64,11 +75,12 @@
                 Indexer.FromLocal()
                     .UseLock()
                     .SaveDep(asm, bytes, registry);
+                AncientProject.FromLocal().AddDep(package, asm.GetName().Version.ToString(), DepVersionKind.Fixed);
                 Console.WriteLine($"{":movie_camera:".Emoji()} '{package}' save to deps is {"success".Nier(0).Color(Color.GreenYellow)}.");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message.Color(Color.Red));
+                Console.WriteLine(e.ToString().Color(Color.Red));
                 return 2;
             }
             return 0;

@@ -9,8 +9,9 @@
     using Ancient.ProjectSystem;
     using cli;
     using etc;
+    using Internal;
 
-    public class RunCommand
+    public class RunCommand : WithProject
     {
         public static int Run(string[] args)
         {
@@ -41,19 +42,9 @@
         public int Execute(string value)
         {
             var directory = Directory.GetCurrentDirectory();
-            var projectFiles = Directory.GetFiles(directory, "*.rune.json");
-
-            if (projectFiles.Length == 0)
-            {
-                throw new InvalidOperationException(
-                    $"Couldn't find a project to run. Ensure a project exists in {directory}.");
-            }
-
-            var project = projectFiles.Single();
-
-            var rune = AncientProject.Open(new FileInfo(project));
-
-            var script = rune.scripts.FirstOrDefault(x => x.Key.Equals(value, StringComparison.InvariantCultureIgnoreCase)).Value;
+            if (!Validate(directory))
+                return 1;
+            var script = AncientProject.FromLocal().scripts.FirstOrDefault(x => x.Key.Equals(value, StringComparison.InvariantCultureIgnoreCase)).Value;
 
             if(script is null)
                 throw new InvalidOperationException($"Command '{value}' not found.");

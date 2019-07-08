@@ -52,7 +52,7 @@
             var author      = new ValueView<string>($"[4/4] {":skull:".Emoji()} Project Author:").WithDefault("").Read();
             var dir = Directory.GetCurrentDirectory();
 
-            var proj = new AncientProject
+            var proj = new AncientProjectFile
             {
                 name = projectName,
                 version = version,

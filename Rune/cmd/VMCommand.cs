@@ -5,13 +5,12 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using Ancient.ProjectSystem;
     using cli;
     using etc;
+    using Internal;
 
-    public class VMCommand
+    public class VMCommand : WithProject
     {
-        public AncientProject project { get; set; }
         public static int Run(string[] args)
         {
             var app = new CommandLineApplication
@@ -46,18 +45,9 @@
 
         internal int Execute(CommandOption isDebug, CommandOption keepMemory, CommandOption fastWrite)
         {
-            var directory = Directory.GetCurrentDirectory();
-            var projectFiles = Directory.GetFiles(directory, "*.rune.json");
-
-            if (projectFiles.Length == 0)
-            {
-                throw new InvalidOperationException(
-                    $"Couldn't find a project to run. Ensure a project exists in {directory}.");
-            }
-
-            var p = projectFiles.Single();
-
-            project = AncientProject.Open(new FileInfo(p));
+            var dir = Directory.GetCurrentDirectory();
+            if (!Validate(dir))
+                return 1;
 
             var ancient_home = Environment.GetEnvironmentVariable("ANCIENT_HOME", EnvironmentVariableTarget.User);
 
@@ -86,7 +76,7 @@
                 .WithEnv("VM_KEEP_MEMORY", keepMemory.BoolValue.HasValue)
                 .WithEnv("VM_MEM_FAST_WRITE", fastWrite.BoolValue.HasValue)
                 .WithEnv("CLI", true)
-                .WithEnv("CLI_WORK_PATH", directory)
+                .WithEnv("CLI_WORK_PATH", dir)
                 
                 .Start()
                 .Wait().ExitCode();

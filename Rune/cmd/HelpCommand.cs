@@ -69,6 +69,7 @@ Common Commands:
             builder.AppendLine($"  {"install".Color(Color.CornflowerBlue)}      {"Install device package from ancient registry".Color(Color.DarkKhaki)}");
             builder.AppendLine($"  {"clear".Color(Color.CornflowerBlue)}        {"Clearing deps in current project".Color(Color.DarkKhaki)}");
             builder.AppendLine($"  {"build".Color(Color.CornflowerBlue)}        {"Builds a Ancient project".Color(Color.DarkKhaki)}");
+            builder.AppendLine($"  {"restore".Color(Color.CornflowerBlue)}      {"Restore packages from current project".Color(Color.DarkKhaki)}");
             builder.AppendLine($"  {"run".Color(Color.CornflowerBlue)}          {"Immediately executes a script from Ancient project".Color(Color.DarkKhaki)}");
             builder.AppendLine($"  {"vm".Color(Color.CornflowerBlue)}           {"Immediately build and execute project in Ancient VM".Color(Color.DarkKhaki)}");
             builder.AppendLine();

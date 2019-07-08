@@ -9,12 +9,10 @@
     using Ancient.ProjectSystem;
     using cli;
     using etc;
+    using Internal;
 
-    public class BuildCommand
+    public class BuildCommand : WithProject
     {
-        public AncientProject project { get; set; }
-
-
         public static int Run(string[] args)
         {
             var app = new CommandLineApplication
@@ -44,17 +42,8 @@
         public int Execute(bool isTemp)
         {
             var directory = Directory.GetCurrentDirectory();
-            var projectFiles = Directory.GetFiles(directory, "*.rune.json");
-
-            if (projectFiles.Length == 0)
-            {
-                Console.WriteLine($"{":cd:".Emoji()} {"Couldn't".Color(Color.Red)} find a project to run. {"Ensure".Nier(0)} a project exists in '{directory}'.");
+            if (!Validate(directory))
                 return 1;
-            }
-
-            var p = projectFiles.Single();
-
-            project = AncientProject.Open(new FileInfo(p));
 
             var ancient_home = Environment.GetEnvironmentVariable("ANCIENT_HOME", EnvironmentVariableTarget.User);
 
@@ -77,10 +66,10 @@
 
             if (isTemp)
                 outputDir = "obj";
-
-            argBuilder.Add($"-o ./{outputDir}/{project.name}");
-            if(project.extension != null)
-                argBuilder.Add($"-e {project.extension}");
+            var Project = AncientProject.FromLocal();
+            argBuilder.Add($"-o ./{outputDir}/{Project.Name}");
+            if(Project.Extension != null)
+                argBuilder.Add($"-e {Project.Extension}");
             argBuilder.Add($"-s \"{files.First()}\"");
 
             var external = new ExternalTools(acc_bin, string.Join(" ", argBuilder));
