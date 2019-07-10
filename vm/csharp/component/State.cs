@@ -12,6 +12,8 @@
     using static System.Console;
     using static System.MathF;
 
+
+    [DebuggerDisplay("{ToString()}")]
     public class State
     {
         private readonly Bus bus;
@@ -160,6 +162,7 @@
 
         public long[] mem = new long[64];
 
+        
         public Stack stack { get; set; }
 
         public sbyte halt { get; set; } = 0;
@@ -520,8 +523,6 @@
             var o2 = u16 & (container & 0x0F0000000);
             return u16 & (o1 << 0x4 | o2);
         }
-
-        
         /// <summary><see cref="byte"/> to <see cref="long"/></summary>
         public static Unicast<byte  , long > u8  = new Unicast<byte  , long>();
         /// <summary><see cref="ushort"/> to <see cref="ulong"/></summary>
@@ -566,6 +567,9 @@
 
         public event Action<string> OnTrace;
         public event Action<string> OnError;
+
+
+        public override string ToString() => $"[{pc:X} {r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X} {x2:X}]";
     }
 
     public class BitwiseContainer : IFormattable
