@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <PackageId>flame.compiler</PackageId>
     <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
-    <Version>0.47.246</Version>
+    <Version>0.48.345</Version>
     <Authors>Yuuki Wesp</Authors>
     <Product>flame.compiler</Product>
     <Copyright>Yuuki Wesp(C) 2019</Copyright>

@@ -9,6 +9,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Text.RegularExpressions;
     using exceptions;
@@ -24,6 +25,18 @@
     {
         public static int Main(string[] c_args)
         {
+            if (Environment.GetEnvironmentVariable("WT_SESSION") == null && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Environment.SetEnvironmentVariable($"RUNE_EMOJI_USE", "0");
+                Environment.SetEnvironmentVariable($"RUNE_COLOR_USE", "0");
+                Environment.SetEnvironmentVariable($"RUNE_NIER_USE", "0");
+                Environment.SetEnvironmentVariable($"NO_COLOR", "true");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
+
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { ConsoleExtensions.Disable(); };
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var raw = new FluentCommandLineParser<Args>();

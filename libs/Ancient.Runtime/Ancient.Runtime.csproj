@@ -2,11 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Yuuki Wesp</Authors>
-    <AssemblyVersion>0.31.101.603</AssemblyVersion>
-    <Version>0.31.101</Version>
+    <AssemblyVersion>0.48.345.603</AssemblyVersion>
+    <Version>0.48.345</Version>
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <FileVersion>0.31.101.154</FileVersion>
+    <FileVersion>0.48.345.603</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
