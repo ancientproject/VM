@@ -24,8 +24,8 @@ namespace vm_test
         public void reset()
         {
             bus = new Bus();
+            bus.State.stack = new Stack(bus, this, state);
             bus.Add(new TestDevice());
-            state.northFlag = true;
             state.southFlag = true;
             bios.virtual_stack = true;
         }
