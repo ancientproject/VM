@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -20,7 +21,6 @@
 
             foreach (var offset in scheme.GroupBy(x => x.Value).Where(x => x.Count() > 1).Select(x => x.Key))
                 errors.Add(("ASH0505", $"dublicate device-offset '{offset}' in scheme '#[SCHEME]#'."));
-
         }
 
         public static DeviceScheme Open(FileInfo file) 
@@ -49,5 +49,7 @@
                 return result;
             return @default;
         }
+
+        public override string ToString() => $"map [{scheme.Count} overrides]";
     }
 }
