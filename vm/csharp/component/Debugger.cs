@@ -6,6 +6,8 @@
 
     public class Debugger
     {
+        public static readonly Debugger Default = new Debugger(null);
+
         private readonly DebugSymbols debugSymbols;
 
         public delegate void Break(ushort offset, CPU cpu, DebugSymbols symbols);
@@ -14,7 +16,7 @@
         public Debugger(DebugSymbols debugSymbols)
         {
             this.debugSymbols = debugSymbols;
-            OnBreak += Null;
+            if(debugSymbols != null) OnBreak += Null;
         }
 
         public Break Null = (s, cpu, d) =>
@@ -27,5 +29,12 @@
         };
 
         public void handleBreak(ushort offset, CPU cpu) => OnBreak?.Invoke(offset, cpu, debugSymbols);
+
+        public override string ToString()
+        {
+            return debugSymbols is null ? 
+                $"debugger [not_connected] [0 symbols]" : 
+                $"debugger [connected] [{debugSymbols.symbols.Count} symbols]";
+        }
     }
 }
