@@ -17,23 +17,33 @@
         public DateTime startTime;
 
         private readonly ulong[] mem = new ulong[32];
-
+        /// <summary>
+        /// 0x1, using hpet timer
+        /// </summary>
         public bool hpet
         {
             set => mem[0x1] = value ? 0x1UL : 0x0UL;
             get => mem[0x1] == 0x1;
         }
+        /// <summary>
+        /// 0x2, using virtual forwarding
+        /// </summary>
         public bool virtual_stack
         {
             set => mem[0x2] = value ? 0x1UL : 0x0UL;
             get => mem[0x2] == 0x1;
         }
+        /// <summary>
+        /// 0x3, using forward in standalone memory sector
+        /// </summary>
         public bool memory_stack_forward
         {
             set => mem[0x3] = value ? 0x1UL : 0x0UL;
             get => mem[0x3] == 0x1;
         }
-
+        /// <summary>
+        /// 0x4, using guarding with violation memory write
+        /// </summary>
         public bool bios_guard
         {
             set => mem[0x4] = value ? 0x1UL : 0x0UL;
