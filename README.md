@@ -22,6 +22,8 @@
   <a href="https://t.me/ivysola">
     <img src="https://img.shields.io/badge/Ask%20Me-Anything-1f425f.svg">
   </a>
+  <a href="https://www.codacy.com/app/0xF6/cpu_4bit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=0xF6/cpu_4bit&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/e033b506944447289b2ef39478fc8234"/></a>
+  </a>
 </p>
 <p align="center">
   <a href="#">
@@ -33,7 +35,6 @@
   </a>
 </p>
 
-  
 ![image](https://user-images.githubusercontent.com/13326808/60311909-e71fa900-9961-11e9-96f0-bf4c4a45681c.png)
 
 
