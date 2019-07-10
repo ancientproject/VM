@@ -88,7 +88,7 @@
             while (bus.State.halt == 0)
             {
                 bus.cpu.Step();
-                await Task.Delay(1);
+                await Task.Delay(1).ConfigureAwait(false);
             }
 
             bus.Unload();
