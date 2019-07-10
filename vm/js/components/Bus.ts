@@ -46,6 +46,6 @@ export class Bus {
             else
                 max = guess - 1;	
         }
-        return -1;
+        return (0-1);
     }
 }
