@@ -152,6 +152,33 @@ list:
 .sub &(result_cell) &(cellValue1) &(cellValue2)
 .pow &(result_cell) &(cellValue1) &(cellValue2)
 .sqrt &(result_cell) &(cellValue)
+// advanced math (need float-mode) (advanced math operation send result to stack)
+.abs &(cell_value)
+.acos &(cell_value)
+.atan &(cell_value)
+.acosh &(cell_value)
+.atanh &(cell_value)
+.asin &(cell_value)
+.asinh &(cell_value)
+.cbrt &(cell_value) 
+.cell &(cell_value) // celling
+.cos &(cell_value)
+.cosh &(cell_value)
+.flr &(cell_value) // floor
+.exp &(cell_value) // exponent
+.log &(cell_value)
+.log10 &(cell_value)
+.tan &(cell_value)
+.tanh &(cell_value)
+.sin &(cell_value)
+.sinh &(cell_value)
+.trc &(cell_value) // truncate
+.bitd &(cell_value) // bit decrement
+.biti &(cell_value) // bit increment
+.atan2 &(cell_value) &(cell_value)
+.min &(cell_value) &(cell_value)
+.max &(cell_value) &(cell_value)
+
                               
 // manage device and etc
 .mvt &($device_id) &(action_id) <| $(value)       // push raw value to device_id.action_id in bus
