@@ -9,6 +9,7 @@
     using ancient.runtime;
     using ancient.runtime.exceptions;
     using ancient.runtime.hardware;
+    using MoreLinq;
     using static System.Console;
     using static System.MathF;
 
@@ -319,13 +320,12 @@
                     stack.push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
-                    trace($"call :: ref_t 0x{r1:X}");
+                    trace($"call :: ref_t 0x{r1:X}"); // Enumerable.Range(0, r1).Select(x => i64 & fetch()).Pipe(z => stack.push(z)).ToArray();
                     mem[r1] = i64 & pc;
                     break;
                 case 0xA0:
                     trace($"call :: orb '{r1}' times");
-                    for (var i = pc + r1; pc != i;)
-                        stack.push(i64 & fetch());
+                    Enumerable.Range(0, r1).Select(_ => i64 & fetch()).Pipe(z => stack.push(z)).ToArray();
                     break;
                 case 0xA1:
                     trace($"call :: pull -> 0x{r1:X}");
@@ -352,7 +352,8 @@
                     trace($"call :: decrement 0x{r1:X}--");
                     unchecked { mem[r1]--; } 
                     break; 
-
+                        /* for (var i = pc + r1; pc != i;)
+                        stack.push(i64 & fetch());*/
 
                 #region debug
 

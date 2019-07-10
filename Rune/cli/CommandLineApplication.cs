@@ -78,15 +78,10 @@
             return argument;
         }
 
-        public void OnExecute(Func<int> invoke)
-        {
-            Invoke = invoke;
-        }
-
-        public void OnExecute(Func<Task<int>> invoke)
-        {
-            Invoke = () => invoke().Result;
-        }
+        public void OnExecute(Func<int> invoke) 
+            => Invoke = invoke;
+        public void OnExecute(Func<Task<int>> invoke) 
+            => Invoke = () => invoke().Result;
 
         public int Execute(params string[] args)
         {
@@ -94,10 +89,8 @@
             CommandOption option = null;
             IEnumerator<CommandArgument> arguments = null;
 
-            if (HandleResponseFiles)
-            {
+            if (HandleResponseFiles) 
                 args = ExpandResponseFiles(args).ToArray();
-            }
 
             for (var index = 0; index < args.Length; index++)
             {
@@ -257,9 +250,7 @@
         public void ShowHint()
         {
             if (OptionHelp != null)
-            {
                 Console.WriteLine($"Specify --{OptionHelp.LongName} for a list of available options and commands.");
-            }
         }
         public void ShowHelp(string commandName = null)
         {
@@ -355,11 +346,8 @@
 
         public void ShowVersion()
         {
-            for (var cmd = this; cmd != null; cmd = cmd.Parent)
-            {
+            for (var cmd = this; cmd != null; cmd = cmd.Parent) 
                 cmd.IsShowingInformation = true;
-            }
-
             Console.WriteLine(FullName);
             Console.WriteLine(LongVersionGetter());
         }
@@ -367,19 +355,11 @@
         public string GetFullNameAndVersion() => ShortVersionGetter == null ? FullName : $"{FullName} {ShortVersionGetter()}";
 
 
-        private int MaxOptionTemplateLength(IEnumerable<CommandOption> options)
-        {
-            var maxLen = 0;
-            foreach (var opt in options)
-            {
-                maxLen = opt.Template.Length > maxLen ? opt.Template.Length : maxLen;
-            }
-            return maxLen;
-        }
-
-        private int MaxCommandLength(IEnumerable<CommandLineApplication> commands) 
+        private static int MaxOptionTemplateLength(IEnumerable<CommandOption> options) 
+            => options.Select(opt => opt.Template.Length).Concat(new[] {0}).Max();
+        private static int MaxCommandLength(IEnumerable<CommandLineApplication> commands) 
             => commands.Select(cmd => cmd.Name.Length).Concat(new[] {0}).Max();
-        private int MaxArgumentLength(IEnumerable<CommandArgument> arguments) 
+        private static int MaxArgumentLength(IEnumerable<CommandArgument> arguments) 
             => arguments.Select(arg => arg.Name.Length).Concat(new[] {0}).Max();
 
         private void HandleUnexpectedArg(CommandLineApplication command, string[] args, int index, string argTypeName)
@@ -425,10 +405,8 @@
         {
             private readonly IEnumerator<CommandArgument> _enumerator;
 
-            public CommandArgumentEnumerator(IEnumerator<CommandArgument> enumerator)
-            {
-                _enumerator = enumerator;
-            }
+            public CommandArgumentEnumerator(IEnumerator<CommandArgument> enumerator) 
+                => _enumerator = enumerator;
 
             public CommandArgument Current => _enumerator.Current;
 
