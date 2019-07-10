@@ -1,58 +1,55 @@
 ﻿namespace vm.component
 {
     using System.Collections.Generic;
-
-    public class Stack
+    public sealed class Stack
     {
         private readonly Bus _bus;
-        private State state => _bus.State;
-        private CPU getCPU() => _bus.cpu;
-        public Stack(Bus bus) => _bus = bus;
+        private readonly IHalting _cpuHalter;
+        private readonly State _provider;
+        public Stack(Bus bus)
+        {
+            _bus = bus;
+            _cpuHalter = bus.cpu;
+            _provider = bus.State;
+        }
 
-        private readonly Stack<long> stack = new Stack<long>();
+        public Stack(Bus bus, IHalting halt, State provider)
+        {
+            _bus = bus;
+            _cpuHalter = halt;
+            _provider = provider;
+        }
+
+        internal readonly Stack<long> cells = new Stack<long>();
 
         
         public void push(long data)
         {
-            if (state.SP >= 0x400)
-                getCPU().halt(0xA2);
+            if (_provider.SP >= 0x400)
+                _cpuHalter.halt(0xA2);
 
-            state.southFlag = true;
-            if (state.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
+            if (_provider.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
             {
-                _bus.Find(0x0).write( 0x100 + state.SP++, data);
+                _bus.Find(0x0).write(  _provider.SP+ 0x100, data);
+                _provider.SP++;
                 return;
             }
-            if (state.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
+            if (_provider.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
             {
-                stack.Push(data);
-                state.SP++;
+                cells.Push(data);
+                _provider.SP++;
                 return;
             }
-
-            switch (state.northFlag, state.eastFlag)
-            {
-                case (true, false):
-                    push8(data);
-                    return;
-                case (true, true):
-                    push4(data);
-                    return;
-                case (false, false):
-                    push2(data);
-                    return;
-            }
-            getCPU().halt(0xD6);
+            push16(data);
         }
 
         internal void push2(long data)
         {
-            if (state.SP >= 0x400)
-                getCPU().halt(0xA2);
+            if (_provider.SP >= 0x400)
+                _cpuHalter.halt(0xA2);
             data &= 0xFF;
-            state.SP++;
-            stack.Push(data);
-            _bus.Find(0x0).write(state.SP + 0x100, data);
+            _provider.SP++;
+            _bus.Find(0x0).write(_provider.SP + 0x100, data);
         }
         internal void push4(long data)
         {
@@ -64,40 +61,41 @@
             push4((data >> 16) & 0xffff);
             push4(data & 0xffff);
         }
+        internal void push16(long data)
+        {
+            push8((data >> 32) & 0xffff_ffff);
+            push8(data & 0xffff_ffff);
+        }
 
         public long pop()
         {
-            if (state.SP <= 0)
-                getCPU().halt(0xA3);
-            if (state.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
-                return _bus.Find(0x0).read( 0x100 + state.SP--);
-            if (state.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
+            if (_provider.SP <= 0)
+                _cpuHalter.halt(0xA3);
+            if (_provider.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
             {
-                state.SP--;
-                return stack.Pop();
+                _provider.SP--;
+                return _bus.Find(0x0).read(_provider.SP + 0x100);
             }
-            switch (state.northFlag, state.eastFlag)
+            if (_provider.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
             {
-                case (true, false):
-                    return pop8();
-                case (true, true):
-                    return pop4();
-                case (false, false):
-                    return pop2();
+                _provider.SP--;
+                return cells.Pop();
             }
-            return getCPU().halt(0xD6);
+            return pop16();
         }
 
         internal long pop2()
         {
-            if (state.SP <= 0)
-                getCPU().halt(0xA3);
-            if (state.SP >= 0x400)
-                getCPU().halt(0xA2);
-            return _bus.Find(0x0).read(--state.SP + 0x100);
+            if (_provider.SP <= 0)
+                _cpuHalter.halt(0xA3);
+            if (_provider.SP >= 0x400)
+                _cpuHalter.halt(0xA2);
+            var res = _bus.Find(0x0).read(_provider.SP--+ 0x100);
+            return res;
         }
 
         internal long pop4() => pop2() | (pop2() << 8);
-        internal long pop8() => pop4() | (pop4() << 16);
+        internal long pop8() =>  pop4() | (pop4() << 16);
+        internal long pop16() => pop8() | (pop8() << 32) ;
     }
 }
