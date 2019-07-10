@@ -1,7 +1,6 @@
-using NUnit.Framework;
-
 namespace Tests
 {
+    using NUnit.Framework;
     using rune.etc;
 
     public class CSharpCompileTest
@@ -74,6 +73,7 @@ using static System.Console;
             }
         }
 ");
+            Assert.IsNotEmpty(result);
         }
     }
 }
