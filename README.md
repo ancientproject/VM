@@ -39,9 +39,7 @@
 
 
 
-##### Flags
-
-in env:   
+##### Env flags 
 ```yaml
 - VM_TRACE         : 1\0    - enable or disable trace logging (default 0)
 - VM_ERROR         : 1\0    - enable or disable error logging (default 1)
@@ -53,20 +51,61 @@ in env:
 - VM_SYM_ENCODING  : "utf8" - set encoding of debug symbols (default "IBM037")
 ```
 
-in runtime:
-```yaml
+##### Memory table: 
+  
+example:  
+```assembler
 .ldx &(0x11) $(0x0) - disable trace
-
+``` 
+list: 
+```yaml
 - 0x11 : 1\0 - enable or disable trace logging (default 0)
 - 0x12 : 1\0 - enable or disable error logging (default 1)
 - 0x13 : 1\0 - when halt cpu disable or enable clearing memory table (default 0 - clearing)
 - 0x14 : 1\0 - enable or disable fast-write mode to devices (see fast-mode addressing)
+- 0x18 : 1\0 - enable float-mode
+- 0x19 : 1\0 - enable stack-forward flag
+- 0x20 : 1\0 - control stack flag (north flag)
+- 0x21 : 1\0 - control stack flag (east flag)
+- 0x22 : 1\0 - bios read-access flag
 ```
 
-##### fast-mode addressing        
-Write speedUp to device memory (x12~ times), but disables the ability to write to certain sections of device memory.
+##### Bios table: 
 
-##### Registers
+###### public memory [READ]: 
+```yaml
+- 0x00 - return current ticks (u32)
+- 0x01 - return hpet enabled or not
+- 0x02 - return memory channel
+- 0xAX - private memory randge
+```
+###### private memory [READ]:
+```yaml
+- 0xA1 : return hpet enabled or not
+- 0xA2 : return use virtual stack forwarding or not
+- 0xA3 : return use forward in standalone memory sector or not
+- 0xA4 : return using guarding with violation memory write or not (default bios_guard_flag has enabled)
+```
+
+###### public\private memory [WRITE]: 
+  
+```yaml
+- 0x1 : 1\0 - set hpet use or not (default value depends on the firmware)
+- 0xF : reseting hpet and system timers
+- 0xD : call system interrupts for N-value ms
+- 0xC : call clearing RAM (need enabled bios_guard_flag, and disabled southFlag)
+- 0xA : set at private memory range value (need southFlag)
+```
+
+
+##### remarks:
+###### fast-mode addressing        
+`Write speedUp to device memory (x12~ times), but disables the ability to write to certain sections of device memory.`
+###### READ\WRITE operation for bios
+`Need southFlag enabled for READ\WRITE operation for private memory, otherwise will be calling CorruptedMemoryException and halting cpu`
+###### bios_guard_flag
+`Some memory segments are not allowed to READ\WRITE operation when bios_guard_flag is enabled`
+##### Command docs
 
 ```csharp
 -- legend:
@@ -138,17 +177,6 @@ Write speedUp to device memory (x12~ times), but disables the ability to write t
 .raw 0xABCDEFE0 // (warm)
 
 .mvj &($device_id) &(action_id) <| @string_t("test string") // cast string to mvt instruction
-```
-
-##### Devices spec
-
-// todo
-
-###### UI-LED
-```CSharp
-Device Address : 0xB
-Set ON         : 0xD
-Set OFF        : 0xE
 ```
 
 <p align="center">
