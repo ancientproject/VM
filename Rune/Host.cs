@@ -12,6 +12,8 @@
     using etc;
     using Microsoft.DotNet.PlatformAbstractions;
     using Newtonsoft.Json;
+    using static System.Console;
+    using static System.Environment;
     using RuntimeEnvironment = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment;
 
     internal class Host
@@ -40,7 +42,7 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message.Color(Color.OrangeRed));
+                WriteLine(e.Message.Color(Color.OrangeRed));
                 return 1;
             }
         }
@@ -48,29 +50,29 @@
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
             {
-                Console.WriteLine("Platform is not supported.");
-                Environment.Exit(-0xFFFFFFF);
+                WriteLine("Platform is not supported.");
+                Exit(-0xFFFFFFF);
                 return;
             }
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                Console.OutputEncoding = Encoding.Unicode;
+                OutputEncoding = Encoding.Unicode;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore, 
                 Formatting = Formatting.Indented, ReferenceLoopHandling = ReferenceLoopHandling.Ignore, 
                 Culture = CultureInfo.InvariantCulture
             };
-            if (Environment.GetEnvironmentVariable("WT_SESSION") == null && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (GetEnvironmentVariable("WT_SESSION") == null && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Environment.SetEnvironmentVariable($"RUNE_EMOJI_USE", "0");
-                Environment.SetEnvironmentVariable($"RUNE_COLOR_USE", "0");
-                Environment.SetEnvironmentVariable($"RUNE_NIER_USE", "0");
-                Environment.SetEnvironmentVariable($"NO_COLOR", "true");
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
-                Console.ForegroundColor = ConsoleColor.White;
+                SetEnvironmentVariable($"RUNE_EMOJI_USE", "0");
+                SetEnvironmentVariable($"RUNE_COLOR_USE", "0");
+                SetEnvironmentVariable($"RUNE_NIER_USE", "0");
+                SetEnvironmentVariable($"NO_COLOR", "true");
+                ForegroundColor = ConsoleColor.Gray;
+                WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
+                ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -104,7 +106,7 @@
                 }
                 else if (args[lastArg].StartsWith("-"))
                 {
-                    Console.WriteLine($"Unknown option: {args[lastArg]}");
+                    WriteLine($"Unknown option: {args[lastArg]}");
                     success = false;
                 }
                 else
@@ -135,22 +137,22 @@
                 exitCode = builtIn(appArgs.ToArray());
             else
             {
-                Console.WriteLine("Could not execute because the specified command or file was not found.".Color(Color.Red));
+                WriteLine("Could not execute because the specified command or file was not found.".Color(Color.Red));
                 exitCode = -1;
             }
                 
             watch.Stop();
 
-            Console.WriteLine($"{":sparkles:".Emoji()} Done in {watch.Elapsed.TotalSeconds:00.000}s.");
+            WriteLine($"{":sparkles:".Emoji()} Done in {watch.Elapsed.TotalSeconds:00.000}s.");
 
             return exitCode;
         }
         private static void PrintInfo()
         {
-            Console.WriteLine($" OS Name:     {RuntimeEnvironment.OperatingSystem}");
-            Console.WriteLine($" OS Version:  {RuntimeEnvironment.OperatingSystemVersion}");
-            Console.WriteLine($" OS Platform: {RuntimeEnvironment.OperatingSystemPlatform}");
-            Console.WriteLine($" Base Path:   {ApplicationEnvironment.ApplicationBasePath}");
+            WriteLine($" OS Name:     {RuntimeEnvironment.OperatingSystem}");
+            WriteLine($" OS Version:  {RuntimeEnvironment.OperatingSystemVersion}");
+            WriteLine($" OS Platform: {RuntimeEnvironment.OperatingSystemPlatform}");
+            WriteLine($" Base Path:   {ApplicationEnvironment.ApplicationBasePath}");
         }
         private static bool IsArg(string candidate, string longName) 
             => IsArg(candidate, null, longName);

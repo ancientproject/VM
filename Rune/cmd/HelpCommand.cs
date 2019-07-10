@@ -1,32 +1,13 @@
 ﻿namespace rune.cmd
 {
-    using System;
     using System.Drawing;
     using System.Linq;
     using System.Text;
     using etc;
+    using static System.Console;
 
     public class HelpCommand
     {
-        private const string UsageText = @"Usage: rune [common-options] [command] [arguments]
-
-Arguments:
-  [command]     The command to execute
-  [arguments]   Arguments to pass to the command
-
-Common Options (passed before the command):
-  --version     Display Rune CLI Version Number
-  --info        Display Rune CLI Info
-
-Common Commands:
-  new           Initialize a basic Ancient project
-  new-scheme    Initializes empty map file for Ancient VM Devices
-  install       Install device package from ancient registry
-  clear         Clearing deps in current project
-  build         Builds a Ancient project
-  run           Immediately executes a script from Ancient project
-  vm            Immediately build and execute project in Ancient VM";
-
         public static int Run(string[] args)
         {
             if (args.Any())
@@ -38,7 +19,7 @@ Common Commands:
         public static void PrintHelp()
         {
             PrintVersionHeader();
-            Console.WriteLine(BuildUsageText());
+            WriteLine(BuildUsageText());
         }
 
         
@@ -79,13 +60,7 @@ Common Commands:
         }
 
 
-        public static void PrintVersion()
-        {
-            Console.WriteLine("v0.48");
-        }
-        public static void PrintVersionHeader()
-        {
-            Console.WriteLine($"Rune v0.48 x64 [{"Ancient SDK".Color(Color.Chocolate)}]");
-        }
+        public static void PrintVersion() => WriteLine("v0.48");
+        public static void PrintVersionHeader() => WriteLine($"Rune v0.48 x64 [{"Ancient SDK".Color(Color.Chocolate)}]");
     }
 }
