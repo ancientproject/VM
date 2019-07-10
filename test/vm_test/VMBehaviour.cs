@@ -8,12 +8,13 @@ namespace vm_test
     using NUnit.Framework;
     using vm.component;
 
-    public abstract class VMBehaviour
+    public abstract class VMBehaviour : IHalting
     {
         public Bus bus { get; private set; }
         public CPU cpu => bus.cpu;
         public State state => bus.State;
         public TestDevice dev => bus.Find(0x1) as TestDevice;
+        public BIOS bios => bus.Find(0x45) as BIOS;
 
         protected VMBehaviour()
         {
@@ -26,7 +27,6 @@ namespace vm_test
             bus.Add(new TestDevice());
             state.northFlag = true;
             state.southFlag = true;
-            var bios = bus.Find(0x45) as BIOS;
             bios.virtual_stack = true;
         }
 
@@ -49,7 +49,12 @@ namespace vm_test
                 Assert.AreEqual($"[{name}] {value}", $"[{name}] {val}");
             else
                 Assert.AreEqual($"[{name}] 0x{value:X}", $"[{name}] 0x{val:X}");
-            
+        }
+
+        public int halt(int reason, string text = "")
+        {
+            Assert.Fail($"HALT: {CPU.AssociationHaltCode(reason, text)}");
+            return reason;
         }
     }
 }
