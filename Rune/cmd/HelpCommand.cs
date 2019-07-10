@@ -41,6 +41,8 @@ Common Commands:
             Console.WriteLine(BuildUsageText());
         }
 
+        
+
 
         private static string BuildUsageText()
         {
@@ -76,9 +78,14 @@ Common Commands:
             return builder.ToString();
         }
 
+
+        public static void PrintVersion()
+        {
+            Console.WriteLine("v0.48");
+        }
         public static void PrintVersionHeader()
         {
-            Console.WriteLine($"Rune v0.47 x64 [{"Ancient SDK".Color(Color.Chocolate)}]");
+            Console.WriteLine($"Rune v0.48 x64 [{"Ancient SDK".Color(Color.Chocolate)}]");
         }
     }
 }

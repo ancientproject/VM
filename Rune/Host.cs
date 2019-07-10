@@ -62,6 +62,16 @@
                 Formatting = Formatting.Indented, ReferenceLoopHandling = ReferenceLoopHandling.Ignore, 
                 Culture = CultureInfo.InvariantCulture
             };
+            if (Environment.GetEnvironmentVariable("WT_SESSION") == null && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Environment.SetEnvironmentVariable($"RUNE_EMOJI_USE", "0");
+                Environment.SetEnvironmentVariable($"RUNE_COLOR_USE", "0");
+                Environment.SetEnvironmentVariable($"RUNE_NIER_USE", "0");
+                Environment.SetEnvironmentVariable($"NO_COLOR", "true");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
 
         internal static bool Verbose { get; set; }
@@ -77,7 +87,7 @@
                     Verbose = true;
                 else if (IsArg(args[lastArg], "version"))
                 {
-                    PrintVersion();
+                    HelpCommand.PrintVersion();
                     return 0;
                 }
                 else if (IsArg(args[lastArg], "info"))
@@ -135,11 +145,6 @@
 
             return exitCode;
         }
-        private static void PrintVersion()
-        {
-            Console.WriteLine("v0.31");
-        }
-
         private static void PrintInfo()
         {
             Console.WriteLine($" OS Name:     {RuntimeEnvironment.OperatingSystem}");
