@@ -4,11 +4,11 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
-    using System.Threading.Tasks;
     using ancient.runtime;
     using MoreLinq;
     using static System.Console;
-    public class CPU
+
+    public class CPU : IHalting
     {
         private readonly Bus _bus;
 
@@ -45,59 +45,31 @@
             if (State.halt != 0) return reason;
             Error(Environment.NewLine);
             _bus.State.halt = 1;
-            switch (reason)
-            {
-                case 0x0:
-                    Error($"HALT: Power off");
-                    break;
-                case 0x4:
-                    Error($"HALT: bus offset conflict. {text}");
-                    break;
-                case 0x1:
-                    Error($"HALT: Bootable sector not found.");
-                    break;
-                case 0xC:
-                    Error($"HALT: Divide by zero - YOU JUST CREATED A BLACK HOLE!");
-                    break;
-                case 0xF:
-                    Error($"HALT: Corrupted memory.");
-                    break;
-                case 0xA1:
-                    Error($"HALT: Overflow exception.");
-                    break;
-                case 0xA2:
-                    Error($"HALT: Overflow stack exception.");
-                    break;
-                case 0xA3:
-                    Error($"HALT: Low stack exception.");
-                    break;
-                case 0xFC:
-                    Error($"HALT: Invalid Opcode.");
-                    break;
-                case 0xA9:
-                    Error($"HALT: x87 float exception");
-                    break;
-                case 0xBD:
-                    Error($"HALT: Overflow heap memory exception");
-                    break;
-                case 0xD6:
-                    Error($"HALT: x9 segmentation fault");
-                    break;
-                case 0x77:
-                    Error($"HALT: unexpected end of executable memory");
-                    break;
-                case 0xFFFF:
-                    Error($"HALT: shift fault, {text}");
-                    break;
-                default:
-                    Error($"HALT: Unknown state 0x{reason:X}");
-                    break;
-            }
+            Error(AssociationHaltCode(reason, text));
             var l1 = _bus.State;
             Error($"L1 Cache, PC: 0x{l1.pc:X8}, OpCode: {l1.iid} [{l1.iid.getInstruction()}]");
             Error($"\t0x{l1.r1:X} 0x{l1.r2:X} 0x{l1.r3:X} 0x{l1.u1:X} 0x{l1.u2:X} 0x{l1.x1:X} 0x{l1.x2:X}");
             return reason;
         }
+
+        public static string AssociationHaltCode(int reason, string text) => reason switch
+        {
+            0x0     => $"Power off",
+            0x4     => $"Bus offset conflict. {text}",
+            0x1     => $"Bootable sector not found.",
+            0xC     => $"Divide by zero - YOU JUST CREATED A BLACK HOLE!",
+            0xF     => $"Corrupted memory.",
+            0xA1    => $"Overflow exception.",
+            0xA2    => $"Overflow stack exception.",
+            0xA3    => $"Low stack exception.",
+            0xFC    => $"Invalid Opcode.",
+            0xA9    => $"x87 float exception",
+            0xBD    => $"Overflow heap memory exception",
+            0xD6    => $"x9 segmentation fault",
+            0x77    => $"Unexpected end of executable memory",
+            0xFFFF  => $"Shift fault, {text}",
+            _       => $"Unknown state 0x{reason:X}",
+        };
 
         public string getStateOfCPU()
         {
@@ -130,6 +102,12 @@
             ForegroundColor = ConsoleColor.Red;
             WriteLine(str);
             ForegroundColor = ConsoleColor.White;
+        }
+
+        public override string ToString()
+        {
+            var haltText = State.halt != 0 ? "OFF" : "ON";
+            return $"cpu [{haltText} - {State.step} ticks]";
         }
     }
 }
