@@ -1,6 +1,7 @@
 ﻿namespace vm.component
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using Ancient.ProjectSystem;
     using ancient.runtime;
@@ -12,11 +13,13 @@
         public CPU cpu { get; }
         public DeviceScheme scheme { get; }
 
-        public Debugger debugger { get; set; }
+        public Debugger debugger { get; set; } = Debugger.Default;
 
         public List<IDevice> Devices = new List<IDevice>(16);
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool WarmUpDevices { get; set; } = AppFlag.GetVariable("VM_WARMUP_DEV", true);
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public bool ShutdownDevices { get; set; } = AppFlag.GetVariable("VM_SHUTDOWN_DEV", true);
 
         public Bus()
