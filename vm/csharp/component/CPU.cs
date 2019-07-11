@@ -10,7 +10,7 @@
 
     public class CPU : IHalting
     {
-        private readonly Bus _bus;
+        private Bus _bus { get; }
 
         public CPU(Bus bus) => _bus = bus;
 
