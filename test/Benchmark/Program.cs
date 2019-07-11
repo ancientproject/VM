@@ -2,7 +2,6 @@
 {
     using System;
     using System.Text;
-    using System.Threading.Tasks;
     using BenchmarkDotNet.Attributes;
     using BenchmarkDotNet.Running;
     using ancient.runtime;
@@ -81,9 +80,7 @@
         public NullDevice() : base(0x5, "<null-device>") { }
 
         [ActionAddress(0x6)]
-        public void StageChar(char c)
-        {
-        }
+        public void StageChar(char c) => Console.Out.Write(c);
     }
 
     public class Program
