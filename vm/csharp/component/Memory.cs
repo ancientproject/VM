@@ -1,10 +1,14 @@
 ﻿namespace vm.component
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using ancient.runtime;
     using MoreLinq;
 
+    
+
+    [DebuggerTypeProxy(typeof(MemoryView))]
     public class Memory : Device
     {
         private readonly CPU _cpu;
@@ -43,6 +47,21 @@
                 _cpu.halt(0xD6);
             var bin = binary.Batch(sizeof(long)).Select(x => BitConverter.ToInt64(x.ToArray())).Reverse().ToArray();
             Array.Copy(bin, 0, mem, memOffset, maxLen);
+        }
+
+
+        internal class MemoryView
+        {
+            private readonly Memory _mem;
+
+            public MemoryView(Memory mem) => _mem = mem;
+
+
+            public long[] all => _mem.mem;
+            public long[] execute => _mem.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x600).Select(x => x.i).ToArray();
+            public long execute_len => _mem.mem[0x599];
+            public long[] bios => _mem.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x300).Select(x => x.i).ToArray();
+            public long[] stack => _mem.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x100).Select(x => x.i).ToArray();
         }
     }
 }
