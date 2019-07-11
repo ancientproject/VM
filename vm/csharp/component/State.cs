@@ -296,7 +296,7 @@
         ///   |     |   |   |  |
         /// 0xFFFF_FFCC_AAA_BBB_DD
         /// ===
-        /// :: future instruction map (x16 bit instruction size, x40bit data)
+        /// :: future instruction map (x16 bit instruction size, x48bit data)
         ///          r     u    x f
         ///  opCode 1234  1234  1212
         ///   |  |
