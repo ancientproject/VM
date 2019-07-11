@@ -74,9 +74,6 @@
 
             InitializeFlags(bus);
 
-            //bus.Add(new Terminal(0x1));
-            //bus.Add(new AdvancedTerminal(0x2));
-
             if(AppFlag.GetVariable("VM_TRACE"))
                 DeviceLoader.OnTrace += Console.WriteLine;
 
