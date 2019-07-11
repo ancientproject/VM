@@ -73,7 +73,7 @@
                 }
                 return string.Join("", str.ToArray());
             }
-            catch (Exception e)
+            catch
             {
                 return value;
             }
@@ -81,13 +81,20 @@
 
         #region shit-code
 
-        public static void Error<T>(ErrorToken<T> error, string source)
+        public static void Error<T>(ErrorToken<T> token, string source)
         {
-            lock(Guarder) { }
-            var col = error.ErrorResult.Remainder.Column;
-            var lin = error.ErrorResult.Remainder.Line;
-            var exp = error.ErrorResult.Expectations.First();
-            var rem = error.ErrorResult.Remainder.Current;
+            lock (Guarder)
+            {
+                _error(token, source);
+            }
+        }
+
+        private static void _error<T>(ErrorToken<T> token, string source)
+        {
+            var col = token.ErrorResult.Remainder.Column;
+            var lin = token.ErrorResult.Remainder.Line;
+            var exp = token.ErrorResult.Expectations.First();
+            var rem = token.ErrorResult.Remainder.Current;
 
             var nestedLine = source.Split('\n')[lin-1];
             var fuck = getFromMiddle(nestedLine, col, nestedLine.Length - col, true);
@@ -99,7 +106,7 @@
 
             var focusRegion = new SourceRegion(
                 new SourceSpan(doc2, nameOffset, fuck.Length));
-            var title = $"{error.ErrorResult.getWarningCode().To<string>().Pastel(Color.Orange)}";
+            var title = $"{token.ErrorResult.getWarningCode().To<string>().Pastel(Color.Orange)}";
             var message = $"character '{exp}' expected".Pastel(Color.Orange);
 
             string Render(MarkupNode node, params NodeRenderer[] extraRenderers)
