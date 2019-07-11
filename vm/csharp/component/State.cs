@@ -225,7 +225,7 @@
             if (AcceptOpCode(prog.First()) == 0x33)
             {
                 Func<int> shift = ShiftFactory.Create(sizeof(int) * 0b100 - 0b100).Shift;
-                Accept((ulong)prog.First());
+                Accept(prog.First());
                 prog = prog.Skip(1).ToArray();
                 pin = (r1 << shift()) | (r2 << shift()) | (r3 << shift()) | (u1 << shift());
                 set = pin - 0b1;
@@ -271,7 +271,7 @@
             {
                 if (halt != 0) return 0;
                 lastAddr = curAddr;
-                if (++step != 0x90000)
+                if (++step == 0x90000)
                     throw new StepOverflowException();
                 if (bus.Find(0x0).read(0x599) != (i64 & pc) && ++step != 0x90000)
                     return (curAddr = i64 | bus.Find(0x0).read((i64 & pc++)));
