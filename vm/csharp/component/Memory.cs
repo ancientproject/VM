@@ -52,16 +52,16 @@
 
         internal class MemoryView
         {
-            private readonly Memory _mem;
+            private readonly Memory obj_ref;
 
-            public MemoryView(Memory mem) => _mem = mem;
+            public MemoryView(Memory @ref) => obj_ref = @ref;
 
 
-            public long[] all => _mem.mem;
-            public long[] execute => _mem.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x600).Select(x => x.i).ToArray();
-            public long execute_len => _mem.mem[0x599];
-            public long[] bios => _mem.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x300).Select(x => x.i).ToArray();
-            public long[] stack => _mem.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x100).Select(x => x.i).ToArray();
+            public long[] all => obj_ref.mem;
+            public long[] execute => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x600).Select(x => x.i).ToArray();
+            public long execute_len => obj_ref.mem[0x599];
+            public long[] bios => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x300).Select(x => x.i).ToArray();
+            public long[] stack => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x100).Select(x => x.i).ToArray();
         }
     }
 }
