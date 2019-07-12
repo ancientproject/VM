@@ -3,22 +3,12 @@
     using System.Collections.Generic;
     public sealed class Stack
     {
-        private readonly Bus _bus;
-        private readonly IHalting _cpuHalter;
-        private readonly State _provider;
-        public Stack(Bus bus)
-        {
-            _bus = bus;
-            _cpuHalter = bus.cpu;
-            _provider = bus.State;
-        }
+        internal IHalting __halter;
 
-        public Stack(Bus bus, IHalting halt, State provider)
-        {
-            _bus = bus;
-            _cpuHalter = halt;
-            _provider = provider;
-        }
+        private readonly Bus _bus;
+        private IHalting _cpuHalter => __halter ?? _bus.cpu;
+        private State _provider => _bus.State;
+        public Stack(Bus bus) => _bus = bus;
 
         internal readonly Stack<long> cells = new Stack<long>();
 
