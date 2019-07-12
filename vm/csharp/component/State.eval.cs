@@ -118,7 +118,7 @@
                     stack.push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0x8 when u2 == 0xC: // 0x8F000C0
-                    trace($"call :: ref_t 0x{r1:X}"); // Enumerable.Range(0, r1).Select(x => i64 & fetch()).Pipe(z => stack.push(z)).ToArray();
+                    trace($"call :: ref_t 0x{r1:X}");
                     mem[r1] = i64 & pc;
                     break;
                 case 0xA0:
@@ -151,18 +151,18 @@
                     trace($"call :: decrement 0x{r1:X}--");
                     unchecked { mem[r1]--; } 
                     break; 
-                case 0xB3:
+                case 0xB3: /* @dup */
                     trace($"call :: dup 0x{(u2 << 4) | u1:X}");
                     mem[(u2 << 4) | u1] = mem[(r1 << 4) | r2];
                     break;
-                case 0xB4:
+                case 0xB4: /* @ckft */
                     trace($"call :: ckft 0x{(r2 << 4) | r1:X}");
                     if (ff && !float.IsFinite(f32i64 & mem[(r2 << 4) | r1]))
                         bus.cpu.halt(0xA9);
                     break;
                 #region debug
 
-                case 0xF when x2 == 0xF:
+                case 0xF when x2 == 0xF: /* @mvx */
                     var x = mem[u1].ToString();
 
                     if (ff) x = (i64f32 & mem[u1]).ToString(CultureInfo.InvariantCulture);
@@ -229,7 +229,7 @@
                         : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(mem[r2] <= mem[r3]) pc = (ulong)mem[r1];
                     break;
-                case 0x09:
+                case 0x09: /* @jump */
                     pc = (ulong)((r1 << 4) | r2);
                     break;
 
@@ -286,13 +286,14 @@
                     Error($"call :: unknown opCode -> {iid:X2}");
                     break;
             }
-
+            /* @break :: after */
             if (mem[0x17] == 0x3) mem[0x17] = 0x2;
-            if (mem[0x17] == 0x2)
+            if (mem[0x17] == 0x2) 
             {
                 bus.debugger.handleBreak(u16 & pc, bus.cpu);
                 mem[0x17] = 0x0;
             }
+            /* @break :: end */
         }
     }
 }
