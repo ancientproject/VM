@@ -2,6 +2,7 @@
 {
     public enum IID : short
     {
+        [OpCode(0x00)] nop,
         [OpCode(0x0A)] warm,
         [OpCode(0x0D)] halt,
 
