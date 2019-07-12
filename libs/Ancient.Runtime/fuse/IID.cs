@@ -9,7 +9,8 @@
         [OpCode(0x01)] ldi,
         [OpCode(0x01)] ldx,
 
-        [OpCode(0x0F)] mva, [OpCode(0x0F)] mvd,
+        [OpCode(0x0F)] mva, 
+        [OpCode(0x0F)] mvd,
         [OpCode(0x0F)] mvx,
         [OpCode(0xA4)] rfd,
 
@@ -19,6 +20,8 @@
         [OpCode(0x08)] jump_e, [OpCode(0x08)] jump_g,
         [OpCode(0x08)] jump_u, [OpCode(0x08)] jump_y,
         [OpCode(0x09)] jump_p,
+
+
         [OpCode(0x33)] page,
 
         [UnfCode] mvj, [UnfCode] raw,
@@ -26,6 +29,10 @@
         [OpCode(0xA0)] orb,
         [OpCode(0xA1)] pull,
         [OpCode(0xAA)] val,
+
+        [OpCode(0xB1)] inc,
+        [OpCode(0xB2)] dec,
+        [OpCode(0xB3)] dup,
 
         [OpCode(0xC1)] brk_s,
         [OpCode(0xC1)] brk_n,
@@ -35,8 +42,7 @@
         //[OpCode(0xA5)] sig, 
         //[OpCode(0xA6)] ret,
 
-        [OpCode(0xB1)] inc,
-        [OpCode(0xB2)] dec,
+        
 
         // 1x, abs, acos, atan, acosh, atanh, asin, asinh, cbrt, cell, cos, cosh, flr, exp, log, log10, tan, tanh, trc, bitd, biti
         // 2x, atan2, min, max
@@ -76,6 +82,7 @@
         [OpCode(0xE6)] max,
         [OpCode(0xE7)] sin,
         [OpCode(0xE8)] sinh,
+
 
         
     }
