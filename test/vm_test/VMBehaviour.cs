@@ -1,6 +1,7 @@
 namespace vm_test
 {
     using System;
+    using System.ComponentModel;
     using System.Linq;
     using System.Linq.Expressions;
     using ancient.runtime.tools;
@@ -24,7 +25,7 @@ namespace vm_test
         public void reset()
         {
             bus = new Bus();
-            bus.State.stack = new Stack(bus, this, state);
+            bus.State.stack.__halter = this;
             bus.Add(new TestDevice());
             state.southFlag = true;
             bios.virtual_stack = true;
