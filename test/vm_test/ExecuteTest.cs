@@ -105,7 +105,7 @@ namespace vm_test
                 new sub(0x3, 0x1, 0x2)
             };
             load(mem);
-            shot(5);
+            shot((uint)mem.Length);
             Assert.AreEqual(14, state.step);
             AssertRegister(x => State.i64f32 & x.mem[0x3], 3f);
         }
@@ -115,7 +115,6 @@ namespace vm_test
             state.southFlag = false;
             bios.virtual_stack = false;
             var mem = new ulong[] {
-                new warm(),
                 new ldx(0x11, 0x1), 
                 // load to stack next 2 values
                 new orb(0x1),
@@ -125,7 +124,7 @@ namespace vm_test
                 new pull(0x2)
             };
             load(mem);
-            shot(5);
+            shot((uint)mem.Length);
             AssertRegister(x => State.i64f32 & x.mem[0x2], 3.14f);
         }
 
@@ -136,13 +135,12 @@ namespace vm_test
             bios.virtual_stack = false;
             state.ff = false;
             var mem = new ulong[] {
-                new warm(),
                 new ldi(0x0, 0x1), 
                 new ldi(0x1, 0x5), 
                 new div(0x3, 0x1, 0x0),
             };
             load(mem);
-            shot(5);
+            shot((ushort)mem.Length);
             var s = this;
             AssertRegister(x => x.mem[0x3], 0x5);
         }
@@ -154,7 +152,6 @@ namespace vm_test
             bios.virtual_stack = false;
             state.ff = false;
             var mem = new ulong[] {
-                new warm(),
                 new orb(0x2),
                 new val(1.0f),
                 new val(5.4f), 
@@ -175,7 +172,6 @@ namespace vm_test
             bios.virtual_stack = false;
             state.ff = false;
             var mem = new ulong[] {
-                new warm(),
                 new orb(0x2),
                 new val(1.0f),
                 new val(5.4f), 
