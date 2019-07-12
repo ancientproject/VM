@@ -50,6 +50,8 @@
             .Or(ByIIDToken(IID.brk_a))
             .Or(ByIIDToken(IID.brk_n))
             .Or(ByIIDToken(IID.brk_s))
+            // etc
+            .Or(ByIIDToken(IID.nop))
             // math instruction token
             .Or(MathInstruction(IID.add))
             .Or(MathInstruction(IID.mul))
