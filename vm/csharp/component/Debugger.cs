@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using ancient.runtime.tools;
+    using Newtonsoft.Json;
 
     public class Debugger
     {
@@ -22,7 +23,7 @@
         public Break Null = (s, cpu, d) =>
         {
             Console.WriteLine("-=== BREAK ===-");
-            Console.WriteLine(ObjectDumper.Dump(cpu.State));
+            Console.WriteLine(JsonConvert.SerializeObject(cpu.State));
             Console.WriteLine($"\n\n{d.symbols.FirstOrDefault(x => x.offset == s).line}");
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
