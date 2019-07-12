@@ -11,7 +11,7 @@
         [SetUp]
         public void setUp()
         {
-            stack = new Stack(bus, this, state);
+            stack.__halter = this;
         }
 
         [Test]

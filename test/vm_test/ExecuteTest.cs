@@ -109,5 +109,85 @@ namespace vm_test
             Assert.AreEqual(14, state.step);
             AssertRegister(x => State.i64f32 & x.mem[0x3], 3f);
         }
+        [Test]
+        public void OrbTest()
+        {
+            state.southFlag = false;
+            bios.virtual_stack = false;
+            var mem = new ulong[] {
+                new warm(),
+                new ldx(0x11, 0x1), 
+                // load to stack next 2 values
+                new orb(0x1),
+                // value
+                new val(3.14f), 
+                // load from stack to 0x2 cell memory
+                new pull(0x2)
+            };
+            load(mem);
+            shot(5);
+            AssertRegister(x => State.i64f32 & x.mem[0x2], 3.14f);
+        }
+
+        [Test]
+        public void DivTest()
+        {
+            state.southFlag = false;
+            bios.virtual_stack = false;
+            state.ff = false;
+            var mem = new ulong[] {
+                new warm(),
+                new ldi(0x0, 0x1), 
+                new ldi(0x1, 0x5), 
+                new div(0x3, 0x1, 0x0),
+            };
+            load(mem);
+            shot(5);
+            var s = this;
+            AssertRegister(x => x.mem[0x3], 0x5);
+        }
+
+        [Test]
+        public void DivFloatTest()
+        {
+            state.southFlag = false;
+            bios.virtual_stack = false;
+            state.ff = false;
+            var mem = new ulong[] {
+                new warm(),
+                new orb(0x2),
+                new val(1.0f),
+                new val(5.4f), 
+                new pull(0x0), 
+                new pull(0x1), 
+                new ldx(0x18, 0x1), 
+                new div(0x2, 0x0, 0x1),
+            };
+            load(mem);
+            shot((uint)mem.Length);
+            var s = this;
+            AssertRegister(x => State.i64f32 & x.mem[0x2], 5.4f / 1f);
+        }
+        [Test]
+        public void DivFloatTestInvert()
+        {
+            state.southFlag = false;
+            bios.virtual_stack = false;
+            state.ff = false;
+            var mem = new ulong[] {
+                new warm(),
+                new orb(0x2),
+                new val(1.0f),
+                new val(5.4f), 
+                new pull(0x0), 
+                new pull(0x1), 
+                new ldx(0x18, 0x1), 
+                new div(0x2, 0x1, 0x0),
+            };
+            load(mem);
+            shot((uint)mem.Length);
+            var s = this;
+            AssertRegister(x => State.i64f32 & x.mem[0x2],  1f / 5.4f);
+        }
     }
 }
