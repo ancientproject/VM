@@ -17,12 +17,6 @@
         {
             using var watcher = new StopwatchOperation("eval operation");
             MemoryManagement.FastWrite = fw;
-            if (iid == 0xA)
-            {
-                trace($"  r   r   r   u   u   x   x");
-                trace($"  1   2   3   1   2   1   2");
-                trace($"0x{r1:X} 0x{r2:X} 0x{r3:X} 0x{u1:X} 0x{u2:X} 0x{x1:X} 0x{x2:X}");
-            }
             if (bf)
             {
                 bus.debugger.handleBreak(u16 & pc, bus.cpu);
@@ -73,8 +67,6 @@
                     /* @stack-forward-flag */
                     if (sf)  stack.push(result);
                     else     mem[r1] = result;
-                    break;
-                case 0xA:
                     break;
                 #region halt
                 case 0xF when r1 == 0xF && r2 == 0xF && r3 == 0xF && u1 == 0xF && u2 == 0xF && x1 == 0xF:
