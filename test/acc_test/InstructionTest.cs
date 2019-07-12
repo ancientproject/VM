@@ -132,15 +132,6 @@ namespace ancient.runtime.compiler.test
             if (result.Instruction is halt i)
                 Assert.Equal(IID.halt, i.ID);
         }
-        [Theory]
-        [InlineData(".warm")]
-        public void Warm(string code)
-        {
-            var result = new FlameAssemblerSyntax().ByIIDToken(IID.warm).End().Parse(code);
-
-            if (result.Instruction is warm i)
-                Assert.Equal(IID.warm, i.ID);
-        }
 
         [Theory]
         [InlineData(".jump_t &(0xF)")]
