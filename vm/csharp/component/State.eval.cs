@@ -159,9 +159,9 @@
 
                     if (ff) x = (i64f32 & mem[u1]).ToString(CultureInfo.InvariantCulture);
 
-                    short[] cast(string str)
+                    static short[] cast(string str)
                     {
-                        var list = new List<int>();
+                        var list = new List<int>(); 
                         foreach (var c in str)
                         {
                             var uu1 = (c & 0xF0) >> 4;
