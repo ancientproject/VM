@@ -151,6 +151,10 @@
                     trace($"call :: decrement 0x{r1:X}--");
                     unchecked { mem[r1]--; } 
                     break; 
+                case 0xB3:
+                    trace($"call :: dup 0x{(u2 << 4) | u1:X}");
+                    mem[(u2 << 4) | u1] = mem[(r1 << 4) | r2];
+                    break;
 
                 #region debug
 
