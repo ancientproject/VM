@@ -123,7 +123,8 @@
                     break;
                 case 0xA0:
                     trace($"call :: orb '{r1}' times");
-                    Enumerable.Range(0, r1).Select(_ => i64 & fetch()).Pipe(z => stack.push(z)).ToArray();
+                    for (var i = pc + r1; pc != i;)
+                        stack.push(i64 & fetch());
                     break;
                 case 0xA1:
                     trace($"call :: pull -> 0x{r1:X}");
@@ -150,8 +151,6 @@
                     trace($"call :: decrement 0x{r1:X}--");
                     unchecked { mem[r1]--; } 
                     break; 
-                        /* for (var i = pc + r1; pc != i;)
-                        stack.push(i64 & fetch());*/
 
                 #region debug
 
