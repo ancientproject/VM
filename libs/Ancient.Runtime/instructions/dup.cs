@@ -9,7 +9,8 @@
     [PublicAPI]
     public class dup : Instruction
     {
-        public dup(byte cell1, byte cell2) => _ = (v1 = cell1, v2 = cell2);
+        public dup(byte cell1, byte cell2) 
+            : base(IID.dup) => _ = (v1 = cell1, v2 = cell2);
 
         /// <summary>
         /// first cell ref
