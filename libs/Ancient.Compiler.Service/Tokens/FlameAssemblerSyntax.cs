@@ -37,6 +37,8 @@
             .Or(StageN)
             .Or(NValue)
             .Or(Raw)
+            .Or(CKFT)
+            .Or(Dup)
             // jumps
             .Or(JumpT)
             .Or(JumpAt(IID.jump_e))
@@ -232,6 +234,23 @@
             .Token()
             .WithPosition()
             .Named("orb expression");
+
+        public virtual Parser<IInputToken> CKFT =>
+            (from dword in InstructionToken(IID.ckft)
+                from val1 in RefToken
+                select new InstructionExpression(new ckft(val1.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("ckft expression");
+
+        public virtual Parser<IInputToken> Dup =>
+            (from dword in InstructionToken(IID.dup)
+                from val1 in RefToken
+                from val2 in RefToken
+                select new InstructionExpression(new dup(val1.Cell, val2.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("dup expression");
 
         public virtual Parser<IInputToken> NValue =>
             (from dword in InstructionToken(IID.val)

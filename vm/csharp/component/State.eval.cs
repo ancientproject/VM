@@ -155,7 +155,11 @@
                     trace($"call :: dup 0x{(u2 << 4) | u1:X}");
                     mem[(u2 << 4) | u1] = mem[(r1 << 4) | r2];
                     break;
-
+                case 0xB4:
+                    trace($"call :: ckft 0x{(r2 << 4) | r1:X}");
+                    if (ff && !float.IsFinite(f32i64 & mem[(r2 << 4) | r1]))
+                        bus.cpu.halt(0xA9);
+                    break;
                 #region debug
 
                 case 0xF when x2 == 0xF:
