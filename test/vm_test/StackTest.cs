@@ -1,18 +1,14 @@
 ﻿namespace vm_test
 {
-    using System.Linq;
     using NUnit.Framework;
     using vm.component;
 
     public class StackTest : VMBehaviour
     {
-        private Stack stack;
+        public Stack stack;
 
         [SetUp]
-        public void setUp()
-        {
-            stack.__halter = this;
-        }
+        public void setUp() => stack = new Stack(bus) {__halter = this};
 
         [Test]
         public void UseVirtualForward()
