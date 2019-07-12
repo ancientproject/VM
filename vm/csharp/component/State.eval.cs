@@ -198,32 +198,32 @@
                 #endregion
                 #region jumps
 
-                case 0x8 when u2 == 0xF && x1 == 0x0: // 0x8F000F00
+                case 0x8 when u2 == 0xF && x1 == 0x0: /* @jump_t */
                     trace($"jump_t 0x{r1:X}");
                     pc = (ulong)mem[r1];
                     break;
-                case 0x8 when u2 == 0xF && x1 == 0x1: // 0x8FCD0F10
+                case 0x8 when u2 == 0xF && x1 == 0x1: /* @jump_e  0x8FCD0F10 */
                     trace(mem[r2] >= mem[r3]
                         ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(mem[r2] >= mem[r3]) 
                         pc = i64 | mem[r1];
                     break;
-                case 0x8 when u2 == 0xF && x1 == 0x2: // 0x8FCD0F20
+                case 0x8 when u2 == 0xF && x1 == 0x2: /* @jump_g */
                     trace(mem[r2] > mem[r3]
                         ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(mem[r2] > mem[r3])
                         pc = (ulong)mem[r1];
                     break;
-                case 0x8 when u2 == 0xF && x1 == 0x3: // 0x8FCD0F30
+                case 0x8 when u2 == 0xF && x1 == 0x3: /* @jump_u */
                     trace(mem[r2] < mem[r3]
                         ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
                     if(mem[r2] < mem[r3])
                         pc = (ulong)mem[r1];
                     break;
-                case 0x8 when u2 == 0xF && x1 == 0x4: // 0x8FCD0F40
+                case 0x8 when u2 == 0xF && x1 == 0x4: /* @jump_y */
                     trace(mem[r2] <= mem[r3]
                         ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
