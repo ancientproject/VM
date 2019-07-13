@@ -1,7 +1,7 @@
 ﻿namespace ancient.runtime.exceptions
 {
     using System;
-
+    [Serializable]
     public class CorruptedMemoryException : Exception
     {
         public CorruptedMemoryException() { }

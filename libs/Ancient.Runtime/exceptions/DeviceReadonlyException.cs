@@ -1,9 +1,6 @@
 ﻿namespace ancient.runtime.exceptions
 {
     using System;
-
-    public class DeviceReadonlyException : Exception
-    {
-        
-    }
+    [Serializable]
+    public class DeviceReadonlyException : Exception { }
 }
