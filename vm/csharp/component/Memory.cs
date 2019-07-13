@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using ancient.runtime;
+    using JetBrains.Annotations;
     using MoreLinq;
 
     
@@ -49,7 +50,7 @@
             Array.Copy(bin, 0, mem, memOffset, maxLen);
         }
 
-
+        [UsedImplicitly]
         internal class MemoryView
         {
             private readonly Memory obj_ref;
