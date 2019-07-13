@@ -25,22 +25,22 @@
         #region casters
 
         /// <summary><see cref="byte"/> to <see cref="long"/></summary>
-        public static Unicast<byte  , long > u8  = new Unicast<byte  , long>();
+        public static readonly Unicast<byte  , long > u8  = new Unicast<byte  , long>();
         /// <summary><see cref="ushort"/> to <see cref="ulong"/></summary>
-        public static Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
+        public static readonly Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
         /// <summary><see cref="uint"/> to <see cref="long"/></summary>
-        public static Unicast<uint  , long > u32 = new Unicast<uint  , long>();
+        public static readonly Unicast<uint  , long > u32 = new Unicast<uint  , long>();
         /// <summary><see cref="int"/> to <see cref="long"/></summary>
-        public static Unicast<int   , long > i32 = new Unicast<int   , long>();
+        public static readonly Unicast<int   , long > i32 = new Unicast<int   , long>();
         /// <summary><see cref="long"/> to <see cref="ulong"/></summary>
-        public static Unicast<long  , ulong> i64 = new Unicast<long  , ulong>();
+        public static readonly Unicast<long  , ulong> i64 = new Unicast<long  , ulong>();
 
         /// <summary>bytecast <see cref="float"/> to <see cref="long"/></summary>
-        public static Bitcast<float, long > i64f32 = new Bitcast<float, long>();
+        public static readonly Bitcast<float, long > i64f32 = new Bitcast<float, long>();
         /// <summary>bytecast <see cref="long"/> to <see cref="float"/></summary>
-        public static Bitcast<long , float> f32i64 = new Bitcast<long , float>();
+        public static readonly Bitcast<long , float> f32i64 = new Bitcast<long , float>();
         /// <summary><see cref="int"/> to <see cref="short"/></summary>
-        public static Unicast<int  , short> i32i16 = new Unicast<int  , short>();
+        public static readonly Unicast<int  , short> i32i16 = new Unicast<int  , short>();
 
         #endregion
 
