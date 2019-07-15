@@ -1,4 +1,4 @@
-﻿namespace ancient.runtime.emit
+namespace ancient.runtime.emit
 {
     using System;
     using System.Collections.Generic;
@@ -59,6 +59,7 @@
                 headerLen = header.LongLength;
 
             var body = generator.Load().SelectMany(x => x.GetBodyILBytes()).ToArray(out var bodyLen);
+            var meta = generator.Load().Where(x => x.HasMetadata()).SelectMany(x => x.GetMetaDataILBytes()).ToArray(out var metaLen);
 
             
             void push<T>(T value)
@@ -108,6 +109,10 @@
             push(bodyLen);
             // wL ? bytes - body code
             push(body);
+            push("\n"); // push 0x0A to next section
+            push(metaLen);
+            // wL ? bytes - metadata code
+            push(meta);
             push("\n"); // push 0x0A to next section
             return list.ToArray();
         }

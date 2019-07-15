@@ -13,7 +13,7 @@
     {
         public string Name { get; protected set; }
         public List<(string key, string value)> Metadata { get; protected set; }
-        protected byte[] ILCode { get; set; }
+        protected IList<(string name, byte[] data)> sections { get; set; } = new List<(string name, byte[])>();
 
         public AssemblyTag Tag { get; protected set; } = new AssemblyTag(AssemblyTag.SignType.UnSecurity, AssemblyTag.ArchType.Any, 1);
 
@@ -53,14 +53,20 @@
 
             var bodyLen = BitConverter.ToInt64(mem.ReadBytes(sizeof(long)), 0);
             var body = mem.ReadBytes((int) bodyLen);
+            mem.ReadBytes(1); // read '\n'
+
+            var metaLen = BitConverter.ToInt64(mem.ReadBytes(sizeof(long)), 0);
+            var metadata = mem.ReadBytes((int) bodyLen);
 
             var asm = new AncientAssembly
             {
-                ILCode = body,
                 Metadata = new List<(string key, string value)>(header.Metadata), 
                 Name = header.Name,
                 Tag = tag
             };
+
+            asm.sections.Add((".body", body));
+            asm.sections.Add((".meta", metadata));
 
 
             return asm;
@@ -69,6 +75,6 @@
         public static AncientAssembly LoadFrom(string filename) // todo
             => Load(File.ReadAllBytes(filename));
 
-        public virtual byte[] GetILCode() => ILCode;
+        public virtual byte[] GetILCode() => sections.First(x => x.name == ".body").data;
     }
 }
