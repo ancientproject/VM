@@ -24,6 +24,10 @@
 
         [OpCode(0x33)] page,
 
+        [OpCode(0x34)] lpstr,
+        [OpCode(0x35)] unlock,
+        
+
         [UnfCode] mvj, [UnfCode] raw,
 
         [OpCode(0xA0)] orb,
