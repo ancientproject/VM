@@ -1,0 +1,68 @@
+{
+	"name": "ancient-asm",
+	"displayName": "Ancient Assembly",
+	"description": "Ancient Assembly developmemnt environment (8bit cpu)",
+	"version": "0.48.0",
+	"icon": "images/icon.png",
+	"galleryBanner": {
+		"color": "#18c7b1",
+		"theme": "dark"
+	},
+	"publisher": "rijndael",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/0xF6/ancient_cpu/issues"
+	},
+	"homepage": "https://github.com/0xF6/ancient_cpu/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/0xF6/ancient_cpu.git"
+	},
+	"engines": {
+		"vscode": "^1.4.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+		"ancient",
+		"8bit",
+		"assembly"
+	],
+	"activationEvents": [
+		"onLanguage:asm",
+		"onCommand:extension.target.create",
+		"onCommand:extension.target.select",
+		"onCommand:extension.target.run",
+		"onCommand:extension.target.build"
+	],
+	"main": "./extension",
+	"contributes": {
+		"languages": [
+			{
+				"id": "asm",
+				"aliases": [
+					"Ancient Assembly"
+				],
+				"extensions": [
+					".asm",
+					".ancient"
+				],
+				"configuration": "./ancient.configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "asm",
+				"scopeName": "source.asm.ancient",
+				"path": "./syntaxes/asm.tmLanguage"
+			}
+		]
+	},
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"vscode": "^0.11.0"
+	}
+}

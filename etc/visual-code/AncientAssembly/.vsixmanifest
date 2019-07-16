@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Language="en-US" Id="ancient-asm" Version="0.48.0" Publisher="rijndael"/>
+    <DisplayName>Ancient Assembly</DisplayName>
+    <Description xml:space="preserve">Ancient Assembly developmemnt environment (8bit cpu)</Description>
+    <Tags>ancient,8bit,assembly,8bit assembly,__ext_.asm,__ext_.ancient</Tags>
+    <Categories>Languages</Categories>
+    <GalleryFlags>Public</GalleryFlags>
+    <Badges></Badges>
+    <Properties>
+        <Property Id="Microsoft.VisualStudio.Code.Engine" Value="^1.4.0" />
+        <Property Id="Microsoft.VisualStudio.Code.ExtensionDependencies" Value="" />
+        <Property Id="Microsoft.VisualStudio.Services.Links.Source" Value="https://github.com/0xF6/ancient_cpu.git" />
+        <Property Id="Microsoft.VisualStudio.Services.Links.Getstarted" Value="https://github.com/0xF6/ancient_cpu.git" />
+        <Property Id="Microsoft.VisualStudio.Services.Links.GitHub" Value="https://github.com/0xF6/ancient_cpu.git" />
+        <Property Id="Microsoft.VisualStudio.Services.Links.Support" Value="https://github.com/0xF6/ancient_cpu/issues" />
+        <Property Id="Microsoft.VisualStudio.Services.Links.Learn" Value="https://github.com/0xF6/ancient_cpu" />
+        <Property Id="Microsoft.VisualStudio.Services.Branding.Color" Value="#18c7b1" />
+        <Property Id="Microsoft.VisualStudio.Services.Branding.Theme" Value="dark" />
+        <Property Id="Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown" Value="true" />
+    </Properties>
+    <License>extension/LICENSE</License>
+    <Icon>extension/images/icon.png</Icon>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Code"/>
+  </Installation>
+  <Dependencies/>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true" />
+    <Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true" />
+    <Asset Type="Microsoft.VisualStudio.Services.Content.License" Path="extension/LICENSE" Addressable="true" />
+    <Asset Type="Microsoft.VisualStudio.Services.Icons.Default" Path="extension/images/icon.png" Addressable="true" />
+  </Assets>
+</PackageManifest>
