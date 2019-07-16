@@ -335,3 +335,5 @@ build/
 etc/aip/ancient-sdk-cache/
 
 etc/aip/ancient-sdk\.back\.aip
+
+*.vsix
