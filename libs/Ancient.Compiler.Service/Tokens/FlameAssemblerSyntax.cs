@@ -1,5 +1,6 @@
 ﻿namespace ancient.compiler.tokens
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -62,27 +63,13 @@
             .Or(MathInstruction(IID.pow))
             .Or(SqrtToken)
             // advanced math
-            .Or(AdvMathInstruction(IID.abs))
-            .Or(AdvMathInstruction(IID.acos))
-            .Or(AdvMathInstruction(IID.atan))
-            .Or(AdvMathInstruction(IID.acosh))
-            .Or(AdvMathInstruction(IID.atanh))
-            .Or(AdvMathInstruction(IID.asin))
-            .Or(AdvMathInstruction(IID.asinh))
-            .Or(AdvMathInstruction(IID.cbrt))
-            .Or(AdvMathInstruction(IID.cell))
-            .Or(AdvMathInstruction(IID.cos))
-            .Or(AdvMathInstruction(IID.cosh))
-            .Or(AdvMathInstruction(IID.flr))
-            .Or(AdvMathInstruction(IID.exp))
-            .Or(AdvMathInstruction(IID.log))
-            .Or(AdvMathInstruction(IID.log10))
-            .Or(AdvMathInstruction(IID.tan))
-            .Or(AdvMathInstruction(IID.tanh))
-            .Or(AdvMathInstruction(IID.trc))
-            .Or(AdvMathInstruction(IID.biti))
-            .Or(AdvMathInstruction(IID.bitd))
-            .Or(AdvMathInstruction(IID.sin))
+            .Or(AdvMathInstruction(IID.abs)).Or(AdvMathInstruction(IID.acos)).Or(AdvMathInstruction(IID.atan))
+            .Or(AdvMathInstruction(IID.acosh)).Or(AdvMathInstruction(IID.atanh)).Or(AdvMathInstruction(IID.asin))
+            .Or(AdvMathInstruction(IID.asinh)).Or(AdvMathInstruction(IID.cbrt)).Or(AdvMathInstruction(IID.cell))
+            .Or(AdvMathInstruction(IID.cos)).Or(AdvMathInstruction(IID.cosh)).Or(AdvMathInstruction(IID.flr))
+            .Or(AdvMathInstruction(IID.exp)).Or(AdvMathInstruction(IID.log)).Or(AdvMathInstruction(IID.log10))
+            .Or(AdvMathInstruction(IID.tan)).Or(AdvMathInstruction(IID.tanh)).Or(AdvMathInstruction(IID.trc))
+            .Or(AdvMathInstruction(IID.biti)).Or(AdvMathInstruction(IID.bitd)).Or(AdvMathInstruction(IID.sin))
             .Or(AdvMathInstruction(IID.sinh))
 
             .Or(AdvMathInstruction(IID.inc))
@@ -93,59 +80,102 @@
             .Or(Adv2MathInstruction(IID.atan2))
         ;
 
+        #region Segments
         public virtual Parser<IInputToken[]> ManyParser => (
                 from many in
                     Parser
                 select many)
             .ContinueMany()
             .Select(x => x.ToArray());
-
+        //  
+        /// <summary>
+        /// Comment token
+        /// </summary>
+        /// <example>
+        /// CharToken.Parse("; this is single-line comment");
+        /// </example>
         public virtual Parser<CommentToken> CommentToken =>
-            (from comment in new CommentParser(";",null, null, "\n").SingleLineComment
+            (from comment in new CommentParser(";","{|", "|}", "\n").SingleLineComment
                 select new CommentToken(comment))
             .Token()
             .Named("comment token");
-
+        /// <summary>
+        /// Single char wrapped in quote character
+        /// </summary>
+        /// <example>
+        /// CharToken.Parse("'1'");
+        /// </example>
         public virtual Parser<char> CharToken =>
-               (from _1 in Parse.Char('\'')
-                from @char in Parse.AnyChar
-                from _2 in Parse.Char('\'')
-             select @char)
+            (from @char in Wrap(Parse.AnyChar, Parse.Char('\''))
+                select @char)
             .Token()
             .Named("char token");
-        public virtual Parser<string> QuoteIdentifierToken =>
-            (from open in Parse.Char('\'')
-                from @string in Parse.AnyChar.Except(Parse.Char('\'')).Many().Text()
-                from close in Parse.Char('\'')
+        /// <summary>
+        /// Single quote wrapped identifier token
+        /// </summary>
+        /// <example>
+        /// QuoteIdentifierToken.Parse("'test identifier token'");
+        /// </example>
+        public virtual Parser<string> QuoteIdentifierToken => (   
+                from @string in Wrap(Parse.AnyChar.Except(Parse.Char('\'')).Many().Text(), Parse.Char('\''))
                 select @string)
             .Token()
             .Named("quote string token");
+        /// <summary>
+        /// string wrapped in double quote chars
+        /// </summary>
+        /// <example>
+        /// StringToken.Parse("\"str\"") -> "str"
+        /// </example>
+        public virtual Parser<string> StringToken => (
+            from @string in Wrap(Parse.AnyChar.Except(Parse.Char('"')).Many().Text(), Parse.Char('"'))
+                select @string)
+            .Token().Named("string token");
 
+        /// <summary>
+        /// Keyword token
+        /// </summary>
+        /// <param name="keyword">
+        /// keyword string
+        /// </param>
+        /// <example>
+        /// Keyword("var").Parse("var")
+        /// </example>
+        public virtual Parser<string> Keyword(string keyword) =>
+            (from word in Parse.String(keyword).Text() select word)
+                .Token().Named($"keyword {keyword} token");
+        /// <summary>
+        /// Float number token
+        /// </summary>
+        /// <example>
+        ///
+        /// </example>
+        public virtual Parser<string> FloatToken => 
+            (from @string in Parse.Decimal select @string)
+            .Token().Named("string token");
+
+        [Obsolete]
         public virtual Parser<string> IdentifierToken =>
             (from word in Parse.AnyChar.Except(Parse.Char(' ')).Many().Text()
-            select word)
+                select word)
             .Token()
             .Named("identifier token");
 
-        public virtual Parser<string> Keyword(string keyword) =>
-            (from word in Parse.String(keyword).Text()
-                select word)
-            .Token()
-            .Named($"keyword {keyword} token");
+        #endregion
 
-        public virtual Parser<string> StringToken =>
-               (from open in Parse.Char('"')
-                from @string in Parse.AnyChar.Except(Parse.Char('"')).Many().Text()
-                from close in Parse.Char('"')
-             select @string)
-            .Token()
-            .Named("string token");
+        #region etc
 
-        public virtual Parser<string> FloatToken =>
-            (from @string in Parse.Decimal
-                select @string)
-            .Token()
-            .Named("string token");
+        protected internal virtual Parser<T> Wrap<T, S>(Parser<T> el, Parser<S> wrapper) =>
+            from _1 in wrapper
+            from result in el
+            from _2 in wrapper
+            select result;
+
+        #endregion
+
+        
+
+       
 
         
         public virtual Parser<string> HexNumber =>
@@ -211,7 +241,7 @@
         public virtual Parser<float> CastFloat =>
             (from refSym in Parse.String("@float_t")
                 from openParen in Parse.Char('(')
-                from @string in StringToken
+                from @string in FloatToken
                 from closeParen in Parse.Char(')')
                 select float.Parse(@string, CultureInfo.InvariantCulture))
             .Token()
@@ -407,9 +437,9 @@
             .Token()
             .Named("~ident");
         public virtual Parser<string> InstructionToken(IID instruction) =>
-            from dot in Parse.Char('.')
-            from ident in Parse.String(instruction.ToString()).Text()
-            select ident;
+            (from dot in Parse.Char('.')
+                from ident in Parse.String(instruction.ToString()).Text()
+                select ident).Token().Named($"{instruction} expression");
         public virtual Parser<InstructionExpression> ByIIDToken(IID id) =>
             (from dword in InstructionToken(id)
                 select new InstructionExpression(Instruction.Summon(id)))

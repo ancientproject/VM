@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "echo 1"
+  },
+  "name": "rand",
+  "version": "1",
+  "author": "Yuuki Wesp"
+}

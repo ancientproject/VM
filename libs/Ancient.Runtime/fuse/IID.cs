@@ -87,8 +87,5 @@
         [OpCode(0xE6)] max,
         [OpCode(0xE7)] sin,
         [OpCode(0xE8)] sinh,
-
-
-        
     }
 }
