@@ -1,5 +1,7 @@
 ﻿namespace ancient.runtime
 {
+    using System;
+
     public class ShiftFactory : IShifter
     {
         private int prev;
@@ -7,7 +9,7 @@
 
         private ShiftFactory() {}
 
-        public static IShifter Create(int bitIndex) => new ShiftFactory {index = bitIndex};
+        public static ShiftFactory Create(int bitIndex) => new ShiftFactory {index = bitIndex};
 
         public int Shift()
         {
@@ -16,5 +18,7 @@
             if (index < 0) index = 0;
             return prev;
         }
+
+        public static implicit operator Func<int>(ShiftFactory factory) => factory.Shift;
     }
 }
