@@ -10,7 +10,7 @@ namespace ancient.runtime.compiler.test
     public class InstructionTest
     {
         [Theory]
-        [InlineData(".val @float_t(\"14.56\")")]
+        [InlineData(".val @float_t(14.56)")]
         public void FloatParseTest(string code)
         {
             var result = new FlameAssemblerSyntax().NValue.End().Parse(code);
