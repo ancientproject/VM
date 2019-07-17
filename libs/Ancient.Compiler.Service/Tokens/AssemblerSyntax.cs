@@ -4,8 +4,11 @@ namespace ancient.compiler.tokens
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Reflection;
     using runtime;
+    using runtime.emit.sys;
     using Sprache;
+    using Module = runtime.emit.sys.Module;
 
     public class AssemblerSyntax
     {
@@ -40,6 +43,7 @@ namespace ancient.compiler.tokens
             .Or(Raw)
             .Or(CKFT)
             .Or(Dup)
+            .Or(Call_I)
             // jumps
             .Or(JumpT)
             .Or(JumpAt(IID.jump_e))

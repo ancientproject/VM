@@ -1,15 +1,28 @@
 namespace ancient.runtime.compiler.test
 {
     using System.Linq;
-    using System.Reflection.Emit;
     using ancient.compiler;
     using ancient.compiler.tokens;
+    using emit.sys;
     using runtime;
     using Sprache;
     using Xunit;
 
     public class InstructionTest
     {
+        [Theory]
+        [InlineData(".call.i !{sys->memory->barrier()}")]
+        public void CallInnerTest(string code)
+        {
+            var result = new AssemblerSyntax().Call_I.End().Parse(code);
+
+            if (result is InstructionExpression exp && exp.Instruction is call_i i)
+            {
+                Assert.Equal(Module.CompositeIndex("sys->memory->barrier()"), i._sign);
+            }
+        }
+
+
         [Theory]
         [InlineData(".val @float_t(14.56)")]
         public void FloatParseTest(string code)
@@ -60,7 +73,7 @@ namespace ancient.runtime.compiler.test
         }
         [Theory]
         [InlineData(".mva &(0x0) &(0xC) <| $(0xFF)")]
-        [InlineData(".mva &(0x0) &(0xC) <| @char_t('ÿ')")]
+        [InlineData(".mva &(0x0) &(0xC) <| @char_t('ï¿½')")]
         public void PushA(string code)
         {
             var result = new AssemblerSyntax().PushA.End().Parse(code);

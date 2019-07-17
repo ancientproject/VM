@@ -1,14 +1,19 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Reflection;
+    using ancient.runtime;
+    using ancient.runtime.emit.sys;
+    using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
     using ancient.runtime.hardware;
     using MoreLinq;
 
 	using static System.MathF;
+    using Module = ancient.runtime.emit.sys.Module;
 
     public partial class State
     {
@@ -32,7 +37,7 @@
                     /* need @float-flag */
                     if(!ff) bus.cpu.halt(0xA9);
                     trace($"call :: [0xD0..0xE8]::0x{iid:X}");
-                    var result = iid switch {
+                    var result = iid switch { // todo refactoring 
                         0xD0 => f32i64 & Abs    (i64f32 & mem[r1]),
                         0xD1 => f32i64 & Acos   (i64f32 & mem[r1]),
                         0xD2 => f32i64 & Atan   (i64f32 & mem[r1]),
@@ -151,6 +156,18 @@
                     trace($"call :: ckft 0x{(r2 << 4) | r1:X}");
                     if (ff && !float.IsFinite(f32i64 & mem[(r2 << 4) | r1]))
                         bus.cpu.halt(0xA9);
+                    break;
+                case 0x36: /* @call */
+                    d16u sign = (u8 & r3, u8 & u1, u8 & u2, u8 & x1);
+                    trace($"call :: call 0x{sign.Value:X}");
+                    var find = Module.Global.Find(sign, out var @extern);
+                    if (find != ExternStatus.Found)
+                    {
+                        bus.cpu.halt(0xA16 + (int) find, $"0x{sign.Value:X}");
+                        return;
+                    }
+                    trace($"call :: {@extern.Signature}");
+                    CallAndWrite(@extern);
                     break;
                 #region debug
 
@@ -286,6 +303,24 @@
                 mem[0x17] = 0x0;
             }
             /* @break :: end */
+        }
+        private void CallAndWrite(ExternSignature info)
+        {
+            if (info.IsArgs())
+            {
+                bus.cpu.halt(0xA22, "not implemented");
+                return;
+            }
+            try
+            {
+                var result = info.method.Invoke(null, new object[0]);
+                if(!info.IsVoid())
+                    stack.push(result.To<long>());
+            }
+            catch (Exception e)
+            {
+                bus.cpu.halt(0xA22, e.Message);
+            }
         }
     }
 }
