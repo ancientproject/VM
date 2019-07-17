@@ -35,53 +35,53 @@
         ],
         "description": ""
     },
-    ".jump_t": {
+    ".jump.t": {
         "prefix": [
-          ".jump_t"
+          ".jump.t"
         ],
         "body": [
-          ".jump_t &(${0:cell})"
+          ".jump.t &(${0:cell})"
         ],
         "description": ""
     },
 
-    ".jump_e": {
+    ".jump.e": {
         "prefix": [
-          ".jump_e",
+          ".jump.e",
           ".jpe"
         ],
         "body": [
-          ".jump_e &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+          ".jump.e &(${0:cell}) ~- &(${1:N}) &(${2:S})"
         ],
         "description": "jump to offset if N cell value more or equal S cell value."
     },
-    ".jump_g": {
+    ".jump.g": {
         "prefix": [
-          ".jump_g",
+          ".jump.g",
           ".jpg"
         ],
         "body": [
-          ".jump_g &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+          ".jump.g &(${0:cell}) ~- &(${1:N}) &(${2:S})"
         ],
         "description": "jump to offset if N cell value more S cell value."
     },
-    ".jump_u": {
+    ".jump.u": {
         "prefix": [
-          ".jump_u",
+          ".jump.u",
           ".jpu"
         ],
         "body": [
-          ".jump_u &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+          ".jump.u &(${0:cell}) ~- &(${1:N}) &(${2:S})"
         ],
         "description": "jump to offset if N cell value less S cell value."
     },
-    ".jump_y": {
+    ".jump.y": {
         "prefix": [
-          ".jump_y",
+          ".jump.y",
           ".jpy"
         ],
         "body": [
-          ".jump_y &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+          ".jump.y &(${0:cell}) ~- &(${1:N}) &(${2:S})"
         ],
         "description": "jump to offset if N cell value less or equal S cell value."
     },
@@ -187,30 +187,30 @@
           ],
           "description": "Decrement value in cell (float-mode support)"
     },
-    ".brk_s": {
+    ".brk.s": {
         "prefix": [
-            ".brk_s"
+            ".brk.s"
           ],
           "body": [
-            ".brk_s"
+            ".brk.s"
           ],
           "description": "standard break - now break (need connected debugger, command '-d')"
     },
-    ".brk_n": {
+    ".brk.n": {
         "prefix": [
-            ".brk_n"
+            ".brk.n"
           ],
           "body": [
-            ".brk_n"
+            ".brk.n"
           ],
           "description": "break on next cycle execute (need connected debugger, command '-d')"
     },
-    ".brk_a": {
+    ".brk.a": {
         "prefix": [
-            ".brk_a"
+            ".brk.a"
           ],
           "body": [
-            ".brk_a"
+            ".brk.a"
           ],
           "description": "break on after next cycle execute (need connected debugger, command '-d')"
     },
