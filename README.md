@@ -138,15 +138,15 @@ list:
 // refer and jumper
 
 // set reference current program offset to cell_id
-.ref_t &(cell_id)
+.ref.t &(cell_id)
 // read from cell_id offset program and go to
-.jump_t &(cell_id)
+.jump.t &(cell_id)
 
 // other jumper
-.jump_e &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more or equal 0x6 cell value
-.jump_g &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more 0x6 cell value 
-.jump_u &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less 0x6 cell value 
-.jump_y &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less or equal 0x6 cell value 
+.jump.e &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more or equal 0x6 cell value
+.jump.g &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more 0x6 cell value 
+.jump.u &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less 0x6 cell value 
+.jump.y &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less or equal 0x6 cell value 
 
 
 // manage processor
@@ -207,9 +207,9 @@ list:
 .pull &(target_cell)  // read from stack float value and insert to target_cell
 
 // debugger
-.brk_s // standard break - now break
-.brk_n // break on next cycle execute
-.brk_a // break on after next cycle execute
+.brk.s // standard break - now break
+.brk.n // break on next cycle execute
+.brk.a // break on after next cycle execute
 
 // other
 .inc &(cell) // cell++
