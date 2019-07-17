@@ -69,6 +69,11 @@
             0xBD    => $"Overflow heap memory exception",
             0xD6    => $"x9 segmentation fault",
             0x77    => $"Unexpected end of executable memory",
+            0xA18   => $"Signature fault, method '{text}' not found",
+            0xA19   => $"Signature fault, method '{text}' not valid",
+            0xA1A   => $"Signature fault, method '{text}' not static",
+            0xA1B   => $"Signature fault, method '{text}' access denied",
+            0xA22   => $"Signature fault, '{text}'",
             0xFFFF  => $"Shift fault, {text}",
             _       => $"Unknown state 0x{reason:X}",
         };
