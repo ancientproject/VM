@@ -10,7 +10,7 @@
         public static Parser<OperatorKind> NamedOperator(this Parser<OperatorKind> parser, OperatorKind kind)
         {
             return parser.Named(
-                $"{kind} operator ({FlameAssemblerSyntax.Operators.First(x => x.Value == kind).Key})");
+                $"{kind} operator ({AssemblerSyntax.Operators.First(x => x.Value == kind).Key})");
         }
 
         public static Parser<T> WithPosition<T>(this Parser<T> parser) where T : class, IInputToken

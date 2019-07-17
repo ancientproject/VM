@@ -7,7 +7,7 @@
     using runtime;
     using Sprache;
 
-    public class FlameAssemblerSyntax
+    public class AssemblerSyntax
     {
         internal static readonly Dictionary<string, OperatorKind> Operators = new Dictionary<string, OperatorKind>
         {
@@ -148,11 +148,25 @@
         /// Float number token
         /// </summary>
         /// <example>
-        ///
+        /// FloatToken.Parse("12.45") -> "12.45"
         /// </example>
         public virtual Parser<string> FloatToken => 
             (from @string in Parse.Decimal select @string)
             .Token().Named("string token");
+
+        /// <summary>
+        /// hex number token
+        /// </summary>
+        /// <example>
+        /// HexToken.Parse("0xDA") -> DA
+        /// </example>
+        public virtual Parser<string> HexToken =>
+            (from zero in Parse.Char('0')
+                from x in Parse.Chars("x")
+                from number in Parse.Chars("ABCDEF1234567890").Many().Text()
+                select number)
+            .Token()
+            .Named("hex number");
 
         [Obsolete]
         public virtual Parser<string> IdentifierToken =>
@@ -178,13 +192,7 @@
        
 
         
-        public virtual Parser<string> HexNumber =>
-            (from zero in Parse.Char('0')
-                from x in Parse.Chars("x")
-                from number in Parse.Chars("0xABCDEF123456789").Many().Text()
-                select number)
-            .Token()
-            .Named("hex number");
+       
 
         #region Operator tokens
         public virtual Parser<OperatorKind> PipeLeft =>
@@ -206,7 +214,7 @@
         public virtual Parser<RefExpression> RefToken =>
             (from refSym in Parse.Char('&')
                 from openParen in Parse.Char('(')
-                from cellID in HexNumber
+                from cellID in HexToken
                 from closeParen in Parse.Char(')')
                 select new RefExpression(cellID))
             .Token()
@@ -215,7 +223,7 @@
         public virtual Parser<ValueExpression> ValueToken =>
             (from refSym in Parse.Char('$')
                 from openParen in Parse.Char('(')
-                from value in HexNumber
+                from value in HexToken
                 from closeParen in Parse.Char(')')
                 select new ValueExpression(value))
             .Token()
@@ -251,7 +259,7 @@
         public virtual Parser<IInputToken> Raw =>
             (from dword in InstructionToken(IID.raw)
                 from space1 in Parse.WhiteSpace.Optional()
-                from val1 in HexNumber
+                from val1 in HexToken
                 select new InstructionExpression(new raw(ulong.Parse(val1, NumberStyles.AllowHexSpecifier))))
             .Token()
             .WithPosition()
