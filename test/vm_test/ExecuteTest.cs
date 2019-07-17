@@ -2,6 +2,7 @@ namespace vm_test
 {
     using System;
     using ancient.runtime;
+    using ancient.runtime.emit.sys;
     using ancient.runtime.hardware;
     using NUnit.Framework;
     using vm.component;
@@ -141,7 +142,6 @@ namespace vm_test
             };
             load(mem);
             shot((ushort)mem.Length);
-            var s = this;
             AssertRegister(x => x.mem[0x3], 0x5);
         }
 
@@ -162,7 +162,6 @@ namespace vm_test
             };
             load(mem);
             shot((uint)mem.Length);
-            var s = this;
             AssertRegister(x => State.i64f32 & x.mem[0x2], 5.4f / 1f);
         }
         [Test]
@@ -178,12 +177,23 @@ namespace vm_test
                 new pull(0x0), 
                 new pull(0x1), 
                 new ldx(0x18, 0x1), 
-                new div(0x2, 0x1, 0x0),
+                new div(0x2, 0x1, 0x0)
             };
             load(mem);
             shot((uint)mem.Length);
-            var s = this;
             AssertRegister(x => State.i64f32 & x.mem[0x2],  1f / 5.4f);
+        }
+
+        [Test]
+        public void CallInnerTest()
+        {
+            var mem = new ulong[]
+            {
+                new call_i(Module.CompositeIndex("assert->value()")),
+            };
+            load(mem);
+            shot();
+            Assert.AreEqual(0xDDD, bus.State.stack.pop());
         }
     }
 }

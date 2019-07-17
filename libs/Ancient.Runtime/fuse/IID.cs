@@ -1,4 +1,4 @@
-﻿namespace ancient.runtime
+namespace ancient.runtime
 {
     public enum IID : short
     {
@@ -26,6 +26,9 @@
 
         [OpCode(0x34)] lpstr,
         [OpCode(0x35)] unlock,
+        [OpCode(0x36)] call_i,
+        [OpCode(0x37)] prune,
+        [OpCode(0x38)] locals,
         
 
         [UnfCode] mvj, [UnfCode] raw,
