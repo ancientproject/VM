@@ -13,18 +13,34 @@
 <h4 align="center">
   8bit CPU Virtual Machine & Ancient Assembler-style language
 </h4>
+
+<!-- classic badges -->
 <p align="center">
   <a href="#">
     <img src="https://dev.azure.com/0xF6/AncientVM/_apis/build/status/0xF6.ancient_cpu?branchName=master">
     <img src="http://img.shields.io/:license-MIT-blue.svg">
-    <img src="https://img.shields.io/github/release/0xF6/ancient_cpu.svg">
   </a>
-  <a href="https://t.me/ivysola">
-    <img src="https://img.shields.io/badge/Ask%20Me-Anything-1f425f.svg">
+  <a href="https://github.com/0xF6/ancient_cpu/releases">
+    <img src="https://img.shields.io/github/release/0xF6/ancient_cpu.svg?logo=github&style=flat">
   </a>
   <a href="https://www.codacy.com/app/0xF6/cpu_4bit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=0xF6/cpu_4bit&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/e033b506944447289b2ef39478fc8234"/></a>
   </a>
 </p>
+
+<!-- popup badges -->
+<p align="center">
+   <a href="https://marketplace.visualstudio.com/items?itemName=rijndael.ancient-asm">
+    <img alt="Visual Studio Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/rijndael.ancient-asm.svg?logo=visual-studio-code&logoColor=%23CCC&style=popout-square">
+  </a>
+  <a href="https://t.me/ivysola">
+    <img src="https://img.shields.io/badge/Ask%20Me-Anything-1f425f.svg?style=popout-square&logo=telegram">
+  </a>
+  <a href="https://t.me/ivysola">
+    <img src="https://img.shields.io/badge/ethereum-free-blue.svg?style=popout-square&logo=ethereum&logoColor=%23CCC">
+  </a>
+</p>
+
+<!-- big badges -->
 <p align="center">
   <a href="#">
     <img src="https://forthebadge.com/images/badges/made-with-c-sharp.svg">
