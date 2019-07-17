@@ -57,6 +57,8 @@
             public void Add(string sign, MethodInfo method)
             {
                 var index = CompositeIndex(sign);
+                if(methods.ContainsKey(index))
+                    return;
                 var @extern = Composite(sign, index);
                 @extern.method = method;
                 methods.Add(index, @extern);
