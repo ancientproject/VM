@@ -4,6 +4,7 @@ namespace vm_test
     using System.ComponentModel;
     using System.Linq;
     using System.Linq.Expressions;
+    using ancient.runtime.emit.sys;
     using ancient.runtime.tools;
     using MoreLinq;
     using NUnit.Framework;
@@ -19,6 +20,8 @@ namespace vm_test
 
         protected VMBehaviour()
         {
+            Module.Global.Add("assert->pass()", typeof(VMBehaviour).GetMethod("CallSuccess"));
+            Module.Global.Add("assert->value()", typeof(VMBehaviour).GetMethod("CallValue"));
             reset();
         }
         [TearDown]
@@ -30,6 +33,9 @@ namespace vm_test
             state.southFlag = true;
             bios.virtual_stack = true;
         }
+
+        public static void CallSuccess() => Assert.Pass("call_success");
+        public static int CallValue() => 0xDDD;
 
         public void load(params ulong[] values) => bus.State.Load("<exec>",values);
 

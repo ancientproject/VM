@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -169,6 +169,22 @@ namespace vm.component
                     trace($"call :: {@extern.Signature}");
                     CallAndWrite(@extern);
                     break;
+                case 0x37: /* prune */
+                    evaluation.Prune();
+                    break;
+                case 0x38: /* locals */
+                    d8u len = (u8 & r1, u8 & r2);
+                    evaluation.Alloc(len);
+                    var segs = new List<EvaluationSegment>(len);
+                    for(var i = 0; i != len; i++)
+                        segs.Add(EvaluationSegment.Construct(fetch(), fetch()));
+                    var @params = new object[len];
+                    foreach (var s in segs)
+                        @params[s.Index] = Activator.CreateInstance(Type.GetType($"ancient.runtime.emit.sys.{s.Type}_Type"));
+                    locals.Pin(@params, out var @external);
+                    foreach (var (host, index) in @external.Select((x, i) => (x, i)))
+                        evaluation[index] = host;
+                    break;
                 #region debug
 
                 case 0xF when x2 == 0xF: /* @mvx */
@@ -304,6 +320,35 @@ namespace vm.component
             }
             /* @break :: end */
         }
+
+        public class Evaluate
+        {
+            private Stack<object> stack;
+            private List<object> table;
+
+            public object this[int index]
+            {
+                get => table[index];
+                set => table[index] = value;
+            }
+
+            public void Prune()
+            {
+                stack?.Clear();
+                table?.Clear();
+                stack = null;
+                table = null;
+            }
+
+            public void Alloc(int len)
+            {
+                stack = new Stack<object>(len);
+                table = new List<object>(len);
+            }
+        }
+
+        public readonly Evaluate evaluation = new Evaluate();
+
         private void CallAndWrite(ExternSignature info)
         {
             if (info.IsArgs())

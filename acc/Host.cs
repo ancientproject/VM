@@ -1,4 +1,4 @@
-﻿namespace ancient.compiler
+namespace ancient.compiler
 {
     using System;
     using emit;
@@ -9,12 +9,16 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
+    using System.Security;
     using System.Text;
     using System.Text.RegularExpressions;
     using exceptions;
+    using MoreLinq;
     using Pastel;
     using runtime.emit;
+    using runtime.emit.sys;
     using runtime.tools;
     using tokens;
     using static System.Console;
@@ -36,7 +40,7 @@
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-
+            Module.Boot();
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { ConsoleExtensions.Disable(); };
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var raw = new FluentCommandLineParser<Args>();
@@ -101,18 +105,13 @@
             return 1;
         }
 
-        public static string Evolve(string code)
+        public static string Evolve(string code) // todo REWORK IT
         {
             var result = code;
             var block = code.Replace("\r", "").Split('\n');
             var parsed = new TransformerSyntax().ManyEvolver.Parse(code);
-            foreach (var token in parsed)
+            foreach (var token in parsed.Pipe(x => Trace($"evolving :: {x}")))
             {
-                switch (token)
-                {
-                    case EmptyEvolve _: break;
-                    default: Trace($"evolving :: {token}"); break;
-                }
                 switch (token)
                 {
                     case ClassicEvolve e:
@@ -121,6 +120,11 @@
                             string.Join("\n", e.Result));
                         break;
                     case EmptyEvolve _:
+                        break;
+                    case LocalsInitEvolver local:
+                        var dd = result.Split('\n').ToList();
+                        dd.Insert(token.InputPosition.Line-1, $"{string.Join(" ", local.Result)}\n");
+                        result = string.Join("\n", dd);
                         break;
                     case DefineLabels labels:
                         var reg = new Regex(@"\!\[~(?<alias>\w+)\]");
@@ -139,11 +143,6 @@
 
                         result = labels.Labels.Aggregate(result, (current, aliase) => 
                                 current.Replace($"![~{aliase.Name}]", $"0x{aliase.Hex}"));
-                        result = new Regex(@"^#\{.+\}$", 
-                            RegexOptions.Compiled | 
-                            RegexOptions.Multiline | 
-                            RegexOptions.Singleline)
-                            .Replace(result, "");
                         break;
                     case ErrorEvolveToken error:
                         Error(error, code);
@@ -186,8 +185,8 @@
                     case ErrorCompileToken error:
                         Error(error, source);
                         throw new AncientCompileException(error.ErrorResult.ToString());
-                    case CommentToken _:
-                        break;
+                    case CommentToken   _: break;
+                    case NullExpression _: break;
                     default:
                         Warn(Warning.IgnoredToken, $"Ignored {expression} at {expression.InputPosition}");
                         break;
