@@ -1,7 +1,9 @@
 ﻿namespace ancient.compiler.tokens
 {
+    using System.Globalization;
     using System.Linq;
     using runtime;
+    using runtime.emit.sys;
     using Sprache;
 
     public class TransformerSyntax : AssemblerSyntax
@@ -17,21 +19,6 @@
             .WithPosition()
             .Named("mvj transform expression");
 
-        public virtual Parser<IEvolveToken[]> Group(Parser<IEvolveToken> @group) => 
-            from s in Parse.String("#{").Text()
-            from g in @group.AtLeastOnce()
-            from end in Parse.Char('}')
-            select g.ToArray();
-
-        public virtual Parser<IEvolveToken> Label =>
-            (from dword in ProcToken("label")
-                from name in QuoteIdentifierToken
-                from hex in HexToken
-                from auto in Keyword("auto").Optional()
-                select new DefineLabel(name, hex))
-            .Token()
-            .Named("label token");
-
         public override Parser<string> HexToken =>
             (from zero in Parse.Char('0')
                 from x in Parse.Chars("x")
@@ -45,9 +32,11 @@
                 from end in  Parse.String("]")
                 select name).Token().Named("ref_label token");
         public Parser<IEvolveToken> Evolver =>
-            Parser.Return(new EmptyEvolve())
-                .Or(PushJ)
-                .Or(Group(Label).Select(x => new DefineLabels(x)));
+            PushJ
+                .Or(Locals)
+                .Or(Group(Label).Select(x => new DefineLabels(x)))
+                .Or(Parser.Return(new EmptyEvolve()));
+
 
         public Parser<IEvolveToken[]> ManyEvolver => 
             (from many in Evolver select many)
