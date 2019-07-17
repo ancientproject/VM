@@ -101,6 +101,7 @@
 
                 if(!args.Any())
                     args = @class.GetConstructors().First().GetParameters().Select(@default).ToArray();
+                //Console.WriteLine($"{args}, {@class}, {id}");
                 var inst = Activate<Instruction>(@class, args);
                 if (inst is { } block && block.ID == id)
                     return inst;

@@ -10,4 +10,9 @@
 
         public InstructionExpression(Instruction ins) => Instruction = ins;
     }
+
+    public class NullExpression : IInputToken
+    {
+        public Position InputPosition { get; set; }
+    }
 }

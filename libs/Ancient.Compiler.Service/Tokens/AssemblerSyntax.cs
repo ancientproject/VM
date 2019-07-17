@@ -1,4 +1,4 @@
-namespace ancient.compiler.tokens
+﻿namespace ancient.compiler.tokens
 {
     using System;
     using System.Collections.Generic;
@@ -83,6 +83,10 @@ namespace ancient.compiler.tokens
             .Or(Adv2MathInstruction(IID.min))
             .Or(Adv2MathInstruction(IID.max))
             .Or(Adv2MathInstruction(IID.atan2))
+
+            // transformators
+            .Or(Locals.Return(new NullExpression()))
+            .Or(Group(Label).Return(new NullExpression()))
         ;
 
         #region Segments
@@ -242,6 +246,15 @@ namespace ancient.compiler.tokens
                  select (ushort)@char)
             .Token()
             .Named("char_t expression");
+
+        public virtual Parser<string> SignatureToken =>
+            (from refSym in Parse.String("!{")
+                from sign in Parse.AnyChar.Except(Parse.Char('}')).Many().Text()
+                from closeParen in Parse.Char('}')
+                select sign)
+            .Token()
+            .Named("signature expression");
+
         public virtual Parser<string> CastStringToken =>
             (from refSym in Parse.String("@string_t")
                 from openParen in Parse.Char('(')
@@ -269,6 +282,14 @@ namespace ancient.compiler.tokens
             .Token()
             .WithPosition()
             .Named("raw expression");
+
+        public virtual Parser<IInputToken> Call_I =>
+            (from dword in InstructionToken(IID.call_i)
+                from sign in SignatureToken
+                select new InstructionExpression(new call_i(Module.CompositeIndex(sign))))
+            .Token()
+            .WithPosition()
+            .Named("call_inner expression");
 
         public virtual Parser<IInputToken> StageN =>
             (from dword in InstructionToken(IID.orb)
@@ -451,7 +472,7 @@ namespace ancient.compiler.tokens
             .Named("~ident");
         public virtual Parser<string> InstructionToken(IID instruction) =>
             (from dot in Parse.Char('.')
-                from ident in Parse.String(instruction.ToString()).Text()
+                from ident in Parse.String(instruction.ToString().Replace("_", ".")).Text()
                 select ident).Token().Named($"{instruction} expression");
         public virtual Parser<InstructionExpression> ByIIDToken(IID id) =>
             (from dword in InstructionToken(id)
@@ -459,6 +480,50 @@ namespace ancient.compiler.tokens
             .Token()
             .WithPosition()
             .Named($"{id} expression");
+
+        #endregion
+
+        #region Transformers
+
+        public virtual Parser<IEvolveToken> Locals =>
+            (from dword in InstructionToken(IID.locals)
+                from init in Parse.String("init").Token()
+                from s in Parse.String("#(").Text()
+                from g in (
+                    from hex in (from c1 in Parse.Char('[')
+                        from hex in HexToken
+                        from c2 in Parse.Char(']') select hex).Token().Named("hex tail token")
+                    from type in 
+                        Parse.String("u8").Text().Or(
+                            Parse.String("u16").Text()).Or(
+                            Parse.String("u32").Text()).Or(
+                            Parse.String("u64").Text()).Or(
+                            Parse.String("f64").Text()).Or(
+                            Parse.String("u2").Text())
+                    from dd in Parse.Char(',').Optional()
+                    select new EvaluationSegment(byte.Parse(hex, NumberStyles.AllowHexSpecifier), type)
+                ).Token().Named("segment evaluation stack token").AtLeastOnce()
+                from end in Parse.Char(')')
+                select new LocalsInitEvolver(g.ToArray()))
+            .Token()
+            .WithPosition()
+            .Named("locals transform expression");
+
+
+        public virtual Parser<IEvolveToken[]> Group(Parser<IEvolveToken> @group) => 
+            from s in Parse.String("#{").Text()
+            from g in @group.AtLeastOnce()
+            from end in Parse.Char('}')
+            select g.ToArray();
+
+        public virtual Parser<IEvolveToken> Label =>
+            (from dword in ProcToken("label")
+                from name in QuoteIdentifierToken
+                from hex in HexToken
+                from auto in Keyword("auto").Optional()
+                select new DefineLabel(name, hex))
+            .Token()
+            .Named("label token");
 
         #endregion
     }
