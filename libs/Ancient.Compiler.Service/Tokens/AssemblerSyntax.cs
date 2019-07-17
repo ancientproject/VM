@@ -1,4 +1,4 @@
-﻿namespace ancient.compiler.tokens
+namespace ancient.compiler.tokens
 {
     using System;
     using System.Collections.Generic;
@@ -55,6 +55,7 @@
             .Or(ByIIDToken(IID.brk_s))
             // etc
             .Or(ByIIDToken(IID.nop))
+            .Or(ByIIDToken(IID.prune))
             // math instruction token
             .Or(MathInstruction(IID.add))
             .Or(MathInstruction(IID.mul))
