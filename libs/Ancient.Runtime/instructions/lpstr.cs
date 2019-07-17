@@ -8,6 +8,7 @@
     {
         private readonly string _str;
 
+        public lpstr() : this("") {}
         public lpstr(string str) : base(IID.lpstr) => _str = str;
 
         protected override void OnCompile()
