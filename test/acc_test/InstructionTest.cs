@@ -120,7 +120,7 @@ namespace ancient.runtime.compiler.test
             }
         }
         [Theory]
-        [InlineData(".jump_t &(0x0)")]
+        [InlineData(".jump.t &(0x0)")]
         public void JumpT(string code)
         {
             var result = new AssemblerSyntax().JumpT.End().Parse(code);
@@ -132,7 +132,7 @@ namespace ancient.runtime.compiler.test
             }
         }
         [Theory]
-        [InlineData(".ref_t &(0x0)")]
+        [InlineData(".ref.t &(0x0)")]
         public void RefT(string code)
         {
             var result = new AssemblerSyntax().RefT.End().Parse(code);
@@ -167,18 +167,17 @@ namespace ancient.runtime.compiler.test
         }
 
         [Theory]
-        [InlineData(".jump_t &(0xF)")]
-        [InlineData(".jump_e &(0xF) ~- &(0x9) &(0x9)")]
-        [InlineData(".jump_g &(0xF) ~- &(0x9) &(0x9)")]
-        [InlineData(".jump_u &(0xF) ~- &(0x9) &(0x9)")]
-        [InlineData(".jump_y &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump.t &(0xF)")]
+        [InlineData(".jump.e &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump.g &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump.u &(0xF) ~- &(0x9) &(0x9)")]
+        [InlineData(".jump.y &(0xF) ~- &(0x9) &(0x9)")]
         public void JumperTest(string code)
         {
             var result = new AssemblerSyntax().ManyParser.End().Parse(code).First();
 
             if (result is InstructionExpression i)
             {
-                Assert.Contains(i.Instruction.GetType().Name, code);
                 if(i.Instruction is jump_t t)
                     Assert.Equal(0x8F000F00, (uint)t.Assembly());
                 if(i.Instruction is jump_e e)
