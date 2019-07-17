@@ -30,7 +30,8 @@
             ["install"]     = InstallCommand.Run,
             ["clear"]       = ClearCommand.Run,
             ["remove"]      = RemoveCommand.Run,
-            ["restore"]     = RestoreCommand.Run
+            ["restore"]     = RestoreCommand.Run,
+            ["view"]        = ViewCommand.Run
         };
         public static int Main(string[] args)
         {

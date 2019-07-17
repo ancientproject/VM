@@ -55,6 +55,7 @@
             builder.AppendLine($"  {"restore".Color(Color.CornflowerBlue)}      {"Restore packages from current project".Color(Color.DarkKhaki)}");
             builder.AppendLine($"  {"run".Color(Color.CornflowerBlue)}          {"Immediately executes a script from Ancient project".Color(Color.DarkKhaki)}");
             builder.AppendLine($"  {"vm".Color(Color.CornflowerBlue)}           {"Immediately build and execute project in Ancient VM".Color(Color.DarkKhaki)}");
+            builder.AppendLine($"  {"view".Color(Color.CornflowerBlue)}         {"View file as hex table.".Color(Color.DarkKhaki)}");
             builder.AppendLine();
             return builder.ToString();
         }
