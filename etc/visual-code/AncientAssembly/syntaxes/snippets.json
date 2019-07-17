@@ -1,0 +1,226 @@
+{
+    ".val": {
+        "prefix": [
+          ".val"
+        ],
+        "body": [
+          ".val @float_t(${0:float})"
+        ],
+        "description": "A float value"
+    },
+    ".mva": {
+        "prefix": [
+          ".mva"
+        ],
+        "body": [
+          ".mva &(${2:dev}) &(${1:actor}) <| $(${0:value})"
+        ],
+        "description": ""
+    },
+    ".ldx": {
+        "prefix": [
+          ".ldx"
+        ],
+        "body": [
+          ".ldx &(${1:cell}) <| $(${0:value})"
+        ],
+        "description": ""
+    },
+    ".ldi": {
+        "prefix": [
+          ".ldi"
+        ],
+        "body": [
+          ".ldi &(${1:cell}) <| $(${0:value})"
+        ],
+        "description": ""
+    },
+    ".jump_t": {
+        "prefix": [
+          ".jump_t"
+        ],
+        "body": [
+          ".jump_t &(${0:cell})"
+        ],
+        "description": ""
+    },
+
+    ".jump_e": {
+        "prefix": [
+          ".jump_e",
+          ".jpe"
+        ],
+        "body": [
+          ".jump_e &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+        ],
+        "description": "jump to offset if N cell value more or equal S cell value."
+    },
+    ".jump_g": {
+        "prefix": [
+          ".jump_g",
+          ".jpg"
+        ],
+        "body": [
+          ".jump_g &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+        ],
+        "description": "jump to offset if N cell value more S cell value."
+    },
+    ".jump_u": {
+        "prefix": [
+          ".jump_u",
+          ".jpu"
+        ],
+        "body": [
+          ".jump_u &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+        ],
+        "description": "jump to offset if N cell value less S cell value."
+    },
+    ".jump_y": {
+        "prefix": [
+          ".jump_y",
+          ".jpy"
+        ],
+        "body": [
+          ".jump_y &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+        ],
+        "description": "jump to offset if N cell value less or equal S cell value."
+    },
+    ".locals": {
+        "prefix": [
+          ".ll",
+          ".loc"
+        ],
+        "body": [
+          ".locals init #(",
+          "   [0x0] ${0:TypeOf}",
+          ") "
+        ],
+        "description": "Allocate evaluation type-safe stack"
+    },
+    ".mul": {
+        "prefix": [
+            ".mul"
+          ],
+          "body": [
+            ".mul &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+          ],
+          "description": "Multiple VCell1 VCell2 and stage result to resultCell (float-mode support)"
+    },
+    ".add ": {
+        "prefix": [
+            ".add "
+          ],
+          "body": [
+            ".add  &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+          ],
+          "description": "Sum VCell1 VCell2 and stage result to resultCell (float-mode support)"
+    },
+    ".div": {
+        "prefix": [
+            ".div"
+          ],
+          "body": [
+            ".div &(${0:resultCell}) &(${1:VCell1}) &(${0:VCell2})"
+          ],
+          "description": "Divide VCell1 VCell2 and stage result to resultCell (float-mode support)"
+    },
+    ".sub": {
+        "prefix": [
+            ".sub"
+          ],
+          "body": [
+            ".sub &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+          ],
+          "description": "Substract VCell1 VCell2 and stage result to resultCell (float-mode support)"
+    },
+    ".pow": {
+        "prefix": [
+            ".pow"
+          ],
+          "body": [
+            ".pow &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+          ],
+          "description": "Pow VCell1 VCell2 and stage result to resultCell (float-mode support)"
+    },
+    ".sqrt": {
+        "prefix": [
+            ".sqrt"
+          ],
+          "body": [
+            ".sqrt &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+          ],
+          "description": "sqrt VCell1 VCell2 and stage result to resultCell (float-mode support)"
+    },
+    ".mvj": {
+        "prefix": [
+            ".mvj"
+          ],
+          "body": [
+            ".mvj &(${0:deviceID}) &(${1:actionID}) <| @string_t(\"${2:str}\")"
+          ],
+          "description": ""
+    },
+    ".raw": {
+        "prefix": [
+            ".raw"
+          ],
+          "body": [
+            ".raw ${0:hex_value}"
+          ],
+          "description": "execute raw value"
+    },
+    ".inc": {
+        "prefix": [
+            ".inc"
+          ],
+          "body": [
+            ".inc &(${0:cell})"
+          ],
+          "description": "Increment value in cell (float-mode support)"
+    },
+    ".dec": {
+        "prefix": [
+            ".dec"
+          ],
+          "body": [
+            ".dec &(${0:cell})"
+          ],
+          "description": "Decrement value in cell (float-mode support)"
+    },
+    ".brk_s": {
+        "prefix": [
+            ".brk_s"
+          ],
+          "body": [
+            ".brk_s"
+          ],
+          "description": "standard break - now break (need connected debugger, command '-d')"
+    },
+    ".brk_n": {
+        "prefix": [
+            ".brk_n"
+          ],
+          "body": [
+            ".brk_n"
+          ],
+          "description": "break on next cycle execute (need connected debugger, command '-d')"
+    },
+    ".brk_a": {
+        "prefix": [
+            ".brk_a"
+          ],
+          "body": [
+            ".brk_a"
+          ],
+          "description": "break on after next cycle execute (need connected debugger, command '-d')"
+    },
+    ".pull": {
+        "prefix": [
+            ".pull"
+          ],
+          "body": [
+            ".pull &(${0:cell})"
+          ],
+          "description": "read from stack float value and insert into cell"
+    }
+}
