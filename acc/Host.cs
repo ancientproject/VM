@@ -105,7 +105,7 @@
         {
             var result = code;
             var block = code.Replace("\r", "").Split('\n');
-            var parsed = new FlameTransformerSyntax().ManyEvolver.Parse(code);
+            var parsed = new TransformerSyntax().ManyEvolver.Parse(code);
             foreach (var token in parsed)
             {
                 switch (token)
@@ -154,7 +154,7 @@
         }
         public static (byte[] data, byte[] map) Compile(string source, Args args)
         {
-            var @try = new FlameAssemblerSyntax().ManyParser.Parse(source);
+            var @try = new AssemblerSyntax().ManyParser.Parse(source);
             var map = new DebugSymbols();
             var offset = 0;
             var asm = new DynamicAssembly(args.OutFile, ("timestamp", $"{DateTime.UtcNow.Ticks}"));

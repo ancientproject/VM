@@ -4,7 +4,7 @@
     using runtime;
     using Sprache;
 
-    public class FlameTransformerSyntax : FlameAssemblerSyntax
+    public class TransformerSyntax : AssemblerSyntax
     {
         public virtual Parser<IEvolveToken> PushJ =>
             (from dword in InstructionToken(IID.mvj)
@@ -26,13 +26,13 @@
         public virtual Parser<IEvolveToken> Label =>
             (from dword in ProcToken("label")
                 from name in QuoteIdentifierToken
-                from hex in HexNumber
+                from hex in HexToken
                 from auto in Keyword("auto").Optional()
                 select new DefineLabel(name, hex))
             .Token()
             .Named("label token");
 
-        public override Parser<string> HexNumber =>
+        public override Parser<string> HexToken =>
             (from zero in Parse.Char('0')
                 from x in Parse.Chars("x")
                 from number in Parse.Chars("0xABCDEF123456789").Many().Text()
