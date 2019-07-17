@@ -48,6 +48,25 @@ namespace ancient.runtime.compiler.test
 
             Assert.Equal(2, result.Length);
         }
+        [Fact()]
+        public void LocalsTransform()
+        {
+            const string str = 
+@".locals init #(
+   [0x0] u32,
+   [0x1] u16
+)
+
+.locals init #(
+   [0x0] u64,
+   [0x1] u64
+)
+";
+            var result = new TransformerSyntax().ManyEvolver
+                .End().Parse(str);
+
+            Assert.Equal(2, result.Length);
+        }
         [Fact]
         public void ShiftTest()
         {
@@ -73,7 +92,7 @@ namespace ancient.runtime.compiler.test
         }
         [Theory]
         [InlineData(".mva &(0x0) &(0xC) <| $(0xFF)")]
-        [InlineData(".mva &(0x0) &(0xC) <| @char_t('ï¿½')")]
+        [InlineData(".mva &(0x0) &(0xC) <| @char_t('ÿ')")]
         public void PushA(string code)
         {
             var result = new AssemblerSyntax().PushA.End().Parse(code);
