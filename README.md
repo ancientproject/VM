@@ -35,9 +35,6 @@
   <a href="https://t.me/ivysola">
     <img src="https://img.shields.io/badge/Ask%20Me-Anything-1f425f.svg?style=popout-square&logo=telegram">
   </a>
-  <a href="https://t.me/ivysola">
-    <img src="https://img.shields.io/badge/ethereum-free-blue.svg?style=popout-square&logo=ethereum&logoColor=%23CCC">
-  </a>
 </p>
 
 <!-- big badges -->
