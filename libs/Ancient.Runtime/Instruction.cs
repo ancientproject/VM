@@ -46,13 +46,8 @@
             #pragma warning restore CS0675
         }
 
-        public override byte[] GetBodyILBytes() => BitConverter.GetBytes(Assembly());
-        public override byte[] GetMetaDataILBytes()
-        {
-            if (HasMetadata())
-                return Array.Empty<byte>();
-            return metadataBytes;
-        }
+        public override byte[] GetBodyILBytes() => BitConverter.GetBytes(Assembly()).Reverse().ToArray();
+        public override byte[] GetMetaDataILBytes() => !HasMetadata() ? Array.Empty<byte>() : metadataBytes;
 
         protected internal virtual byte[] metadataBytes { get; } = Array.Empty<byte>();
         protected abstract void OnCompile();
