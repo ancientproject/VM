@@ -16,8 +16,10 @@
 
 <!-- classic badges -->
 <p align="center">
-  <a href="#">
+    <a href="https://dev.azure.com/0xF6/AncientVM/_build">
     <img src="https://dev.azure.com/0xF6/AncientVM/_apis/build/status/0xF6.ancient_cpu?branchName=master">
+  </a>
+  <a href="#">
     <img src="http://img.shields.io/:license-MIT-blue.svg">
   </a>
   <a href="https://github.com/0xF6/ancient_cpu/releases">
