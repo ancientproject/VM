@@ -44,6 +44,7 @@
             .Or(CKFT)
             .Or(Dup)
             .Or(Call_I)
+            .Or(LPSTR)
             // jumps
             .Or(JumpT)
             .Or(JumpAt(IID.jump_e))
@@ -290,6 +291,14 @@
             .Token()
             .WithPosition()
             .Named("call_inner expression");
+
+        public virtual Parser<IInputToken> LPSTR =>
+            (from dword in InstructionToken(IID.lpstr)
+                from sign in SignatureToken
+                select new InstructionExpression(new lpstr(sign.Replace("\"", ""))))
+            .Token()
+            .WithPosition()
+            .Named("lower point string expression");
 
         public virtual Parser<IInputToken> StageN =>
             (from dword in InstructionToken(IID.orb)
