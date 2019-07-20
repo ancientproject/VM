@@ -83,12 +83,5 @@
         public void StageChar(char c) => Console.Out.Write(c);
     }
 
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var summary = BenchmarkRunner.Run<JobCompiling>();
-            Console.WriteLine(summary);
-        }
-    }
+    
 }
