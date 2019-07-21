@@ -45,6 +45,8 @@
             .Or(Dup)
             .Or(Call_I)
             .Or(LPSTR)
+            .Or(IXOR)
+            .Or(IOR)
             // jumps
             .Or(JumpT)
             .Or(JumpAt(IID.jump_e))
@@ -324,6 +326,24 @@
             .Token()
             .WithPosition()
             .Named("dup expression");
+
+        public virtual Parser<IInputToken> IXOR =>
+            (from dword in InstructionToken(IID.ixor)
+                from val1 in RefToken
+                from val2 in RefToken
+                select new InstructionExpression(new ixor(val1.Cell, val2.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("ixor expression");
+
+        public virtual Parser<IInputToken> IOR =>
+            (from dword in InstructionToken(IID.ior)
+                from val1 in RefToken
+                from val2 in RefToken
+                select new InstructionExpression(new ior(val1.Cell, val2.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("ior expression");
 
         public virtual Parser<IInputToken> NValue =>
             (from dword in InstructionToken(IID.val)
