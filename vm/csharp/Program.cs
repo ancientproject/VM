@@ -54,13 +54,19 @@
                     bus.AttachDebugger(new Debugger(DebugSymbols.Open(File.ReadAllBytes(pdb.FullName))));
                 if (bios.Exists)
                 {
-                    var bytes = AncientAssembly.LoadFrom(bios.FullName).GetILCode();
+                    var asm = AncientAssembly.LoadFrom(bios.FullName);
+                    var bytes = asm.GetILCode();
+                    var meta = asm.GetMetaILCode();
                     bus.State.Load("<bios>",CastFromBytes(bytes));
+                    bus.State.LoadMeta(meta);
                 }
                 if (file.Exists)
                 {
-                    var bytes = AncientAssembly.LoadFrom(file.FullName).GetILCode();
+                    var asm = AncientAssembly.LoadFrom(file.FullName);
+                    var bytes = asm.GetILCode();
+                    var meta = asm.GetMetaILCode();
                     bus.State.Load("<exec>",CastFromBytes(bytes));
+                    bus.State.LoadMeta(meta);
                 }
                 else
                     bus.State.Load("<chip>",0xB00B5000);

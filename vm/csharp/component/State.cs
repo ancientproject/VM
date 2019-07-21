@@ -3,9 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using ancient.runtime;
+    using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
+    using ancient.runtime.@unsafe;
     using static System.Console;
 
     /// <summary>
@@ -71,6 +75,24 @@
         /// </summary>
         public ushort iid { get; set; }
 
+        internal unsafe void LoadMeta(byte[] meta)
+        {
+            using var steam = new MemoryStream(meta);
+            while (steam.Position != steam.Length)
+            {
+                var template = MetaTemplate.FromBytes(steam.ReadBytes(sizeof(MetaTemplate)));
+
+                if (template.type == TemplateType.STR)
+                {
+                    var str = Encoding.UTF8.GetString(steam.ReadBytes(template.len));
+                    StringLiteralMap.GetInternedString(str, true);
+                }
+                if (template.type == TemplateType.RND)
+                {
+                    steam.ReadBytes(template.len);
+                }
+            }
+        }
 
         public sbyte memoryChannel { get; set; }
 
