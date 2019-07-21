@@ -76,5 +76,6 @@
             => Load(File.ReadAllBytes(filename));
 
         public virtual byte[] GetILCode() => sections.First(x => x.name == ".body").data;
+        public virtual byte[] GetMetaILCode() => sections.First(x => x.name == ".meta").data;
     }
 }
