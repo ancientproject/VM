@@ -1,6 +1,7 @@
 namespace vm_test
 {
     using System;
+    using System.Linq;
     using ancient.runtime;
     using ancient.runtime.emit.sys;
     using ancient.runtime.hardware;
@@ -111,6 +112,8 @@ namespace vm_test
             AssertRegister(x => State.i64f32 & x.mem[0x3], 3f);
         }
         [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("float load test")]
         public void OrbTest()
         {
             state.southFlag = false;
@@ -130,6 +133,8 @@ namespace vm_test
         }
 
         [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("divide test")]
         public void DivTest()
         {
             state.southFlag = false;
@@ -146,6 +151,8 @@ namespace vm_test
         }
 
         [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("float divide test")]
         public void DivFloatTest()
         {
             state.southFlag = false;
@@ -165,6 +172,8 @@ namespace vm_test
             AssertRegister(x => State.i64f32 & x.mem[0x2], 5.4f / 1f);
         }
         [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("float divide test")]
         public void DivFloatTestInvert()
         {
             state.southFlag = false;
@@ -185,6 +194,8 @@ namespace vm_test
         }
 
         [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("call extern function test")]
         public void CallInnerTest()
         {
             var mem = new ulong[]
@@ -194,6 +205,22 @@ namespace vm_test
             load(mem);
             shot();
             Assert.AreEqual(0xDDD, bus.State.stack.pop());
+        }
+
+
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("str load test")]
+        public void lpStrTest()
+        {
+            var mem = new Instruction[]
+            {
+                new lpstr("test_value1"), 
+                new lpstr("test_value2"), 
+                new lpstr("test_value3"), 
+            };
+            state.LoadMeta(mem.SelectMany(x => x.GetMetaDataILBytes()).ToArray());
+            load(mem.Select(x => (ulong)x).ToArray());
         }
     }
 }
