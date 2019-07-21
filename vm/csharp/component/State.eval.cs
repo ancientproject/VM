@@ -169,10 +169,10 @@
                     trace($"call :: {@extern.Signature}");
                     CallAndWrite(@extern);
                     break;
-                case 0x37: /* prune */
+                case 0x37: /* @prune */
                     evaluation.Prune();
                     break;
-                case 0x38: /* locals */
+                case 0x38: /* @locals */
                     d8u len = (u8 & r1, u8 & r2);
                     evaluation.Alloc(len);
                     var segs = new List<EvaluationSegment>(len);
@@ -184,6 +184,16 @@
                     locals.Pin(@params, out var @external);
                     foreach (var (host, index) in @external.Select((x, i) => (x, i)))
                         evaluation[index] = host;
+                    break;
+                case 0xB5: /* @ixor */
+                case 0xB6: /* @ior */
+                    d8u first  = (u8 & r1, u8 & r2);
+                    d8u second = (u8 & u1, u8 & u2);
+                    // not support float-mode
+                    if(iid == 0xB5)
+                        mem[first] ^= mem[second];
+                    if(iid == 0xB6)
+                        mem[first] |= mem[second];
                     break;
                 #region debug
 
@@ -220,6 +230,7 @@
                     trace($"[0x{iid:X}] @break :: after");
                     mem[0x17] = 0x3;
                     break;
+
                 #endregion
                 #region jumps
 

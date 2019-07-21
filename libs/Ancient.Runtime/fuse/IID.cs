@@ -41,6 +41,8 @@
         [OpCode(0xB2)] dec,
         [OpCode(0xB3)] dup,
         [OpCode(0xB4)] ckft,
+        [OpCode(0xB5)] ixor,
+        [OpCode(0xB6)] ior,
 
         [OpCode(0xC1)] brk_s,
         [OpCode(0xC1)] brk_n,
