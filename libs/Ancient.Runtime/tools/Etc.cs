@@ -14,9 +14,10 @@
 
         public static byte[] ReadBytes(this MemoryStream stream, int size)
         {
-            var bytes = new byte[size];
-            stream.Read(bytes, 0, size);
-            return bytes;
+            var bytes = new List<byte>(size);
+            for (var i = 0; i < size; i++)
+                bytes.Add((byte)stream.ReadByte());
+            return bytes.ToArray();
         }
     }
 }
