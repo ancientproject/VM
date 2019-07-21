@@ -1,6 +1,7 @@
 ﻿namespace ancient.runtime.emit.@unsafe
 {
     using System.Runtime.InteropServices;
+    using System.Security;
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct MetaTemplate
@@ -15,7 +16,7 @@
             len = l;
             return this;
         }
-
+        [SecurityCritical]
         public byte[] ToBytes() 
         {
             var size = Marshal.SizeOf(this);
@@ -27,7 +28,7 @@
             Marshal.FreeHGlobal(ptr);
             return arr;
         }
-
+        [SecurityCritical]
         public static MetaTemplate FromBytes(byte[] arr)
         {
             var str = new MetaTemplate();
