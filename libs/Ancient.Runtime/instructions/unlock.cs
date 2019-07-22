@@ -6,7 +6,7 @@
     {
         private readonly ushort _handle;
 
-        public unlock(ushort handle) => _handle = handle;
+        public unlock(ushort handle) : base(IID.unlock) => _handle = handle;
 
         protected override void OnCompile()
         {
