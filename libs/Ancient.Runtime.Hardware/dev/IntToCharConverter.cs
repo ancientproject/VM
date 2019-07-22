@@ -19,14 +19,13 @@
         }
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
-            if (value is int t)
-                return (char) t;
-            if (value is short s)
-                return (char)s;
-            if (value is byte b)
-                return (char)b;
-            if (value is long l)
-                return (char) l;
+            if (value is int t    ) return (char) t;
+            if (value is uint ut  ) return (char) ut;
+            if (value is short s  ) return (char) s;
+            if (value is ushort us) return (char) us;
+            if (value is byte b   ) return (char) b;
+            if (value is long l   ) return (char) l;
+            if (value is ulong ul ) return (char) ul;
             return base.ConvertFrom(context, culture, value);
         }
 
