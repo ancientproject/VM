@@ -103,7 +103,6 @@ namespace ancient.runtime.compiler.test
                 Assert.Equal(0x0, i._addressBus);
                 Assert.Equal(0xC, i._addressDev);
                 Assert.Equal(0xFF, i._value);
-                Assert.Equal(0xF0C00FFC, (uint)i.Assembly());
             }
         }
         [Theory]
@@ -179,15 +178,15 @@ namespace ancient.runtime.compiler.test
             if (result is InstructionExpression i)
             {
                 if(i.Instruction is jump_t t)
-                    Assert.Equal(0x8F000F00, (uint)t.Assembly());
+                    Assert.Equal($"{0x8F000F000:X}", $"{t.Assembly():X}");
                 if(i.Instruction is jump_e e)
-                    Assert.Equal(0x8F990F10, (uint)e.Assembly());
+                    Assert.Equal($"{0x8F990F100:X}",$"{e.Assembly():X}");
                 if(i.Instruction is jump_g g)
-                    Assert.Equal(0x8F990F20, (uint)g.Assembly());
+                    Assert.Equal($"{0x8F990F200:X}", $"{g.Assembly():X}");
                 if(i.Instruction is jump_u u)
-                    Assert.Equal(0x8F990F30, (uint)u.Assembly());
+                    Assert.Equal($"{0x8F990F300:X}", $"{u.Assembly():X}");
                 if(i.Instruction is jump_y y)
-                    Assert.Equal(0x8F990F40, (uint)y.Assembly());
+                    Assert.Equal($"{0x8F990F400:X}", $"{y.Assembly():X}");
             }
         }
     }
