@@ -63,6 +63,7 @@
             // etc
             .Or(ByIIDToken(IID.nop))
             .Or(ByIIDToken(IID.prune))
+            .Or(Unlock)
             // math instruction token
             .Or(MathInstruction(IID.add))
             .Or(MathInstruction(IID.mul))
@@ -456,6 +457,14 @@
             .Token()
             .WithPosition()
             .Named("ref_t expression");
+
+        public virtual Parser<IInputToken> Unlock => (
+                from dword in InstructionToken(IID.unlock)
+                from cell1 in RefToken
+                select new InstructionExpression(new unlock(cell1.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("unlock expression");
 
         public virtual Parser<IInputToken> MathInstruction(IID id) => (
                 from dword in InstructionToken(id)
