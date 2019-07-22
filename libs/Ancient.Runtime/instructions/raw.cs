@@ -11,6 +11,6 @@
 
         }
 
-        public override long Assembly() => (long) _value;
+        public override ulong Assembly() =>  _value;
     }
 }

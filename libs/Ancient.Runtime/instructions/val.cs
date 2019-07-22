@@ -11,12 +11,12 @@
 
         protected override void OnCompile() { }
 
-        public override long Assembly()
+        public override ulong Assembly()
         {
             if (_data is float fval)
-                return BitConverter.ToInt32(BitConverter.GetBytes(fval), 0);
+                return (ulong)BitConverter.ToInt32(BitConverter.GetBytes(fval), 0);
             if (_data is double dval)
-                return BitConverter.ToInt64(BitConverter.GetBytes(dval), 0);
+                return (ulong)BitConverter.ToInt64(BitConverter.GetBytes(dval), 0);
             throw new InvalidCastException();
         }
     }
