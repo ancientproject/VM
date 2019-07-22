@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Security;
@@ -44,6 +45,11 @@
 
 
         public static void Clear() => literalStorage.Clear();
+
+        public static bool Has(int index)
+        {
+            return literalStorage.Any(x => x.GetHashCode() == index);
+        }
 
         #region private
 
