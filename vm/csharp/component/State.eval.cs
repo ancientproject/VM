@@ -191,6 +191,7 @@ namespace vm.component
                     d8u first  = (u8 & r1, u8 & r2);
                     d8u second = (u8 & u1, u8 & u2);
                     // not support float-mode
+                    if (ff) bus.cpu.halt(0xA9);
                     if(iid == 0xB5)
                         mem[first] ^= mem[second];
                     if(iid == 0xB6)
