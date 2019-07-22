@@ -21,16 +21,19 @@
 
         public long this[long address]
         {
-            get => read(address);
+            get => (long)read(address);
             set => write(address, value);
         }
 
         #region read\write
 
         public virtual void write(long address, long data) =>
-            (this as IDevice).WriteMemory(address, data);
+            write(address, (ulong) data);
 
-        public virtual long read(long address) 
+        public virtual void write(long address, ulong data)
+            =>(this as IDevice).WriteMemory(address, data);
+
+        public virtual ulong read(long address) 
             => throw new DeviceReadonlyException();
 
         public virtual void warmUp() { }

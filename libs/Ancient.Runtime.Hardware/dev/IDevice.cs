@@ -7,7 +7,8 @@
         string name { get; }
         short startAddress { get; set; }
         void write(long address, long data);
-        long read(long address);
+        void write(long address, ulong data);
+        ulong read(long address);
 
         long this[long address] { get; set; }
 
