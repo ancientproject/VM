@@ -44,24 +44,13 @@ namespace vm_test
 
             load(mem);
 
-            shot(12 - 2);
-            Assert.AreEqual((15.14f - 5.52f), State.i64f32 & state.mem[0x3]);
-            Assert.AreEqual(15.14f * 5.52f, State.i64f32 & state.mem[0x4]);
-            Assert.AreEqual(15.14f / 5.52f, State.i64f32 & state.mem[0x5]);
-            Assert.AreEqual(15.14f + 5.52f, State.i64f32 & state.mem[0x6]);
-            Assert.AreEqual(MathF.Sqrt(15.14f), State.i64f32 & state.mem[0x7]);
-            Assert.AreEqual(MathF.Pow(15.14f, 5.52f), State.i64f32 & state.mem[0x8]);
-        }
-        [Test]
-        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
-        [Description("warm up load and assert registers")]
-        public void WarmUpTest()
-        {
-            load(0xABCDEFE0);
-            shot();
-            AssertRegister(x => x.iid, 0xA);
-            AssertRegister(x => x.r1, 0xB);
-            AssertRegister(x => x.x1, 0xE);
+            shot((uint)mem.Length);
+            Assert.AreEqual((15.14f - 5.52f), State.u64f32 & state.mem[0x3]);
+            Assert.AreEqual(15.14f * 5.52f, State.u64f32 & state.mem[0x4]);
+            Assert.AreEqual(15.14f / 5.52f, State.u64f32 & state.mem[0x5]);
+            Assert.AreEqual(15.14f + 5.52f, State.u64f32 & state.mem[0x6]);
+            Assert.AreEqual(MathF.Sqrt(15.14f), State.u64f32 & state.mem[0x7]);
+            Assert.AreEqual(MathF.Pow(15.14f, 5.52f), State.u64f32 & state.mem[0x8]);
         }
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
@@ -81,8 +70,8 @@ namespace vm_test
         {
             load(new ldi(0x1, 0x5), new ldi(0x2, 0x4));
             shot(2);
-            AssertRegister(x => x.mem[0x1], 0x5);
-            AssertRegister(x => x.mem[0x2], 0x4);
+            AssertRegister(x => x.mem[0x1], (ulong)0x5);
+            AssertRegister(x => x.mem[0x2], (ulong)0x4);
         }
 
         [Test]
@@ -109,7 +98,7 @@ namespace vm_test
             load(mem);
             shot((uint)mem.Length);
             Assert.AreEqual(18, state.step);
-            AssertRegister(x => State.i64f32 & x.mem[0x3], 3f);
+            AssertRegister(x => State.u64f32 & x.mem[0x3], 3f);
         }
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
@@ -129,7 +118,7 @@ namespace vm_test
             };
             load(mem);
             shot((uint)mem.Length);
-            AssertRegister(x => State.i64f32 & x.mem[0x2], 3.14f);
+            AssertRegister(x => State.u64f32 & x.mem[0x2], 3.14f);
         }
 
         [Test]
@@ -147,7 +136,7 @@ namespace vm_test
             };
             load(mem);
             shot((ushort)mem.Length);
-            AssertRegister(x => x.mem[0x3], 0x5);
+            AssertRegister(x => x.mem[0x3], (ulong)0x5);
         }
 
         [Test]
@@ -169,7 +158,7 @@ namespace vm_test
             };
             load(mem);
             shot((uint)mem.Length);
-            AssertRegister(x => State.i64f32 & x.mem[0x2], 5.4f / 1f);
+            AssertRegister(x => State.i64f32 & (State.i64 & x.mem[0x2]), 5.4f / 1f);
         }
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
@@ -190,7 +179,7 @@ namespace vm_test
             };
             load(mem);
             shot((uint)mem.Length);
-            AssertRegister(x => State.i64f32 & x.mem[0x2],  1f / 5.4f);
+            AssertRegister(x => State.i64f32 & (State.i64 & x.mem[0x2]),  1f / 5.4f);
         }
 
         [Test]
