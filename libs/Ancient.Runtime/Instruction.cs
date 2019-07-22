@@ -7,43 +7,42 @@
     public abstract class Instruction : OpCode
     {
         public IID ID { get; protected set; }
-        public short OPCode { get; protected set; }
+        public ushort OPCode { get; protected set; }
 
-        private byte _r1, _r2, _r3, _u1, _u2, _x1, _x2;
+        private byte _r1, _r2, _r3, _u1, _u2, _x1, _x2, _x3;
 
         protected Instruction() { }
         protected Instruction(IID id)
         {
             ID = id;
-            OPCode = id.getOpCode();
+            OPCode = (ushort)id.getOpCode();
         }
 
         public void SetOpCode(IID id)
         {
             ID = id;
-            OPCode = id.getOpCode();
+            OPCode = (ushort)id.getOpCode();
         }
 
-        public virtual long Assembly()
+        public virtual ulong Assembly()
         {
             OnCompile();
-            Func<int> Shift = ShiftFactory.Create(32);
+            Func<int> Shift = ShiftFactory.Create(36);
             
-            var op1 = ((OPCode & 0xF0L) >> 4) << Shift();
-            var op2 = ((OPCode & 0x0FL) >> 0) << Shift();
-            var rr1 = (_r1 << Shift());
-            var rr2 = (_r2 << Shift());
-            var rr3 = (_r3 << Shift());
-            var ru1 = (_u1 << Shift());
-            var ru2 = (_u2 << Shift());
-            var rx1 = (_x1 << Shift());
-            var rx2 = (_x2 << Shift());
-            #pragma warning disable CS0675
+            var op1 = ((OPCode & 0xF0UL) >> 4) << Shift();
+            var op2 = ((OPCode & 0x0FUL) >> 0) << Shift();
+            var rr1 = (ulong)_r1 << Shift();
+            var rr2 = (ulong)_r2 << Shift();
+            var rr3 = (ulong)_r3 << Shift();
+            var ru1 = (ulong)_u1 << Shift();
+            var ru2 = (ulong)_u2 << Shift();
+            var rx1 = (ulong)_x1 << Shift();
+            var rx2 = (ulong)_x2 << Shift();
+            var rx3 = (ulong)_x3 << Shift();
             return op1 | op2 | rr1 |
                    rr2 | rr3 | 
                    ru1 | ru2 | 
-                   rx1 | rx2;
-            #pragma warning restore CS0675
+                   rx1 | rx2 | rx3;
         }
 
         public override byte[] GetBodyILBytes() => BitConverter.GetBytes(Assembly()).Reverse().ToArray();
@@ -64,9 +63,12 @@
         [Obsolete("use Construct")]
         public void SetRegisters(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0, byte x2 = 0)
         {
-            _r1 = r1; _r2 = r2;
-            _r3 = r3; _u1 = u1;
-            _u2 = u2; _x1 = x1;
+            _r1 = r1; 
+            _r2 = r2;
+            _r3 = r3; 
+            _u1 = u1;
+            _u2 = u2; 
+            _x1 = x1;
             _x2 = x2;
         }
         public static Instruction Summon(IID id, params object[] args)
