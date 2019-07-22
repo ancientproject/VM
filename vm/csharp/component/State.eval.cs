@@ -180,10 +180,10 @@ namespace vm.component
                         segs.Add(EvaluationSegment.Construct(fetch(), fetch()));
                     var @params = new object[len];
                     foreach (var s in segs)
-                        @params[s.Index] = Activator.CreateInstance(Type.GetType($"ancient.runtime.emit.sys.{s.Type}_Type"));
+                        @params[s.Index] = ExternType.Find(s.Type);
                     locals.Pin(@params, out var @external);
-                    foreach (var (host, index) in @external.Select((x, i) => (x, i)))
-                        evaluation[index] = host;
+                    foreach (var (host, e_index) in @external.Select((x, i) => (x, i)))
+                        evaluation[e_index] = host;
                     break;
                 case 0xB5: /* @ixor */
                 case 0xB6: /* @ior */
