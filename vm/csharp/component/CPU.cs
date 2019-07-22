@@ -73,6 +73,7 @@
             0xA19   => $"Signature fault, method '{text}' not valid",
             0xA1A   => $"Signature fault, method '{text}' not static",
             0xA1B   => $"Signature fault, method '{text}' access denied",
+            0xDE3   => $"Memory manage fault, {text}",
             0xA22   => $"Signature fault, '{text}'",
             0xFFFF  => $"Shift fault, {text}",
             _       => $"Unknown state 0x{reason:X}",

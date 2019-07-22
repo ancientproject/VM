@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -73,6 +73,7 @@ namespace vm.component
         /// </summary>
         public ushort x1 { get; set; }
         public ushort x2 { get; set; }
+        public ushort x3 { get; set; }
         
         /// <summary>
         /// id
@@ -221,8 +222,11 @@ namespace vm.component
         /// <summary>
         /// L1 Cache memory
         /// </summary>
-
-        public long[] mem = new long[64];
+        public ulong[] mem = new ulong[64];
+        /// <summary>
+        /// L1 Types 
+        /// </summary>
+        private ExternType[] mem_types = new ExternType[64];
 
         /// <summary>
         /// CPU Stack
@@ -342,7 +346,7 @@ namespace vm.component
             u2  = u16 & (container & 0x000000F000);
             x1  = u16 & (container & 0x0000000F00);
             x2  = u16 & (container & 0x00000000F0);
-            var x3=u16& (container & 0x000000000F);
+            x3  = u16 & (container & 0x000000000F);
             iid = u16 & (pfx << 0x4 | iid );
         }
         /// <summary>

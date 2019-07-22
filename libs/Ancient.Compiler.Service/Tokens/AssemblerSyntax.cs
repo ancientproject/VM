@@ -461,7 +461,15 @@
         public virtual Parser<IInputToken> Unlock => (
                 from dword in InstructionToken(IID.unlock)
                 from cell1 in RefToken
-                select new InstructionExpression(new unlock(cell1.Cell)))
+                from type in 
+                    Parse.String("u8").Text().Or(
+                        Parse.String("u16").Text()).Or(
+                        Parse.String("u32").Text()).Or(
+                        Parse.String("u64").Text()).Or(
+                        Parse.String("f64").Text()).Or(
+                        Parse.String("str").Text()).Or(
+                        Parse.String("u2").Text()).Token()
+                select new InstructionExpression(new unlock(cell1.Cell, type)))
             .Token()
             .WithPosition()
             .Named("unlock expression");
@@ -537,6 +545,7 @@
                             Parse.String("u32").Text()).Or(
                             Parse.String("u64").Text()).Or(
                             Parse.String("f64").Text()).Or(
+                            Parse.String("str").Text()).Or(
                             Parse.String("u2").Text())
                     from dd in Parse.Char(',').Optional()
                     select new EvaluationSegment(byte.Parse(hex, NumberStyles.AllowHexSpecifier), type)
