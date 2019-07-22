@@ -20,7 +20,7 @@
             Assert.IsType<ILGen>(d.GetGenerator());
             d.GetGenerator().Emit(new ldi(0xF, 0xC));
             Assert.Equal(sizeof(ulong), d.GetILCode().Length);
-            Assert.Equal($"{0x1F00C000:X}", $"{BitConverter.ToUInt32(d.GetILCode().Reverse().ToArray()):X}");
+            Assert.Equal($"{0xF00C0000:X}", $"{BitConverter.ToUInt32(d.GetILCode().Reverse().ToArray()):X}");
         }
     }
 }
