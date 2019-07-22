@@ -8,6 +8,7 @@
     using System.Text.RegularExpressions;
 
     public abstract class ExternType { }
+    public sealed class Unknown_Type : ExternType { }
     public sealed class f64_Type : ExternType { }
     public sealed class u64_Type : ExternType { }
     public sealed class u32_Type : ExternType { }
