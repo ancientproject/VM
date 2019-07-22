@@ -5,10 +5,25 @@
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using System.Text.RegularExpressions;
+    using @unsafe;
 
-    public abstract class ExternType { }
+    public abstract class ExternType
+    {
+        public static ExternType Find(params d8u[] bytes) 
+            => Find(Encoding.ASCII.GetString(bytes.Select(u8 => u8.Value).ToArray()));
+
+        public static ExternType Find(string code)
+        {
+            var type = Type.GetType($"ancient.runtime.emit.sys.{code}_Type");
+            if(type is null)
+                return new Unknown_Type();
+            return Activator.CreateInstance(type) as ExternType;
+        }
+    }
     public sealed class Unknown_Type : ExternType { }
+    public sealed class Str_Type : ExternType { }
     public sealed class f64_Type : ExternType { }
     public sealed class u64_Type : ExternType { }
     public sealed class u32_Type : ExternType { }
