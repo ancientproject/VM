@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Text;
+    using emit.@unsafe;
     using exceptions;
 
     public class mva : Instruction
@@ -20,12 +21,9 @@
 
         protected override void OnCompile()
         {
-            var u1 = (byte)((_value & 0xF000) >> 12);
-            var u2 = (byte)((_value & 0xF00 ) >> 8);
-            var u3 = (byte)((_value & 0xF0  ) >> 4);
-            var u4 = (byte)((_value & 0xF   ) >> 0);
+            var (u1, u2, u3, u4) = new d16u(_value);
 
-            SetRegisters(_addressBus,_addressDev, u1, u2, u3, u4, 0xC);
+            Construct(_addressBus,_addressDev, u1, u2, u3, u4, 0xC);
         }
     }
 }
