@@ -257,7 +257,7 @@ namespace vm.component
                 set = pin - 0b1;
             }
             foreach (var (@ulong, index) in prog.Select((x, i) => (x, i)))
-                bus.Find(0x0).write(pin + index, i64 & @ulong);
+                bus.Find(0x0).write(pin + index, @ulong);
             bus.Find(0x0).write(set, prog.Length);
             sectors.Add((name, u32 & pin));
             if(pc == 0x0) pc = i64 | pin;
@@ -274,8 +274,8 @@ namespace vm.component
         /// </returns>
         public ulong? next(ulong pc_ref)
         {
-            if (bus.Find(0x0).read(0x599) >= (i64 & pc) && ++step != 0x90000) 
-                return i64 | bus.Find(0x0).read(0x600 + (i64 & pc_ref));
+            if (bus.Find(0x0).read(0x599) >= pc && ++step != 0x90000) 
+                return bus.Find(0x0).read(0x600 + (i64 & pc_ref));
             return null;
         }
 
@@ -299,15 +299,15 @@ namespace vm.component
                 lastAddr = curAddr;
                 if (++step == 0x90000)
                     throw new StepOverflowException();
-                if (bus.Find(0x0).read(0x599) != (i64 & pc) && ++step != 0x90000)
-                    return (curAddr = i64 | bus.Find(0x0).read((i64 & pc++)));
+                if (bus.Find(0x0).read(0x599) != pc && ++step != 0x90000)
+                    return (curAddr = bus.Find(0x0).read((i64 & pc++)));
                 bus.cpu.halt(0x77);
                 return 0xDEAD;
             }
             catch (StepOverflowException) { throw; }
             catch
             {
-                if (!km) Array.Fill(mem, 0xDEADL, 0, 16);
+                if (!km) Array.Fill(mem, 0xDEADUL, 0, 16);
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
         }
@@ -333,15 +333,16 @@ namespace vm.component
         {
             trace($"fetch 0x{container:X}");
             var 
-            pfx = u16 & (container & 0xF00000000);
-            iid = u16 & (container & 0x0F0000000);
-            r1  = u16 & (container & 0x00F000000);
-            r2  = u16 & (container & 0x000F00000);
-            r3  = u16 & (container & 0x0000F0000);
-            u1  = u16 & (container & 0x00000F000);
-            u2  = u16 & (container & 0x000000F00);
-            x1  = u16 & (container & 0x0000000F0);
-            x2  = u16 & (container & 0x00000000F);
+            pfx = u16 & (container & 0xF000000000);
+            iid = u16 & (container & 0x0F00000000);
+            r1  = u16 & (container & 0x00F0000000);
+            r2  = u16 & (container & 0x000F000000);
+            r3  = u16 & (container & 0x0000F00000);
+            u1  = u16 & (container & 0x00000F0000);
+            u2  = u16 & (container & 0x000000F000);
+            x1  = u16 & (container & 0x0000000F00);
+            x2  = u16 & (container & 0x00000000F0);
+            var x3=u16& (container & 0x000000000F);
             iid = u16 & (pfx << 0x4 | iid );
         }
         /// <summary>
