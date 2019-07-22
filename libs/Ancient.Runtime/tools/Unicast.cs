@@ -41,10 +41,15 @@
     {
         public static TOut operator &(Bitcast<TOut, TIn> _, TIn q)
         {
+            // TODO FLOAT SIZE 4 BYTE
             if (typeof(TOut) == typeof(long) && typeof(TIn) == typeof(float))
                 return (TOut)(object)(long)BitConverter.ToInt32(BitConverter.GetBytes((float) (object) q), 0);
+            if (typeof(TOut) == typeof(ulong) && typeof(TIn) == typeof(float))
+                return (TOut)(object)(ulong)BitConverter.ToInt32(BitConverter.GetBytes((float) (object) q), 0);
             if (typeof(TOut) == typeof(float) && typeof(TIn) == typeof(long))
                 return (TOut)(object)BitConverter.ToSingle(BitConverter.GetBytes((long) (object) q), 0);
+            if (typeof(TOut) == typeof(float) && typeof(TIn) == typeof(ulong))
+                return (TOut)(object)BitConverter.ToSingle(BitConverter.GetBytes((long)(ulong)(object) q), 0);
             throw new InvalidCastException();
         }
         public override string ToString() => $"bit_cast<{typeof(TIn).Name}, {typeof(TOut).Name}>";

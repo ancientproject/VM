@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Text;
     using ancient.runtime;
+    using ancient.runtime.emit.sys;
     using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
     using ancient.runtime.@unsafe;
@@ -23,26 +24,29 @@
         {
             this.bus = bus;
             this.stack = new Stack(bus);
+            Array.Fill(mem_types, new Unknown_Type());
         }
 
 
         #region casters
 
         /// <summary><see cref="byte"/> to <see cref="long"/></summary>
-        public static readonly Unicast<byte  , long > u8  = new Unicast<byte  , long>();
+        public static readonly Unicast<byte  , ulong > u8  = new Unicast<byte  , ulong>();
         /// <summary><see cref="ushort"/> to <see cref="ulong"/></summary>
         public static readonly Unicast<ushort, ulong> u16 = new Unicast<ushort, ulong>();
         /// <summary><see cref="uint"/> to <see cref="long"/></summary>
-        public static readonly Unicast<uint  , long > u32 = new Unicast<uint  , long>();
+        public static readonly Unicast<uint  , ulong > u32 = new Unicast<uint  , ulong>();
         /// <summary><see cref="int"/> to <see cref="long"/></summary>
-        public static readonly Unicast<int   , long > i32 = new Unicast<int   , long>();
+        public static readonly Unicast<int   , ulong > i32 = new Unicast<int   , ulong>();
         /// <summary><see cref="long"/> to <see cref="ulong"/></summary>
         public static readonly Unicast<long  , ulong> i64 = new Unicast<long  , ulong>();
 
         /// <summary>bytecast <see cref="float"/> to <see cref="long"/></summary>
         public static readonly Bitcast<float, long > i64f32 = new Bitcast<float, long>();
+        public static readonly Bitcast<float, ulong > u64f32 = new Bitcast<float, ulong>();
         /// <summary>bytecast <see cref="long"/> to <see cref="float"/></summary>
         public static readonly Bitcast<long , float> f32i64 = new Bitcast<long , float>();
+        public static readonly Bitcast<ulong , float> f32u64 = new Bitcast<ulong , float>();
         /// <summary><see cref="int"/> to <see cref="short"/></summary>
         public static readonly Unicast<int  , short> i32i16 = new Unicast<int  , short>();
 
@@ -106,7 +110,7 @@
         public bool tc 
         {
             get => mem[0x11] == 1;
-            set => mem[0x11] = value ? 0x1L : 0x0L;
+            set => mem[0x11] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// Error flag
@@ -114,7 +118,7 @@
         public bool ec
         {
             get => mem[0x12] == 1;
-            set => mem[0x12] = value ? 0x1L : 0x0L;
+            set => mem[0x12] = value ? 0x1UL : 0x0UL;
         }
 
         /// <summary>
@@ -123,7 +127,7 @@
         public bool km
         {
             get => mem[0x13] == 1;
-            set => mem[0x13] = value ? 0x1L : 0x0L;
+            set => mem[0x13] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// fast write flag
@@ -131,7 +135,7 @@
         public bool fw
         {
             get => mem[0x14] == 0x0;
-            set => mem[0x14] = value ? 0x1L : 0x0L;
+            set => mem[0x14] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// overflow flag
@@ -139,7 +143,7 @@
         public bool of
         {
             get => mem[0x15] == 1;
-            set => mem[0x15] = value ? 0x1L : 0x0L;
+            set => mem[0x15] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// negative flag
@@ -147,7 +151,7 @@
         public bool nf
         {
             get => mem[0x16] == 1;
-            set => mem[0x16] = value ? 0x1L : 0x0L;
+            set => mem[0x16] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// break flag (for next execute)
@@ -155,7 +159,7 @@
         public bool bf
         {
             get => mem[0x17] == 1;
-            set => mem[0x17] = value ? 0x1L : 0x0L;
+            set => mem[0x17] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// float flag
@@ -163,7 +167,7 @@
         public bool ff
         {
             get => mem[0x18] == 1;
-            set => mem[0x18] = value ? 0x1L : 0x0L;
+            set => mem[0x18] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// stack forward flag
@@ -171,7 +175,7 @@
         public bool sf
         {
             get => mem[0x19] == 1;
-            set => mem[0x19] = value ? 0x1L : 0x0L;
+            set => mem[0x19] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// control stack flag
@@ -179,7 +183,7 @@
         public bool northFlag
         {
             get => mem[0x20] == 1;
-            set => mem[0x20] = value ? 0x1L : 0x0L;
+            set => mem[0x20] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// control stack flag
@@ -187,7 +191,7 @@
         public bool eastFlag
         {
             get => mem[0x21] == 1;
-            set => mem[0x21] = value ? 0x1L : 0x0L;
+            set => mem[0x21] = value ? 0x1UL : 0x0UL;
         }
         /// <summary>
         /// bios read-access
@@ -195,7 +199,7 @@
         public bool southFlag
         {
             get => mem[0x22] == 1;
-            set => mem[0x22] = value ? 0x1L : 0x0L;
+            set => mem[0x22] = value ? 0x1UL : 0x0UL;
         }
 
         #endregion
