@@ -10,6 +10,7 @@ namespace vm.component
     using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
     using ancient.runtime.hardware;
+    using ancient.runtime.@unsafe;
     using MoreLinq;
 
 	using static System.MathF;
@@ -194,6 +195,21 @@ namespace vm.component
                         mem[first] ^= mem[second];
                     if(iid == 0xB6)
                         mem[first] |= mem[second];
+                    break;
+                case 0x34: /* @lpstr */
+                    d32u str_index = (u8 & r1, u8 & r2, u8 & r3, u8 & u1, u8 & u2, u8 & x1, u8 & x2, u8 & x3);
+                    if (!StringLiteralMap.Has(str_index))
+                        bus.cpu.halt(0xDE3, $"index {str_index.Value} not found in memory");
+                    stack.push(str_index.Value);
+                    break;
+                case 0x35: /* @unlock */
+                    d8u unlock_cell = (u8 & r1, u8 & r2);
+                    mem[unlock_cell] = stack.pop();
+                    mem_types[unlock_cell] = ExternType.Find(
+                        (u8 & r3, u8 & u1), 
+                        (u8 & u2, u8 & x1),
+                        (u8 & x2, u8 & x3)
+                    );
                     break;
                 #region debug
 
