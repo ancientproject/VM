@@ -53,13 +53,12 @@
 
         #region serviced
 
-        public static implicit operator uint(Instruction i) => (uint)i.Assembly();
-        public static implicit operator ulong(Instruction i) => (ulong)i.Assembly();
+        public static implicit operator ulong(Instruction i) => i.Assembly();
 
         public override string ToString() => $"{ID} [{string.Join(" ", GetBodyILBytes().Select(x => x.ToString("X2")))}]";
 
         public void Construct(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0,
-            byte x2 = 0) => SetRegisters(r1, r2, r3, u1, u2, x1, x2);
+            byte x2 = 0, byte x3 = 0) => SetRegisters(r1, r2, r3, u1, u2, x1, x2);
         [Obsolete("use Construct")]
         public void SetRegisters(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0, byte x2 = 0)
         {

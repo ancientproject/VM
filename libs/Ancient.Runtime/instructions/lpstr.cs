@@ -11,7 +11,12 @@
         public lpstr() : this("") {}
         public lpstr(string str) : base(IID.lpstr) => _str = str;
 
-        protected override void OnCompile() { }
+        protected override void OnCompile()
+        {
+            var (r1, r2, r3, u1, u2, x1, x2, x3) = new d32u((uint)_str.GetHashCode());
+
+            Construct(r1, r2, r3, u1, u2, x1, x2, x3);
+        }
         public override bool HasMetadata() => true;
 
         protected internal override byte[] metadataBytes
