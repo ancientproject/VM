@@ -61,18 +61,18 @@
             this.hpet = AppFlag.GetVariable("c69_bios_hpet");
         }
 
-        public override long read(long address)
+        public override ulong read(long address)
         {
             var (u1, u2) = new d8u((byte) address);
             switch (u1, _bus.State.southFlag) {
                 case (0x0, _):
-                    return unchecked((int) Ticks);
+                    return i64 | unchecked((int) Ticks);
                 case (0x1, _):
-                    return hpet ? 0x1 : 0x0;
+                    return i64 | (hpet ? 0x1 : 0x0);
                 case (0x2, _):
-                    return _bus.State.memoryChannel;
+                    return i64 |_bus.State.memoryChannel;
                 case (0xA, true):
-                    return i64 & mem[u2];
+                    return mem[u2];
                 default: throw ThrowMemoryRead(_bus.State.curAddr, address);
             }
         }
@@ -93,7 +93,7 @@
         private void clearRAM()
         {
             if(_bus.Find(0x0) is Memory slot)
-                Array.Fill(slot.mem, 0L);
+                Array.Fill(slot.mem, 0UL);
         }
         public override void shutdown()
         {
