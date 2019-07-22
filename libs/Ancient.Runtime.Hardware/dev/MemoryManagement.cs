@@ -21,7 +21,7 @@
             public TypeConverter ArgConverter { get; set; }
         }
 
-        internal static void WriteMemory(this IDevice dev, long address, long memory)
+        internal static void WriteMemory(this IDevice dev, long address, ulong memory)
         {
             var key = $"{dev.name}-{dev.startAddress:X}-{address:X}";
             if (FastWrite)
