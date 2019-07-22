@@ -13,7 +13,7 @@
     public class Memory : Device
     {
         private readonly CPU _cpu;
-        internal readonly long[] mem;
+        internal readonly ulong[] mem;
 
         public Memory(int startAddress, int endAddress, Bus bus) : base(0x0, "<ddr>")
         {
@@ -21,11 +21,11 @@
             // 512kb max
             if (endAddress >= 0x100000)
                 _cpu.halt(0xBD);
-            mem = new long[endAddress - startAddress + 1];
+            mem = new ulong[endAddress - startAddress + 1];
         }
 
 
-        public override void write(long address, long data)
+        public override void write(long address, ulong data)
         {
             if (address >= mem.Length)
             {
@@ -34,7 +34,7 @@
             }
             mem[address] = data;
         }
-        public override long read(long address)
+        public override ulong read(long address)
         {
             if (address < mem.Length) 
                 return mem[address];
@@ -58,11 +58,11 @@
             public MemoryView(Memory @ref) => obj_ref = @ref;
 
 
-            public long[] all => obj_ref.mem;
-            public long[] execute => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x600).Select(x => x.i).ToArray();
-            public long execute_len => obj_ref.mem[0x599];
-            public long[] bios => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x300).Select(x => x.i).ToArray();
-            public long[] stack => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x100).Select(x => x.i).ToArray();
+            public ulong[] all => obj_ref.mem;
+            public ulong[] execute => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x600).Select(x => x.i).ToArray();
+            public ulong execute_len => obj_ref.mem[0x599];
+            public ulong[] bios => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x300).Select(x => x.i).ToArray();
+            public ulong[] stack => obj_ref.mem.Select((i, z) => (i, z)).SkipWhile(x => x.z != 0x100).Select(x => x.i).ToArray();
         }
     }
 }

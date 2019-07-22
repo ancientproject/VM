@@ -10,10 +10,10 @@
         private State _provider => _bus.State;
         public Stack(Bus bus) => _bus = bus;
 
-        internal readonly Stack<long> cells = new Stack<long>();
+        internal readonly Stack<ulong> cells = new Stack<ulong>();
 
         
-        public void push(long data)
+        public void push(ulong data)
         {
             if (_provider.SP >= 0x400)
                 _cpuHalter.halt(0xA2);
@@ -33,7 +33,7 @@
             push16(data);
         }
 
-        internal void push2(long data)
+        internal void push2(ulong data)
         {
             if (_provider.SP >= 0x400)
                 _cpuHalter.halt(0xA2);
@@ -41,23 +41,23 @@
             _provider.SP++;
             _bus.Find(0x0).write(_provider.SP + 0x100, data);
         }
-        internal void push4(long data)
+        internal void push4(ulong data)
         {
             push2((data >> 8) & 0xff);
             push2(data & 0xff);
         }
-        internal void push8(long data)
+        internal void push8(ulong data)
         {
             push4((data >> 16) & 0xffff);
             push4(data & 0xffff);
         }
-        internal void push16(long data)
+        internal void push16(ulong data)
         {
             push8((data >> 32) & 0xffff_ffff);
             push8(data & 0xffff_ffff);
         }
 
-        public long pop()
+        public ulong pop()
         {
             if (_provider.SP <= 0)
                 _cpuHalter.halt(0xA3);
@@ -74,7 +74,7 @@
             return pop16();
         }
 
-        internal long pop2()
+        internal ulong pop2()
         {
             if (_provider.SP <= 0)
                 _cpuHalter.halt(0xA3);
@@ -84,8 +84,8 @@
             return res;
         }
 
-        internal long pop4() => pop2() | (pop2() << 8);
-        internal long pop8() =>  pop4() | (pop4() << 16);
-        internal long pop16() => pop8() | (pop8() << 32) ;
+        internal ulong pop4() => pop2() | (pop2() << 8);
+        internal ulong pop8() =>  pop4() | (pop4() << 16);
+        internal ulong pop16() => pop8() | (pop8() << 32) ;
     }
 }
