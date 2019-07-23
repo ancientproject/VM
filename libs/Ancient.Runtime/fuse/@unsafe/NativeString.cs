@@ -1,4 +1,4 @@
-namespace ancient.runtime.@unsafe
+﻿namespace ancient.runtime.@unsafe
 {
     using System;
     using System.Collections.Generic;
@@ -88,6 +88,7 @@ namespace ancient.runtime.@unsafe
                 result.Add(Marshal.ReadByte(startStr + i));
             return result.ToArray();
         }
+        [SecurityCritical]
         private static void* WriteUtf8String(IReadOnlyList<byte> bytes, int encodingPage, int hashCode)
         {
             var len = bytes.Count;
@@ -100,7 +101,32 @@ namespace ancient.runtime.@unsafe
                 Marshal.WriteByte(adr + 12 + i, bytes[i]);
             return (void*)adr;
         }
+        // only x64
+        [SecurityCritical]
+        public static int GetHashCode(string str)
+        {
+            fixed (char* chPtr1 = str)
+            {
+                var num1 = 0x1505; 
+                var num2 = num1;
+                var chPtr2 = chPtr1;
+                int num3;
+                while ((num3 = *chPtr2) != 0)
+                {
+                    num1 = (num1 << 5) + num1 ^ num3;
+                    var num4 = (int) chPtr2[1];
+                    if (num4 != 0)
+                    {
+                        num2 = (num2 << 5) + num2 ^ num4;
+                        chPtr2 += 2;
+                    }
+                    else break;
+                }
+                return num1 + num2 * 0x5D588B65;
+            }
+        }
 
+        [SecurityCritical]
         public byte[] GetRaw()
         {
             var len = GetLen() + 12;
