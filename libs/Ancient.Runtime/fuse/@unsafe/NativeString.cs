@@ -1,4 +1,4 @@
-﻿namespace ancient.runtime.@unsafe
+namespace ancient.runtime.@unsafe
 {
     using System;
     using System.Collections.Generic;
@@ -17,27 +17,32 @@
         /// Get Length of this string
         /// </summary>
         /// <returns></returns>
+        [SecurityCritical]
         public int GetLen() => Marshal.ReadInt32((IntPtr)@ref);
         /// <summary>
         /// Get Encoding Page
         /// </summary>
         /// <returns></returns>
+        [SecurityCritical]
         public Encoding GetEncoding() => Encoding.GetEncoding(Marshal.ReadInt32((IntPtr)@ref + 4));
-
+        [SecurityCritical]
         public override int GetHashCode() => Marshal.ReadInt32((IntPtr)@ref + 8);
         /// <summary>
         /// Get managed buffer
         /// </summary>
+        [SecurityCritical]
         public byte[] GetBuffer() => ReadUtf8String((void*)@ref).ToArray();
         /// <summary>
         /// get size of this structure
         /// </summary>
         /// <returns></returns>
+        [SecurityCritical]
         public static int SizeOf(NativeString* p) => p->GetLen() + 12;
         /// <summary>
         /// Get UnmanagedBuffer
         /// </summary>
         /// <returns></returns>
+        [SecurityCritical]
         public byte* GetUnmanagedBuffer()
         {
             fixed (byte* p = GetBuffer()) return p;
@@ -47,30 +52,32 @@
         /// <param name="str">managed string </param>
         /// <param name="free">free memory after unwraping string? </param>
         /// <exception cref="AccessViolationException">point has disposed</exception>
-        public static void Unwrap(in NativeString* p, out string str, bool free, bool suppressFail = false)
+        [SecurityCritical]
+        public static void Unwrap(in NativeString p, out string str, bool free, bool suppressFail = false)
         {
-            if (p == null || p->@ref == null)
+            if (p.@ref == null)
             {
                 if(!suppressFail) throw new AccessViolationException();
                 str = null;
                 return;
             }
-            var buffer = p->GetBuffer();
-            var enc = p->GetEncoding();
-            str = enc.GetString(buffer, 0, p->GetLen());
-            if (free) p->Dispose();
+            var buffer = p.GetBuffer();
+            var enc = p.GetEncoding();
+            str = enc.GetString(buffer, 0, p.GetLen());
+            if (free) p.Dispose();
         }
+        [SecurityCritical]
         public static NativeString Wrap(string str, Encoding enc = null)
         {
             if(enc is null) enc = Encoding.UTF8;
             return new NativeString
             {
-                @ref = WriteUtf8String(enc.GetBytes(str), enc.CodePage, str.GetHashCode())
+                @ref = WriteUtf8String(enc.GetBytes(str), enc.CodePage, GetHashCode(str))
             };
         }
         
         #region private
-
+        [SecurityCritical]
         private static IEnumerable<byte> ReadUtf8String(void* point)
         {
             var address = new IntPtr(point);
