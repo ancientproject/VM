@@ -32,7 +32,7 @@
 <!-- popup badges -->
 <p align="center">
    <a href="https://marketplace.visualstudio.com/items?itemName=rijndael.ancient-asm">
-    <img alt="Visual Studio Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/rijndael.ancient-asm.svg?logo=visual-studio-code&logoColor=%23CCC&style=popout-square">
+    <img alt="Visual Studio Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/rijndael.ancient-asm.svg?style=popout-square&logo=visual-studio-code&logoColor=%23CCC">
   </a>
   <a href="https://t.me/ivysola">
     <img src="https://img.shields.io/badge/Ask%20Me-Anything-1f425f.svg?style=popout-square&logo=telegram">
