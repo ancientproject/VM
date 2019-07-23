@@ -216,7 +216,7 @@
                 #region debug
 
                 case 0xF when x2 == 0xF: /* @mvx */
-                    unsafe string toString(ushort memAddr)
+                    string toString(ushort memAddr)
                     {
                         var str = default(string);
                         var value = mem[memAddr];
