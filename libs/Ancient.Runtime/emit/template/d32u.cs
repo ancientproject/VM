@@ -24,8 +24,15 @@
         public d32u Construct(in byte n1, in byte n2, in byte n3, in byte n4, in byte n5, in byte n6, in byte n7, in byte n8)
         {
             resetShifter();
-            this._value = (ushort) ((n1 << shift()) | (n2 << shift()) | (n3 << shift()) | (n4 << shift())
-                                    | (n5 << shift())| (n6 << shift())| (n7 << shift())| (n8 << shift()));
+            _value = (uint) (
+                (n1 << shift()) | 
+                (n2 << shift()) | 
+                (n3 << shift()) | 
+                (n4 << shift()) | 
+                (n5 << shift()) | 
+                (n6 << shift()) | 
+                (n7 << shift()) | 
+                (n8 << shift()) );
             return this;
         }
 

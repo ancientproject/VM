@@ -61,7 +61,7 @@
         }
 
 
-        public static void PrintVersion() => WriteLine("v0.48");
-        public static void PrintVersionHeader() => WriteLine($"Rune v0.48 x64 [{"Ancient SDK".Color(Color.Chocolate)}]");
+        public static void PrintVersion() => WriteLine("v0.50");
+        public static void PrintVersionHeader() => WriteLine($"Rune v0.50 x64 [{"Ancient SDK".Color(Color.Chocolate)}]");
     }
 }
