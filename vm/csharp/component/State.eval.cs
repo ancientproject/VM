@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -188,6 +188,7 @@ namespace vm.component
                     break;
                 case 0xB5: /* @ixor */
                 case 0xB6: /* @ior */
+                    
                     d8u first  = (u8 & r1, u8 & r2);
                     d8u second = (u8 & u1, u8 & u2);
                     // not support float-mode
@@ -215,22 +216,24 @@ namespace vm.component
                 #region debug
 
                 case 0xF when x2 == 0xF: /* @mvx */
-                    var x = mem[u1].ToString();
-
-                    if (ff) x = (u64f32 & mem[u1]).ToString(CultureInfo.InvariantCulture);
-
-                    static short[] cast(string str)
+                    unsafe string toString(ushort memAddr)
                     {
-                        var list = new List<int>(); 
-                        foreach (var c in str)
+                        var str = default(string);
+                        var value = mem[memAddr];
+                        var type = mem_types[memAddr];
+                        if (type is Unknown_Type)
+                            return ff ? 
+                                (u64f32 & value).ToString(CultureInfo.InvariantCulture) : 
+                                value.ToString(CultureInfo.InvariantCulture);
+                        if (type is str_Type)
                         {
-                            var uu1 = (c & 0xF0) >> 4;
-                            var uu2 = (c & 0xF);
-                            list.Add((uu1 << 4 | uu2) & 0xFFFFFFF);
+                            var p = StringLiteralMap.GetInternedString((int) value);
+                            NativeString.Unwrap(p, out var result_str, true, true);
+                            return result_str ?? "<null>";
                         }
-                        return list.Select(i32i16.auto).ToArray();
+                        return $"<{type.GetType().Name.Replace("_Type", "").ToLowerInvariant()}>";
                     }
-                    foreach (var uuu in cast(x))
+                    foreach (var uuu in toString(u1).Select(x => (int)x))
                         bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
 
