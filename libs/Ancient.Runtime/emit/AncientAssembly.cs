@@ -56,7 +56,7 @@
             mem.ReadBytes(1); // read '\n'
 
             var metaLen = BitConverter.ToInt64(mem.ReadBytes(sizeof(long)), 0);
-            var metadata = mem.ReadBytes((int) bodyLen);
+            var metadata = mem.ReadBytes((int) metaLen);
 
             var asm = new AncientAssembly
             {
