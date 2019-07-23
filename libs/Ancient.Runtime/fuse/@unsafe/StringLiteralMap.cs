@@ -17,39 +17,18 @@
      */
     public static unsafe class StringLiteralMap
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [SecurityCritical]
-        public static string GetInternedString(string str, bool AddIfNotFound)
-        {
-            var @ref = NativeString.Wrap(str);
-            NativeString.Unwrap(GetInternedString(&@ref, AddIfNotFound), out var result, true, true);
-            return result;
-        }
+        public static NativeString GetInternedString(int index) => literalStorage.FirstOrDefault(x => x.GetHashCode() == index);
+
         [SecurityCritical]
-        public static NativeString* GetInternedString(NativeString* pStr, bool AddIfNotFound)
+        public static void InternString(NativeString str)
         {
-            if (IsInternedString(pStr))
-            {
-                Marshal.AddRef((IntPtr)pStr->@ref);
-                return pStr;
-            }
-            if (AddIfNotFound)
-            {
-                literalStorage.Add(*pStr);
-                GC.KeepAlive(*pStr);
-                return pStr;
-            }
-            return null;
+            literalStorage.Add(str);
+            GC.KeepAlive(str);
         }
-        public static bool IsInternedString(in NativeString* a) => literalStorage.Contains(*a);
-
-
         public static void Clear() => literalStorage.Clear();
-
-        public static bool Has(int index)
-        {
-            return literalStorage.Any(x => x.GetHashCode() == index);
-        }
+        
+        public static bool Has(int index) => literalStorage.Any(x => x.GetHashCode() == index);
 
         #region private
 
