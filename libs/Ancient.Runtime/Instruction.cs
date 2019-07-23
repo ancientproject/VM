@@ -1,4 +1,4 @@
-namespace ancient.runtime
+﻿namespace ancient.runtime
 {
     using System;
     using System.Linq;
@@ -58,9 +58,9 @@ namespace ancient.runtime
         public override string ToString() => $"{ID} [{string.Join(" ", GetBodyILBytes().Select(x => x.ToString("X2")))}]";
 
         public void Construct(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0,
-            byte x2 = 0, byte x3 = 0) => SetRegisters(r1, r2, r3, u1, u2, x1, x2);
+            byte x2 = 0, byte x3 = 0) => SetRegisters(r1, r2, r3, u1, u2, x1, x2, x3);
         [Obsolete("use Construct")]
-        public void SetRegisters(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0, byte x2 = 0)
+        public void SetRegisters(byte r1 = 0, byte r2 = 0, byte r3 = 0, byte u1 = 0, byte u2 = 0, byte x1 = 0, byte x2 = 0, byte x3 = 0)
         {
             _r1 = r1; 
             _r2 = r2;
@@ -69,6 +69,7 @@ namespace ancient.runtime
             _u2 = u2; 
             _x1 = x1;
             _x2 = x2;
+            _x3 = x3;
         }
         public static Instruction Summon(IID id, params object[] args)
         {
