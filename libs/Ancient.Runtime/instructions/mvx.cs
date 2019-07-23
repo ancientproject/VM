@@ -13,7 +13,6 @@
             _cellIndex = cellIndex;
         }
 
-        protected override void OnCompile() 
-            => SetRegisters(_addressBus, _addressDev, 0xE, _cellIndex, x2: 0xF);
+        protected override void OnCompile() => SetRegisters(_addressBus, _addressDev, 0xE, _cellIndex, x2: 0xF);
     }
 }

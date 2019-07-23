@@ -88,14 +88,9 @@
                 var template = MetaTemplate.FromBytes(steam.ReadBytes(sizeof(MetaTemplate)));
 
                 if (template.type == TemplateType.STR)
-                {
-                    var str = Encoding.UTF8.GetString(steam.ReadBytes(template.len));
-                    StringLiteralMap.GetInternedString(str, true);
-                }
+                    StringLiteralMap.InternString(NativeString.Wrap(Encoding.UTF8.GetString(steam.ReadBytes(template.len))));
                 if (template.type == TemplateType.RND)
-                {
                     steam.ReadBytes(template.len);
-                }
             }
         }
 
