@@ -222,5 +222,14 @@
             ".pull &(${0:cell})"
           ],
           "description": "read from stack float value and insert into cell"
+    },
+    ".unlock": {
+        "prefix": [
+            ".unlock"
+          ],
+          "body": [
+            ".unlock &(${0:cell}) ${1:typeof}"
+          ],
+          "description": "read from stack value and cast to type"
     }
 }
