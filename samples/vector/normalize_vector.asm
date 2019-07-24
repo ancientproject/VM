@@ -3,9 +3,9 @@
     ~label 'y' 0x2
     ~label 'z' 0x3
     ~label 'ln' 0x0A
+	~label 'buf' 0x8
 }
 
-.warm
 .mva &(0x5) &(0xF) <| $(0x0)
 ; load values
 .ldi &(![~x]) <| $(0x1)
@@ -14,7 +14,9 @@
 
 
 ; print info
-.mvj &(0x1) &(0x6) <| @string_t("Vector values:")
+.lpstr !{"Vector values:"}
+.unlock &(![~buf]) str
+.mvx &(0x1) &(0x6) |> &(![~buf])
 .mva &(0x1) &(0x6) <| $(0x0A)
 
 .mvj &(0x1) &(0x6) <| @string_t("x: ")
