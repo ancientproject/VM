@@ -96,7 +96,9 @@ list:
 ###### READ\WRITE operation for bios
 `Need southFlag enabled for READ\WRITE operation for private memory, otherwise will be calling CorruptedMemoryException and halting cpu`
 ###### bios_guard_flag
-`Some memory segments are not allowed to READ\WRITE operation when bios_guard_flag is enabled`
+`Some memory segments are not allowed to READ\WRITE operation when bios_guard_flag is enabled ` 
+###### create external function   
+`todo :)` 
 ##### Command docs
 
 ```csharp
@@ -116,15 +118,15 @@ list:
 // refer and jumper
 
 // set reference current program offset to cell_id
-.ref_t &(cell_id)
+.ref.t &(cell_id)
 // read from cell_id offset program and go to
-.jump_t &(cell_id)
+.jump.t &(cell_id)
 
 // other jumper
-.jump_e &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more or equal 0x6 cell value
-.jump_g &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more 0x6 cell value 
-.jump_u &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less 0x6 cell value 
-.jump_y &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less or equal 0x6 cell value 
+.jump.e &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more or equal 0x6 cell value
+.jump.g &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value more 0x6 cell value 
+.jump.u &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less 0x6 cell value 
+.jump.y &(cell_id) ~- &(0x9) &(0x6) // if 0x9 cell value less or equal 0x6 cell value 
 
 
 // manage processor
@@ -171,6 +173,21 @@ list:
 .min &(cell_value) &(cell_value)
 .max &(cell_value) &(cell_value)
 
+
+
+.lpstr !{"test string"} // stage to stack it string
+.unlock &(0x5) str // pull from stack and stage in 0x5 cell and make 'str' type
+
+
+// init evaluation stack and pulling data from normal stack 
+.locals init #(
+    [0x0] u32 // int
+    [0x1] u2  // bool
+)
+// call external function (see 'create external function')
+call !{some_function(u32, u8)}
+.prune // clear evaluation stack
+
                               
 // manage device and etc
 .mvt &($device_id) &(action_id) <| $(value)       // push raw value to device_id.action_id in bus
@@ -185,9 +202,9 @@ list:
 .pull &(target_cell)  // read from stack float value and insert to target_cell
 
 // debugger
-.brk_s // standard break - now break
-.brk_n // break on next cycle execute
-.brk_a // break on after next cycle execute
+.brk.s // standard break - now break
+.brk.n // break on next cycle execute
+.brk.a // break on after next cycle execute
 
 // other
 .inc &(cell) // cell++
