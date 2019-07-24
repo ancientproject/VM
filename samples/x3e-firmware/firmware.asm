@@ -7,8 +7,6 @@
     ~label 'true' 0x1
     ~label 'false' 0x0
 }
-.warm
-
 .ldx &(![~float_flag]) <| $(![~true])
 
 ; load power-value
@@ -17,7 +15,7 @@
 
 ; |x arctan(x) cos(x)|
 .cos &(![~buffer])
-.atan &(![~bufferd)
+.atan &(![~buffer])
 
 .pull &(0x2) 
 .pull &(0x3)
@@ -30,5 +28,5 @@
 .ldx &(![~fast_forward]) <| $(![~true])
 .abs &(![~buffer])
 ; result in ~buffer cell
-.brk_s
+.brk.s
 
