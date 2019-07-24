@@ -8,8 +8,8 @@
     <ApplicationIcon>resource\icon.ico</ApplicationIcon>
     <StartupObject></StartupObject>
     <Version>0.50.345</Version>
-    <AssemblyVersion>0.50.352.0</AssemblyVersion>
-    <FileVersion>0.50.352.0</FileVersion>
+    <AssemblyVersion>0.50.354.0</AssemblyVersion>
+    <FileVersion>0.50.354.0</FileVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>

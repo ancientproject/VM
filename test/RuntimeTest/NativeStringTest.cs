@@ -14,17 +14,7 @@ namespace Tests
             Assert.AreEqual(str.Length, p.GetLen());
             Assert.AreEqual(Encoding.UTF8.GetByteCount(str), p.GetBuffer().Length);
             Assert.AreEqual(Encoding.UTF8, p.GetEncoding());
-            Assert.AreEqual(str.GetHashCode(), p.GetHashCode());
-        }
-        [Test]
-        public void InternStringWhenNotFound()
-        {
-            Assert.Null(StringLiteralMap.GetInternedString("test", false));
-        }
-        [Test]
-        public void InternStringWhenFound()
-        {
-            Assert.NotNull(StringLiteralMap.GetInternedString("test", true));
+            Assert.AreEqual(NativeString.GetHashCode(str), p.GetHashCode());
         }
     }
 }
