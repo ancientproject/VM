@@ -15,10 +15,10 @@
     <ROW Property="ARPNOREPAIR" Value="1"/>
     <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
     <ROW Property="Manufacturer" Value="Yuuki Wesp"/>
-    <ROW Property="ProductCode" Value="1033:{116ED9A8-4912-440D-88C0-DA9DB6E55DFB} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{8221E11F-F0CC-4DDA-99F6-AD02FC927915} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="ancient-sdk"/>
-    <ROW Property="ProductVersion" Value="0.48.347" Type="32"/>
+    <ROW Property="ProductVersion" Value="0.50.355" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{7D3B4BF5-C5CA-4208-90D7-9529CAC2549D}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -56,7 +56,7 @@
     <ROW Directory="zhHant_Dir" Directory_Parent="rune_Dir" DefaultDir="zh-Hant"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AI_CustomARPName" ComponentId="{4F0C3BCC-0DC7-4B8F-BC2D-01E8B401A01D}" Directory_="APPDIR" Attributes="4" KeyPath="DisplayName" Options="1"/>
+    <ROW Component="AI_CustomARPName" ComponentId="{6F73C8B5-695D-4D48-A7D4-6EA96973EB44}" Directory_="APPDIR" Attributes="4" KeyPath="DisplayName" Options="1"/>
     <ROW Component="Ancient.Compiler.Service.dll" ComponentId="{17DFC5EA-EB79-4E09-9202-069947AEDD03}" Directory_="rune_Dir" Attributes="0" KeyPath="Ancient.Compiler.Service.dll"/>
     <ROW Component="Ancient.Compiler.Service.dll_1" ComponentId="{394DC9D3-CFE2-44D3-9210-7C6299417320}" Directory_="compiler_Dir" Attributes="0" KeyPath="Ancient.Compiler.Service.dll_1"/>
     <ROW Component="Ancient.ProjectSystem.dll" ComponentId="{D7740845-C37F-4183-BCF2-BE30522E5C4B}" Directory_="rune_Dir" Attributes="0" KeyPath="Ancient.ProjectSystem.dll"/>
