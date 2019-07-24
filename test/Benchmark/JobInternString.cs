@@ -35,8 +35,8 @@
         [Benchmark(Description = "intern string [native non-insert]")]
         public unsafe void NativeFalseFound()
         {
-            fixed(NativeString* p = &native)
-                StringLiteralMap.GetInternedString(p, false);
+            //fixed(NativeString* p = &native)
+            //    StringLiteralMap.GetInternedString(p, false);
         }
         [GlobalSetup]
         public static void Asd()
@@ -46,9 +46,9 @@
         [Benchmark(Description = "intern string [native insert, auto free]")]
         public unsafe void AddNative()
         {
-            fixed(NativeString* p = &native)
-                StringLiteralMap.GetInternedString(p, true);
-            StringLiteralMap.Clear();
+            //fixed(NativeString* p = &native)
+            //    StringLiteralMap.GetInternedString(p, true);
+            //StringLiteralMap.Clear();
         }
 
         [Benchmark(Description = "intern string [managed insert, auto free]")]
