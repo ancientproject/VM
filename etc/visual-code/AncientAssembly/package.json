@@ -2,7 +2,7 @@
 	"name": "ancient-asm",
 	"displayName": "Ancient Assembly",
 	"description": "Ancient Assembly developmemnt environment (8bit cpu)",
-	"version": "0.48.6",
+	"version": "0.50.6",
 	"icon": "images/icon.png",
 	"galleryBanner": {
 		"color": "#18c7b1",

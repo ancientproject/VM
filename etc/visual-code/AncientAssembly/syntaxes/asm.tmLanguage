@@ -225,7 +225,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b__(u((8|16|32|64)([lb]e)?)|f(8|16|32|64|80[me]|128[lh])|Infinity|[QS]?NaN)__\b</string>
+					<string>\b__(u((8|16|32|64)([lb]e)?)|str|f(8|16|32|64|80[me]|128[lh])|Infinity|[QS]?NaN)__\b</string>
 					<key>name</key>
 					<string>support.function.asm</string>
 				</dict>
