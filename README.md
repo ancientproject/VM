@@ -120,7 +120,9 @@ list:
 ###### READ\WRITE operation for bios
 `Need southFlag enabled for READ\WRITE operation for private memory, otherwise will be calling CorruptedMemoryException and halting cpu`
 ###### bios_guard_flag
-`Some memory segments are not allowed to READ\WRITE operation when bios_guard_flag is enabled`
+`Some memory segments are not allowed to READ\WRITE operation when bios_guard_flag is enabled ` 
+###### create external function   
+`todo :)` 
 ##### Command docs
 
 ```csharp
@@ -194,6 +196,21 @@ list:
 .atan2 &(cell_value) &(cell_value)
 .min &(cell_value) &(cell_value)
 .max &(cell_value) &(cell_value)
+
+
+
+.lpstr !{"test string"} // stage to stack it string
+.unlock &(0x5) str // pull from stack and stage in 0x5 cell and make 'str' type
+
+
+// init evaluation stack and pulling data from normal stack 
+.locals init #(
+    [0x0] u32 // int
+    [0x1] u2  // bool
+)
+// call external function (see 'create external function')
+call !{some_function(u32, u8)}
+.prune // clear evaluation stack
 
                               
 // manage device and etc
