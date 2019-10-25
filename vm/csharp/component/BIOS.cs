@@ -49,7 +49,9 @@
             set => mem[0x4] = value ? 0x1UL : 0x0UL;
             get => mem[0x4] == 0x1;
         }
-
+        /// <summary>
+        /// Ticks count after started system
+        /// </summary>
         public long Ticks 
             => hpet ? systemTimer.ElapsedTicks : Environment.TickCount;
 
@@ -60,7 +62,9 @@
             bios_guard = true;
             this.hpet = AppFlag.GetVariable("c69_bios_hpet");
         }
-
+        /// <summary>
+        /// read 64 bit data from internal bios memory
+        /// </summary>
         public override ulong read(long address)
         {
             var (u1, u2) = new d8u((byte) address);
@@ -76,7 +80,9 @@
                 default: throw ThrowMemoryRead(_bus.State.curAddr, address);
             }
         }
-
+        /// <summary>
+        /// write 64bit data to internal bios memory
+        /// </summary>
         public override void write(long address, long data)
         {
             var (adr, u2) = new d8u((byte)address);
@@ -89,12 +95,17 @@
                 _                   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
         }
-
+        /// <summary>
+        /// clear memory in default slot
+        /// </summary>
         private void clearRAM()
         {
             if(_bus.Find(0x0) is Memory slot)
                 Array.Fill(slot.mem, 0UL);
         }
+        /// <summary>
+        /// Shutdown system
+        /// </summary>
         public override void shutdown()
         {
             systemTimer.Stop();
@@ -109,7 +120,9 @@
             _();
             return 0;
         }
-
+        /// <summary>
+        /// warm up system
+        /// </summary>
         public override void warmUp()
         {
             systemTimer = Stopwatch.StartNew();
