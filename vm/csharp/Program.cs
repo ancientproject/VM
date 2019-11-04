@@ -2,6 +2,7 @@
 {
     using System;
     using System.Drawing;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
@@ -52,9 +53,10 @@
 
         public static void InitializeMemory(Bus bus, params string[] args)
         {
-            if (bus.State.halt != 0) return;
+            if (bus.State.halt != 0) 
+                return;
             if (!args.Any())
-                bus.State.Load("<chip>", 0xB00B5000);
+                bus.State.Load("<chip>", 0xB00B500000);
             else
             {
                 var nameFile = Path.Combine(Path.GetDirectoryName(args.First()),Path.GetFileNameWithoutExtension(args.First()));
@@ -87,11 +89,13 @@
 
         public static async Task Main(string[] args)
         {
-            if (Environment.GetEnvironmentVariable("MANAGED_DEBUGGER_WAIT") == "1")
+            if (AppFlag.GetVariable("MANAGED_DEBUGGER_WAIT"))
                 HandleDebugger();
 
             InitializeProcess();
             var bus = new Bus();
+
+            
 
             InitializeFlags(bus);
 
@@ -100,8 +104,13 @@
 
             DeviceLoader.AutoGrub(bus.Add);
 
-            InitializeMemory(bus, args);
-
+            if (AppFlag.GetVariable("REPL"))
+            {
+                Console.WriteLine("@ Ancient VM Interactive @".Pastel(Color.Green));
+                InteractiveConstruction(bus);
+            }
+            else
+                InitializeMemory(bus, args);
 
             while (bus.State.halt == 0)
             {
@@ -121,5 +130,39 @@
             throw new Exception("invalid offset file.");
         }
 
+
+        public static void InteractiveConstruction(Bus bus)
+        {
+            bus.State.km = true;
+            bus.State.fw = true;
+            while (true)
+            {
+                Console.Write("> ".Pastel(Color.Gray));
+                var input = Console.ReadLine();
+                if(input is null)
+                    continue;
+
+                if (!input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Invalid operation;".Pastel(Color.Red));
+                    continue;
+                }
+
+                // shit))0
+                if (input.Length < "0x0000000000".Length)
+                {
+                    var need = "0x0000000000".Length;
+                    var current = input.Length;
+                    var diff = (need - current) - 1;
+                    input = $"{input}{new string('0', diff)}";
+                }
+
+                var decoded = ulong.Parse(input.Remove(0, 2), NumberStyles.HexNumber);
+                bus.State.halt = 0;
+                bus.State.Append(decoded);
+                bus.cpu.Step();
+            }
+            
+        }
     }
 }
