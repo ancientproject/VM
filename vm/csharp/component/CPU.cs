@@ -29,7 +29,7 @@
             {
                 OnError?.Invoke(e);
                 halt(0xFFFF, e.Message.ToLowerInvariant());
-                if(State.tc)
+                if(State.ec)
                     WriteLine(e.ToString());
                 Trace.TraceError(e.ToString());
             }
