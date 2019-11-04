@@ -12,6 +12,7 @@
         [OpCode(0x0F)] mva, 
         [OpCode(0x0F)] mvd,
         [OpCode(0x0F)] mvx,
+        [OpCode(0xA3)] wtd,
         [OpCode(0xA4)] rfd,
 
         [OpCode(0x03)] swap,
