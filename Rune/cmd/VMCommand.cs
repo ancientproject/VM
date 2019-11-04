@@ -27,10 +27,13 @@
             var isDebug = app.Option("-d|--debug <bool>", "Is debug mode", CommandOptionType.BoolValue);
             var fastWrite = app.Option("-f|--fast_write <bool>", "Use fast-write mode?", CommandOptionType.BoolValue);
             var keepMemory = app.Option("-k|--keep_memory <bool>", "Keep memory?", CommandOptionType.BoolValue);
+            var isInteractive = app.Option("-i|--interactive", "Start with interactive mode", CommandOptionType.BoolValue);
             app.OnExecute(() =>
             {
+                if(isInteractive.BoolValue.HasValue)
+                    return vm.Execute(isDebug, keepMemory, fastWrite, isInteractive);
                 var buildResult = dotnetBuild.Execute(true);
-                return buildResult != 0 ? buildResult : vm.Execute(isDebug, keepMemory, fastWrite);
+                return buildResult != 0 ? buildResult : vm.Execute(isDebug, keepMemory, fastWrite, isInteractive);
             });
             try
             {
@@ -43,7 +46,7 @@
             }
         }
 
-        internal int Execute(CommandOption isDebug, CommandOption keepMemory, CommandOption fastWrite)
+        internal int Execute(CommandOption isDebug, CommandOption keepMemory, CommandOption fastWrite, CommandOption isInteractive)
         {
             var dir = Directory.GetCurrentDirectory();
             if (!Validate(dir))
@@ -64,10 +67,14 @@
 
             var argBuilder = new List<string>();
 
+            if (!Directory.Exists("obj"))
+                Directory.CreateDirectory("obj");
+
             var files = Directory.GetFiles(Path.Combine("obj"), "*.*")
                 .Where(x => x.EndsWith(".dlx") || x.EndsWith(".bios"));
 
-            argBuilder.Add($"\"{Path.Combine("obj", Path.GetFileNameWithoutExtension(files.First()))}\"");
+            if(files.Any())
+                argBuilder.Add($"\"{Path.Combine("obj", Path.GetFileNameWithoutExtension(files.First()))}\"");
 
 
             var external = new ExternalTools(vm_bin, string.Join(" ", argBuilder));
@@ -75,6 +82,7 @@
                 .WithEnv("VM_ATTACH_DEBUGGER", isDebug.BoolValue.HasValue)
                 .WithEnv("VM_KEEP_MEMORY", keepMemory.BoolValue.HasValue)
                 .WithEnv("VM_MEM_FAST_WRITE", fastWrite.BoolValue.HasValue)
+                .WithEnv("REPL", isInteractive.BoolValue.HasValue)
                 .WithEnv("CLI", true)
                 .WithEnv("CLI_WORK_PATH", dir)
                 

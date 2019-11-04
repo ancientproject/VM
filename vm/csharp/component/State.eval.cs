@@ -120,7 +120,7 @@
                     stack.push(bus.find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0xA4: /* @rfd */
-                    trace($"call :: rfd dev[0x{r1:X}], 0x{r2:X}");
+                    trace($"call :: rfd dev[0x{r1:X}{r2:X}]-> 0x{u1:X}{u2:X}");
                     stack.push(bus.find((d8u)(u8 & r1, u8 & r2)).read((d8u)(u8 & u1, u8 & u2)));
                     break;
                 
