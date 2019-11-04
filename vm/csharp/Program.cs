@@ -149,11 +149,11 @@
                 }
 
                 // shit))0
-                if (input.Length < "0x0000000000".Length)
+                if (input.Length < "0x000000000".Length)
                 {
                     var need = "0x0000000000".Length;
                     var current = input.Length;
-                    var diff = (need - current) - 1;
+                    var diff = (need - current);
                     input = $"{input}{new string('0', diff)}";
                 }
 
