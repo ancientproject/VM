@@ -18,13 +18,13 @@
             if (_provider.SP >= 0x400)
                 _cpuHalter.halt(0xA2);
 
-            if (_provider.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xA3) == 0x1)
             {
-                _bus.Find(0x0).write(  _provider.SP+ 0x100, data);
+                _bus.find(0x0).write(  _provider.SP+ 0x100, data);
                 _provider.SP++;
                 return;
             }
-            if (_provider.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xA2) == 0x1)
             {
                 cells.Push(data);
                 _provider.SP++;
@@ -39,7 +39,7 @@
                 _cpuHalter.halt(0xA2);
             data &= 0xFF;
             _provider.SP++;
-            _bus.Find(0x0).write(_provider.SP + 0x100, data);
+            _bus.find(0x0).write(_provider.SP + 0x100, data);
         }
         internal void push4(ulong data)
         {
@@ -61,12 +61,12 @@
         {
             if (_provider.SP <= 0)
                 _cpuHalter.halt(0xA3);
-            if (_provider.southFlag && _bus.Find(0x45).read(0xA3) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xA3) == 0x1)
             {
                 _provider.SP--;
-                return _bus.Find(0x0).read(_provider.SP + 0x100);
+                return _bus.find(0x0).read(_provider.SP + 0x100);
             }
-            if (_provider.southFlag && _bus.Find(0x45).read(0xA2) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xA2) == 0x1)
             {
                 _provider.SP--;
                 return cells.Pop();
@@ -80,7 +80,7 @@
                 _cpuHalter.halt(0xA3);
             if (_provider.SP >= 0x400)
                 _cpuHalter.halt(0xA2);
-            var res = _bus.Find(0x0).read(_provider.SP--+ 0x100);
+            var res = _bus.find(0x0).read(_provider.SP--+ 0x100);
             return res;
         }
 

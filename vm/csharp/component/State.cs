@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -256,8 +256,8 @@
                 set = pin - 0b1;
             }
             foreach (var (@ulong, index) in prog.Select((x, i) => (x, i)))
-                bus.Find(0x0).write(pin + index, @ulong);
-            bus.Find(0x0).write(set, prog.Length);
+                bus.find(0x0).write(pin + index, @ulong);
+            bus.find(0x0).write(set, prog.Length);
             sectors.Add((name, u32 & pin));
             if(pc == 0x0) pc = i64 | pin;
         }
@@ -273,8 +273,8 @@
         /// </returns>
         public ulong? next(ulong pc_ref)
         {
-            if (bus.Find(0x0).read(0x599) >= pc && ++step != 0x90000) 
-                return bus.Find(0x0).read(0x600 + (i64 & pc_ref));
+            if (bus.find(0x0).read(0x599) >= pc && ++step != 0x90000) 
+                return bus.find(0x0).read(0x600 + (i64 & pc_ref));
             return null;
         }
 
@@ -298,8 +298,8 @@
                 lastAddr = curAddr;
                 if (++step == 0x90000)
                     throw new StepOverflowException();
-                if (bus.Find(0x0).read(0x599) != pc && ++step != 0x90000)
-                    return (curAddr = bus.Find(0x0).read((i64 & pc++)));
+                if (bus.find(0x0).read(0x599) != pc && ++step != 0x90000)
+                    return (curAddr = bus.find(0x0).read((i64 & pc++)));
                 bus.cpu.halt(0x77);
                 return 0xDEAD;
             }
