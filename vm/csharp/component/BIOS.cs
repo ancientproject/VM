@@ -42,13 +42,14 @@
             get => mem[0x3] == 0x1;
         }
         /// <summary>
-        /// 0x4, using guarding with violation memory write
+        /// 0x6, using guarding with violation memory write
         /// </summary>
         public bool bios_guard
         {
-            set => mem[0x4] = value ? 0x1UL : 0x0UL;
-            get => mem[0x4] == 0x1;
+            set => mem[0x6] = value ? 0x1UL : 0x0UL;
+            get => mem[0x6] == 0x1;
         }
+        
         /// <summary>
         /// Ticks count after started system
         /// </summary>
@@ -75,7 +76,7 @@
                     return i64 | (hpet ? 0x1 : 0x0);
                 case (0x2, _):
                     return i64 |_bus.State.memoryChannel;
-                case (0xA, true):
+                case (0xF, true):
                     return mem[u2];
                 default: throw ThrowMemoryRead(_bus.State.curAddr, address);
             }
@@ -88,10 +89,10 @@
             var (adr, u2) = new d8u((byte)address);
             _ = (adr, bios_guard, _bus.State.southFlag) switch {
                 (0x1, _, _)         => X(() => hpet = data == 0x1),
-                (0xF, _, _)         => X(warmUp),
+                (0xA, _, _)         => X(warmUp),
                 (0xC, true, false)  => X(clearRAM),
                 (0xD, _, _)         => X(() => Thread.Sleep((int)data)),
-                (0xA, _, true)      => X(() => mem[u2] = i64 | data),
+                (0xF, _, true)      => X(() => mem[u2] = i64 | data),
                 _                   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
         }
@@ -100,7 +101,7 @@
         /// </summary>
         private void clearRAM()
         {
-            if(_bus.Find(0x0) is Memory slot)
+            if(_bus.find(0x0) is Memory slot)
                 Array.Fill(slot.mem, 0UL);
         }
         /// <summary>
