@@ -14,8 +14,8 @@ namespace vm_test
         public Bus bus { get; private set; }
         public CPU cpu => bus.cpu;
         public State state => bus.State;
-        public TestDevice dev => bus.Find(0x1) as TestDevice;
-        public BIOS bios => bus.Find(0x45) as BIOS;
+        public TestDevice dev => bus.find(0x1) as TestDevice;
+        public BIOS bios => bus.find(0x45) as BIOS;
 
         protected VMBehaviour()
         {

@@ -48,7 +48,7 @@
             if(WarmUpDevices) device.warmUp();
         }
 
-        public IDevice Find(int address) 
+        public IDevice find(int address) 
             => Devices.FirstOrDefault(x => x.startAddress == address) 
                ?? new CorruptedDevice(cpu);
 

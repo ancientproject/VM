@@ -105,15 +105,15 @@
                     break;
                 case 0xF when x2 == 0xE: // 0xF9988E0
                     trace($"call :: move, dev[0x{r1:X}] -> 0x{r2:X} -> 0x{u1:X}");
-                    bus.Find(r1 & 0xFF).write(r2 & 0xFF, i32 & mem[u1] & 0xFF);
+                    bus.find(r1 & 0xFF).write(r2 & 0xFF, i32 & mem[u1] & 0xFF);
                     break;
                 case 0xF when x2 == 0xC: // 0xF00000C
                     trace($"call :: move, dev[0x{r1:X}] -> 0x{r2:X} -> [0x{u1:X}-0x{u2:X}]");
-                    bus.Find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
+                    bus.find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
                 case 0xA4:
                     trace($"call :: rfd dev[0x{r1:X}], 0x{r2:X}");
-                    stack.push(bus.Find(r1 & 0xFF).read(r2 & 0xFF));
+                    stack.push(bus.find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0x8 when u2 == 0xC: /* @ref.t */
                     trace($"call :: ref.t 0x{r1:X}");
@@ -234,7 +234,7 @@
                         return $"<{type.GetType().Name.Replace("_Type", "").ToLowerInvariant()}>";
                     }
                     foreach (var uuu in toString(u1).Select(x => (int)x))
-                        bus.Find(r1 & 0xFF).write(r2 & 0xFF, uuu);
+                        bus.find(r1 & 0xFF).write(r2 & 0xFF, uuu);
                     break;
 
                 case 0xC1 when x2 == 0x1: /* @break :: now */
