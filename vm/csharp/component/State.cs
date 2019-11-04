@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -260,6 +260,26 @@ namespace vm.component
             bus.find(0x0).write(set, prog.Length);
             sectors.Add((name, u32 & pin));
             if(pc == 0x0) pc = i64 | pin;
+        }
+
+        /// <summary>
+        /// Append new instruction to state
+        /// for REPL
+        /// </summary>
+        /// <remarks>
+        /// 1. read len of current program set from memory
+        /// 2. add to len one
+        /// 3. write new len of program set to memory
+        /// 4. write new instruction to end in program set
+        /// </remarks>
+        public void Append(ulong instruction)
+        {
+            const int set = 0x599;
+            var target = 0x600 + pc;
+            var len = bus.find(0x0).read(set);
+            bus.find(0x0).write(set, ++len);
+            bus.find(0x0).write(i64 & ++target, instruction);
+            pc = target;
         }
 
         /// <summary>
