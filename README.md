@@ -93,24 +93,24 @@ list:
 - 0x00 - return current ticks (u32)
 - 0x01 - return hpet enabled or not
 - 0x02 - return memory channel
-- 0xAX - private memory randge
+- 0xFX - private memory randge
 ```
 ###### private memory [READ]:
 ```yaml
-- 0xA1 : return hpet enabled or not
-- 0xA2 : return use virtual stack forwarding or not
-- 0xA3 : return use forward in standalone memory sector or not
-- 0xA4 : return using guarding with violation memory write or not (default bios_guard_flag has enabled)
+- 0xF1 : return hpet enabled or not
+- 0xF2 : return use virtual stack forwarding or not
+- 0xF3 : return use forward in standalone memory sector or not
+- 0xF6 : return using guarding with violation memory write or not (default bios_guard_flag has enabled)
 ```
 
 ###### public\private memory [WRITE]: 
   
 ```yaml
 - 0x1 : 1\0 - set hpet use or not (default value depends on the firmware)
-- 0xF : reseting hpet and system timers
+- 0xA : reseting hpet and system timers
 - 0xD : call system interrupts for N-value ms
 - 0xC : call clearing RAM (need enabled bios_guard_flag, and disabled southFlag)
-- 0xA : set at private memory range value (need southFlag)
+- 0xF : set at private memory range value (need southFlag)
 ```
 
 
