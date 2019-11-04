@@ -112,15 +112,12 @@
                     bus.find(r1 & 0xFF).write(r2 & 0xFF, (r3 << 12 | u1 << 8 | u2 << 4 | x1) & 0xFFFFFFF);
                     break;
                 case 0xA3: /* wtd */
-                    trace($"call :: wtd dev[0x{r1:X}], 0x{r2:X}");
-                    d8u id_dev = (u8 & r1, u8 & r2);
-                    d8u addr   = (u8 & u1, u8 & u2);
-                    d8u data   = (u8 & x1, u8 & x2);
-                    bus.find(id_dev).write(addr, data);
+                    trace($"call :: wtd dev[0x{r1:X}{r2:X}] -> 0x{u1:X}{u2:X}");
+                    bus.find((d8u)(u8 & r1, u8 & r2)).write((d8u)(u8 & u1, u8 & u2), (d8u)(u8 & x1, u8 & x2));
                     stack.push(bus.find(r1 & 0xFF).read(r2 & 0xFF));
                     break;
                 case 0xA4: /* @rfd */
-                    trace($"call :: rfd dev[0x{r1:X}{r2:X}]-> 0x{u1:X}{u2:X}");
+                    trace($"call :: rfd dev[0x{r1:X}{r2:X}] -> 0x{u1:X}{u2:X}");
                     stack.push(bus.find((d8u)(u8 & r1, u8 & r2)).read((d8u)(u8 & u1, u8 & u2)));
                     break;
                 
