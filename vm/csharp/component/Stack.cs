@@ -18,13 +18,13 @@
             if (_provider.SP >= 0x400)
                 _cpuHalter.halt(0xA2);
 
-            if (_provider.southFlag && _bus.find(0x45).read(0xA3) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xF3) == 0x1)
             {
                 _bus.find(0x0).write(  _provider.SP+ 0x100, data);
                 _provider.SP++;
                 return;
             }
-            if (_provider.southFlag && _bus.find(0x45).read(0xA2) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xF2) == 0x1)
             {
                 cells.Push(data);
                 _provider.SP++;
@@ -61,12 +61,12 @@
         {
             if (_provider.SP <= 0)
                 _cpuHalter.halt(0xA3);
-            if (_provider.southFlag && _bus.find(0x45).read(0xA3) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xF3) == 0x1)
             {
                 _provider.SP--;
                 return _bus.find(0x0).read(_provider.SP + 0x100);
             }
-            if (_provider.southFlag && _bus.find(0x45).read(0xA2) == 0x1)
+            if (_provider.southFlag && _bus.find(0x45).read(0xF2) == 0x1)
             {
                 _provider.SP--;
                 return cells.Pop();
