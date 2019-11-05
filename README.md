@@ -22,6 +22,7 @@
   <a href="#">
     <img src="http://img.shields.io/:license-MIT-blue.svg">
   </a>
+<a href="https://app.fossa.io/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu.svg?type=shield"/></a>
   <a href="https://github.com/0xF6/ancient_cpu/releases">
     <img src="https://img.shields.io/github/release/0xF6/ancient_cpu.svg?logo=github&style=flat">
   </a>
@@ -54,6 +55,9 @@
 
 
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu?ref=badge_large)
 
 ##### Env flags 
 ```yaml
@@ -244,4 +248,3 @@ call !{some_function(u32, u8)}
     <img src="https://www.ko-fi.com/img/githubbutton_sm.svg">
   </a>
 </p>
-
