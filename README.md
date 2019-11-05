@@ -55,10 +55,6 @@
 
 
 
-
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu?ref=badge_large)
-
 ##### Env flags 
 ```yaml
 - VM_TRACE         : 1\0    - enable or disable trace logging (default 0)
@@ -242,6 +238,8 @@ call !{some_function(u32, u8)}
 
 .mvj &($device_id) &(action_id) <| @string_t("test string") // cast string to mvt instruction
 ```
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2F0xF6%2Fancient_cpu?ref=badge_large)
 
 <p align="center">
    <a href="https://ko-fi.com/P5P7YFY5">
