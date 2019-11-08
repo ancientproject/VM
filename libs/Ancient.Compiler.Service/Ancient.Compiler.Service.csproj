@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,10 +13,18 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Yuuki Wesp</Authors>
     <Company>Ancient Project</Company>
-    <Version>0.60.345</Version>
+    <Version>0.60.345.1</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration) == 'Debug'">
+    <BumpRevision>true</BumpRevision>
+    <BumpLabelDigits>4</BumpLabelDigits>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="morelinq" Version="3.2.0" />
+    <PackageReference Include="MSBump" Version="2.3.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Sprache" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
