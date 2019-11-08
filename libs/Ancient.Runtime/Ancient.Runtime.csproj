@@ -7,7 +7,7 @@
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileVersion>0.50.345.603</FileVersion>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>Ancient Project</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -19,9 +19,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="morelinq" Version="3.1.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="morelinq" Version="3.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview6.19303.8" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0" />
   </ItemGroup>
 </Project>
