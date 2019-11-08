@@ -3,10 +3,19 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Version>0.50.345</Version>
+    <Version>0.60.345</Version>
     <AssemblyVersion>0.50.345</AssemblyVersion>
     <FileVersion>0.50.345</FileVersion>
     <PlatformTarget>x64</PlatformTarget>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://raw.githubusercontent.com/0xF6/ancient_cpu/master/Rune/resource/icon.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/0xF6/ancient_cpu</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/0xF6/ancient_cpu</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Yuuki Wesp</Authors>
+    <Company>Ancient Project</Company>
+    <Copyright>(C) 2019 Yuuki Wesp</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
