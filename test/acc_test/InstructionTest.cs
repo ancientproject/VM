@@ -91,8 +91,8 @@ namespace ancient.runtime.compiler.test
             Assert.Equal(".mva &(0x0) &(0xC) <| $(0x74)", result.Last());
         }
         [Theory]
-        [InlineData(".mva &(0x0) &(0xC) <| $(0xFF)")]
-        [InlineData(".mva &(0x0) &(0xC) <| @char_t('ÿ')")]
+        [InlineData(".mva &(0x0) &(0xC) <| $(0x66)")]
+        [InlineData(".mva &(0x0) &(0xC) <| @char_t('f')")]
         public void PushA(string code)
         {
             var result = new AssemblerSyntax().PushA.End().Parse(code);
@@ -102,7 +102,7 @@ namespace ancient.runtime.compiler.test
                 Assert.Equal(IID.mva, i.ID);
                 Assert.Equal(0x0, i._addressBus);
                 Assert.Equal(0xC, i._addressDev);
-                Assert.Equal(0xFF, i._value);
+                Assert.Equal(0x66, i._value);
             }
         }
         [Theory]
