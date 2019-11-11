@@ -9,7 +9,7 @@
   "private": false,
   "dependencies": {
     "@types/lodash": "^4.14.146",
-    "@types/node": "^12.12.6",
+    "@types/node": "^12.12.7",
     "@types/ramda": "^0.26.33",
     "lodash": "^4.17.15",
     "ramda": "^0.26.1",
