@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/lodash": "^4.14.147",
     "@types/node": "^12.12.7",
-    "@types/ramda": "^0.26.33",
+    "@types/ramda": "^0.26.34",
     "lodash": "^4.17.15",
     "ramda": "^0.26.1",
     "typescript": "^3.7.2"
