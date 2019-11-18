@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@types/lodash": "^4.14.147",
+    "@types/lodash": "^4.14.148",
     "@types/node": "^12.12.7",
     "@types/ramda": "^0.26.34",
     "lodash": "^4.17.15",
