@@ -337,3 +337,7 @@ etc/aip/ancient-sdk-cache/
 etc/aip/ancient-sdk\.back\.aip
 
 *.vsix
+
+*.lock
+
+vm/rust/target/
