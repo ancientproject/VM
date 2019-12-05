@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Yuuki Wesp</Authors>
     <AssemblyVersion>0.50.345.603</AssemblyVersion>
-    <Version>0.60.345.1</Version>
+    <Version>0.60.345.2</Version>
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileVersion>0.50.345.603</FileVersion>
