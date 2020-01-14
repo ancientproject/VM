@@ -54,6 +54,17 @@
 ![image](https://user-images.githubusercontent.com/13326808/60311909-e71fa900-9961-11e9-96f0-bf4c4a45681c.png)
 
 
+<details>
+  <summary>Spoiler</summary>
+  
+![meme]((https://user-images.githubusercontent.com/13326808/72352994-55586d00-36f4-11ea-8667-39475c9fd69f.png) 
+
+  by 
+ [@ViktorChernyaev](https://github.com/ViktorChernyaev)
+</details>
+
+
+
 
 ##### Env flags 
 ```yaml
