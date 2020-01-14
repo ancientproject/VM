@@ -57,7 +57,7 @@
 <details>
   <summary>Spoiler</summary>
   
-![meme]((https://user-images.githubusercontent.com/13326808/72352994-55586d00-36f4-11ea-8667-39475c9fd69f.png) 
+![meme](https://user-images.githubusercontent.com/13326808/72352994-55586d00-36f4-11ea-8667-39475c9fd69f.png) 
 
   by 
  [@ViktorChernyaev](https://github.com/ViktorChernyaev)
