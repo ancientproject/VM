@@ -22,12 +22,12 @@
     {
         public static void InitializeProcess()
         {
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 Console.Title = "cpu_host";
             IntToCharConverter.Register<char>();
-            
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 Console.OutputEncoding = Encoding.Unicode;
         }
 
@@ -53,16 +53,16 @@
 
         public static void InitializeMemory(Bus bus, params string[] args)
         {
-            if (bus.State.halt != 0) 
+            if (bus.State.halt != 0)
                 return;
             if (!args.Any())
                 bus.State.Load("<chip>", 0xB00B500000);
             else
             {
-                var nameFile = Path.Combine(Path.GetDirectoryName(args.First()),Path.GetFileNameWithoutExtension(args.First()));
+                var nameFile = Path.Combine(Path.GetDirectoryName(args.First()), Path.GetFileNameWithoutExtension(args.First()));
                 var file = new FileInfo($"{nameFile}.dlx");
                 var bios = new FileInfo($"{nameFile}.bios");
-                var pdb  = new FileInfo($"{nameFile}.pdb");
+                var pdb = new FileInfo($"{nameFile}.pdb");
 
                 if (AppFlag.GetVariable("VM_ATTACH_DEBUGGER") && pdb.Exists)
                     bus.AttachDebugger(new Debugger(DebugSymbols.Open(File.ReadAllBytes(pdb.FullName))));
@@ -71,7 +71,7 @@
                     var asm = AncientAssembly.LoadFrom(bios.FullName);
                     var bytes = asm.GetILCode();
                     var meta = asm.GetMetaILCode();
-                    bus.State.Load("<bios>",CastFromBytes(bytes));
+                    bus.State.Load("<bios>", CastFromBytes(bytes));
                     bus.State.LoadMeta(meta);
                 }
                 if (file.Exists)
@@ -79,11 +79,11 @@
                     var asm = AncientAssembly.LoadFrom(file.FullName);
                     var bytes = asm.GetILCode();
                     var meta = asm.GetMetaILCode();
-                    bus.State.Load("<exec>",CastFromBytes(bytes));
+                    bus.State.Load("<exec>", CastFromBytes(bytes));
                     bus.State.LoadMeta(meta);
                 }
                 else
-                    bus.State.Load("<chip>",0xB00B5000);
+                    bus.State.Load("<chip>", 0xB00B5000);
             }
         }
 
@@ -95,11 +95,9 @@
             InitializeProcess();
             var bus = new Bus();
 
-            
-
             InitializeFlags(bus);
 
-            if(AppFlag.GetVariable("VM_TRACE"))
+            if (AppFlag.GetVariable("VM_TRACE"))
                 DeviceLoader.OnTrace += Console.WriteLine;
 
             DeviceLoader.AutoGrub(bus.Add);
@@ -130,7 +128,6 @@
             throw new Exception("invalid offset file.");
         }
 
-
         public static void InteractiveConstruction(Bus bus)
         {
             bus.State.km = true;
@@ -139,7 +136,7 @@
             {
                 Console.Write("> ".Pastel(Color.Gray));
                 var input = Console.ReadLine();
-                if(input is null)
+                if (input is null)
                     continue;
 
                 if (!input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase))
@@ -149,9 +146,9 @@
                 }
 
                 // shit))0
-                if (input.Length < "0x000000000".Length)
+                if (input.Length < 11)
                 {
-                    var need = "0x0000000000".Length;
+                    var need = 12;
                     var current = input.Length;
                     var diff = (need - current);
                     input = $"{input}{new string('0', diff)}";
@@ -162,7 +159,6 @@
                 bus.State.Append(decoded);
                 bus.cpu.Step();
             }
-            
         }
     }
 }
