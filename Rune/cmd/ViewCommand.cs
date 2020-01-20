@@ -18,7 +18,6 @@
                 Description = "View file as hex table."
             };
 
-
             app.HelpOption("-h|--help");
             var cmd = new ViewCommand();
             var file = app.Argument("<file>", "file name");
@@ -37,7 +36,6 @@
 
         public int Execute(string file)
         {
-            var dir = Directory.GetCurrentDirectory();
             var info = new FileInfo(file);
 
             if (!info.Exists)

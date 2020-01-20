@@ -36,6 +36,7 @@
             {
                 case RegistryType.github:
                     return new GitHubOrgRegistry(url);
+
                 default:
                     throw new NotSupportedException();
             }
@@ -67,7 +68,7 @@
         public Assembly Put(string id, out byte[] assembly)
         {
             var repo = client.Repository.GetAllForUser(owner).Result.FirstOrDefault(x => x.Name == id);
-            assembly = new byte[0];
+            assembly = Array.Empty<byte>();
             if (repo is null)
             {
                 Console.WriteLine($"{":thought_balloon:".Emoji()} [github] {"package".Nier()} '{id}' not found in '{owner}'".Color(Color.Orange));
@@ -106,10 +107,10 @@
         }
     }
 
-
     public interface IRegistry
     {
         bool Exist(string id);
+
         Assembly Put(string id, out byte[] assemblyBytes);
     }
 }

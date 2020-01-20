@@ -8,10 +8,11 @@
 
         public orb(byte next) : base(IID.orb)
         {
-            if(next >= 16)
+            if (next >= 16)
                 throw new InvalidCastException($"[orb] too many next read instruction");
             _next = next;
         }
-        protected override void OnCompile() => SetRegisters(r1: _next);
+
+        protected override void OnCompile() => Construct(r1: _next);
     }
 }

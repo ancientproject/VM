@@ -22,7 +22,6 @@
                 Description = "Build all files from project"
             };
 
-
             app.HelpOption("-h|--help");
             var type = app.Option("-t|--temp <bool>", "Is temp", CommandOptionType.BoolValue);
             var dotnetNew = new BuildCommand();
@@ -48,7 +47,7 @@
             var ancient_home = Environment.GetEnvironmentVariable("ANCIENT_HOME", EnvironmentVariableTarget.User);
 
             if (ancient_home is null)
-                throw new InvalidOperationException($"env variable 'ANCIENT_HOME' is not set.");
+                throw new InvalidOperationException($"Env variable 'ANCIENT_HOME' is not set.");
             if (!new DirectoryInfo(ancient_home).Exists)
                 throw new InvalidOperationException($"Env variable 'ANCIENT_HOME' is invalid.");
 
@@ -68,14 +67,13 @@
                 outputDir = "obj";
             var Project = AncientProject.FromLocal();
             argBuilder.Add($"-o ./{outputDir}/{Project.Name}");
-            if(Project.Extension != null)
+            if (Project.Extension != null)
                 argBuilder.Add($"-e {Project.Extension}");
             argBuilder.Add($"-s \"{files.First()}\"");
 
             var external = new ExternalTools(acc_bin, string.Join(" ", argBuilder));
             Directory.CreateDirectory(Path.Combine(directory, outputDir));
             return external.Start().Wait().ExitCode();
-
         }
     }
 }

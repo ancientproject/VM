@@ -20,7 +20,6 @@
                 Description = "Execute project in Ancient VM"
             };
 
-
             app.HelpOption("-h|--help");
             var dotnetBuild = new BuildCommand();
             var vm = new VMCommand();
@@ -30,7 +29,7 @@
             var isInteractive = app.Option("-i|--interactive", "Start with interactive mode", CommandOptionType.BoolValue);
             app.OnExecute(() =>
             {
-                if(isInteractive.BoolValue.HasValue)
+                if (isInteractive.BoolValue.HasValue)
                     return vm.Execute(isDebug, keepMemory, fastWrite, isInteractive);
                 var buildResult = dotnetBuild.Execute(true);
                 return buildResult != 0 ? buildResult : vm.Execute(isDebug, keepMemory, fastWrite, isInteractive);
@@ -71,11 +70,10 @@
                 Directory.CreateDirectory("obj");
 
             var files = Directory.GetFiles(Path.Combine("obj"), "*.*")
-                .Where(x => x.EndsWith(".dlx") || x.EndsWith(".bios"));
+                .Where(x => x.EndsWith(".dlx") || x.EndsWith(".bios")).ToArray();
 
-            if(files.Any())
+            if (files.Any())
                 argBuilder.Add($"\"{Path.Combine("obj", Path.GetFileNameWithoutExtension(files.First()))}\"");
-
 
             var external = new ExternalTools(vm_bin, string.Join(" ", argBuilder));
             return external
@@ -85,7 +83,7 @@
                 .WithEnv("REPL", isInteractive.BoolValue.HasValue)
                 .WithEnv("CLI", true)
                 .WithEnv("CLI_WORK_PATH", dir)
-                
+
                 .Start()
                 .Wait().ExitCode();
         }

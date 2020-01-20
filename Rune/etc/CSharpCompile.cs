@@ -6,7 +6,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
     using ancient.runtime;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -20,7 +19,7 @@
             var coreDir = Directory.GetParent(dd);
             var refs = new List<MetadataReference>();
 
-            refs.AddRange(new []
+            refs.AddRange(new[]
             {
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
 
@@ -40,20 +39,16 @@
                 .AddSyntaxTrees(CSharpSyntaxTree.ParseText(code));
             var temp = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
             var result = compilation.Emit(temp);
-            if(result.Success)
+            if (result.Success)
                 Console.WriteLine($".. OK".Color(Color.DimGray));
-            else 
+            else
                 Console.WriteLine($".. FAIL".Color(Color.DimGray));
 
-            if (!result.Success)
-            {
-                var b = new StringBuilder();
-                foreach (var diagnostic in result.Diagnostics)
-                    Console.WriteLine(diagnostic.ToString().Color(Color.Red));
-                return null;
-            }
-
-            return File.ReadAllBytes(temp);
+            if (result.Success)
+                return File.ReadAllBytes(temp);
+            foreach (var diagnostic in result.Diagnostics)
+                Console.WriteLine(diagnostic.ToString().Color(Color.Red));
+            return null;
         }
     }
 }

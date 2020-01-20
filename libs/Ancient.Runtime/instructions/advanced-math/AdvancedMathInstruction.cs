@@ -13,10 +13,10 @@
 
         protected override void OnCompile()
         {
-            if(_r2 == null)
-                SetRegisters(_r1);
+            if (_r2 == null)
+                Construct(_r1);
             else
-                SetRegisters(_r1, _r2.Value);
+                Construct(_r1, _r2.Value);
         }
     }
 }
