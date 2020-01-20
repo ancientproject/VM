@@ -11,6 +11,6 @@
             _index2 = index2;
         }
 
-        protected override void OnCompile() => SetRegisters(_index1, _index2);
+        protected override void OnCompile() => Construct(_index1, _index2);
     }
 }

@@ -11,11 +11,13 @@
             _index = index;
             _value = value;
         }
+
         public ldx(ushort index, bool value) : base(IID.ldx)
         {
             _index = index;
             _value = (ushort)(value ? 1 : 0);
         }
+
         public ldx(ushort index, ushort value, byte x2) : base(IID.ldx)
         {
             _index = index;
@@ -30,7 +32,7 @@
 
             var r1 = (byte)((_index & 0xF0) >> 4);
             var r2 = (byte)(_index & 0xF);
-            SetRegisters(r1, r2, 0x0, u1, u2, x2:_x2);
+            Construct(r1, r2, 0x0, u1, u2, x2: _x2);
         }
     }
 }
