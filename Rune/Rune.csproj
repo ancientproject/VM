@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleTools" Version="0.5.2" />
+    <PackageReference Include="ConsoleTools" Version="0.5.4" />
     <PackageReference Include="EmojiOne.NETStandard" Version="4.0.1" />
     <PackageReference Include="Flurl" Version="2.8.2" />
     <PackageReference Include="Flurl.Http" Version="2.4.2" />
