@@ -13,19 +13,19 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Yuuki Wesp</Authors>
     <Company>Ancient Project</Company>
-    <Version>0.60.345.6</Version>
+    <Version>0.60.345.7</Version>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpRevision>true</BumpRevision>
     <BumpLabelDigits>4</BumpLabelDigits>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="morelinq" Version="3.3.2" />
-    <PackageReference Include="MSBump" Version="2.3.2">
+    <PackageReference Include="Ivy.Versioning" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sprache" Version="2.2.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Sprache" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ancient.Runtime\Ancient.Runtime.csproj" />
