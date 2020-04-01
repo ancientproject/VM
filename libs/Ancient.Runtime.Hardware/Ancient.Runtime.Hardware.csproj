@@ -14,14 +14,14 @@
     <PackageIconUrl>https://raw.githubusercontent.com/0xF6/ancient_cpu/master/Rune/resource/icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/0xF6/ancient_cpu</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.60.345.8</Version>
+    <Version>0.60.345.12</Version>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpRevision>true</BumpRevision>
     <BumpLabelDigits>4</BumpLabelDigits>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MSBump" Version="2.3.2">
+    <PackageReference Include="Ivy.Versioning" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
