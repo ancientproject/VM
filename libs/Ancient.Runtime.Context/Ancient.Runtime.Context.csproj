@@ -23,7 +23,7 @@
     <BumpLabelDigits>4</BumpLabelDigits>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ivy.Versioning" Version="3.0.0">
+    <PackageReference Include="Ivy.Versioning" Version="3.0.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
