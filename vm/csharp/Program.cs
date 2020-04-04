@@ -89,6 +89,7 @@ namespace vm
 
         public static async Task Main(string[] args)
         {
+            var spin = new SpinWait();
             if (AppFlag.GetVariable("MANAGED_DEBUGGER_WAIT"))
                 HandleDebugger();
 
@@ -113,9 +114,8 @@ namespace vm
             while (bus.State.halt == 0)
             {
                 bus.cpu.Step();
-                await Task.Delay(1).ConfigureAwait(false);
+                spin.SpinOnce();
             }
-
             bus.Unload();
         }
 
