@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace vm.component
     {
         public void Eval()
         {
-            using var watcher = new StopwatchOperation("eval operation");
+            //using var watcher = new StopwatchOperation("eval operation");
             MemoryManagement.FastWrite = fw;
             if (bf)
             {
@@ -396,6 +396,7 @@ namespace vm.component
                 mem[0x17] = 0x0;
             }
             /* @break :: end */
+            IncrementClockStep();
         }
 
         public class Evaluate
@@ -443,6 +444,37 @@ namespace vm.component
             {
                 bus.cpu.halt(0xA22, e.Message);
             }
+        }
+
+
+
+
+
+        private int clockStep { get; set; }
+
+
+        public float GetHertz()
+        {
+            var sec = (float)(DateTimeOffset.UtcNow - StartPoint).TotalSeconds;
+
+            if (sec >= 1)
+                return 0;
+
+            return Round(clockStep / sec, 2);
+        }
+
+        private DateTimeOffset StartPoint { get; set; }
+        private void IncrementClockStep()
+        {
+            if (StartPoint == default)
+                StartPoint = DateTimeOffset.UtcNow;
+            if ((DateTimeOffset.UtcNow - StartPoint).TotalSeconds >= 1)
+            {
+                StartPoint = DateTimeOffset.UtcNow;
+                clockStep = 0;
+            }
+
+            clockStep++;
         }
     }
 }
