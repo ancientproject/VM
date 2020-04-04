@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -379,11 +379,9 @@
         }
 
         #region trace
-
         private void trace(string str)
         {
             if(tc) WriteLine(str);
-            Trace.WriteLine(str);
             OnTrace?.Invoke(str);
         }
 
