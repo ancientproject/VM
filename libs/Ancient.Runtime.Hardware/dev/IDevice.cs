@@ -18,5 +18,6 @@
     public interface IBusGate
     {
         void assignBus(dynamic bus);
+        dynamic getBus();
     }
 }

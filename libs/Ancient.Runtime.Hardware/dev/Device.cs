@@ -50,19 +50,26 @@
 
         private ulong currentAddress => connectedBus.State.curAddr;
 
-        void IBusGate.assignBus(dynamic bus)
+        void IBusGate.assignBus(dynamic bus) 
+            => connectedBus = ValidateBus(bus, true);
+        dynamic IBusGate.getBus() 
+            => ValidateBus(connectedBus, false);
+
+
+        private dynamic ValidateBus(dynamic bus, bool isWrite = true)
         {
             try
             {
+                // test structure
                 _ = $"{bus.State}";
-                _ = $"{bus.cpu}";
             }
             catch (RuntimeBinderException e)
             {
                 throw new CorruptedMemoryException(
-                    $"Instruction at address <???> accessed memory <0x{startAddress:X}-?assignBus*>. Memory could not be write.", e);
+                    $"Instruction at address <???> accessed memory <0x{startAddress:X}-?assignBus*>. Memory could not be {(isWrite ? "write" : "read")}.", e);
             }
-            connectedBus = bus;
+
+            return bus;
         }
 
         #endregion
