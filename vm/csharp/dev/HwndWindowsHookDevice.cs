@@ -1,11 +1,14 @@
 ﻿namespace vm.dev
 {
     using System;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
     using ancient.runtime;
     using component;
+    using UnitsNet;
+    using UnitsNet.Units;
 
     public class HwndWindowsHookDevice : Device
     {
@@ -36,10 +39,17 @@
         {
             while (!tokenSource.IsCancellationRequested)
             {
-                var value = state.GetHertz();
-                var formatted = value > 100 ? $"{MathF.Round(value / 1000f, 2)} GHz" : $"{value} Hz";
+                var freq = new Frequency(state.GetHertz(), FrequencyUnit.Hertz);
+                var type = FrequencyUnit.Hertz;
 
-                Console.Title = $"[vm_host] {formatted}";
+                if (freq.Gigahertz > 0.1)
+                    type = FrequencyUnit.Gigahertz;
+                else if (freq.Megahertz > 0.1)
+                    type = FrequencyUnit.Megahertz;
+                else if (freq.Kilohertz > 0.1)
+                    type = FrequencyUnit.Kilohertz;
+
+                Console.Title = $"[vm_host] {freq.ToUnit(type).ToString(CultureInfo.InvariantCulture)}";
                 await Task.Delay(200);
             }
         }
