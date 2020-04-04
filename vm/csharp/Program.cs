@@ -1,4 +1,4 @@
-﻿namespace vm
+namespace vm
 {
     using System;
     using System.Drawing;
@@ -23,7 +23,7 @@
         public static void InitializeProcess()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                Console.Title = "cpu_host";
+                Console.Title = "vm_host";
             IntToCharConverter.Register<char>();
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
