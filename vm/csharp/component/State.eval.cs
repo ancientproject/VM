@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -32,7 +32,7 @@
                     trace("call :: skip");
                     break;
 
-                case ushort opcode when opcode.In(0xD0..0xE8):
+                case { } opcode when opcode.In(0xD0..0xE8):
                     /* need @float-flag */
                     if (!ff) bus.cpu.halt(0xA9);
                     trace($"call :: [0xD0..0xE8]::0x{iid:X}");
@@ -67,7 +67,7 @@
                         0xE1 => f32u64 & Truncate(u64f32 & mem[r1]),
                         0xE2 => f32u64 & BitDecrement(u64f32 & mem[r1]),
                         0xE3 => f32u64 & BitIncrement(u64f32 & mem[r1]),
-                        _ => throw new CorruptedMemoryException($"")
+                        _ => throw new CorruptedMemoryException("")
                     };
                     /* @stack-forward-flag */
                     if (sf) stack.push(result);
