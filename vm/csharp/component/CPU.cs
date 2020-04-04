@@ -57,8 +57,9 @@
         public static string AssociationHaltCode(int reason, string text) => reason switch
         {
             0x0     => $"Power off",
-            0x4     => $"Bus offset conflict. {text}",
             0x1     => $"Bootable sector not found.",
+            0x2     => $"Reaching step limit exception.",
+            0x4     => $"Bus offset conflict. {text}",
             0xC     => $"Divide by zero - YOU JUST CREATED A BLACK HOLE!",
             0xF     => $"Corrupted memory.",
             0xA1    => $"Overflow exception.",

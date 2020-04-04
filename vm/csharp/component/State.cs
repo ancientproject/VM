@@ -2,7 +2,6 @@ namespace vm.component
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -233,6 +232,7 @@ namespace vm.component
         /// </summary>
         public sbyte halt { get; set; } = 0;
 
+
         /// <summary>
         /// Section addressing information
         /// </summary>
@@ -317,16 +317,15 @@ namespace vm.component
                 if (halt != 0) return 0;
                 lastAddr = curAddr;
                 if (++step == 0x90000)
-                    throw new StepOverflowException();
-                if (bus.find(0x0).read(0x599) != pc && ++step != 0x90000)
-                    return (curAddr = bus.find(0x0).read((i64 & pc++)));
-                bus.cpu.halt(0x77);
-                return 0xDEAD;
+                    return i64 | bus.cpu.halt(0x2);
+                if (bus.find(0x0).read(0x599) != pc)
+                    return curAddr = bus.find(0x0).read(i64 & pc++);
+                return i64 | bus.cpu.halt(0x77);
             }
-            catch (StepOverflowException) { throw; }
             catch
             {
-                if (!km) Array.Fill(mem, 0xDEADUL, 0, 16);
+                if (!km) 
+                    Array.Fill(mem, 0xDEADUL, 0, 16);
                 throw new CorruptedMemoryException($"Memory instruction at address 0x{curAddr:X4} access to memory 0x{pc:X4} could not be read.");
             }
         }
