@@ -97,7 +97,7 @@ namespace vm_test
             };
             load(mem);
             shot((uint)mem.Length);
-            Assert.AreEqual(18, state.step);
+            Assert.AreEqual(9, state.step);
             AssertRegister(x => State.u64f32 & x.mem[0x3], 3f);
         }
         [Test]
