@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Yuuki Wesp</Authors>
     <AssemblyVersion>0.50.345.603</AssemblyVersion>
-    <Version>0.60.345.12</Version>
+    <Version>0.60.345.19</Version>
     <LangVersion>8</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileVersion>0.50.345.603</FileVersion>
