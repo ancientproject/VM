@@ -5,6 +5,7 @@
     using System.Linq;
     using Ancient.ProjectSystem;
     using ancient.runtime;
+    using dev;
     using MoreLinq;
 
     public class Bus
@@ -31,6 +32,7 @@
 
             Add(new BIOS(cpu,this));
             Add(new Memory(0x0, 0x90000, this));
+            Add(new HwndWindowsHookDevice());
         }
 
         public void Add(IDevice device)
