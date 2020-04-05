@@ -307,9 +307,6 @@ namespace vm.component
         /// <exception cref="CorruptedMemoryException">
         /// Memory instruction at address access to memory could not be read.
         /// </exception>
-        /// <exception cref="StepOverflowException">
-        /// Too many step count
-        /// </exception>
         public ulong fetch()
         {
             try

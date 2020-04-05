@@ -86,6 +86,6 @@
 
         internal ulong pop4() => pop2() | (pop2() << 8);
         internal ulong pop8() =>  pop4() | (pop4() << 16);
-        internal ulong pop16() => pop8() | (pop8() << 32) ;
+        internal ulong pop16() => pop8() | (pop8() << 32);
     }
 }
