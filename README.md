@@ -69,10 +69,10 @@
 
 Once i read an [article on Wikipedia](https://en.wikibooks.org/wiki/Creating_a_Virtual_Machine/Register_VM_in_C) about writing custom VM and interpreter bytecode.    
 So, i wanted to give it a try.
-Initially, i planned to write a 4-bit CPU emulator, i actually wrote it - but with the development of the source code, bit rate of instructions increased, and emulator has a programming language that is very similar to Assembler language (and CSS, yeah).    
+Initially, i planned to write a 4-bit CPU emulator, afterwards i wrote it - but with the development of the source code, bit rate of instructions increased, and emulator has a programming language that is very similar to Assembler language (and CSS, yeah).    
 It was a wonderful experience, i faced unusual problems and came up with quite unusual solutions.   
 Since then, i continued to develop and improve different kinds of features in this project afterwards.  
-I do not pursue any goals (except of course vm speed and language usability), and i do not expect that my VM to be useful - but if you have any ideas on how to improve the project I’d be happy to hear from you.
+I do not pursue any goals (except of course vm speed and language usability), and i do not expect my VM to be useful - but if you have any ideas on how to improve the project I’d be happy to hear from you.
 
 
 
