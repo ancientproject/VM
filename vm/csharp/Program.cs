@@ -1,4 +1,4 @@
-namespace vm
+﻿namespace vm
 {
     using System;
     using System.Drawing;
@@ -56,7 +56,17 @@ namespace vm
             if (bus.State.halt != 0)
                 return;
             if (!args.Any())
-                bus.State.Load("<chip>", 0xB00B500000);
+            {
+                var snapshot_looping = new Instruction[]
+                {
+                    //new ldx(0x11, 0x1), 
+                    new ref_t(0x5),
+                    new nop(),
+                    new jump_t(0x5)
+                };
+                bus.State.Load("<exec>", snapshot_looping.Select(x => (ulong)x).ToArray());
+                //bus.State.Load("<chip>", 0xB00B50000);
+            }
             else
             {
                 var nameFile = Path.Combine(Path.GetDirectoryName(args.First()), Path.GetFileNameWithoutExtension(args.First()));
