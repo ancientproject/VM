@@ -11,7 +11,7 @@
 </h1>
 <!-- desc -->
 <h4 align="center">
-  8bit CPU Virtual Machine & Ancient Assembler-style language
+  8bit Virtual Machine & Ancient Assembler-style language
 </h4>
 
 <!-- classic badges -->
