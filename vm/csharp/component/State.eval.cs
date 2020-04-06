@@ -214,6 +214,9 @@
                         evaluation[e_index] = host;
                     break;
 
+                case 0x39: /* @readonly */
+                    break;
+
                 case 0xB5: /* @ixor */
                 case 0xB6: /* @ior */
 
