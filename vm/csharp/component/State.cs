@@ -214,13 +214,17 @@ namespace vm.component
         public virtual ulong step { get; set; }
 
         /// <summary>
-        /// L1 Cache memory
+        /// L1 Memory
         /// </summary>
         public ulong[] mem = new ulong[64];
         /// <summary>
         /// L1 Types 
         /// </summary>
         private ExternType[] mem_types = new ExternType[64];
+        /// <summary>
+        /// L1 Memory flags
+        /// </summary>
+        private ulong[] flags = new ulong[64];
 
         /// <summary>
         /// CPU Stack
