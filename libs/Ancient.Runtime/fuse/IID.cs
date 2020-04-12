@@ -30,7 +30,8 @@
         [OpCode(0x36)] call_i,
         [OpCode(0x37)] prune,
         [OpCode(0x38)] locals,
-        
+        [OpCode(0x39)] @readonly,
+
 
         [UnfCode] mvj, [UnfCode] raw,
 
