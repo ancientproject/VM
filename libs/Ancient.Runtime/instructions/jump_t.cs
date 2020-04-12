@@ -1,18 +1,6 @@
 ﻿namespace ancient.runtime
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using emit.@unsafe;
-
-    public static class Ex
-    {
-        public static IEnumerable<TResult> GeographicalScheme<TSource, TResult>(this IEnumerable<TSource> source,
-            Func<TSource, int, TResult> selector)
-        {
-            return source.Select(selector);
-        }
-    }
 
     public class jump_t : jump
     {
