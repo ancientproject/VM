@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
@@ -8,12 +8,13 @@
     <RootNamespace>Rune.CLI</RootNamespace>
     <ApplicationIcon>resource\icon.ico</ApplicationIcon>
     <StartupObject></StartupObject>
-    <Version>0.50.366</Version>
+    <Version>0.50.368</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ancient.ProjectSystem" Version="0.60.345.19" />
     <PackageReference Include="ConsoleTools" Version="0.5.4" />
     <PackageReference Include="EmojiOne.NETStandard" Version="4.0.1" />
     <PackageReference Include="Flurl" Version="2.8.2" />
@@ -31,7 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\libs\Ancient.Compiler.Service\Ancient.Compiler.Service.csproj" />
-    <ProjectReference Include="..\libs\Ancient.ProjectSystem\Ancient.ProjectSystem.csproj" />
     <ProjectReference Include="..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
   </ItemGroup>
 
