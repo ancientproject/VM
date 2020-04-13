@@ -2,18 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using Ancient.ProjectSystem;
     using cli;
-    using etc;
     using Internal;
 
-    public class BuildCommand : WithProject
+    public class BuildCommand : RuneCommand<BuildCommand>, IWithProject
     {
-        public static int Run(string[] args)
+        internal override CommandLineApplication Setup()
         {
             var app = new CommandLineApplication
             {
@@ -27,21 +24,12 @@
             var dotnetNew = new BuildCommand();
             app.OnExecute(() => dotnetNew.Execute(type.BoolValue.HasValue));
 
-            try
-            {
-                return app.Execute(args);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString().Color(Color.Red));
-                return 1;
-            }
+            return app;
         }
-
         public int Execute(bool isTemp)
         {
             var directory = Directory.GetCurrentDirectory();
-            if (!Validate(directory))
+            if (!this.Validate(directory))
                 return 1;
 
             var ancient_home = Environment.GetEnvironmentVariable("ANCIENT_HOME", EnvironmentVariableTarget.User);
