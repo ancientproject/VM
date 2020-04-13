@@ -12,5 +12,7 @@
         public List<string> Values { get; }
         public bool MultipleValues { get; set; }
         public string Value => Values.FirstOrDefault();
+
+        public bool IsEmpty() => string.IsNullOrEmpty(Value);
     }
 }
