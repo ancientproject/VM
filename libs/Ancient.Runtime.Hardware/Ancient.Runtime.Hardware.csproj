@@ -14,7 +14,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/0xF6/ancient_cpu/master/Rune/resource/icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/0xF6/ancient_cpu</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.60.345.38</Version>
+    <Version>0.60.345.51</Version>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpRevision>true</BumpRevision>
