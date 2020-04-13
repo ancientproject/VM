@@ -8,6 +8,7 @@
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Threading.Tasks;
     using cmd;
     using etc;
     using Microsoft.DotNet.PlatformAbstractions;
@@ -18,8 +19,8 @@
 
     internal class Host
     {
-        private static readonly Dictionary<string, Func<string[], int>> s_builtIns 
-            = new Dictionary<string, Func<string[], int>>
+        private static readonly Dictionary<string, Func<string[], Task<int>>> s_builtIns 
+            = new Dictionary<string, Func<string[], Task<int>>>
         {
             ["new"]         = NewCommand.Run,
             ["help"]        = HelpCommand.Run,
@@ -31,9 +32,10 @@
             ["clear"]       = ClearCommand.Run,
             ["remove"]      = RemoveCommand.Run,
             ["restore"]     = RestoreCommand.Run,
-            ["view"]        = ViewCommand.Run
+            ["view"]        = ViewCommand.Run,
+            ["config"]      = ConfigCommand.Run
         };
-        public static int Main(string[] args)
+        public static Task<int> Main(string[] args)
         {
             InitializeProcess();
 
@@ -44,7 +46,7 @@
             catch (Exception e)
             {
                 WriteLine(e.Message.Color(Color.OrangeRed));
-                return 1;
+                return Task.FromResult(1);
             }
         }
         private static void InitializeProcess()
@@ -75,11 +77,14 @@
                 WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
                 ForegroundColor = ConsoleColor.White;
             }
+
+            if (!Dirs.ConfigFile.Exists) 
+                Config.Ensure();
         }
 
         internal static bool Verbose { get; set; }
 
-        internal static int ProcessArgs(string[] args)
+        internal static async Task<int> ProcessArgs(string[] args)
         {
             var success = true;
             var command = string.Empty;
@@ -135,7 +140,7 @@
 
             int exitCode;
             if (s_builtIns.TryGetValue(command, out var builtIn))
-                exitCode = builtIn(appArgs.ToArray());
+                exitCode = await builtIn(appArgs.ToArray());
             else
             {
                 WriteLine("Could not execute because the specified command or file was not found.".Color(Color.Red));
