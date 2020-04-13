@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Drawing;
     using System.IO;
+    using System.Threading.Tasks;
     using Ancient.ProjectSystem;
     using cli;
     using etc;
@@ -11,7 +12,7 @@
 
     public class RestoreCommand : WithProject
     {
-        public static int Run(string[] args)
+        public static async Task<int> Run(string[] args)
         {
             var app = new CommandLineApplication
             {
@@ -27,7 +28,7 @@
             app.OnExecute(() => cmd.Execute(registry));
             try
             {
-                return app.Execute(args);
+                return await app.Execute(args);
             }
             catch (Exception ex)
             {
@@ -37,7 +38,7 @@
         }
 
 
-        public int Execute(CommandOption registryOption)
+        public async Task<int> Execute(CommandOption registryOption)
         {
             var registry = registryOption.HasValue() ? registryOption.Value() : "github+https://github.com/ancientproject";
             var dir = Directory.GetCurrentDirectory();
@@ -48,7 +49,7 @@
             {
                 if (!indexer.Exist(package))
                 {
-                    if(!Registry.By(registry).Exist(package))
+                    if(!await Registry.By(registry).Exist(package))
                     {
                         Console.WriteLine($"{":page_with_curl:".Emoji()} '{package}' is {"not".Nier(0).Color(Color.Red)} found in '{registry}' registry.");
                         continue;
@@ -56,7 +57,7 @@
 
                     try
                     {
-                        var asm = Registry.By(registry).Put(package, out var bytes);
+                        var (asm, bytes) = await Registry.By(registry).Fetch(package);
 
                         if (asm is null)
                         {

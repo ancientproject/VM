@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Threading.Tasks;
     using Ancient.ProjectSystem;
     using cli;
     using etc;
@@ -13,7 +14,7 @@
 
     public class RunCommand : WithProject
     {
-        public static int Run(string[] args)
+        public static async Task<int> Run(string[] args)
         {
             var app = new CommandLineApplication
             {
@@ -30,7 +31,7 @@
 
             try
             {
-                return app.Execute(args);
+                return await app.Execute(args);
             }
             catch (Exception ex)
             {

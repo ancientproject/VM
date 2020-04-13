@@ -5,13 +5,14 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using cli;
     using etc;
     using Internal;
 
     public class VMCommand : WithProject
     {
-        public static int Run(string[] args)
+        public static async Task<int> Run(string[] args)
         {
             var app = new CommandLineApplication
             {
@@ -36,7 +37,7 @@
             });
             try
             {
-                return app.Execute(args);
+                return await app.Execute(args);
             }
             catch (Exception ex)
             {

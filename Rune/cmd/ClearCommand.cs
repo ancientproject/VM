@@ -2,13 +2,14 @@
 {
     using System;
     using System.Drawing;
+    using System.Threading.Tasks;
     using Ancient.ProjectSystem;
     using cli;
     using etc;
 
     public class ClearCommand
     {
-        public static int Run(string[] args)
+        public static async Task<int> Run(string[] args)
         {
             var app = new CommandLineApplication
             {
@@ -24,7 +25,7 @@
 
             try
             {
-                return app.Execute(args);
+                return await app.Execute(args);
             }
             catch (Exception ex)
             {

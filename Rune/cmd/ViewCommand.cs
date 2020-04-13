@@ -3,13 +3,14 @@
     using System;
     using System.Drawing;
     using System.IO;
+    using System.Threading.Tasks;
     using ancient.runtime.tools;
     using cli;
     using etc;
 
     public class ViewCommand
     {
-        public static int Run(string[] args)
+        public static async Task<int> Run(string[] args)
         {
             var app = new CommandLineApplication
             {
@@ -25,7 +26,7 @@
 
             try
             {
-                return app.Execute(args);
+                return await app.Execute(args);
             }
             catch (Exception ex)
             {

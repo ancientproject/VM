@@ -3,17 +3,18 @@
     using System.Drawing;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
     using etc;
     using static System.Console;
 
     public class HelpCommand
     {
-        public static int Run(string[] args)
+        public static Task<int> Run(string[] args)
         {
             if (args.Any())
                 return Host.Main(new[] { args[0], "--help" });
             PrintHelp();
-            return 0;
+            return Task.FromResult(1);
         }
 
         public static void PrintHelp()

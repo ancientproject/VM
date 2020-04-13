@@ -19,7 +19,7 @@
             Arguments = new List<CommandArgument>();
             Commands = new List<CommandLineApplication>();
             RemainingArguments = new List<string>();
-            Invoke = () => 0;
+            Invoke = () => Task.FromResult(0);
         }
 
         public CommandLineApplication Parent { get; set; }
@@ -33,7 +33,7 @@
         public List<CommandArgument> Arguments { get; }
         public List<string> RemainingArguments { get; }
         public bool IsShowingInformation { get; protected set; }  // Is showing help or version?
-        public Func<int> Invoke { get; set; }
+        public Func<Task<int>> Invoke { get; set; }
         public Func<string> LongVersionGetter { get; set; }
         public Func<string> ShortVersionGetter { get; set; }
         public List<CommandLineApplication> Commands { get; }
@@ -79,11 +79,11 @@
         }
 
         public void OnExecute(Func<int> invoke) 
-            => Invoke = invoke;
+            => Invoke = () => Task.FromResult(invoke());
         public void OnExecute(Func<Task<int>> invoke) 
-            => Invoke = () => invoke().Result;
+            => Invoke = async () => await invoke();
 
-        public int Execute(params string[] args)
+        public async Task<int> Execute(params string[] args)
         {
             var command = this;
             CommandOption option = null;
@@ -203,10 +203,9 @@
                 if (!processed && arguments == null)
                 {
                     var currentCommand = command;
-                    foreach (var subcommand in command.Commands)
+                    foreach (var subcommand in 
+                        command.Commands.Where(subcommand => string.Equals(subcommand.Name, arg, StringComparison.OrdinalIgnoreCase)))
                     {
-                        if (!string.Equals(subcommand.Name, arg, StringComparison.OrdinalIgnoreCase)) 
-                            continue;
                         processed = true;
                         command = subcommand;
                         break;
@@ -231,7 +230,7 @@
             switch (option)
             {
                 case null:
-                    return command.Invoke();
+                    return await command.Invoke();
                 default:
                     command.ShowHint();
                     throw new CommandParsingException(command, $"Missing value for option '{option.LongName}'");
