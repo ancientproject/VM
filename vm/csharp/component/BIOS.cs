@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.Drawing;
+    using System.Text;
     using System.Threading;
     using ancient.runtime;
     using ancient.runtime.emit.@unsafe;
@@ -110,10 +111,15 @@
         public override void shutdown()
         {
             systemTimer.Stop();
-            var line = $"    system is stopped, total operating time: {systemTimer.Elapsed:g}    ";
-            Console.WriteLine(new string(' ', line.Length).PastelBg(Color.DarkRed));
-            Console.WriteLine(line.PastelBg(Color.DarkRed));
-            Console.WriteLine(new string(' ', line.Length).PastelBg(Color.DarkRed));
+            var line = $"    VM is stopped, total operating time: {systemTimer.Elapsed:g}    ";
+
+            var len = $"|{new string('-', line.Length)}|".Length;
+            Console.SetCursorPosition((Console.WindowWidth - len) / 2, Console.CursorTop);
+            Console.WriteLine($"|{new string('-', line.Length)}|".PastelBg(Color.DarkRed));
+            Console.SetCursorPosition((Console.WindowWidth - len) / 2, Console.CursorTop);
+            Console.WriteLine($"|{line}|".PastelBg(Color.DarkRed));
+            Console.SetCursorPosition((Console.WindowWidth - len) / 2, Console.CursorTop);
+            Console.WriteLine($"|{new string('-', line.Length)}|".PastelBg(Color.DarkRed));
         }
 
         public int X(Action _)
