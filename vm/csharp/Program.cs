@@ -36,7 +36,7 @@
             /* @0x11 */
             bus.State.tc = AppFlag.GetVariable("VM_TRACE");
             /* @0x12 */
-            bus.State.ec = AppFlag.GetVariable("VM_ERROR", true);
+            bus.State.ec = AppFlag.GetVariable("VM_ERROR", false);
             /* @0x13 */
             bus.State.km = AppFlag.GetVariable("VM_KEEP_MEMORY");
             /* @0x14 */
