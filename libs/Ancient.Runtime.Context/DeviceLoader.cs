@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -14,7 +13,7 @@
         public static DeviceImageLoadContext Context { get; internal set; }
         public static event Action<string> OnTrace;
 
-        static DeviceLoader() => OnTrace += x => Trace.WriteLine(x);
+        static DeviceLoader() => OnTrace += Console.WriteLine;
 
         public static void AutoGrub(Action<IDevice> hook)
         {
@@ -66,7 +65,7 @@
                 .Select(x => (IDevice) x);
             foreach (var dev in devList) hook(dev);
         }
-
+        
         private static void trace(string str) => OnTrace?.Invoke(str);
     }
 }
