@@ -29,7 +29,7 @@
 
         public FileSystemInfo FindImage(string devName, Version version)
         {
-            var corePath = $"deps/{devName}/{version.ToString(2)}/any/{devName}.image";
+            var corePath = $"deps/{devName}/{version.ToString(3)}/any/{devName}.image";
             return new FileSystemInfo[]
             {
                 new VMFileInfo(Path.Combine(CacheDir.FullName, corePath).Replace("\\", "/")),
