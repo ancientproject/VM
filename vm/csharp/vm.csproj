@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RuntimeIdentifiers>win10-x64;osx.10.14-x64;linux-x64</RuntimeIdentifiers>
-    <Version>0.50.407</Version>
+    <Version>0.50.409</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
@@ -31,6 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ancient.Runtime" Version="0.60.345.604" />
     <PackageReference Include="Ivy.Versioning" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -45,7 +46,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Context\Ancient.Runtime.Context.csproj" />
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
-    <ProjectReference Include="..\..\libs\Ancient.Runtime\Ancient.Runtime.csproj" />
   </ItemGroup>
 
 

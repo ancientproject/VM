@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/0xF6/ancient_cpu/master/Rune/resource/icon.png</PackageIconUrl>
@@ -13,21 +13,19 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Yuuki Wesp</Authors>
     <Company>Ancient Project</Company>
-    <Version>0.60.345.115</Version>
+    <Version>0.60.345.117</Version>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpRevision>true</BumpRevision>
     <BumpLabelDigits>4</BumpLabelDigits>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Ancient.Runtime" Version="0.60.345.604" />
     <PackageReference Include="Ivy.Versioning" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Sprache" Version="2.3.0" />
     <PackageReference Include="morelinq" Version="3.3.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Ancient.Runtime\Ancient.Runtime.csproj" />
   </ItemGroup>
 </Project>
