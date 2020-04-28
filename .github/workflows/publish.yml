@@ -1,0 +1,57 @@
+name: publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore
+    - name: packing acc binaries for win64
+      run: dotnet publish ./acc/acc.csproj -o out/acc/win64 -c release -r win-x64
+    - name: packing acc binaries for linux64
+      run: dotnet publish ./acc/acc.csproj -o out/acc/linux64 -c release -r linux-x64
+    - name: packing acc vm for linux64
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux64 -c release -r linux-x64
+    - name: packing acc vm for win64
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win64 -c release -r win-x64
+
+    - run: zip vm-linux64.zip . -r -9
+      working-directory: ./out/vm/linux64
+    - run: zip vm-win64.zip . -r -9
+      working-directory: ./out/vm/win64
+
+    - run: zip acc-linux64.zip . -r -9
+      working-directory: ./out/acc/linux64
+    - run: zip acc-win64.zip . -r -9
+      working-directory: ./out/acc/win64
+
+    - run: mv ./out/vm/win64/vm-win64.zip ./vm-win64.zip
+    - run: mv ./out/vm/linux64/vm-linux64.zip ./vm-linux64.zip
+    - run: mv ./out/acc/win64/acc-win64.zip ./acc-win64.zip
+    - run: mv ./out/acc/linux64/acc-linux64.zip ./acc-linux64.zip
+
+
+    - name: Create Release
+      id: create_release_linux
+      uses: ncipollo/release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        artifacts: "./**/*.zip"
+        allowUpdates: true 
+        commit: master 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag_name: ${{ github.ref }}
+        release_name: rune-cli release
+        draft: false
+        prerelease: false
