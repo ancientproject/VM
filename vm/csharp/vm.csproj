@@ -4,43 +4,24 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RuntimeIdentifiers>win10-x64;osx.10.14-x64;linux-x64</RuntimeIdentifiers>
-    <Version>0.70.410</Version>
+    <Version>0.70.411</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
+    <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ShouldCreateLogs>True</ShouldCreateLogs>
-    <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
-    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
-    <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
-    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
-    <AssemblyVersionSettings>None.None.None.None</AssemblyVersionSettings>
-    <UpdatePackageVersion>True</UpdatePackageVersion>
-    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
-    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
-    <PackageVersionSettings>AssemblyVersion.IncrementWithAutoReset.None</PackageVersionSettings>
-    <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
-  </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Ancient.Runtime" Version="0.60.345.604" />
-    <PackageReference Include="Ivy.Versioning" Version="3.1.0-beta.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Ancient.Runtime" Version="0.60.345.605" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="ObjectDumper.NET" Version="2.5.20033.1" />
     <PackageReference Include="Pastel" Version="1.3.1" />
-    <PackageReference Include="UnitsNet" Version="4.57.0" />
+    <PackageReference Include="UnitsNet" Version="4.59.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,7 +29,12 @@
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
   </ItemGroup>
 
-
+  <ItemGroup Condition="$(Configuration) == 'Debug'">
+    <PackageReference Include="Ivy.Versioning" Version="3.1.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpPatch>true</BumpPatch>
   </PropertyGroup>
