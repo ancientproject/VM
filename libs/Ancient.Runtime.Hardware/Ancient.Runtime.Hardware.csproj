@@ -10,7 +10,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/ancientproject/cli/master/resource/icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/0xF6/ancient_cpu</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.70.345.62</Version>
+    <Version>0.70.346.63</Version>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpRevision>true</BumpRevision>
@@ -20,7 +20,7 @@
     <PackageReference Include="Ancient.Runtime" Version="0.60.345.604" />
   </ItemGroup>
   <ItemGroup Condition="$(Configuration) == 'Debug'">
-    <PackageReference Include="Ivy.Versioning" Version="3.1.0.1">
+    <PackageReference Include="Ivy.Versioning" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
