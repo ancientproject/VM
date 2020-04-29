@@ -152,12 +152,6 @@
                 if (input is null)
                     continue;
 
-                if (!input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    Console.WriteLine("Invalid operation;".Pastel(Color.Red));
-                    continue;
-                }
-
                 if (input.StartsWith("0x"))
                 {
                     if (!ulong.TryParse(input.Remove(0, 2), NumberStyles.HexNumber, null, out _))
