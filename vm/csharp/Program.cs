@@ -9,6 +9,7 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using ancient.compiler.emit;
     using ancient.runtime;
     using ancient.runtime.context;
     using component;
@@ -17,6 +18,8 @@
     using ancient.runtime.tools;
     using MoreLinq;
     using Pastel;
+    using ancient.compiler.tokens;
+    using Sprache;
 
     internal class Program
     {
@@ -140,6 +143,8 @@
         {
             bus.State.km = true;
             bus.State.fw = true;
+            Console.WriteLine($"keem memory has {"enabled".Pastel(Color.GreenYellow)}");
+            Console.WriteLine($"fast write has {"enabled".Pastel(Color.GreenYellow)}");
             while (true)
             {
                 Console.Write("> ".Pastel(Color.Gray));
@@ -147,25 +152,48 @@
                 if (input is null)
                     continue;
 
-                if (!input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase))
+                if (!input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) || 
+                    ulong.TryParse(input.Remove(0, 2), NumberStyles.HexNumber, null, out _))
                 {
                     Console.WriteLine("Invalid operation;".Pastel(Color.Red));
                     continue;
                 }
 
-                // shit))0
-                if (input.Length < 11)
+                if (input.StartsWith("0x"))
                 {
-                    var need = 12;
-                    var current = input.Length;
-                    var diff = (need - current);
-                    input = $"{input}{new string('0', diff)}";
-                }
+                    // shit))0
+                    if (input.Length < 11)
+                    {
+                        var need = 12;
+                        var current = input.Length;
+                        var diff = (need - current);
+                        input = $"{input}{new string('0', diff)}";
+                    }
 
-                var decoded = ulong.Parse(input.Remove(0, 2), NumberStyles.HexNumber);
-                bus.State.halt = 0;
-                bus.State.Append(decoded);
-                bus.cpu.Step();
+                    var decoded = ulong.Parse(input.Remove(0, 2), NumberStyles.HexNumber);
+                    bus.State.halt = 0;
+                    bus.State.Append(decoded);
+                    bus.cpu.Step();
+                }
+                else
+                {
+                    var token = new AssemblerSyntax().Parser.Parse(input);
+                    if (token is InstructionExpression instruction)
+                    {
+                        bus.State.halt = 0;
+                        bus.State.Append(instruction.Instruction.Assembly());
+                        bus.cpu.Step();
+                    }
+
+                    if (token is ErrorCompileToken error)
+                    {
+                        var exp = error.ErrorResult.Expectations.First();
+                        var title = $"{error.ErrorResult.getWarningCode().To<string>().Pastel(Color.Orange)}";
+                        var message = $"character '{exp}' expected".Pastel(Color.Orange);
+                        Console.WriteLine($" :: {title} - {message}");
+                    }
+                }
+               
             }
         }
     }
