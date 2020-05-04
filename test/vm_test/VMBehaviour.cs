@@ -9,7 +9,7 @@ namespace vm_test
     using NUnit.Framework;
     using vm.component;
 
-    public abstract class VMBehaviour : IHalting
+    public abstract class VMBehaviour : IHalter
     {
         public Bus bus { get; private set; }
         public CPU cpu => bus.cpu;
