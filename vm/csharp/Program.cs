@@ -1,4 +1,4 @@
-namespace vm
+﻿namespace vm
 {
     using System;
     using System.Drawing;
@@ -60,15 +60,16 @@ namespace vm
                 return;
             if (!args.Any())
             {
-                var snapshot_looping = new Instruction[]
+                if (System.Diagnostics.Debugger.IsAttached && !AppFlag.GetVariable("MANAGED_DEBUGGER_WAIT"))
                 {
-                    //new ldx(0x11, 0x1), 
-                    new ref_t(0x5),
-                    new nop(),
-                    new jump_t(0x5)
-                };
-                bus.State.Load("<exec>", snapshot_looping.Select(x => (ulong)x).ToArray());
-                //bus.State.Load("<chip>", 0xB00B50000);
+                    var snapshot_looping = new Instruction[]
+                    {
+                        new ldx(0x11, 0x1),
+                        new nop()
+                    };
+                    bus.State.Load("<exec>", snapshot_looping.Select(x => (ulong)x).ToArray());
+                }
+                else bus.State.Load("<chip>", 0xB00B50000);
             }
             else
             {
