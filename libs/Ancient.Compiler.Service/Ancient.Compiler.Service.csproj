@@ -13,7 +13,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Yuuki Wesp</Authors>
     <Company>Ancient Project</Company>
-    <Version>0.70.359.120</Version>
+    <Version>0.70.379.120</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ancient.Runtime" Version="0.60.345.605" />

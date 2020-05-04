@@ -19,7 +19,6 @@
     using MoreLinq;
     using Pastel;
     using ancient.compiler.tokens;
-    using ancient.runtime.emit.sys;
     using Sprache;
 
     internal class Program
