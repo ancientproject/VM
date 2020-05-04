@@ -27,7 +27,7 @@
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 Console.Title = "vm_host";
-            IntToCharConverter.Register<char>();
+            IntConverter.Register<char>();
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
