@@ -10,7 +10,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/ancientproject/cli/master/resource/icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/0xF6/ancient_cpu</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.70.353.70</Version>
+    <Version>0.70.354.71</Version>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpRevision>true</BumpRevision>
