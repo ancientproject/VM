@@ -25,3 +25,4 @@ jobs:
 
       - name: Push generated package to GitHub registry
         run: nuget push .\**\*.nupkg -Source "GPR" -SkipDuplicate
+        continue-on-error: true
