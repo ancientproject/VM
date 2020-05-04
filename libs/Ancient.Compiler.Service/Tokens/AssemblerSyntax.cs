@@ -162,9 +162,12 @@
         /// </summary>
         /// <example>
         /// FloatToken.Parse("12.45") -> "12.45"
+        /// FloatToken.Parse("-12.45") -> "-12.45"
         /// </example>
-        public virtual Parser<string> FloatToken => 
-            (from @string in Parse.Decimal select @string)
+        public virtual Parser<string> FloatToken => (
+                from minus in Parse.Char('-').Optional()
+                from @string in Parse.DecimalInvariant 
+                select $"{minus.GetOrElse('+')}{@string}")
             .Token().Named("string token");
 
         /// <summary>

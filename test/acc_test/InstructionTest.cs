@@ -1,5 +1,6 @@
 namespace ancient.runtime.compiler.test
 {
+    using System;
     using System.Linq;
     using ancient.compiler;
     using ancient.compiler.tokens;
@@ -25,16 +26,15 @@ namespace ancient.runtime.compiler.test
 
         [Theory]
         [InlineData(".val @float_t(14.56)")]
+        [InlineData(".val @float_t(-14.56)")]
         public void FloatParseTest(string code)
         {
             var result = new AssemblerSyntax().NValue.End().Parse(code);
 
             if (result is InstructionExpression exp && exp.Instruction is val i)
-            {
-                Assert.Equal(14.56f, i._data);
-            }
+                Assert.Equal(14.56f, MathF.Abs((float) i._data));
         }
-        [Fact()]
+        [Fact]
         public void TransformationTest()
         {
             const string str = 
