@@ -92,7 +92,7 @@ I do not pursue any goals (except of course vm speed and language usability), an
   
 example:  
 ```assembler
-.ldx &(0x11) $(0x0) - disable trace
+.ldx &(0x11) <| $(0x0) - disable trace
 ``` 
 list: 
 ```yaml
