@@ -60,69 +60,7 @@
             if (bus.State.halt != 0)
                 return;
             if (!args.Any())
-            {
-                if (System.Diagnostics.Debugger.IsAttached && !AppFlag.GetVariable("MANAGED_DEBUGGER_WAIT"))
-                {
-                    var snapshot_looping = new object[]
-                    {
-                        // 0x0 - var 200
-                        // 0x1 - int i
-                        // 0x2 - double target
-                        // 0x3 - int -1
-                        // 0x4 - int temp
-                        // 0x5 - Math.pow(-1,i+1)
-                        // 0x6 - (2*i - 1)
-                        // 0x9 - pi
-                        // 0xA - ref
-                        new ldx(0x11, 0x1), // set trace=ON
-                        new ldx(0x18, 0x1), // enable float-mode
-                        new ldi(0x0, 200),  // max steps 
-                        new nop(),
-                        new orb(1),
-                        new val(0), // double target = 0;
-                        new pull(0x2),
-                        new orb(1),
-                        new val(-1),// const double minusOne = -1;
-                        new pull(0x3),
-                        // for start
-                        new ref_t(0xA), 
-                        // i++
-                        new inc(0x1), 
-
-                        // Math.pow(-1, i + 1)
-                        new dup(0x1, 0x5), 
-                        new inc(0x5),
-                        new pow(0x5, 0x3, 0x4),
-
-                        // (2 * i - 1)
-                        new dup(0x1, 0x6),
-                        new ldx(0x4, 2), 
-                        new mul(0x6, 0x4, 0x6),
-                        new dec(0x6),
-
-                        new div(0x4, 0x5, 0x6),
-                        new swap(0x4, 0x9), 
-                        // if result 0x9 cell is not infinity
-                        new ckft(0x9),
-                        // if i <= 200 -> continue
-                        new jump_u(0xA, 0x0, 0x1), 
-
-                        // print to console
-                        new prune(), 
-                        new locals(1),
-                        new EvaluationSegment(0x0, "u32"),
-                        new page(0x9),
-                        new call_i(Module.CompositeIndex("sys->write")),
-                        new halt() // shutdown
-                    };
-
-
-
-
-                    bus.State.Load("<exec>", snapshot_looping.Select(x => (ulong)x).ToArray());
-                }
-                else bus.State.Load("<chip>", 0xB00B50000);
-            }
+                bus.State.Load("<chip>", 0xB00B50000);
             else
             {
                 var nameFile = Path.Combine(Path.GetDirectoryName(args.First()), Path.GetFileNameWithoutExtension(args.First()));
