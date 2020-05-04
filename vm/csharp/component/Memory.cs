@@ -8,7 +8,7 @@
     using MoreLinq;
 
     
-
+    // TODO add more memory range
     [DebuggerTypeProxy(typeof(MemoryView))]
     public class Memory : Device
     {

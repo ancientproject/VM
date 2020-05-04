@@ -132,7 +132,7 @@
         public static ulong[] CastFromBytes(byte[] bytes)
         {
             if (bytes.Length % sizeof(ulong) == 0)
-                return bytes.Batch(sizeof(ulong)).Select(x => BitConverter.ToUInt64(x.Reverse().ToArray())).Reverse().ToArray();\
+                return bytes.Batch(sizeof(ulong)).Select(x => BitConverter.ToUInt64(x.Reverse().ToArray())).Reverse().ToArray();
             throw new Exception("invalid offset file.");
         }
 

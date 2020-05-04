@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     public sealed class Stack
     {
-        internal IHalting __halter;
+        internal IHalter __halter;
 
         private readonly Bus _bus;
-        private IHalting _cpuHalter => __halter ?? _bus.cpu;
+        private IHalter _cpuHalter => __halter ?? _bus.cpu;
         private State _provider => _bus.State;
         public Stack(Bus bus) => _bus = bus;
 

@@ -18,7 +18,6 @@
     {
         public void Eval()
         {
-            //using var watcher = new StopwatchOperation("eval operation");
             MemoryManagement.FastWrite = fw;
             if (bf)
             {
@@ -448,25 +447,16 @@
                 bus.cpu.halt(0xA22, e.Message);
             }
         }
-
-
-
-
+        #region Clock tracking
 
         private int clockStep { get; set; }
-
-
+        private DateTimeOffset StartPoint { get; set; }
         public float GetHertz()
         {
             var sec = (float)(DateTimeOffset.UtcNow - StartPoint).TotalSeconds;
-
-            if (sec >= 1)
-                return 0;
-
+            if (sec >= 1) return 0;
             return Round(clockStep / sec, 2);
         }
-
-        private DateTimeOffset StartPoint { get; set; }
         private void IncrementClockStep()
         {
             if (StartPoint == default)
@@ -476,8 +466,8 @@
                 StartPoint = DateTimeOffset.UtcNow;
                 clockStep = 0;
             }
-
             clockStep++;
         }
+        #endregion
     }
 }

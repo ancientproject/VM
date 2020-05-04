@@ -30,9 +30,8 @@
 
             scheme = DeviceScheme.Default;
 
-            Add(new BIOS(cpu,this));
+            Add(new BIOS(this));
             Add(new Memory(0x0, 0x90000, this));
-            Add(new HwndWindowsHookDevice());
         }
 
         public void Add(IDevice device)
@@ -59,7 +58,7 @@
         public void Unload()
         {
             if(ShutdownDevices)
-                Devices.Pipe(x => x.shutdown()).ToArray();
+                Devices.Pipe(x => x.shutdown()).Consume();
         }
 
         public override string ToString() => $"bus [{Devices.Count:00}/{Devices.Capacity:00}]";

@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Text;
     using System.Threading;
     using ancient.runtime;
     using ancient.runtime.emit.@unsafe;
@@ -12,7 +11,6 @@
 
     public class BIOS : Device
     {
-        private readonly CPU _cpu;
         private readonly Bus _bus;
         public Stopwatch systemTimer;
         public DateTime startTime;
@@ -57,9 +55,8 @@
         public long Ticks 
             => hpet ? systemTimer.ElapsedTicks : Environment.TickCount;
 
-        public BIOS(CPU cpu, Bus bus) : base(0x45, "<chipset>")
+        public BIOS(Bus bus) : base(0x45, "<chipset>")
         {
-            _cpu = cpu;
             _bus = bus;
             bios_guard = true;
             this.hpet = AppFlag.GetVariable("c69_bios_hpet");

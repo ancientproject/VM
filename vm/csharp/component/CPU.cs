@@ -8,7 +8,7 @@
     using MoreLinq;
     using static System.Console;
 
-    public class CPU : IHalting
+    public class CPU : IHalter
     {
         private Bus _bus { get; }
 

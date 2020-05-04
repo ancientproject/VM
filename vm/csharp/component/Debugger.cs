@@ -31,11 +31,9 @@
 
         public void handleBreak(ushort offset, CPU cpu) => OnBreak?.Invoke(offset, cpu, debugSymbols);
 
-        public override string ToString()
-        {
-            return debugSymbols is null ? 
+        public override string ToString() =>
+            debugSymbols is null ? 
                 $"debugger [not_connected] [0 symbols]" : 
                 $"debugger [connected] [{debugSymbols.symbols.Count} symbols]";
-        }
     }
 }

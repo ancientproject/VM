@@ -44,7 +44,7 @@ namespace vm_test
         public bool IsNegative() => state.nf;
 
         public void shot(uint count = 1) => 
-            Enumerable.Range(0, (int) count).Pipe(x => cpu.Step()).ToArray();
+            Enumerable.Range(0, (int) count).Pipe(x => cpu.Step()).Consume();
 
         public void AssertRegister<T>(Expression<Func<State, T>> exp, T value) where T : struct, IFormattable
         {

@@ -11,9 +11,12 @@
 
         public BitwiseContainer(ulong mem) => _value = mem;
 
-        public static implicit operator BitwiseContainer(ulong value) => new BitwiseContainer(value);
-        public static implicit operator BitwiseContainer(long value) => new BitwiseContainer((ulong)value);
-        public static implicit operator ulong(BitwiseContainer value) => value._value;
+        public static implicit operator BitwiseContainer(ulong value) 
+            => new BitwiseContainer(value);
+        public static implicit operator BitwiseContainer(long value) 
+            => new BitwiseContainer((ulong)value);
+        public static implicit operator ulong(BitwiseContainer value) 
+            => value._value;
 
         
         public static ulong operator &(BitwiseContainer _, ulong mask)
