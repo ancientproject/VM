@@ -319,7 +319,7 @@ namespace vm.component
                 lastAddr = curAddr;
                 if (++step == 0x90000)
                     return i64 | bus.cpu.halt(0x2);
-                if (bus.find(0x0).read(0x599) != pc)
+                if (bus.find(0x0).read(0x599) != pc - 0x600)
                     return curAddr = bus.find(0x0).read(i64 & pc++);
                 return i64 | bus.cpu.halt(0x77);
             }
