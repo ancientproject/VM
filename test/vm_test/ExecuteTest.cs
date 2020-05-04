@@ -17,6 +17,46 @@ namespace vm_test
 
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("ckft operation")]
+        public void ckftTest()
+        {
+            state.ff = true;
+            var mem = new ulong[]
+            {
+                new orb(1),
+                new val(1.0f),
+                new orb(1),
+                new val(float.PositiveInfinity),
+                new pull(0x0), 
+                new pull(0x1),
+                new ckft(0x0), 
+                new ckft(0x1),
+            };
+            load(mem);
+            shot(mem.Length);
+            AssertRegister(x => x.mem[0x0], (ulong)BitConverter.ToInt32(BitConverter.GetBytes(float.PositiveInfinity), 0));
+            AssertRegister(x => x.mem[0x1], (ulong)BitConverter.ToInt32(BitConverter.GetBytes(1.0f), 0));
+            Assert.True(IsHalt());
+        }
+
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("duplicate operation")]
+        public void DupTest()
+        {
+            var mem = new ulong[]
+            {
+                new ldi(0x0, 0x32),
+                new dup(0x0, 0x1), 
+            };
+            load(mem);
+            shot(mem.Length);
+            AssertRegister(x => x.mem[0x0], (ulong)0x32);
+            AssertRegister(x => x.mem[0x1], (ulong)0x32);
+        }
+
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
         [Description("float math operation")]
         public void FloatMathTest()
         {
