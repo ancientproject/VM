@@ -124,10 +124,8 @@
             else
                 InitializeMemory(bus, args);
 
-            while (bus.State.halt == 0)
-            {
+            while (bus.State.halt == 0) 
                 bus.cpu.Step();
-            }
             bus.Unload();
         }
 
