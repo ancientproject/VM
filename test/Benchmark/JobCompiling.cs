@@ -48,7 +48,7 @@
 
         private void Setup()
         {
-            IntToCharConverter.Register<char>();
+            IntConverter.Register<char>();
             bus = new Bus();
             bus.Add(new NullDevice());
             bus.Add(new RelDevice());

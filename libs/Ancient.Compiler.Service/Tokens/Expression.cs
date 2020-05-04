@@ -8,9 +8,6 @@
 
         public IdentifierExpression(string identifier) => Identifier = identifier;
 
-        public override string ToString()
-        {
-            return $"{Identifier}";
-        }
+        public override string ToString() => $"{Identifier}";
     }
 }

@@ -1,8 +1,10 @@
 ﻿namespace ancient.compiler.emit
 {
+    using System;
     using System.Collections.Generic;
     using tokens;
 
+    [Obsolete]
     public class DebugSymbolsSegment : IChainSegment<string>
     {
         public string Transform(IReadOnlyCollection<IInputToken> tokens)
@@ -11,9 +13,9 @@
             {
                 switch (token)
                 {
-                    case InstructionExpression i:
+                    case InstructionExpression _:
                         break;
-                    case TransformationContext t:
+                    case TransformationContext _:
                         break;
                 }
             }

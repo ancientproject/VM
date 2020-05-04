@@ -13,7 +13,7 @@ namespace vm_test
     {
 
         [OneTimeSetUp]
-        public void Setup() => IntToCharConverter.Register<char>();
+        public void Setup() => IntConverter.Register<char>();
 
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]

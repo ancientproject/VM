@@ -9,9 +9,7 @@ namespace ancient.compiler
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
-    using System.Security;
     using System.Text;
     using System.Text.RegularExpressions;
     using exceptions;
@@ -35,9 +33,9 @@ namespace ancient.compiler
                 Environment.SetEnvironmentVariable($"RUNE_COLOR_USE", "0");
                 Environment.SetEnvironmentVariable($"RUNE_NIER_USE", "0");
                 Environment.SetEnvironmentVariable($"NO_COLOR", "true");
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
-                Console.ForegroundColor = ConsoleColor.White;
+                ForegroundColor = ConsoleColor.Gray;
+                WriteLine($"no windows-terminal: coloring, emoji and nier has disabled.");
+                ForegroundColor = ConsoleColor.White;
             }
 
             Module.Boot();
@@ -60,8 +58,8 @@ namespace ancient.compiler
 
             var ver = FileVersionInfo.GetVersionInfo(typeof(Host).Assembly.Location).ProductVersion;
             
-            WriteLine($"Ancient assembler compiler version {ver} (default)".Pastel(Color.Gray));
-            WriteLine($"Copyright (C) Yuuki Wesp.\n\n".Pastel(Color.Gray));
+            WriteLine($"Ancient assembler compiler version {ver}".Pastel(Color.Gray));
+            WriteLine($"Copyright (C) 2020 Yuuki Wesp.\n\n".Pastel(Color.Gray));
             
             if (!args.sourceFiles.Any())
             {
