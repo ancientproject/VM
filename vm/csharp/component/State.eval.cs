@@ -172,8 +172,8 @@ namespace vm.component
                     break;
 
                 case 0xB3: /* @dup */
-                    trace($"call :: dup 0x{(u2 << 4) | u1:X}");
-                    mem[(u2 << 4) | u1] = mem[(r1 << 4) | r2];
+                    trace($"call :: dup 0x{(u1 << 4) | u2:X}");
+                    mem[(u1 << 4) | u2] = mem[(r1 << 4) | r2];
                     break;
 
                 case 0xB4: /* @ckft */
