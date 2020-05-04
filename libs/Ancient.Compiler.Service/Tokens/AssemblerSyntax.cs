@@ -184,12 +184,6 @@
             .Token()
             .Named("hex number");
 
-        [Obsolete]
-        public virtual Parser<string> IdentifierToken =>
-            (from word in Parse.AnyChar.Except(Parse.Char(' ')).Many().Text()
-                select word)
-            .Token()
-            .Named("identifier token");
 
         #endregion
 
