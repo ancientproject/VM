@@ -23,7 +23,7 @@
         public Break Null = (s, cpu, d) =>
         {
             Console.WriteLine("-=== BREAK ===-");
-            Console.WriteLine(JsonConvert.SerializeObject(cpu.State));
+            Console.WriteLine(JsonConvert.SerializeObject(cpu.State, Formatting.Indented));
             Console.WriteLine($"\n\n{d.symbols.FirstOrDefault(x => x.offset == s).line}");
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
