@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -177,10 +177,11 @@
                     break;
 
                 case 0xB4: /* @ckft */
-                    trace($"call :: ckft 0x{(r2 << 4) | r1:X}");
-                    if (ff && !float.IsFinite(u64f32 & mem[(r2 << 4) | r1]))
+                    trace($"call :: ckft 0x{(r1 << 4) | r2:X}");
+                    if (ff && !float.IsFinite(u64f32 & mem[(r1 << 4) | r2]))
                         bus.cpu.halt(0xA9);
                     break;
+
 
                 case 0x36: /* @call */
                     d16u sign = (u8 & r3, u8 & u1, u8 & u2, u8 & x1);
