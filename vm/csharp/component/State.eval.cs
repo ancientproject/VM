@@ -162,13 +162,19 @@ namespace vm.component
                     break;
 
                 case 0xB1: /* @inc */
-                    trace($"call :: increment 0x{r1:X}++");
-                    unchecked { mem[r1]++; }
+                    trace($"call :: increment [0x{r1:X}]++");
+                    if(!ff)
+                        unchecked { mem[r1]++; }
+                    else
+                        mem[r1] = f32u64 & ((u64f32 & mem[r1]) + 1f);
                     break;
 
                 case 0xB2:  /* @dec */
-                    trace($"call :: decrement 0x{r1:X}--");
-                    unchecked { mem[r1]--; }
+                    trace($"call :: decrement [0x{r1:X}]--");
+                    if (!ff)
+                        unchecked { mem[r1]--; }
+                    else
+                        mem[r1] = f32u64 & ((u64f32 & mem[r1]) - 1f);
                     break;
 
                 case 0xB3: /* @dup */
