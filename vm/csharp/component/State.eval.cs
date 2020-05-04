@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;

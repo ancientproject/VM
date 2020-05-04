@@ -1,11 +1,11 @@
 namespace vm_test
 {
-    using System;
-    using System.Linq;
     using ancient.runtime;
     using ancient.runtime.emit.sys;
     using ancient.runtime.hardware;
     using NUnit.Framework;
+    using System;
+    using System.Linq;
     using vm.component;
 
     [TestFixture]
@@ -18,8 +18,91 @@ namespace vm_test
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
         [Description("ckft operation")]
+        public void TestComplexCalculation()
+        {
+            var mem = new ulong[]
+            {
+                // 0x0 - var 200
+                // 0x1 - int i
+                // 0x2 - double target
+                // 0x3 - int -1
+                // 0x4 - int temp
+                // 0x5 - Math.pow(-1,i+1)
+                // 0x6 - (2*i - 1)
+                // 0x9 - pi
+                // 0xA - ref
+                new ldx(0x11, 0x1), // set trace=ON
+                new ldx(0x18, 0x1), // enable float-mode
+                new ldi(0x0, 200),  // max steps 
+                new nop(),
+                new orb(1),
+                new val(0.0f), // double target = 0;
+                new pull(0x2),
+                new orb(1),
+                new val(-1f),// const float minusOne = -1;
+                new pull(0x3),
+                // i++
+                new ldx(0x18, 0x1),
+                new inc(0x1),
+                
+
+                // Math.pow(-1, i + 1)
+                new dup(0x1, 0x5),
+                new inc(0x5),
+                new ldx(0x18, 0x1),
+                new pow(0x5, 0x3, 0x5),
+
+                // (2 * i - 1)
+                new dup(0x1, 0x6),
+                new orb(1),
+                new val(2.0f), // double target = 0;
+                new pull(0x4),
+                new mul(0x6, 0x4, 0x6),
+                new dec(0x6),
+
+                new div(0x4, 0x5, 0x6),
+                new swap(0x4, 0x9), 
+                // if result 0x9 cell is not infinity
+                new ckft(0x9)
+            };
+            load(mem);
+            shot();
+            AssertRegister<ulong>(x => x.mem[0x11], 0x1);
+            shot();
+            AssertRegister<ulong>(x => x.mem[0x18], 0x1);
+            shot();
+            AssertRegister<ulong>(x => x.mem[0x0], 200);
+            shot(3);
+            AssertRegister<ulong>(x => x.mem[0x2], State.f32u64 & 0.0f);
+            shot(2);
+            AssertRegister<ulong>(x => x.mem[0x3], State.f32u64 & -1.0f);
+            shot(2);
+            AssertRegister<ulong>(x => x.mem[0x1], State.f32u64 & 1f);
+            shot();
+            AssertRegister<ulong>(x => x.mem[0x1], state.mem[0x5]);
+            shot();
+            AssertRegister<ulong>(x => x.mem[0x5], State.f32u64 & (State.u64f32 & state.mem[0x1]) + 1f);
+            shot(2);
+            var t = State.u64f32 & state.mem[0x5];
+            AssertRegister<ulong>(x => x.mem[0x5], State.f32u64 & MathF.Pow(-1, 1 + 1));
+            shot(); // new dup(0x1, 0x6),
+            AssertRegister<ulong>(x => x.mem[0x1], state.mem[0x5]);
+            shot(2); // new val(2.0f), new pull(0x4),
+            AssertRegister<ulong>(x => x.mem[0x4], State.f32u64 & 2f);
+            shot(2); //  new mul(0x6, 0x4, 0x6), new dec(0x6),
+            AssertRegister<ulong>(x => x.mem[0x6], State.f32u64 & (2 * 1 - 1));
+            shot(); //  new div(0x4, 0x5, 0x6),
+            AssertRegister<ulong>(x => x.mem[0x4], State.f32u64 & MathF.Pow(-1, 1 + 1) / (2 * 1 - 1));
+        }
+
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("ckft operation")]
         public void ckftTest()
         {
+            static ulong float2raw(float value) =>
+                (ulong)BitConverter.ToInt32(BitConverter.GetBytes(value), 0);
+
             state.ff = true;
             var mem = new ulong[]
             {
@@ -27,16 +110,18 @@ namespace vm_test
                 new val(1.0f),
                 new orb(1),
                 new val(float.PositiveInfinity),
-                new pull(0x0), 
-                new pull(0x1),
+                new pull(0x0), // pull PositiveInfinity from stack into 0x0 cell
+                new pull(0x1), // pull 1.0f from stack into 0x1 cell
+
+                // validate finity value
                 new ckft(0x0), 
                 new ckft(0x1),
             };
             load(mem);
             shot(mem.Length);
-            AssertRegister(x => x.mem[0x0], (ulong)BitConverter.ToInt32(BitConverter.GetBytes(float.PositiveInfinity), 0));
-            AssertRegister(x => x.mem[0x1], (ulong)BitConverter.ToInt32(BitConverter.GetBytes(1.0f), 0));
-            Assert.True(IsHalt());
+            AssertRegister(x => x.mem[0x0], float2raw(float.PositiveInfinity));
+            AssertRegister(x => x.mem[0x1], float2raw(1.0f));
+            Assert.True(IsHalt()); // validate halting with x87 float exception
         }
 
         [Test]
