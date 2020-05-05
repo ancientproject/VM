@@ -81,6 +81,7 @@
             .Or(AdvMathInstruction(IID.biti)).Or(AdvMathInstruction(IID.bitd)).Or(AdvMathInstruction(IID.sin))
             .Or(AdvMathInstruction(IID.sinh))
 
+            .Or(AdvMathInstruction(IID.neg))
             .Or(AdvMathInstruction(IID.inc))
             .Or(AdvMathInstruction(IID.dec))
 

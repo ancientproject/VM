@@ -235,6 +235,14 @@
                     if (iid == 0xB6)
                         mem[first] |= mem[second];
                     break;
+                case 0xB7: /* @neg */
+                    d8u c1 = (u8 & r1, u8 & r2);
+                    trace($"call :: neg [0x{(ushort)c1:X}]");
+                    if (ff)
+                        mem[c1] = f32u64 & ((u64f32 & mem[c1]) * -1f);
+                    else
+                        mem[c1] = (ulong)((long)mem[c1] * -1);
+                    break;
 
                 case 0x34: /* @lpstr */
                     d32u str_index = (u8 & r1, u8 & r2, u8 & r3, u8 & u1, u8 & u2, u8 & x1, u8 & x2, u8 & x3);

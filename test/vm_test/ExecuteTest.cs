@@ -15,6 +15,28 @@ namespace vm_test
         [OneTimeSetUp]
         public void Setup() => IntConverter.Register<char>();
 
+
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("negative operation")]
+        public void NegTest()
+        {
+            var mem = new ulong[]
+            {
+                new ldi(0x0, 0x32),
+                new neg(0x0),
+                new ldx(0x18, 0x1),
+                new orb(0x1),
+                new val(.14f),
+                new pull(0x1),
+                new neg(0x1), 
+            };
+            load(mem);
+            shot(mem.Length);
+            AssertRegister(x => x.mem[0x0], unchecked((ulong)-0x32));
+            AssertRegister(x => x.mem[0x1], State.f32u64 & -.14f);
+        }
+
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
         [Description("ckft operation")]
@@ -63,7 +85,8 @@ namespace vm_test
                 new div(0x4, 0x5, 0x6),
                 new swap(0x4, 0x9), 
                 // if result 0x9 cell is not infinity
-                new ckft(0x9)
+                new ckft(0x9),
+                
             };
             load(mem);
             shot();

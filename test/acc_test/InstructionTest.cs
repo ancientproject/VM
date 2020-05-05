@@ -12,6 +12,18 @@ namespace ancient.runtime.compiler.test
     public class InstructionTest
     {
         [Theory]
+        [InlineData(".neg &(0x0)")]
+        public void NegativeTest(string code)
+        {
+            var result = new AssemblerSyntax().Parser.End().Parse(code);
+
+            if (result is InstructionExpression exp && exp.Instruction is neg i)
+            {
+                Assert.Equal((ulong)0xB700000000, i.Assembly());
+            }
+        }
+
+        [Theory]
         [InlineData(".call.i !{sys->memory->barrier()}")]
         public void CallInnerTest(string code)
         {

@@ -3,8 +3,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RuntimeIdentifiers>win10-x64;osx.10.14-x64;linux-x64</RuntimeIdentifiers>
-    <Version>0.70.467-beta</Version>
+    <RuntimeIdentifiers>
+      osx.10.14-x64;
+      linux-x64;
+      linux-arm;
+      win10-x64;
+      win10-arm64;
+      win10-arm;
+    </RuntimeIdentifiers>
+    <Version>0.70.471-beta</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>
@@ -16,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ancient.Runtime" Version="0.60.345.605" />
+    <PackageReference Include="Ancient.Runtime" Version="0.60.345.606" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="ObjectDumper.NET" Version="2.5.20033.1" />
