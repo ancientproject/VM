@@ -5,8 +5,10 @@ namespace ancient.runtime.compiler.test
     using ancient.compiler;
     using ancient.compiler.tokens;
     using emit.sys;
+    using emit.@unsafe;
     using runtime;
     using Sprache;
+    using @unsafe;
     using Xunit;
 
     public class InstructionTest
@@ -175,6 +177,18 @@ namespace ancient.runtime.compiler.test
 
             if (result.Instruction is halt i)
                 Assert.Equal(IID.halt, i.ID);
+        }
+        [Theory]
+        [InlineData(".lpstr !{\"test\"}", "test")]
+        [InlineData(".lpstr !{\"big string test bla bla\"}", "big string test bla bla")]
+        [InlineData(".lpstr !{\"number 1234567 test\"}", "number 1234567 test")]
+        [InlineData(".lpstr !{\"symbols !@#$%^&*\"}", "symbols !@#$%^&*")]
+        public void LpStringTest(string code, string text)
+        {
+            var result = new AssemblerSyntax().LPSTR.End().Parse(code);
+            if (result is InstructionExpression exp && exp.Instruction is lpstr lp)
+                Assert.Equal($"34{(uint) NativeString.GetHashCode(text):X8}", $"{lp.Assembly():X}");
+
         }
 
         [Theory]
