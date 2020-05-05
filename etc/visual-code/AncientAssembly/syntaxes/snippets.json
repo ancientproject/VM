@@ -1,235 +1,567 @@
 {
-    ".val": {
-        "prefix": [
-          ".val"
-        ],
-        "body": [
-          ".val @float_t(${0:float})"
-        ],
-        "description": "A float value"
-    },
-    ".mva": {
-        "prefix": [
-          ".mva"
-        ],
-        "body": [
-          ".mva &(${2:dev}) &(${1:actor}) <| $(${0:value})"
-        ],
-        "description": ""
-    },
-    ".ldx": {
-        "prefix": [
-          ".ldx"
-        ],
-        "body": [
-          ".ldx &(${1:cell}) <| $(${0:value})"
-        ],
-        "description": ""
-    },
-    ".ldi": {
-        "prefix": [
-          ".ldi"
-        ],
-        "body": [
-          ".ldi &(${1:cell}) <| $(${0:value})"
-        ],
-        "description": ""
-    },
-    ".jump.t": {
-        "prefix": [
-          ".jump.t"
-        ],
-        "body": [
-          ".jump.t &(${0:cell})"
-        ],
-        "description": ""
-    },
-
-    ".jump.e": {
-        "prefix": [
-          ".jump.e",
-          ".jpe"
-        ],
-        "body": [
-          ".jump.e &(${0:cell}) ~- &(${1:N}) &(${2:S})"
-        ],
-        "description": "jump to offset if N cell value more or equal S cell value."
-    },
-    ".jump.g": {
-        "prefix": [
-          ".jump.g",
-          ".jpg"
-        ],
-        "body": [
-          ".jump.g &(${0:cell}) ~- &(${1:N}) &(${2:S})"
-        ],
-        "description": "jump to offset if N cell value more S cell value."
-    },
-    ".jump.u": {
-        "prefix": [
-          ".jump.u",
-          ".jpu"
-        ],
-        "body": [
-          ".jump.u &(${0:cell}) ~- &(${1:N}) &(${2:S})"
-        ],
-        "description": "jump to offset if N cell value less S cell value."
-    },
-    ".jump.y": {
-        "prefix": [
-          ".jump.y",
-          ".jpy"
-        ],
-        "body": [
-          ".jump.y &(${0:cell}) ~- &(${1:N}) &(${2:S})"
-        ],
-        "description": "jump to offset if N cell value less or equal S cell value."
-    },
-    ".locals": {
-        "prefix": [
-          ".ll",
-          ".loc"
-        ],
-        "body": [
-          ".locals init #(",
-          "   [0x0] ${0:TypeOf}",
-          ") "
-        ],
-        "description": "Allocate evaluation type-safe stack"
-    },
-    ".mul": {
-        "prefix": [
-            ".mul"
-          ],
-          "body": [
-            ".mul &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
-          ],
-          "description": "Multiple VCell1 VCell2 and stage result to resultCell (float-mode support)"
-    },
-    ".add ": {
-        "prefix": [
-            ".add "
-          ],
-          "body": [
-            ".add  &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
-          ],
-          "description": "Sum VCell1 VCell2 and stage result to resultCell (float-mode support)"
-    },
-    ".div": {
-        "prefix": [
-            ".div"
-          ],
-          "body": [
-            ".div &(${0:resultCell}) &(${1:VCell1}) &(${0:VCell2})"
-          ],
-          "description": "Divide VCell1 VCell2 and stage result to resultCell (float-mode support)"
-    },
-    ".sub": {
-        "prefix": [
-            ".sub"
-          ],
-          "body": [
-            ".sub &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
-          ],
-          "description": "Substract VCell1 VCell2 and stage result to resultCell (float-mode support)"
-    },
-    ".pow": {
-        "prefix": [
-            ".pow"
-          ],
-          "body": [
-            ".pow &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
-          ],
-          "description": "Pow VCell1 VCell2 and stage result to resultCell (float-mode support)"
-    },
-    ".sqrt": {
-        "prefix": [
-            ".sqrt"
-          ],
-          "body": [
-            ".sqrt &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
-          ],
-          "description": "sqrt VCell1 VCell2 and stage result to resultCell (float-mode support)"
-    },
-    ".mvj": {
-        "prefix": [
-            ".mvj"
-          ],
-          "body": [
-            ".mvj &(${0:deviceID}) &(${1:actionID}) <| @string_t(\"${2:str}\")"
-          ],
-          "description": ""
-    },
-    ".raw": {
-        "prefix": [
-            ".raw"
-          ],
-          "body": [
-            ".raw ${0:hex_value}"
-          ],
-          "description": "execute raw value"
-    },
-    ".inc": {
-        "prefix": [
-            ".inc"
-          ],
-          "body": [
-            ".inc &(${0:cell})"
-          ],
-          "description": "Increment value in cell (float-mode support)"
-    },
-    ".dec": {
-        "prefix": [
-            ".dec"
-          ],
-          "body": [
-            ".dec &(${0:cell})"
-          ],
-          "description": "Decrement value in cell (float-mode support)"
-    },
-    ".brk.s": {
-        "prefix": [
-            ".brk.s"
-          ],
-          "body": [
-            ".brk.s"
-          ],
-          "description": "standard break - now break (need connected debugger, command '-d')"
-    },
-    ".brk.n": {
-        "prefix": [
-            ".brk.n"
-          ],
-          "body": [
-            ".brk.n"
-          ],
-          "description": "break on next cycle execute (need connected debugger, command '-d')"
-    },
-    ".brk.a": {
-        "prefix": [
-            ".brk.a"
-          ],
-          "body": [
-            ".brk.a"
-          ],
-          "description": "break on after next cycle execute (need connected debugger, command '-d')"
-    },
-    ".pull": {
-        "prefix": [
-            ".pull"
-          ],
-          "body": [
-            ".pull &(${0:cell})"
-          ],
-          "description": "read from stack float value and insert into cell"
-    },
-    ".unlock": {
-        "prefix": [
-            ".unlock"
-          ],
-          "body": [
-            ".unlock &(${0:cell}) ${1:typeof}"
-          ],
-          "description": "read from stack value and cast to type"
-    }
+  ".abs": {
+    "prefix": [
+      ".abs"
+    ],
+    "body": [
+      ".abs &(${0:target})"
+    ],
+    "description": "ABS operation"
+  },
+  ".acos": {
+    "prefix": [
+      ".acos"
+    ],
+    "body": [
+      ".acos &(${0:target})"
+    ],
+    "description": "ACOS operation"
+  },
+  ".atan": {
+    "prefix": [
+      ".atan"
+    ],
+    "body": [
+      ".atan &(${0:target})"
+    ],
+    "description": "ATAN operation"
+  },
+  ".acosh": {
+    "prefix": [
+      ".acosh"
+    ],
+    "body": [
+      ".acosh &(${0:target})"
+    ],
+    "description": "ACOSH operation"
+  },
+  ".atanh": {
+    "prefix": [
+      ".atanh"
+    ],
+    "body": [
+      ".atanh &(${0:target})"
+    ],
+    "description": "ATANH operation"
+  },
+  ".asin": {
+    "prefix": [
+      ".asin"
+    ],
+    "body": [
+      ".asin &(${0:target})"
+    ],
+    "description": "ASIN operation"
+  },
+  ".asinh": {
+    "prefix": [
+      ".asinh"
+    ],
+    "body": [
+      ".asinh &(${0:target})"
+    ],
+    "description": "ASINH operation"
+  },
+  ".cbrt": {
+    "prefix": [
+      ".cbrt"
+    ],
+    "body": [
+      ".cbrt &(${0:target})"
+    ],
+    "description": "CBRT operation"
+  },
+  ".cell": {
+    "prefix": [
+      ".cell"
+    ],
+    "body": [
+      ".cell &(${0:target})"
+    ],
+    "description": "CELLING operation"
+  },
+  ".cos": {
+    "prefix": [
+      ".cos"
+    ],
+    "body": [
+      ".cos &(${0:target})"
+    ],
+    "description": "COS operation"
+  },
+  ".cosh": {
+    "prefix": [
+      ".cosh"
+    ],
+    "body": [
+      ".cosh &(${0:target})"
+    ],
+    "description": "COSH operation"
+  },
+  ".exp": {
+    "prefix": [
+      ".exp"
+    ],
+    "body": [
+      ".exp &(${0:target})"
+    ],
+    "description": "EXP operation"
+  },
+  ".log": {
+    "prefix": [
+      ".log"
+    ],
+    "body": [
+      ".log &(${0:target})"
+    ],
+    "description": "LOG operation"
+  },
+  ".log10": {
+    "prefix": [
+      ".log10"
+    ],
+    "body": [
+      ".log10 &(${0:target})"
+    ],
+    "description": "LOG10 operation"
+  },
+  ".tan": {
+    "prefix": [
+      ".tan"
+    ],
+    "body": [
+      ".tan &(${0:target})"
+    ],
+    "description": "TAN operation"
+  },
+  ".tanh": {
+    "prefix": [
+      ".tanh"
+    ],
+    "body": [
+      ".tanh &(${0:target})"
+    ],
+    "description": "TANH operation"
+  },
+  ".trc": {
+    "prefix": [
+      ".trc"
+    ],
+    "body": [
+      ".trc &(${0:target})"
+    ],
+    "description": "TRC operation"
+  },
+  ".bitd": {
+    "prefix": [
+      ".bitd"
+    ],
+    "body": [
+      ".bitd &(${0:target})"
+    ],
+    "description": "BitDecrement operation"
+  },
+  ".biti": {
+    "prefix": [
+      ".biti"
+    ],
+    "body": [
+      ".biti &(${0:target})"
+    ],
+    "description": "BitIncrement operation"
+  },
+  ".atan2": {
+    "prefix": [
+      ".atan2"
+    ],
+    "body": [
+      ".atan2 &(${0:target})"
+    ],
+    "description": "ATAN2 operation"
+  },
+  ".min": {
+    "prefix": [
+      ".min"
+    ],
+    "body": [
+      ".min &(${0:target})"
+    ],
+    "description": "MIN operation"
+  },
+  ".max": {
+    "prefix": [
+      ".max"
+    ],
+    "body": [
+      ".max &(${0:target})"
+    ],
+    "description": "MAX operation"
+  },
+  ".sin": {
+    "prefix": [
+      ".sin"
+    ],
+    "body": [
+      ".sin &(${0:target})"
+    ],
+    "description": "SIN operation"
+  },
+  ".sinh": {
+    "prefix": [
+      ".sinh"
+    ],
+    "body": [
+      ".sinh &(${0:target})"
+    ],
+    "description": "SINH operation"
+  },
+  ".flr": {
+    "prefix": [
+      ".flr"
+    ],
+    "body": [
+      ".flr &(${0:target})"
+    ],
+    "description": "Floor operation"
+  },
+  ".lpstr": {
+    "prefix": [
+      ".lpstr"
+    ],
+    "body": [
+      ".lpstr !{\"${0:text}\"}"
+    ],
+    "description": "Store into memory target text"
+  },
+  ".ior": {
+    "prefix": [
+      ".ior"
+    ],
+    "body": [
+      ".ior &(${0:target}) &(${1:R})"
+    ],
+    "description": "OR operation for target cell by R cell value"
+  },
+  ".ixor": {
+    "prefix": [
+      ".ixor"
+    ],
+    "body": [
+      ".ixor &(${0:target}) &(${1:R})"
+    ],
+    "description": "XOR operation for target cell by R cell value"
+  },
+  ".ckft": {
+    "prefix": [
+      ".ckft"
+    ],
+    "body": [
+      ".ckft &(${0:target})"
+    ],
+    "description": "Validate target cell is finity value"
+  },
+  ".readonly": {
+    "prefix": [
+      ".readonly"
+    ],
+    "body": [
+      ".readonly &(${0:target})"
+    ],
+    "description": "Make target cell as readonly"
+  },
+  ".neg": {
+    "prefix": [
+      ".neg"
+    ],
+    "body": [
+      ".neg &(${0:target})"
+    ],
+    "description": "Invert value from target cell"
+  },
+  ".dup": {
+    "prefix": [
+      ".dup"
+    ],
+    "body": [
+      ".dup &(${0:C}) &(${1:T})"
+    ],
+    "description": "Duplicate value from C to T"
+  },
+  ".orb": {
+    "prefix": [
+      ".orb"
+    ],
+    "body": [
+      ".orb &(${0:N})"
+    ],
+    "description": "Load next N values into stack"
+  },
+  ".ref.t": {
+    "prefix": [
+      ".ref.t"
+    ],
+    "body": [
+      ".ref.t &(${0:cell})"
+    ],
+    "description": "Set reference current program offset to cell"
+  },
+  ".swap": {
+    "prefix": [
+      ".swap"
+    ],
+    "body": [
+      ".swap &(${0:from}) &(${1:to})"
+    ],
+    "description": "Swap value two cell"
+  },
+  ".halt": {
+    "prefix": [
+      ".halt"
+    ],
+    "body": [
+      ".halt"
+    ],
+    "description": "Shutdown vm"
+  },
+  ".nop": {
+    "prefix": [
+      ".nop"
+    ],
+    "body": [
+      ".nop"
+    ],
+    "description": "No operation"
+  },
+  ".val": {
+    "prefix": [
+      ".val"
+    ],
+    "body": [
+      ".val @float_t(${0:float})"
+    ],
+    "description": "A float value"
+  },
+  ".mva": {
+    "prefix": [
+      ".mva"
+    ],
+    "body": [
+      ".mva &(${2:dev}) &(${1:actor}) <| $(${0:value})"
+    ],
+    "description": ""
+  },
+  ".ldx": {
+    "prefix": [
+      ".ldx"
+    ],
+    "body": [
+      ".ldx &(${1:cell}) <| $(${0:value})"
+    ],
+    "description": ""
+  },
+  ".ldi": {
+    "prefix": [
+      ".ldi"
+    ],
+    "body": [
+      ".ldi &(${1:cell}) <| $(${0:value})"
+    ],
+    "description": ""
+  },
+  ".jump.t": {
+    "prefix": [
+      ".jump.t"
+    ],
+    "body": [
+      ".jump.t &(${0:cell})"
+    ],
+    "description": ""
+  },
+  ".jump.e": {
+    "prefix": [
+      ".jump.e",
+      ".jpe"
+    ],
+    "body": [
+      ".jump.e &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+    ],
+    "description": "jump to offset if N cell value more or equal S cell value."
+  },
+  ".jump.g": {
+    "prefix": [
+      ".jump.g",
+      ".jpg"
+    ],
+    "body": [
+      ".jump.g &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+    ],
+    "description": "jump to offset if N cell value more S cell value."
+  },
+  ".jump.u": {
+    "prefix": [
+      ".jump.u",
+      ".jpu"
+    ],
+    "body": [
+      ".jump.u &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+    ],
+    "description": "jump to offset if N cell value less S cell value."
+  },
+  ".jump.y": {
+    "prefix": [
+      ".jump.y",
+      ".jpy"
+    ],
+    "body": [
+      ".jump.y &(${0:cell}) ~- &(${1:N}) &(${2:S})"
+    ],
+    "description": "jump to offset if N cell value less or equal S cell value."
+  },
+  ".locals": {
+    "prefix": [
+      ".ll",
+      ".loc"
+    ],
+    "body": [
+      ".locals init #(",
+      "   [0x0] ${0:TypeOf}",
+      ") "
+    ],
+    "description": "Allocate evaluation type-safe stack"
+  },
+  ".mul": {
+    "prefix": [
+      ".mul"
+    ],
+    "body": [
+      ".mul &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+    ],
+    "description": "Multiple VCell1 VCell2 and stage result to resultCell (float-mode support)"
+  },
+  ".add": {
+    "prefix": [
+      ".add"
+    ],
+    "body": [
+      ".add &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+    ],
+    "description": "Sum VCell1 VCell2 and stage result to resultCell (float-mode support)"
+  },
+  ".div": {
+    "prefix": [
+      ".div"
+    ],
+    "body": [
+      ".div &(${0:resultCell}) &(${1:VCell1}) &(${0:VCell2})"
+    ],
+    "description": "Divide VCell1 VCell2 and stage result to resultCell (float-mode support)"
+  },
+  ".sub": {
+    "prefix": [
+      ".sub"
+    ],
+    "body": [
+      ".sub &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+    ],
+    "description": "Substract VCell1 VCell2 and stage result to resultCell (float-mode support)"
+  },
+  ".pow": {
+    "prefix": [
+      ".pow"
+    ],
+    "body": [
+      ".pow &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+    ],
+    "description": "Pow VCell1 VCell2 and stage result to resultCell (float-mode support)"
+  },
+  ".sqrt": {
+    "prefix": [
+      ".sqrt"
+    ],
+    "body": [
+      ".sqrt &(${0:resultCell}) &(${1:VCell1}) &(${2:VCell2})"
+    ],
+    "description": "sqrt VCell1 VCell2 and stage result to resultCell (float-mode support)"
+  },
+  ".mvj": {
+    "prefix": [
+      ".mvj"
+    ],
+    "body": [
+      ".mvj &(${0:deviceID}) &(${1:actionID}) <| @string_t(\"${2:str}\")"
+    ],
+    "description": ""
+  },
+  ".raw": {
+    "prefix": [
+      ".raw"
+    ],
+    "body": [
+      ".raw ${0:hex_value}"
+    ],
+    "description": "execute raw value"
+  },
+  ".inc": {
+    "prefix": [
+      ".inc"
+    ],
+    "body": [
+      ".inc &(${0:cell})"
+    ],
+    "description": "Increment value in cell (float-mode support)"
+  },
+  ".dec": {
+    "prefix": [
+      ".dec"
+    ],
+    "body": [
+      ".dec &(${0:cell})"
+    ],
+    "description": "Decrement value in cell (float-mode support)"
+  },
+  ".brk.s": {
+    "prefix": [
+      ".brk.s"
+    ],
+    "body": [
+      ".brk.s"
+    ],
+    "description": "standard break - now break (need connected debugger, command '-d')"
+  },
+  ".brk.n": {
+    "prefix": [
+      ".brk.n"
+    ],
+    "body": [
+      ".brk.n"
+    ],
+    "description": "break on next cycle execute (need connected debugger, command '-d')"
+  },
+  ".brk.a": {
+    "prefix": [
+      ".brk.a"
+    ],
+    "body": [
+      ".brk.a"
+    ],
+    "description": "break on after next cycle execute (need connected debugger, command '-d')"
+  },
+  ".pull": {
+    "prefix": [
+      ".pull"
+    ],
+    "body": [
+      ".pull &(${0:cell})"
+    ],
+    "description": "read from stack float value and insert into cell"
+  },
+  ".unlock": {
+    "prefix": [
+      ".unlock"
+    ],
+    "body": [
+      ".unlock &(${0:cell}) ${1:typeof}"
+    ],
+    "description": "read from stack value and cast to type"
+  }
 }

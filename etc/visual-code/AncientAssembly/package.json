@@ -2,7 +2,7 @@
 	"name": "ancient-asm",
 	"displayName": "Ancient Assembly",
 	"description": "Ancient Assembly developmemnt environment (8bit cpu)",
-	"version": "0.50.6",
+	"version": "0.70.2",
 	"icon": "images/icon.png",
 	"galleryBanner": {
 		"color": "#18c7b1",
@@ -59,11 +59,11 @@
 			}
 		],
 		"snippets": [
-            {
-              "language": "asm",
-              "path": "./syntaxes/snippets.json"
-            }
-        ]
+			{
+				"language": "asm",
+				"path": "./syntaxes/snippets.json"
+			}
+		]
 	},
 	"scripts": {
 		"postinstall": "node ./node_modules/vscode/bin/install"
