@@ -16,29 +16,69 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore
-    - name: packing acc binaries for win64
-      run: dotnet publish ./acc/acc.csproj -o out/acc/win64 -c release -r win-x64
-    - name: packing acc binaries for linux64
-      run: dotnet publish ./acc/acc.csproj -o out/acc/linux64 -c release -r linux-x64
-    - name: packing acc vm for linux64
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux64 -c release -r linux-x64
-    - name: packing acc vm for win64
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win64 -c release -r win-x64
 
-    - run: zip vm-linux64.zip . -r -9
-      working-directory: ./out/vm/linux64
-    - run: zip vm-win64.zip . -r -9
-      working-directory: ./out/vm/win64
+    #  publish ACC for all support RID
+    - name: osx.10.14-x64
+      run: dotnet publish ./acc/acc.csproj -o out/acc/osx.10.14-x64 -c release -r osx.10.14-x64
 
-    - run: zip acc-linux64.zip . -r -9
-      working-directory: ./out/acc/linux64
-    - run: zip acc-win64.zip . -r -9
-      working-directory: ./out/acc/win64
+    - name: linux-x64
+      run: dotnet publish ./acc/acc.csproj -o out/acc/linux-x64 -c release -r linux-x64
+    - name: linux-arm
+      run: dotnet publish ./acc/acc.csproj -o out/acc/linux-arm -c release -r linux-arm
 
-    - run: mv ./out/vm/win64/vm-win64.zip ./vm-win64.zip
-    - run: mv ./out/vm/linux64/vm-linux64.zip ./vm-linux64.zip
-    - run: mv ./out/acc/win64/acc-win64.zip ./acc-win64.zip
-    - run: mv ./out/acc/linux64/acc-linux64.zip ./acc-linux64.zip
+    - name: win10-x64
+      run: dotnet publish ./acc/acc.csproj -o out/acc/win10-x64 -c release -r win10-x64
+    - name: win10-arm64
+      run: dotnet publish ./acc/acc.csproj -o out/acc/win10-arm64 -c release -r win10-arm64
+    - name: win10-arm
+      run: dotnet publish ./acc/acc.csproj -o out/acc/win10-arm -c release -r win10-arm
+    # end ACC
+    # publish VM for all support RID
+    - name: osx.10.14-x64
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/osx.10.14-x64 -c release -r osx.10.14-x64
+
+    - name: linux-x64
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux-x64 -c release -r linux-x64
+    - name: linux-arm
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux-arm -c release -r linux-arm
+
+    - name: win10-x64
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-x64 -c release -r win10-x64
+    - name: win10-arm64
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm64 -c release -r win10-arm64
+    - name: win10-arm
+      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm -c release -r win10-arm
+    # end VM
+
+
+    # pack VM
+    - run: zip vm-osx.10.14-x64.zip . -r -9
+      working-directory: ./out/vm/osx.10.14-x64
+    - run: zip vm-linux-x64.zip . -r -9
+      working-directory: ./out/vm/linux-x64
+    - run: zip vm-linux-arm.zip . -r -9
+      working-directory: ./out/vm/linux-arm
+    - run: zip vm-win10-x64.zip . -r -9
+      working-directory: ./out/vm/win10-x64
+    - run: zip vm-win10-arm64.zip . -r -9
+      working-directory: ./out/vm/win10-arm64
+    - run: zip vm-win10-arm.zip . -r -9
+      working-directory: ./out/vm/win10-arm
+    # pack acc
+    - run: zip acc-osx.10.14-x64.zip . -r -9
+      working-directory: ./out/acc/osx.10.14-x64
+    - run: zip acc-linux-x64.zip . -r -9
+      working-directory: ./out/acc/linux-x64
+    - run: zip acc-linux-arm.zip . -r -9
+      working-directory: ./out/acc/linux-arm
+    - run: zip acc-win10-x64.zip . -r -9
+      working-directory: ./out/acc/win10-x64
+    - run: zip acc-win10-arm64.zip . -r -9
+      working-directory: ./out/acc/win10-arm64
+    - run: zip acc-win10-arm.zip . -r -9
+      working-directory: ./out/acc/win10-arm
+
+    - run: find ./out/**/* -iname "*.zip" -type d | xargs mv ./
 
 
     - name: Create Release
