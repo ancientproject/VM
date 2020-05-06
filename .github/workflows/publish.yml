@@ -17,38 +17,20 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
 
-    #  publish ACC for all support RID
-    - name: osx.10.14-x64
-      run: dotnet publish ./acc/acc.csproj -o out/acc/osx.10.14-x64 -c release -r osx.10.14-x64
-
-    - name: linux-x64
-      run: dotnet publish ./acc/acc.csproj -o out/acc/linux-x64 -c release -r linux-x64
-    - name: linux-arm
-      run: dotnet publish ./acc/acc.csproj -o out/acc/linux-arm -c release -r linux-arm
-
-    - name: win10-x64
-      run: dotnet publish ./acc/acc.csproj -o out/acc/win10-x64 -c release -r win10-x64
-    - name: win10-arm64
-      run: dotnet publish ./acc/acc.csproj -o out/acc/win10-arm64 -c release -r win10-arm64
-    - name: win10-arm
-      run: dotnet publish ./acc/acc.csproj -o out/acc/win10-arm -c release -r win10-arm
-    # end ACC
-    # publish VM for all support RID
-    - name: osx.10.14-x64
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/osx.10.14-x64 -c release -r osx.10.14-x64
-
-    - name: linux-x64
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux-x64 -c release -r linux-x64
-    - name: linux-arm
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux-arm -c release -r linux-arm
-
-    - name: win10-x64
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-x64 -c release -r win10-x64
-    - name: win10-arm64
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm64 -c release -r win10-arm64
-    - name: win10-arm
-      run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm -c release -r win10-arm
-    # end VM
+    #  publish for all support RID
+    - run: dotnet publish ./acc/acc.csproj -o out/acc/osx.10.14-x64 -c release -r osx.10.14-x64
+    - run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/osx.10.14-x64 -c release -r osx.10.14-x64
+    - run: dotnet publish ./acc/acc.csproj -o out/acc/linux-x64 -c release -r linux-x64
+    - run: dotnet publish ./acc/acc.csproj -o out/acc/linux-arm -c release -r linux-arm
+    - run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux-x64 -c release -r linux-x64
+    - run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/linux-arm -c release -r linux-arm
+    - run: dotnet publish ./acc/acc.csproj -o out/acc/win10-x64 -c release -r win10-x64
+    - run: dotnet publish ./acc/acc.csproj -o out/acc/win10-arm64 -c release -r win10-arm64
+    - run: dotnet publish ./acc/acc.csproj -o out/acc/win10-arm -c release -r win10-arm
+    - run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-x64 -c release -r win10-x64
+    - run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm64 -c release -r win10-arm64
+    - run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm -c release -r win10-arm
+    # end 
 
     # pack VM
     - run: zip vm-osx.10.14-x64.zip . -r -9
@@ -77,7 +59,7 @@ jobs:
     - run: zip acc-win10-arm.zip . -r -9
       working-directory: ./out/acc/win10-arm
 
-    - run: find ./out/**/* -iname "*.zip" -type d | xargs mv ./
+    - run: find ./out/**/* -name "*.zip" -exec mv "{}" ./ \;
 
 
     - name: Create Release
