@@ -19,7 +19,6 @@
         {
             get
             {
-                Console.Beep(400, 2);
                 var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ancient");
                 return Directory.CreateDirectory(dir).CreateSubdirectory("packages");
             }
