@@ -50,7 +50,6 @@ jobs:
       run: dotnet publish ./vm/csharp/vm.csproj -o out/vm/win10-arm -c release -r win10-arm
     # end VM
 
-
     # pack VM
     - run: zip vm-osx.10.14-x64.zip . -r -9
       working-directory: ./out/vm/osx.10.14-x64
