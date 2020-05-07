@@ -1,0 +1,3 @@
+[submodule "submodules/runtime"]
+	path = submodules/runtime
+	url = https://github.com/ancientproject/runtime.git
