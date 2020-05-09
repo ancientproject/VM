@@ -222,8 +222,9 @@ namespace vm.component
                 case 0x39: /* @readonly */
                     break;
 
-                case 0xB5: /* @ixor */
-                case 0xB6: /* @ior */
+                /*
+                case 0xB5: / @ixor /
+                case 0xB6: / @ior /
 
                     d8u first = (u8 & r1, u8 & r2);
                     d8u second = (u8 & u1, u8 & u2);
