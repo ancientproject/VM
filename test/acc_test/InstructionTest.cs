@@ -7,7 +7,6 @@ namespace ancient.runtime.compiler.test
     using ancient.compiler;
     using ancient.compiler.tokens;
     using emit.sys;
-    using emit.@unsafe;
     using runtime;
     using Sprache;
     using @unsafe;

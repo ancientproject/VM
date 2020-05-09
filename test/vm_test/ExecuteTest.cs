@@ -15,21 +15,37 @@ namespace vm_test
         [OneTimeSetUp]
         public void Setup() => IntConverter.Register<char>();
 
-
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
-        [Description("negative operation")]
-        public void NegTest()
+        [Description("invert operation")]
+        public void DifTest()
+        {
+            var mem = new ulong[]
+            {
+                new ceq(0x1, 0x0, 0x0),
+                new dif_t(0x1, 1), 
+                new ldi(0x5, 15), 
+                new ldi(0x6, 15), 
+            };
+            load(mem);
+            shot(mem.Length);
+            AssertRegister(x => x.mem[0x5], 0ul);
+            AssertRegister(x => x.mem[0x6], 15ul);
+        }
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("invert operation")]
+        public void InvertTest()
         {
             var mem = new ulong[]
             {
                 new ldi(0x0, 0x32),
-                new neg(0x0),
+                new inv(0x0),
                 new ldx(0x18, 0x1),
                 new orb(0x1),
                 new val(.14f),
                 new pull(0x1),
-                new neg(0x1), 
+                new inv(0x1), 
             };
             load(mem);
             shot(mem.Length);
@@ -185,7 +201,7 @@ namespace vm_test
                 new sub(0x3, 0x1, 0x2),
                 new mul(0x4, 0x1, 0x2),
                 new div(0x5, 0x1, 0x2),
-                new sum(0x6, 0x1, 0x2),
+                new add(0x6, 0x1, 0x2),
                 new sqrt(0x7, 0x1),
                 new pow(0x8, 0x1, 0x2), 
             };
@@ -294,14 +310,13 @@ namespace vm_test
         {
             state.southFlag = false;
             bios.virtual_stack = false;
-            state.ff = false;
+            state.ff = true;
             var mem = new ulong[] {
                 new orb(0x2),
                 new val(1.0f),
                 new val(5.4f), 
                 new pull(0x0), 
-                new pull(0x1), 
-                new ldx(0x18, 0x1), 
+                new pull(0x1),
                 new div(0x2, 0x0, 0x1),
             };
             load(mem);
