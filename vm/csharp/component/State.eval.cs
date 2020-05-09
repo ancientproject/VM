@@ -1,4 +1,4 @@
-namespace vm.component
+﻿namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -262,6 +262,61 @@ namespace vm.component
                     );
                     break;
 
+                case 0xC2: /* @dif_t */
+                case 0xC3: /* @dif_f */
+                    d8u target = (u8 & r1, u8 & r2);
+                    trace($"call :: dif [0x{target:X}]");
+                    if (!(mem_types[target] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{target:X}] is {mem_types[pipe.arg1].GetType().Name}");
+                    d8u skip = (u8 & r3, u8 & u1);
+                    if (mem[target] == (iid == 0xC2ul ? 0x1ul : 0x0ul))
+                        pc += skip;
+                    break;
+                case 0xC5: /* @ceq */
+                    trace($"call :: ceq [0x{pipe.arg1:X}] [0x{pipe.arg2:X}]");
+                    pipe[0x3] = pipe[0x1] == pipe[0x2] ? 1ul : 0ul;
+                    if(x3 == 0x1 || x3 == 0x3)
+                        mem_types[pipe.result] = new i2_Type();
+                    break;
+                case 0xC6: /* @neq */
+                    trace($"call :: neq [0x{pipe.arg1:X}] [0x{pipe.arg2:X}]");
+                    pipe[0x3] = pipe[0x1] != pipe[0x2] ? 1ul : 0ul;
+                    if (x3 == 0x1 || x3 == 0x3)
+                        mem_types[pipe.result] = new i2_Type();
+                    break;
+                case 0xC7: /* @xor */
+                    trace($"call :: xor [0x{pipe.arg1:X}] [0x{pipe.arg2:X}]");
+                    if (!(mem_types[pipe.arg1] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{pipe.arg1:X}] is {mem_types[pipe.arg1].GetType().Name}");
+                    if (!(mem_types[pipe.arg1] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{pipe.arg2:X}] is {mem_types[pipe.arg2].GetType().Name}");
+
+                    pipe[0x3] = (pipe[0x1] == 0x1) ^ (pipe[0x2] == 0x1) ? 0x1ul : 0x0ul;
+                    if (x3 == 0x1 || x3 == 0x3)
+                        mem_types[pipe.result] = new i2_Type();
+                    break;
+                case 0xC8: /* @or */
+                    trace($"call :: xor [0x{pipe.arg1:X}] [0x{pipe.arg2:X}]");
+                    if (!(mem_types[pipe.arg1] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{pipe.arg1:X}] is {mem_types[pipe.arg1].GetType().Name}");
+                    if (!(mem_types[pipe.arg1] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{pipe.arg2:X}] is {mem_types[pipe.arg2].GetType().Name}");
+
+                    pipe[0x3] = (pipe[0x1] == 0x1) | (pipe[0x2] == 0x1) ? 0x1ul : 0x0ul;
+                    if (x3 == 0x1 || x3 == 0x3)
+                        mem_types[pipe.result] = new i2_Type();
+                    break;
+                case 0xC9: /* @and */
+                    trace($"call :: xor [0x{pipe.arg1:X}] [0x{pipe.arg2:X}]");
+                    if (!(mem_types[pipe.arg1] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{pipe.arg1:X}] is {mem_types[pipe.arg1].GetType().Name}");
+                    if (!(mem_types[pipe.arg1] is i2_Type))
+                        bus.cpu.halt(0xA22, $"[0x{pipe.arg2:X}] is {mem_types[pipe.arg2].GetType().Name}");
+
+                    pipe[0x3] = (pipe[0x1] == 0x1) & (pipe[0x2] == 0x1) ? 0x1ul : 0x0ul;
+                    if (x3 == 0x1 || x3 == 0x3)
+                        mem_types[pipe.result] = new i2_Type();
+                    break;
                 #region debug
 
                 case 0xF when x2 == 0xF: /* @mvx */
