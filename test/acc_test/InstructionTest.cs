@@ -1,6 +1,8 @@
 namespace ancient.runtime.compiler.test
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using ancient.compiler;
     using ancient.compiler.tokens;
@@ -13,15 +15,115 @@ namespace ancient.runtime.compiler.test
 
     public class InstructionTest
     {
+
+        public class IIDGenerator : IEnumerable<IID>, IEnumerable<object[]>
+        {
+            private readonly List<IID> data = new List<IID>
+            {
+                IID.abs, IID.acos,
+                IID.asin, IID.cos,
+                IID.sin, IID.sinh,
+                IID.atan2, IID.add,
+                IID.sub, IID.mul,
+                IID.div, IID.tan,
+                IID.tanh, IID.trc,
+                IID.bitd, IID.biti,
+                IID.log10, IID.log
+            };
+            public IEnumerator<IID> GetEnumerator() 
+                => data.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() 
+                => GetEnumerator();
+            IEnumerator<object[]> IEnumerable<object[]>.GetEnumerator() 
+                => data.Select(x => new object[]{x}).GetEnumerator();
+        }
+
         [Theory]
-        [InlineData(".neg &(0x0)")]
+        [ClassData(typeof(IIDGenerator))]
+        public void SingleSignatureTest(IID code)
+        {
+            var result = new AssemblerSyntax().Parser.End().Parse($".{code}");
+
+            if (result is InstructionExpression exp)
+            {
+                Assert.NotNull(exp.Instruction);
+                Assert.Contains(exp.Instruction.GetType().Name, $"{code}");
+            }
+        }
+        [Theory]
+        [ClassData(typeof(IIDGenerator))]
+        public void WithResultCellTest(IID code)
+        {
+            var result = new AssemblerSyntax().Parser.End().Parse($".{code} &(0x0)");
+
+            if (result is InstructionExpression exp)
+            {
+                Assert.NotNull(exp.Instruction);
+                Assert.Contains(exp.Instruction.GetType().Name, $"{code}");
+            }
+        }
+        [Theory]
+        [ClassData(typeof(IIDGenerator))]
+        public void WithPairCellTest(IID code)
+        {
+            var args = Instruction.GetArgumentCountBy(code);
+            var result = default(IInputToken);
+            var source = $".{code} &(0x0) &(0x0)";
+            var parser = new AssemblerSyntax().Parser.End();
+            if (args == 3)
+                result = parser.Parse(source);
+            else
+            {
+                Assert.Throws<ParseException>(() =>
+                {
+                    parser.Parse(source);
+                });
+                return;
+            }
+
+            if (result is InstructionExpression exp)
+            {
+                Assert.NotNull(exp.Instruction);
+                Assert.Contains(exp.Instruction.GetType().Name, $"{code}");
+            }
+        }
+        [Theory]
+        [ClassData(typeof(IIDGenerator))]
+        public void WithPairCellAndResultCellTest(IID code)
+        {
+            var args = Instruction.GetArgumentCountBy(code);
+            var result = default(IInputToken);
+            var source = $".{code} &(0x0) <| &(0x0) &(0x0)";
+            var parser = new AssemblerSyntax().Parser.End();
+            if (args == 3)
+                result = parser.Parse(source);
+            else
+            {
+                Assert.Throws<ParseException>(() =>
+                {
+                    parser.Parse(source);
+                });
+                return;
+            }
+
+            
+
+            if (result is InstructionExpression exp)
+            {
+                Assert.NotNull(exp.Instruction);
+                Assert.Contains(exp.Instruction.GetType().Name, $"{code}");
+            }
+        }
+
+        [Theory]
+        [InlineData(".inv &(0x0)")]
         public void NegativeTest(string code)
         {
             var result = new AssemblerSyntax().Parser.End().Parse(code);
 
-            if (result is InstructionExpression exp && exp.Instruction is neg i)
+            if (result is InstructionExpression exp && exp.Instruction is inv i)
             {
-                Assert.Equal((ulong)0xB700000000, i.Assembly());
+                Assert.Equal($"{(ulong)0xB500000000:X}", $"{i.Assembly():X}");
             }
         }
 

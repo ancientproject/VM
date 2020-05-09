@@ -5,6 +5,8 @@
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
+    using MoreLinq;
     using runtime;
     using runtime.emit.sys;
     using Sprache;
@@ -45,8 +47,13 @@
             .Or(Dup)
             .Or(Call_I)
             .Or(LPSTR)
-            .Or(IXOR)
-            .Or(IOR)
+            // logical
+            .Or(MultipleSignatureToken(IID.or))
+            .Or(MultipleSignatureToken(IID.xor))
+            .Or(MultipleSignatureToken(IID.and))
+            .Or(MultipleSignatureToken(IID.ceq))
+            .Or(MultipleSignatureToken(IID.neq))
+
             // jumps
             .Or(JumpT)
             .Or(JumpAt(IID.jump_e))
@@ -65,29 +72,33 @@
             .Or(ByIIDToken(IID.prune))
             .Or(Unlock)
             // math instruction token
-            .Or(MathInstruction(IID.add))
-            .Or(MathInstruction(IID.mul))
-            .Or(MathInstruction(IID.sub))
-            .Or(MathInstruction(IID.div))
-            .Or(MathInstruction(IID.pow))
-            .Or(SqrtToken)
-            // advanced math
-            .Or(AdvMathInstruction(IID.abs)).Or(AdvMathInstruction(IID.acos)).Or(AdvMathInstruction(IID.atan))
-            .Or(AdvMathInstruction(IID.acosh)).Or(AdvMathInstruction(IID.atanh)).Or(AdvMathInstruction(IID.asin))
-            .Or(AdvMathInstruction(IID.asinh)).Or(AdvMathInstruction(IID.cbrt)).Or(AdvMathInstruction(IID.cell))
-            .Or(AdvMathInstruction(IID.cos)).Or(AdvMathInstruction(IID.cosh)).Or(AdvMathInstruction(IID.flr))
-            .Or(AdvMathInstruction(IID.exp)).Or(AdvMathInstruction(IID.log)).Or(AdvMathInstruction(IID.log10))
-            .Or(AdvMathInstruction(IID.tan)).Or(AdvMathInstruction(IID.tanh)).Or(AdvMathInstruction(IID.trc))
-            .Or(AdvMathInstruction(IID.biti)).Or(AdvMathInstruction(IID.bitd)).Or(AdvMathInstruction(IID.sin))
-            .Or(AdvMathInstruction(IID.sinh))
+            .Or(MultipleSignatureToken(IID.add))
+            .Or(MultipleSignatureToken(IID.mul))
+            .Or(MultipleSignatureToken(IID.sub))
+            .Or(MultipleSignatureToken(IID.div))
+            .Or(MultipleSignatureToken(IID.pow))
+            .Or(MultipleSignatureToken(IID.sqrt))
 
-            .Or(AdvMathInstruction(IID.neg))
+            .Or(MultipleSignatureToken(IID.min))
+            .Or(MultipleSignatureToken(IID.max))
+            .Or(MultipleSignatureToken(IID.atan2))
+            // advanced math
+            .Or(MultipleSignatureToken(IID.abs)).Or(MultipleSignatureToken(IID.acos)).Or(MultipleSignatureToken(IID.atanh))
+            .Or(MultipleSignatureToken(IID.atan))
+            .Or(MultipleSignatureToken(IID.acosh)).Or(MultipleSignatureToken(IID.asin))
+            .Or(MultipleSignatureToken(IID.asinh)).Or(MultipleSignatureToken(IID.cbrt)).Or(MultipleSignatureToken(IID.cell))
+            .Or(MultipleSignatureToken(IID.cosh)).Or(MultipleSignatureToken(IID.cos)).Or(MultipleSignatureToken(IID.flr))
+            .Or(MultipleSignatureToken(IID.exp)).Or(MultipleSignatureToken(IID.log10)).Or(MultipleSignatureToken(IID.log))
+            .Or(MultipleSignatureToken(IID.tanh))
+            .Or(MultipleSignatureToken(IID.tan)).Or(MultipleSignatureToken(IID.trc))
+            .Or(MultipleSignatureToken(IID.biti)).Or(MultipleSignatureToken(IID.bitd))
+            .Or(MultipleSignatureToken(IID.sinh)).Or(MultipleSignatureToken(IID.sin))
+
+            .Or(AdvMathInstruction(IID.inv))
             .Or(AdvMathInstruction(IID.inc))
             .Or(AdvMathInstruction(IID.dec))
 
-            .Or(Adv2MathInstruction(IID.min))
-            .Or(Adv2MathInstruction(IID.max))
-            .Or(Adv2MathInstruction(IID.atan2))
+            
 
             // transformators
             .Or(Locals.Return(new NullExpression()))
@@ -198,14 +209,12 @@
 
         #endregion
 
-        
 
-       
-
-        
-       
 
         #region Operator tokens
+
+
+
         public virtual Parser<OperatorKind> PipeLeft =>
             (from _ in Parse.String("|>")
                 select OperatorKind.PipeLeft)
@@ -275,7 +284,106 @@
             .Token()
             .Named("string_t expression");
         #endregion
+
         #region Instructuions token
+
+        #region Advanced Instruction token
+
+        public virtual Parser<IInputToken> MultipleSignatureToken(IID id) => (
+                from dword in InstructionToken(id)
+                from body in
+                    from bodyToken in MultipleSyntaxCells(Instruction.GetArgumentCountBy(id) - 1)
+                    select bodyToken.GetValueOrDefault((null, new byte[0]))
+                select new InstructionExpression(Instruction.Summon(id, new object[]{ body.result }.Concat(body.args.Cast<object>().ToArray()).ToArray())))
+            .Token()
+            .WithPosition()
+            .Named($"{id} expression");
+
+        private static (byte? result, byte[] args)? DecomposeSignature(
+            (RefExpression result, RefExpression c1, RefExpression c2)? o1,
+            (RefExpression c1, RefExpression c2)? o2,
+            RefExpression o3
+        )
+        {
+            if (o1 is { } r1)
+                return (r1.result.Cell, new []{ r1.c1.Cell, r1.c2.Cell });
+            if (o2 is { } r2)
+                return (null, new []{ r2.c1.Cell, r2.c2.Cell });
+            if (o3 is { })
+                return (o3.Cell, new byte[0]);
+            return null;
+        }
+        private static (byte? result, byte[] args)? DecomposeSignature(
+            (RefExpression result, RefExpression c1)? o1,
+            (RefExpression c1, RefExpression c2)? o2,
+            RefExpression o3
+        )
+        {
+
+            if (o1 is { } r1)
+                return (r1.result.Cell, new[] { r1.c1.Cell });
+            if (o2 is { } r2)
+                return (null, new[] { r2.c1.Cell, r2.c2.Cell });
+            if (o3 is { })
+                return (o3.Cell, new byte[0]);
+            return null;
+        }
+
+        public virtual Parser<(byte? result, byte[] args)?> MultipleSyntaxCells(int argumentCount)
+        {
+            if(argumentCount == 2)
+            return 
+                from n1 in PairArgumentWithPipe.Optional()
+                from n2 in (
+                    from cell1 in RefToken
+                    from cell2 in RefToken
+                    select (cell1, cell2)).Optional()
+                from n3 in RefToken.Optional()
+                select DecomposeSignature(n1.Unwrap(), n2.Unwrap(), n3.GetOrDefault());
+            return (
+
+                from n1 in ArgumentWithPipe.Except(PairArgumentWithPipe).Optional()
+                from n3 in RefToken.Optional()
+                let result = DecomposeSignature(
+                    n1.Unwrap(),
+                    null,
+                    n3.GetOrDefault())
+                select result
+            );
+        }
+
+        private Parser<(RefExpression, RefExpression)> ArgumentPair => 
+            from cell1 in RefToken
+            from cell2 in RefToken
+            select (cell1, cell2);
+
+
+        private Parser<(RefExpression, RefExpression, RefExpression)> PairArgumentWithPipe =>
+            (
+                from resultCell in RefToken
+                from _ in PipeRight
+                from cellPair in 
+                    from cell1 in RefToken
+                    from cell2 in RefToken 
+                    select (cell1, cell2)
+                select (resultCell, cellPair.cell1, cellPair.cell2)
+            )
+            .Token();
+        private Parser<(RefExpression, RefExpression)> ArgumentWithPipe =>
+            (
+                from resultCell in RefToken
+                from _ in PipeRight
+                from cellPair in
+                    from cell1 in RefToken
+                    from cell2 in RefToken.Not("instruction available has no more cells")
+                    select (cell1, cell2)
+                select (resultCell, cellPair.cell1)
+            )
+            .Token();
+
+        #endregion
+
+
         public virtual Parser<IInputToken> Raw =>
             (from dword in InstructionToken(IID.raw)
                 from space1 in Parse.WhiteSpace.Optional()
@@ -325,24 +433,7 @@
             .Token()
             .WithPosition()
             .Named("dup expression");
-
-        public virtual Parser<IInputToken> IXOR =>
-            (from dword in InstructionToken(IID.ixor)
-                from val1 in RefToken
-                from val2 in RefToken
-                select new InstructionExpression(new ixor(val1.Cell, val2.Cell)))
-            .Token()
-            .WithPosition()
-            .Named("ixor expression");
-
-        public virtual Parser<IInputToken> IOR =>
-            (from dword in InstructionToken(IID.ior)
-                from val1 in RefToken
-                from val2 in RefToken
-                select new InstructionExpression(new ior(val1.Cell, val2.Cell)))
-            .Token()
-            .WithPosition()
-            .Named("ior expression");
+        
 
         public virtual Parser<IInputToken> NValue =>
             (from dword in InstructionToken(IID.val)
@@ -498,14 +589,6 @@
             .WithPosition()
             .Named($"{id} expression");
 
-        public virtual Parser<IInputToken> SqrtToken => (
-                from dword in InstructionToken(IID.sqrt)
-                from cell0 in RefToken
-                from cell1 in RefToken
-                select new InstructionExpression(Instruction.Summon(IID.sqrt, cell0.Cell, cell1.Cell)))
-            .Token()
-            .WithPosition()
-            .Named($"sqrt expression");
         #endregion
         #region etc tokens
         public virtual Parser<string> ProcToken(string name) =>
