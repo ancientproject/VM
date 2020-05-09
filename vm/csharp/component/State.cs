@@ -24,6 +24,7 @@ namespace vm.component
             this.bus = bus;
             this.stack = new Stack(bus);
             Array.Fill(mem_types, new Unknown_Type());
+            this.pipe = new ArgumentPipe(this);
         }
 
 
@@ -401,5 +402,66 @@ namespace vm.component
         public override string ToString() => $"[{pc:X} {r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X} {x2:X}]";
 
         #endregion
+
+
+        private ArgumentPipe pipe { get; }
+
+        public class ArgumentPipe
+        {
+            private readonly State _state;
+
+            private ushort x3 => _state.x3;
+            internal ushort result => (d8u)(u8 & _state.r1, u8 & _state.r2);
+            internal ushort arg1 => (d8u)(u8 & _state.r3, u8 & _state.u1);
+            internal ushort arg2 => (d8u)(u8 & _state.u2, u8 & _state.x1);
+
+            private Stack stack => _state.stack;
+            private ulong[] mem => _state.mem;
+            private CPU cpu => _state.bus.cpu;
+
+            public ArgumentPipe(State state) => _state = state;
+
+            public ulong this[byte index]
+            {
+                get => x3 switch
+                {
+                    _ when x3 == 0x0 || x3 == 0x1 => stack.pop(),
+                    _ when x3 == 0x2 || x3 == 0x3 => index switch
+                    {
+                        (0x1) => mem[arg1],
+                        (0x2) => mem[arg2],
+                        (0x3) => mem[result],
+                        _ => (ulong) cpu.halt(0xD8)
+                    },
+                    _ => (ulong) cpu.halt(0xD7)
+                };
+                set => _ = x3 switch
+                {
+                    _ when x3 == 0x0 || x3 == 0x2 => i(() => stack.push(value)),
+                    (0x1) => mem[arg1] = value,
+                    (0x3) => index switch
+                    {
+                        (0x1) => mem[arg1] = value,
+                        (0x2) => mem[arg2] = value,
+                        (0x3) => mem[result] = value,
+                        _ => (ulong) cpu.halt(0xD8)
+                    },
+                    _ => (ulong) cpu.halt(0xD7)
+                };
+            }
+
+            private ulong i(Action action)
+            {
+                action();
+                return 0;
+            }
+        }
+    }
+    public enum Mode : byte
+    {
+        StackOnly = 0x0,
+        ResultCellOnly = 0x1,
+        ArgCellAndStack = 0x2,
+        All = 0x3,
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -32,47 +32,46 @@
                     break;
 
                 case { } opcode when opcode.In(0xD0..0xE8):
-                    /* need @float-flag */
-                    if (!ff) bus.cpu.halt(0xA9);
-                    trace($"call :: [0xD0..0xE8]::0x{iid:X}");
-                    var result = iid switch
-                    { // todo refactoring
-                        0xD0 => f32u64 & Abs(u64f32 & mem[r1]),
-                        0xD1 => f32u64 & Acos(u64f32 & mem[r1]),
-                        0xD2 => f32u64 & Atan(u64f32 & mem[r1]),
-                        0xD3 => f32u64 & Acosh(u64f32 & mem[r1]),
-                        0xD4 => f32u64 & Atanh(u64f32 & mem[r1]),
-                        0xD5 => f32u64 & Asin(u64f32 & mem[r1]),
-                        0xD6 => f32u64 & Asinh(u64f32 & mem[r1]),
-                        0xD7 => f32u64 & Cbrt(u64f32 & mem[r1]),
-                        0xD8 => f32u64 & Ceiling(u64f32 & mem[r1]),
-                        0xD9 => f32u64 & Cos(u64f32 & mem[r1]),
-                        0xDA => f32u64 & Cosh(u64f32 & mem[r1]),
+                    {
+                        /* need @float-flag */
+                        if (!ff) bus.cpu.halt(0xA9);
+                        trace($"call :: [0xD0..0xE8]::0x{iid:X} [0x{pipe.arg1:X}] [0x{pipe.arg2:X}] with 0x{x3:X} mode");
+                        var result = iid switch
+                        { // todo refactoring
+                            0xD0 => f32u64 & Abs(u64f32 & pipe[0x1]),
+                            0xD1 => f32u64 & Acos(u64f32 & pipe[0x1]),
+                            0xD2 => f32u64 & Atan(u64f32 & pipe[0x1]),
+                            0xD3 => f32u64 & Acosh(u64f32 & pipe[0x1]),
+                            0xD4 => f32u64 & Atanh(u64f32 & pipe[0x1]),
+                            0xD5 => f32u64 & Asin(u64f32 & pipe[0x1]),
+                            0xD6 => f32u64 & Asinh(u64f32 & pipe[0x1]),
+                            0xD7 => f32u64 & Cbrt(u64f32 & pipe[0x1]),
+                            0xD8 => f32u64 & Ceiling(u64f32 & pipe[0x1]),
+                            0xD9 => f32u64 & Cos(u64f32 & pipe[0x1]),
+                            0xDA => f32u64 & Cosh(u64f32 & pipe[0x1]),
 
-                        0xDB => f32u64 & Floor(u64f32 & mem[r1]),
-                        0xDC => f32u64 & Exp(u64f32 & mem[r1]),
-                        0xDD => f32u64 & Log(u64f32 & mem[r1]),
-                        0xDE => f32u64 & Log10(u64f32 & mem[r1]),
-                        0xDF => f32u64 & Tan(u64f32 & mem[r1]),
-                        0xE0 => f32u64 & Tanh(u64f32 & mem[r1]),
+                            0xDB => f32u64 & Floor(u64f32 & pipe[0x1]),
+                            0xDC => f32u64 & Exp(u64f32 & pipe[0x1]),
+                            0xDD => f32u64 & Log(u64f32 & pipe[0x1]),
+                            0xDE => f32u64 & Log10(u64f32 & pipe[0x1]),
+                            0xDF => f32u64 & Tan(u64f32 & pipe[0x1]),
+                            0xE0 => f32u64 & Tanh(u64f32 & pipe[0x1]),
 
-                        0xE4 => f32u64 & Atan2(u64f32 & mem[r1], u64f32 & mem[r2]),
-                        0xE5 => f32u64 & Min(u64f32 & mem[r1], u64f32 & mem[r2]),
-                        0xE6 => f32u64 & Max(u64f32 & mem[r1], u64f32 & mem[r2]),
+                            0xE4 => f32u64 & Atan2(u64f32 & pipe[0x1], u64f32 & pipe[0x2]),
+                            0xE5 => f32u64 & Min(u64f32 & pipe[0x1], u64f32 & pipe[0x2]),
+                            0xE6 => f32u64 & Max(u64f32 & pipe[0x1], u64f32 & pipe[0x2]),
 
-                        0xE7 => f32u64 & Sin(u64f32 & mem[r1]),
-                        0xE8 => f32u64 & Sinh(u64f32 & mem[r1]),
+                            0xE7 => f32u64 & Sin(u64f32 & pipe[0x1]),
+                            0xE8 => f32u64 & Sinh(u64f32 & pipe[0x1]),
 
-                        0xE1 => f32u64 & Truncate(u64f32 & mem[r1]),
-                        0xE2 => f32u64 & BitDecrement(u64f32 & mem[r1]),
-                        0xE3 => f32u64 & BitIncrement(u64f32 & mem[r1]),
-                        _ => throw new CorruptedMemoryException("")
-                    };
-                    /* @stack-forward-flag */
-                    if (sf) stack.push(result);
-                    else mem[r1] = result;
-                    break;
-
+                            0xE1 => f32u64 & Truncate(u64f32 & pipe[0x1]),
+                            0xE2 => f32u64 & BitDecrement(u64f32 & pipe[0x1]),
+                            0xE3 => f32u64 & BitIncrement(u64f32 & pipe[0x1]),
+                            _ => throw new CorruptedMemoryException("")
+                        };
+                        pipe[0x3] = result;
+                        break;
+                    }
                 #region halt
 
                 case 0xF when new[] { r1, r2, r3, u1, u2, x1 }.All(x => x == 0xF):
@@ -349,53 +348,53 @@
                 #region math
 
                 case 0xCA:
-                    trace($"call :: sum 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: add [0x{pipe.arg1:X}] [0x{pipe.arg2:X}] with 0x{x3:X} mode");
                     if (ff)
-                        mem[r1] = f32u64 & (u64f32 & mem[r2]) + (u64f32 & mem[r3]);
+                        pipe[0x3] = f32u64 & (u64f32 & pipe[0x1]) + (u64f32 & pipe[0x2]);
                     else
-                        mem[r1] = mem[r2] + mem[r3];
+                        pipe[0x3] = pipe[0x1] + pipe[0x2];
                     break;
 
                 case 0xCB:
-                    trace($"call :: sub 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: sub [0x{pipe.arg1:X}] [0x{pipe.arg2:X}] with 0x{x3:X} mode");
                     if (ff)
-                        mem[r1] = f32u64 & (u64f32 & mem[r2]) - (u64f32 & mem[r3]);
+                        pipe[0x3] = f32u64 & (u64f32 & pipe[0x1]) - (u64f32 & pipe[0x2]);
                     else
-                        mem[r1] = mem[r2] - mem[r3];
+                        pipe[0x3] = pipe[0x1] - pipe[0x2];
                     break;
 
                 case 0xCC:
-                    trace($"call :: div 0x{r2:X}, 0x{r3:X}");
-                    _ = (mem[r3], ff) switch
+                    trace($"call :: div [0x{pipe.arg1:X}] [0x{pipe.arg2:X}] with 0x{x3:X} mode");
+                    _ = (pipe[0x2], ff) switch
                     {
                         (0x0, _) => (ulong)bus.cpu.halt(0xC),
-                        (_, false) => mem[r1] = mem[r2] / mem[r3],
-                        (_, true) => mem[r1] = f32u64 & (u64f32 & mem[r2]) / (u64f32 & mem[r3])
+                        (_, false) => pipe[0x3] = pipe[0x1] / pipe[0x2],
+                        (_, true) => pipe[0x3] = f32u64 & (u64f32 & pipe[0x1]) / (u64f32 & pipe[0x2])
                     };
                     break;
 
                 case 0xCD:
-                    trace($"call :: mul 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: mul [0x{pipe.arg1:X}] [0x{pipe.arg2:X}] with 0x{x3:X} mode");
                     if (ff)
-                        mem[r1] = f32u64 & (u64f32 & mem[r2]) * (u64f32 & mem[r3]);
+                        pipe[0x3] = f32u64 & (u64f32 & pipe[0x1]) * (u64f32 & pipe[0x2]);
                     else
-                        mem[r1] = mem[r2] * mem[r3];
+                        pipe[0x3] = pipe[0x1] * pipe[0x2];
                     break;
 
                 case 0xCE:
-                    trace($"call :: pow 0x{r2:X}, 0x{r3:X}");
+                    trace($"call :: pow [0x{pipe.arg1:X}] [0x{pipe.arg2:X}] with 0x{x3:X} mode");
                     if (ff)
-                        mem[r1] = f32u64 & Pow(u64f32 & mem[r2], u64f32 & mem[r3]);
+                        pipe[0x3] = f32u64 & Pow((u64f32 & pipe[0x1]), (u64f32 & pipe[0x2]));
                     else
-                        mem[r1] = (uint)Math.Pow(mem[r2], mem[r3]);
+                        pipe[0x3] = (ulong)Pow(pipe[0x1], pipe[0x2]);
                     break;
 
                 case 0xCF:
                     trace($"call :: sqrt 0x{r2:X}");
                     if (ff)
-                        mem[r1] = f32u64 & Sqrt(u64f32 & mem[r2]);
+                        pipe[0x3] = f32u64 & Sqrt((u64f32 & pipe[0x1]));
                     else
-                        mem[r1] = (uint)Math.Sqrt(mem[r2]);
+                        pipe[0x3] = (ulong)Sqrt(pipe[0x1]);
                     break;
 
                 #endregion math
