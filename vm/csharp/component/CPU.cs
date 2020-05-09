@@ -69,6 +69,8 @@
             0xA9    => $"x87 float exception",
             0xBD    => $"Overflow heap memory exception",
             0xD6    => $"x9 segmentation fault",
+            0xD7    => $"decompose opcode mode fault",
+            0xD8    => $"Overflow argument opcode",
             0x77    => $"Unexpected end of executable memory",
             0xA18   => $"Signature fault, method '{text}' not found",
             0xA19   => $"Signature fault, method '{text}' not valid",
