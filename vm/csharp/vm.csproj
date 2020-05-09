@@ -11,7 +11,7 @@
       win10-arm64;
       win10-arm;
     </RuntimeIdentifiers>
-    <Version>0.70.481-beta</Version>
+    <Version>0.70.575-beta</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>
@@ -23,7 +23,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ancient.Runtime" Version="0.60.345.606" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="ObjectDumper.NET" Version="2.5.20033.1" />
@@ -35,6 +34,7 @@
     <ProjectReference Include="..\..\libs\Ancient.Compiler.Service\Ancient.Compiler.Service.csproj" />
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Context\Ancient.Runtime.Context.csproj" />
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
+    <ProjectReference Include="..\..\submodules\runtime\src\Ancient.Runtime.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="$(Configuration) == 'Debug'">
