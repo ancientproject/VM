@@ -43,6 +43,8 @@
             .Or(StageN)
             .Or(NValue)
             .Or(Raw)
+            .Or(Dif_f)
+            .Or(Dif_t)
             .Or(CKFT)
             .Or(Dup)
             .Or(Call_I)
@@ -383,6 +385,22 @@
 
         #endregion
 
+        public virtual Parser<IInputToken> Dif_f =>
+            (from dword in InstructionToken(IID.dif_f)
+             from cell in RefToken
+             from count in ValueToken
+             select new InstructionExpression(new dif_f(cell.Cell, (byte)count.Value)))
+            .Token()
+            .WithPosition()
+            .Named("dif_f expression");
+        public virtual Parser<IInputToken> Dif_t =>
+            (from dword in InstructionToken(IID.dif_t)
+                from cell in RefToken
+                from count in ValueToken
+                select new InstructionExpression(new dif_t(cell.Cell, (byte)count.Value)))
+            .Token()
+            .WithPosition()
+            .Named("dif_t expression");
 
         public virtual Parser<IInputToken> Raw =>
             (from dword in InstructionToken(IID.raw)
