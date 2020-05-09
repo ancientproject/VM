@@ -235,7 +235,8 @@ namespace vm.component
                     if (iid == 0xB6)
                         mem[first] |= mem[second];
                     break;
-                case 0xB7: /* @neg */
+                */
+                case 0xB5: /* @neg */
                     d8u c1 = (u8 & r1, u8 & r2);
                     trace($"call :: neg [0x{(ushort)c1:X}]");
                     if (ff)
