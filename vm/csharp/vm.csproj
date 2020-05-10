@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RuntimeIdentifiers>
       osx.10.14-x64;
       linux-x64;
@@ -11,7 +11,7 @@
       win10-arm64;
       win10-arm;
     </RuntimeIdentifiers>
-    <Version>0.70.575-beta</Version>
+    <Version>0.70.577-beta</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>
