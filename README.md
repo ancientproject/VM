@@ -182,7 +182,80 @@ Local 0xF value into [0x0] cell
 .ldi &(0x0) <| $(0xF)
 ```
 ##### Remarks:
-Only range value 0x0-0xF
+Only range cell 0x0-0xF, value 0x0-0xFF
+
+#### Direct load index extended
+Load value into cell
+```asm
+.ldx 
+```
+###### Examples:
+Load 0xF value into [0x0] cell
+```asm
+.ldx &(0x0) <| $(0xF)
+```
+##### Remarks:
+Range cell 0x0-0xFF, value 0x0-0xFF
+
+#### Move classic [obsolete]
+Load value into device
+```asm
+.mva &(0x0) &(0x5) <| $(0xA)
+```
+###### Examples:
+Send 0xA value into [0x0] device and [0x5] action
+```asm
+.mva &(0x0) &(0x5) <| $(0xA)
+```
+##### Remarks:
+Range device 0x0-0xF, action 0x0-0xF, value 0x0-0xFFFF
+
+#### Write to device
+Load value into device
+```asm
+.wtd &(0x00) &(0x55) <| $(0xAF)
+```
+###### Examples:
+Send 0xA value into [0x0] device and [0x5] action
+```asm
+.wtd &(0x0) &(0x5) <| $(0xA)
+```
+##### Remarks:
+Range device 0x0-0xFF, action 0x0-0xFF, value 0x0-0xFF
+Result stage into stack
+
+#### Read to device
+Load value into device
+```asm
+.rfd &(0x0) &(0x5)
+```
+###### Examples:
+Read from 0x5 action and 0x0 device, result stage into stack
+```asm
+.rfd &(0x0) &(0x5)
+```
+##### Remarks:
+Range device 0x0-0xFF, action 0x0-0xFF
+Result stage into stack
+
+##### Remarks:
+Range device 0x0-0xFF, action 0x0-0xFF, value 0x0-0xFF
+Result stage into stack
+
+#### Read to device
+Load value into device
+```asm
+.rfd &(0x0) &(0x5)
+```
+###### Examples:
+Read from 0x5 action and 0x0 device, result stage into stack
+```asm
+.rfd &(0x0) &(0x5)
+```
+##### Remarks:
+Range device 0x0-0xFF, action 0x0-0xFF
+Result stage into stack
+
 
 ## History
 
