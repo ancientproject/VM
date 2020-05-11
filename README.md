@@ -173,7 +173,7 @@ list:
 ```asm
 .halt
 ```   
-<br>    
+***  
 #### Direct load index
 Load value into cell
 ```asm
