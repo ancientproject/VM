@@ -162,15 +162,18 @@ list:
 #### No operation
 ```asm
 .nop
-```
+```   
+***    
 #### Warm up VM [obsolete]
 ```asm
 .warm
 ```
+***
 #### Shutdown VM
 ```asm
 .halt
-```
+```   
+<br>    
 #### Direct load index
 Load value into cell
 ```asm
@@ -182,8 +185,8 @@ Local 0xF value into [0x0] cell
 .ldi &(0x0) <| $(0xF)
 ```
 ##### Remarks:
-Only range cell 0x0-0xF, value 0x0-0xFF
-
+Only range cell 0x0-0xF, value 0x0-0xFF   
+***    
 #### Direct load index extended
 Load value into cell
 ```asm
@@ -195,8 +198,8 @@ Load 0xF value into [0x0] cell
 .ldx &(0x0) <| $(0xF)
 ```
 ##### Remarks:
-Range cell 0x0-0xFF, value 0x0-0xFF
-
+Range cell 0x0-0xFF, value 0x0-0xFF   
+***    
 #### Move classic [obsolete]
 Load value into device
 ```asm
@@ -208,8 +211,8 @@ Send 0xA value into [0x0] device and [0x5] action
 .mva &(0x0) &(0x5) <| $(0xA)
 ```
 ##### Remarks:
-Range device 0x0-0xF, action 0x0-0xF, value 0x0-0xFFFF
-
+Range device 0x0-0xF, action 0x0-0xF, value 0x0-0xFFFF    
+***    
 #### Write to device
 Load value into device
 ```asm
@@ -222,8 +225,22 @@ Send 0xA value into [0x0] device and [0x5] action
 ```
 ##### Remarks:
 Range device 0x0-0xFF, action 0x0-0xFF, value 0x0-0xFF
-Result stage into stack
-
+Result stage into stack   
+***   
+#### Read to device
+Load value into device
+```asm
+.rfd &(0x0) &(0x5)
+```
+###### Examples:
+Read from 0x5 action and 0x0 device, result stage into stack
+```asm
+.rfd &(0x0) &(0x5)
+```
+##### Remarks:
+Range device 0x0-0xFF, action 0x0-0xFF
+Result stage into stack   
+***
 #### Read to device
 Load value into device
 ```asm
@@ -237,25 +254,7 @@ Read from 0x5 action and 0x0 device, result stage into stack
 ##### Remarks:
 Range device 0x0-0xFF, action 0x0-0xFF
 Result stage into stack
-
-##### Remarks:
-Range device 0x0-0xFF, action 0x0-0xFF, value 0x0-0xFF
-Result stage into stack
-
-#### Read to device
-Load value into device
-```asm
-.rfd &(0x0) &(0x5)
-```
-###### Examples:
-Read from 0x5 action and 0x0 device, result stage into stack
-```asm
-.rfd &(0x0) &(0x5)
-```
-##### Remarks:
-Range device 0x0-0xFF, action 0x0-0xFF
-Result stage into stack
-
+***
 
 ## History
 
