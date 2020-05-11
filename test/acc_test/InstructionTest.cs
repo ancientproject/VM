@@ -221,16 +221,17 @@ namespace ancient.runtime.compiler.test
             }
         }
         [Theory]
-        [InlineData(".ldi &(0x0) <| $(0xF)")]
-        public void LoadI(string code)
+        [InlineData(".ldi &(0x0) <| $(0xF)", 0x0, 0xf)]
+        [InlineData(".ldi &(0x11) <| $(0xFA)", 0x11, 0xFA)]
+        public void LoadI(string code, int cell, int value)
         {
             var result = new AssemblerSyntax().LoadI.End().Parse(code);
 
             if(result is InstructionExpression exp && exp.Instruction is ldi i)
             {
                 Assert.Equal(IID.ldi, i.ID);
-                Assert.Equal(0x0, i._index);
-                Assert.Equal(0xF, i._value);
+                Assert.Equal(cell, i._index);
+                Assert.Equal(value, i._value);
             }
         }
         [Theory]
