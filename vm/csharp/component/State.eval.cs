@@ -362,6 +362,7 @@
 
                 case 0x8 when u2 == 0xF && x1 == 0x0: /* @jump_t */
                     trace($"jump_t 0x{r1:X}");
+                    warn("jump_t has obsolete");
                     pc = mem[r1];
                     break;
 
@@ -369,6 +370,7 @@
                     trace(mem[r2] >= mem[r3]
                         ? $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_e 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    warn("jump_e has obsolete");
                     if (mem[r2] >= mem[r3])
                         pc = mem[r1];
                     break;
@@ -377,6 +379,7 @@
                     trace(mem[r2] > mem[r3]
                         ? $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_g 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    warn("jump_g has obsolete");
                     if (mem[r2] > mem[r3])
                         pc = mem[r1];
                     break;
@@ -385,6 +388,7 @@
                     trace(mem[r2] < mem[r3]
                         ? $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_u 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    warn("jump_u has obsolete");
                     if (mem[r2] < mem[r3])
                         pc = mem[r1];
                     break;
@@ -393,13 +397,23 @@
                     trace(mem[r2] <= mem[r3]
                         ? $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> apl"
                         : $"jump_y 0x{r1:X} -> 0x{r2:X} 0x{r3:X} -> skip");
+                    warn("jump_y has obsolete");
                     if (mem[r2] <= mem[r3]) pc = mem[r1];
                     break;
 
-                case 0x09: /* @jump */
-                    pc = (ulong)((r1 << 4) | r2);
+                case 0x09 when x3 == 0x1: /* @jump_p */
+                    pc = mem[(d8u)(u8 & r1, u8 & r2)];
+                    trace($"jump_p [0x{r1:X}{r2:X}] -> apl");
                     break;
-
+                case 0x09 when x3 == 0x2: /* @jump_x */
+                    if (mem_types[(d8u) (u8 & r1, u8 & r2)] is u2_Type && mem[(d8u) (u8 & r1, u8 & r2)] == 0x1)
+                    {
+                        pc = mem[(d8u)(u8 & r3, u8 & u1)];
+                        trace($"jump_x [0x{r1:X}{r2:X}] -> true -> apl");
+                        break;
+                    }
+                    trace($"jump_x [0x{r1:X}{r2:X}] -> false -> skip");
+                    break;
                 #endregion jumps
 
                 #region math

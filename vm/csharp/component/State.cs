@@ -2,6 +2,7 @@ namespace vm.component
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -10,6 +11,7 @@ namespace vm.component
     using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
     using ancient.runtime.@unsafe;
+    using Pastel;
     using static System.Console;
 
     /// <summary>
@@ -384,6 +386,12 @@ namespace vm.component
         {
             if(tc) WriteLine(str);
             OnTrace?.Invoke(str);
+        }
+
+        private void warn(string str)
+        {
+            if(!AppFlag.GetVariable("SKIP_WARNING"))
+            WriteLine($"-  {str}  -".PastelBg(Color.OrangeRed));
         }
 
         private void Error(string str)

@@ -1,12 +1,8 @@
 ﻿namespace ancient.compiler.tokens
 {
-    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using MoreLinq;
     using runtime;
     using runtime.emit.sys;
     using Sprache;
@@ -55,13 +51,14 @@
             .Or(MultipleSignatureToken(IID.and))
             .Or(MultipleSignatureToken(IID.ceq))
             .Or(MultipleSignatureToken(IID.neq))
-
             // jumps
             .Or(JumpT)
             .Or(JumpAt(IID.jump_e))
             .Or(JumpAt(IID.jump_g))
             .Or(JumpAt(IID.jump_u))
             .Or(JumpAt(IID.jump_y))
+            .Or(JumpP)
+            .Or(JumpX)
             // empty instruction token
             .Or(ByIIDToken(IID.halt))
             .Or(ByIIDToken(IID.warm))
@@ -321,7 +318,6 @@
             RefExpression o3
         )
         {
-
             if (o1 is { } r1)
                 return (r1.result.Cell, new[] { r1.c1.Cell });
             if (o2 is { } r2)
@@ -497,7 +493,23 @@
             .Token()
             .WithPosition()
             .Named("jump_t expression");
+        public virtual Parser<IInputToken> JumpX =>
+            (from dword in InstructionToken(IID.jump_x)
+             from cell0 in RefToken
+             from _ in When
+             from cell1 in RefToken
+             select new InstructionExpression(new jump_x(cell0.Cell, cell1.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("jump_x expression");
 
+        public virtual Parser<IInputToken> JumpP =>
+            (from dword in InstructionToken(IID.jump_p)
+                from cell0 in RefToken
+                select new InstructionExpression(new jump_p(cell0.Cell)))
+            .Token()
+            .WithPosition()
+            .Named("jump_p expression");
         public virtual Parser<IInputToken> JumpAt(IID id) =>
             (from dword in InstructionToken(id)
                 from space1 in Parse.WhiteSpace.Optional()
