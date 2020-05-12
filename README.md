@@ -75,7 +75,7 @@
 # 📡 Installation
 
 ```bash
-$ yarn global add @rune-temp/cli
+$ yarn global add @rune/cli
 $ rune install vm
 ```
 
