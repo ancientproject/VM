@@ -106,17 +106,11 @@ namespace ancient.compiler
         public static string Evolve(string code) // todo REWORK IT
         {
             var result = code;
-            var block = code.Replace("\r", "").Split('\n');
             var parsed = new TransformerSyntax().ManyEvolver.Parse(code);
             foreach (var token in parsed.Pipe(x => Trace($"evolving :: {x}")))
             {
                 switch (token)
                 {
-                    case ClassicEvolve e:
-                        result = result.Replace(
-                            block[token.InputPosition.Line-1], 
-                            string.Join("\n", e.Result));
-                        break;
                     case EmptyEvolve _:
                         break;
                     case LocalsInitEvolver local:
@@ -174,9 +168,12 @@ namespace ancient.compiler
                     case InstructionExpression iExp:
                         CompileToken(iExp.Instruction);
                         break;
-                    case TransformationContext ctx:
+                    case ClassicEvolve ctx:
                     {
-                        foreach (var ins in ctx.Instructions)
+                        if(ctx is IEvolveEvent @event)
+                            @event.OnBuild();
+
+                        foreach (var ins in ctx.GetInstructions())
                             CompileToken(ins);
                         break;
                     }

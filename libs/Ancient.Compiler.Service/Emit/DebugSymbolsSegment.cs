@@ -15,8 +15,6 @@
                 {
                     case InstructionExpression _:
                         break;
-                    case TransformationContext _:
-                        break;
                 }
             }
 
