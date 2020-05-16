@@ -113,6 +113,18 @@ namespace ancient.runtime.compiler.test
                 Assert.Contains(exp.Instruction.GetType().Name, $"{code}");
             }
         }
+        [Theory]
+        [InlineData("...static.extern.call !{sys->test()}")]
+        public void CallStaticInternalFunctions(string code)
+        {
+            var result = new AssemblerSyntax().Parser.End().Parse(code);
+
+            if (result is InstructionExpression exp && exp.Instruction is __static_extern_call i)
+            {
+                Assert.Equal($"{(ulong)0x40D51EC0C0:X}", $"{i.Assembly():X}");
+            }
+            else Assert.True(false, "Instruction is not '__static_extern_call'");
+        }
 
         [Theory]
         [InlineData(".inv &(0x0)")]
