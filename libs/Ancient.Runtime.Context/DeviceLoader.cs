@@ -13,7 +13,11 @@
         public static DeviceImageLoadContext Context { get; internal set; }
         public static event Action<string> OnTrace;
 
-        static DeviceLoader() => OnTrace += Console.WriteLine;
+        static DeviceLoader()
+        {
+            if(AppFlag.GetVariable("VM_TRACE"))
+                OnTrace += Console.WriteLine;
+        }
 
         public static void AutoGrub(Action<IDevice> hook)
         {
@@ -49,8 +53,7 @@
         }
         public static void Grub(Action<IDevice> hook, params AssemblyName[] additionalImage)
         {
-            if(Context is null)
-                Context = new DeviceImageLoadContext(trace);
+            Context ??= new DeviceImageLoadContext(trace);
             var asmList = additionalImage
                 .Select(imageName => Context.LoadFromAssemblyName(imageName))
                 .ToList();
