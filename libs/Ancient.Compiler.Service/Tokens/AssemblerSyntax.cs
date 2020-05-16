@@ -8,7 +8,7 @@
     using Sprache;
     using Module = runtime.emit.sys.Module;
 
-    public class AssemblerSyntax
+    public partial class AssemblerSyntax
     {
         internal static readonly Dictionary<string, OperatorKind> Operators = new Dictionary<string, OperatorKind>
         {
@@ -44,6 +44,7 @@
             .Or(CKFT)
             .Or(Dup)
             .Or(Call_I)
+            .Or(StaticExternCall)
             .Or(LPSTR)
             // logical
             .Or(MultipleSignatureToken(IID.or))
@@ -104,99 +105,7 @@
             .Or(Group(Label).Return(new NullExpression()))
         ;
 
-        #region Segments
-        public virtual Parser<IInputToken[]> ManyParser => (
-                from many in
-                    Parser
-                select many)
-            .ContinueMany()
-            .Select(x => x.ToArray());
-        //  
-        /// <summary>
-        /// Comment token
-        /// </summary>
-        /// <example>
-        /// CharToken.Parse("; this is single-line comment");
-        /// </example>
-        public virtual Parser<CommentToken> CommentToken =>
-            (from comment in new CommentParser(";","{|", "|}", "\n").SingleLineComment
-                select new CommentToken(comment))
-            .Token()
-            .Named("comment token");
-        /// <summary>
-        /// Single char wrapped in quote character
-        /// </summary>
-        /// <example>
-        /// CharToken.Parse("'1'");
-        /// </example>
-        public virtual Parser<char> CharToken =>
-            (from @char in Wrap(Parse.AnyChar, Parse.Char('\''))
-                select @char)
-            .Token()
-            .Named("char token");
-        /// <summary>
-        /// Single quote wrapped identifier token
-        /// </summary>
-        /// <example>
-        /// QuoteIdentifierToken.Parse("'test identifier token'");
-        /// </example>
-        public virtual Parser<string> QuoteIdentifierToken => (   
-                from @string in Wrap(Parse.AnyChar.Except(Parse.Char('\'')).Many().Text(), Parse.Char('\''))
-                select @string)
-            .Token()
-            .Named("quote string token");
-        /// <summary>
-        /// string wrapped in double quote chars
-        /// </summary>
-        /// <example>
-        /// StringToken.Parse("\"str\"") -> "str"
-        /// </example>
-        public virtual Parser<string> StringToken => (
-            from @string in Wrap(Parse.AnyChar.Except(Parse.Char('"')).Many().Text(), Parse.Char('"'))
-                select @string)
-            .Token().Named("string token");
-
-        /// <summary>
-        /// Keyword token
-        /// </summary>
-        /// <param name="keyword">
-        /// keyword string
-        /// </param>
-        /// <example>
-        /// Keyword("var").Parse("var")
-        /// </example>
-        public virtual Parser<string> Keyword(string keyword) =>
-            (from word in Parse.String(keyword).Text() select word)
-                .Token().Named($"keyword {keyword} token");
-        /// <summary>
-        /// Float number token
-        /// </summary>
-        /// <example>
-        /// FloatToken.Parse("12.45") -> "12.45"
-        /// FloatToken.Parse("-12.45") -> "-12.45"
-        /// </example>
-        public virtual Parser<string> FloatToken => (
-                from minus in Parse.Char('-').Optional()
-                from @string in Parse.DecimalInvariant 
-                select $"{minus.GetOrElse('+')}{@string}")
-            .Token().Named("string token");
-
-        /// <summary>
-        /// hex number token
-        /// </summary>
-        /// <example>
-        /// HexToken.Parse("0xDA") -> DA
-        /// </example>
-        public virtual Parser<string> HexToken =>
-            (from zero in Parse.Char('0')
-                from x in Parse.Chars("x")
-                from number in Parse.Chars("ABCDEF1234567890").Many().Text()
-                select number)
-            .Token()
-            .Named("hex number");
-
-
-        #endregion
+        
 
         #region etc
 
@@ -210,79 +119,7 @@
 
 
 
-        #region Operator tokens
-
-
-
-        public virtual Parser<OperatorKind> PipeLeft =>
-            (from _ in Parse.String("|>")
-                select OperatorKind.PipeLeft)
-            .Token()
-            .NamedOperator(OperatorKind.PipeLeft);
-        public virtual Parser<OperatorKind> PipeRight =>
-            (from _ in Parse.String("<|")
-                select OperatorKind.PipeRight)
-            .Token()
-            .NamedOperator(OperatorKind.PipeRight);
-
-        public virtual Parser<OperatorKind> When =>
-            (from _ in Parse.String(OperatorsReversed[OperatorKind.When])
-                select OperatorKind.When)
-            .Token()
-            .NamedOperator(OperatorKind.When);
-        public virtual Parser<RefExpression> RefToken =>
-            (from refSym in Parse.Char('&')
-                from openParen in Parse.Char('(')
-                from cellID in HexToken
-                from closeParen in Parse.Char(')')
-                select new RefExpression(cellID))
-            .Token()
-            .WithPosition()
-            .Named("ref_token");
-        public virtual Parser<ValueExpression> ValueToken =>
-            (from refSym in Parse.Char('$')
-                from openParen in Parse.Char('(')
-                from value in HexToken
-                from closeParen in Parse.Char(')')
-                select new ValueExpression(value))
-            .Token()
-            .WithPosition()
-            .Named("value_token");
-        public virtual Parser<ushort> CastCharToken =>
-            (from refSym in Parse.String("@char_t")
-                 from openParen in Parse.Char('(')
-                 from @char in CharToken
-                 from closeParen in Parse.Char(')')
-                 select (ushort)@char)
-            .Token()
-            .Named("char_t expression");
-
-        public virtual Parser<string> SignatureToken =>
-            (from refSym in Parse.String("!{")
-                from sign in Parse.AnyChar.Except(Parse.Char('}')).Many().Text()
-                from closeParen in Parse.Char('}')
-                select sign)
-            .Token()
-            .Named("signature expression");
-
-        public virtual Parser<string> CastStringToken =>
-            (from refSym in Parse.String("@string_t")
-                from openParen in Parse.Char('(')
-                from @string in StringToken
-                from closeParen in Parse.Char(')')
-                select @string)
-            .Token()
-            .Named("string_t expression");
-
-        public virtual Parser<float> CastFloat =>
-            (from refSym in Parse.String("@float_t")
-                from openParen in Parse.Char('(')
-                from @string in FloatToken
-                from closeParen in Parse.Char(')')
-                select float.Parse(@string, CultureInfo.InvariantCulture))
-            .Token()
-            .Named("string_t expression");
-        #endregion
+       
 
         #region Instructuions token
 
@@ -414,6 +251,13 @@
             .Token()
             .WithPosition()
             .Named("call_inner expression");
+        public virtual Parser<IInputToken> StaticExternCall =>
+            (from dword in InstructionToken(IID.__static_extern_call)
+                from sign in SignatureToken
+                select new InstructionExpression(new __static_extern_call(Module.CompositeIndex(sign))))
+            .Token()
+            .WithPosition()
+            .Named("__static_extern_call expression");
 
         public virtual Parser<IInputToken> LPSTR =>
             (from dword in InstructionToken(IID.lpstr)
@@ -580,14 +424,7 @@
         public virtual Parser<IInputToken> Unlock => (
                 from dword in InstructionToken(IID.unlock)
                 from cell1 in RefToken
-                from type in 
-                    Parse.String("u8").Text().Or(
-                        Parse.String("u16").Text()).Or(
-                        Parse.String("u32").Text()).Or(
-                        Parse.String("u64").Text()).Or(
-                        Parse.String("f64").Text()).Or(
-                        Parse.String("str").Text()).Or(
-                        Parse.String("u2").Text()).Token()
+                from type in TypeToken
                 select new InstructionExpression(new unlock(cell1.Cell, type)))
             .Token()
             .WithPosition()
@@ -620,7 +457,6 @@
             .Named($"{id} expression");
 
         #endregion
-        #region etc tokens
         public virtual Parser<string> ProcToken(string name) =>
             (from dot in Parse.Char('~')
                 from ident in Parse.String(name).Text()
@@ -638,52 +474,6 @@
             .WithPosition()
             .Named($"{id} expression");
 
-        #endregion
-
-        #region Transformers
-
-        public virtual Parser<IEvolveToken> Locals =>
-            (from dword in InstructionToken(IID.locals)
-                from init in Parse.String("init").Token()
-                from s in Parse.String("#(").Text()
-                from g in (
-                    from hex in (from c1 in Parse.Char('[')
-                        from hex in HexToken
-                        from c2 in Parse.Char(']') select hex).Token().Named("hex tail token")
-                    from type in 
-                        Parse.String("u8").Text().Or(
-                            Parse.String("u16").Text()).Or(
-                            Parse.String("u32").Text()).Or(
-                            Parse.String("u64").Text()).Or(
-                            Parse.String("f64").Text()).Or(
-                            Parse.String("str").Text()).Or(
-                            Parse.String("u2").Text())
-                    from dd in Parse.Char(',').Optional()
-                    select new EvaluationSegment(byte.Parse(hex, NumberStyles.AllowHexSpecifier), type)
-                ).Token().Named("segment evaluation stack token").AtLeastOnce()
-                from end in Parse.Char(')')
-                select new LocalsInitEvolver(g.ToArray()))
-            .Token()
-            .WithPosition()
-            .Named("locals transform expression");
-
-
-        public virtual Parser<IEvolveToken[]> Group(Parser<IEvolveToken> @group) => 
-            from s in Parse.String("#{").Text()
-            from g in @group.AtLeastOnce()
-            from end in Parse.Char('}')
-            select g.ToArray();
-
-        public virtual Parser<IEvolveToken> Label =>
-            (from dword in ProcToken("label")
-                from name in QuoteIdentifierToken
-                from hex in HexToken
-                from auto in Keyword("auto").Optional()
-                select new DefineLabel(name, hex))
-            .Token()
-            .Named("label token");
-
-        #endregion
     }
     
     public class CommentToken : IInputToken
