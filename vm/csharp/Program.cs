@@ -1,6 +1,7 @@
-﻿namespace vm
+namespace vm
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Globalization;
     using System.IO;
@@ -19,6 +20,7 @@
     using MoreLinq;
     using Pastel;
     using ancient.compiler.tokens;
+    using ancient.runtime.emit.sys;
     using Sprache;
 
     internal class Program
@@ -103,6 +105,7 @@
             if (AppFlag.GetVariable("VM_TRACE"))
                 DeviceLoader.OnTrace += Console.WriteLine;
 
+            Module.Boot();
             DeviceLoader.AutoGrub(bus.Add);
 
             if (AppFlag.GetVariable("REPL"))
