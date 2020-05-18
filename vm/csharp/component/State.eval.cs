@@ -1,4 +1,4 @@
-﻿namespace vm.component
+namespace vm.component
 {
     using System;
     using System.Collections.Generic;
@@ -159,6 +159,9 @@
                     }
                     mem[r2 + 1] = stack.pop();
                     break;
+                case 0xA6: /* @ret */
+                    trace("call :: ret");
+                    break;
 
                 case 0xB1: /* @inc */
                     trace($"call :: increment [0x{r1:X}]++");
@@ -186,11 +189,12 @@
                     if (ff && !float.IsFinite(u64f32 & mem[(r1 << 4) | r2]))
                         bus.cpu.halt(0xA9);
                     break;
-
-
-                case 0x36: /* @call */
+                case 0x36:
+                    warn("0x36 is not implemented");
+                    break;
+                case 0x40: /* @__static_extern_call */
                     d16u sign = (u8 & r3, u8 & u1, u8 & u2, u8 & x1);
-                    trace($"call :: call 0x{sign.Value:X}");
+                    trace($"call :: static_call 0x{sign.Value:X}");
                     var find = Module.Global.Find(sign, out var @extern);
                     if (find != ExternStatus.Found)
                     {
@@ -469,7 +473,6 @@
                     break;
 
                 #endregion math
-
                 default:
                     bus.cpu.halt(0xFC);
                     Error($"call :: unknown opCode -> {iid:X2}");
