@@ -359,12 +359,12 @@ namespace vm_test
             shot((uint)mem.Length);
             AssertRegister(x => State.i64f32 & (State.i64 & x.mem[0x2]),  1f / 5.4f);
         }
-
-        [Test]
+        [Test, Ignore("WIP on call.i instructions")]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
         [Description("call extern function test")]
         public void CallInnerTest()
         {
+            
             var mem = new ulong[]
             {
                 new call_i(Module.CompositeIndex("assert->value()")),

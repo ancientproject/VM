@@ -7,6 +7,8 @@ namespace ancient.runtime.compiler.test
     using ancient.compiler;
     using ancient.compiler.tokens;
     using emit.sys;
+    using RandomDataGenerator.FieldOptions;
+    using RandomDataGenerator.Randomizers;
     using runtime;
     using Sprache;
     using @unsafe;
@@ -121,7 +123,7 @@ namespace ancient.runtime.compiler.test
 
             if (result is InstructionExpression exp && exp.Instruction is __static_extern_call i)
             {
-                Assert.Equal($"{(ulong)0x40D51EC0C0:X}", $"{i.Assembly():X}");
+                Assert.Equal($"{(ulong)0x40D5EDF9C00000:X}", $"{i.Assembly():X}");
             }
             else Assert.True(false, "Instruction is not '__static_extern_call'");
         }
@@ -134,7 +136,7 @@ namespace ancient.runtime.compiler.test
 
             if (result is InstructionExpression exp && exp.Instruction is inv i)
             {
-                Assert.Equal($"{(ulong)0xB500000000:X}", $"{i.Assembly():X}");
+                Assert.Equal($"{(ulong)0xB5000000000000:X}", $"{i.Assembly():X}");
             }
         }
 
@@ -209,7 +211,7 @@ namespace ancient.runtime.compiler.test
             Assert.Equal(0, shifter.Shift());
         }
 
-        [Theory]
+        [Theory(Skip = "temporary evolving mvj disabled")]
         [InlineData(".mvj &(0x0) &(0xC) <| @string_t(\"test\")")]
         public void PushJ(string code)
         {
@@ -292,16 +294,51 @@ namespace ancient.runtime.compiler.test
             if (result.Instruction is halt i)
                 Assert.Equal(IID.halt, i.ID);
         }
+
+        public class LpStringGenerator : IEnumerable<(string code, string text)>, IEnumerable<object[]>
+        {
+            private readonly List<string> text = new List<string>
+            {
+                "test",
+                "BIG STRING WITH SPACES AND UPPER SYMBOLS",
+                "number 1234567 test",
+                "symbols !@#$%^&*",
+                "Its a guid: 71FEF7A3-2E06-46D5-98C1-F437FA78BFB8",
+                "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./",
+                "!@#$%^&*()QWERTYUIOPASDFGHJKL:ZXCVBNM<>?\\|"
+            };
+
+            private List<string> RandomGenerated =>
+                Enumerable.Range(0, 50)
+                    .Select(x =>
+                        RandomizerFactory.GetRandomizer(new FieldOptionsText
+                            {
+                                UseNumber = true, 
+                                UseSpecial = false,
+                                Min = 1,
+                                Max = 100,
+                                UseSpace = true,
+                                UseLetter = true,
+                                UseUppercase = true,
+                                UseLowercase = true
+                            })
+                            .Generate()).ToList();
+
+            public IEnumerator<(string code, string text)> GetEnumerator()
+                => text.Concat(RandomGenerated).Select(x => ($".lpstr !{{\"{x}\"}}", x)).GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() 
+                => GetEnumerator();
+            IEnumerator<object[]> IEnumerable<object[]>.GetEnumerator() 
+                => text.Concat(RandomGenerated).Select(x => new object[] {$".lpstr !{{\"{x}\"}}", x}).GetEnumerator();
+        }
+
         [Theory]
-        [InlineData(".lpstr !{\"test\"}", "test")]
-        [InlineData(".lpstr !{\"big string test bla bla\"}", "big string test bla bla")]
-        [InlineData(".lpstr !{\"number 1234567 test\"}", "number 1234567 test")]
-        [InlineData(".lpstr !{\"symbols !@#$%^&*\"}", "symbols !@#$%^&*")]
+        [ClassData(typeof(LpStringGenerator))]
         public void LpStringTest(string code, string text)
         {
             var result = new AssemblerSyntax().LPSTR.End().Parse(code);
             if (result is InstructionExpression exp && exp.Instruction is lpstr lp)
-                Assert.Equal($"34{(uint) NativeString.GetHashCode(text):X8}", $"{lp.Assembly():X}");
+                Assert.Equal($"34{(uint) NativeString.GetHashCode(text):X8}0000", $"{lp.Assembly():X}");
 
         }
 
@@ -318,15 +355,15 @@ namespace ancient.runtime.compiler.test
             if (result is InstructionExpression i)
             {
                 if(i.Instruction is jump_t t)
-                    Assert.Equal($"{0x8F000F000:X}", $"{t.Assembly():X}");
+                    Assert.Equal($"{0x8F000F0000000:X}", $"{t.Assembly():X}");
                 if(i.Instruction is jump_e e)
-                    Assert.Equal($"{0x8F990F100:X}",$"{e.Assembly():X}");
+                    Assert.Equal($"{0x8F990F1000000:X}",$"{e.Assembly():X}");
                 if(i.Instruction is jump_g g)
-                    Assert.Equal($"{0x8F990F200:X}", $"{g.Assembly():X}");
+                    Assert.Equal($"{0x8F990F2000000:X}", $"{g.Assembly():X}");
                 if(i.Instruction is jump_u u)
-                    Assert.Equal($"{0x8F990F300:X}", $"{u.Assembly():X}");
+                    Assert.Equal($"{0x8F990F3000000:X}", $"{u.Assembly():X}");
                 if(i.Instruction is jump_y y)
-                    Assert.Equal($"{0x8F990F400:X}", $"{y.Assembly():X}");
+                    Assert.Equal($"{0x8F990F4000000:X}", $"{y.Assembly():X}");
             }
         }
     }
