@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,7 +11,7 @@
       win10-arm64;
       win10-arm;
     </RuntimeIdentifiers>
-    <Version>0.70.587-beta</Version>
+    <Version>0.70.629-beta</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>

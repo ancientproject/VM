@@ -60,22 +60,29 @@ namespace vm.component
         public ulong pc { get; set; }
 
         /// <summary>
-        /// base register cell
+        /// base register
         /// </summary>
         public ushort r1 { get; set; }
         public ushort r2 { get; set; }
         public ushort r3 { get; set; }
         /// <summary>
-        /// value register cell
+        /// value register
         /// </summary>
         public ushort u1 { get; set; }
         public ushort u2 { get; set; }
         /// <summary>
-        /// magic cell
+        /// magic registers
         /// </summary>
         public ushort x1 { get; set; }
         public ushort x2 { get; set; }
         public ushort x3 { get; set; }
+        public ushort x4 { get; set; }
+        /// <summary>
+        /// meta registers
+        /// </summary>
+        public ushort o1 { get; set; }
+        public ushort o2 { get; set; }
+        public ushort o3 { get; set; }
         
         /// <summary>
         /// id
@@ -354,17 +361,21 @@ namespace vm.component
         public void Accept(BitwiseContainer container)
         {
             trace($"fetch 0x{container:X}");
-            var 
-            pfx = u16 & (container & 0xF000000000);
-            iid = u16 & (container & 0x0F00000000);
-            r1  = u16 & (container & 0x00F0000000);
-            r2  = u16 & (container & 0x000F000000);
-            r3  = u16 & (container & 0x0000F00000);
-            u1  = u16 & (container & 0x00000F0000);
-            u2  = u16 & (container & 0x000000F000);
-            x1  = u16 & (container & 0x0000000F00);
-            x2  = u16 & (container & 0x00000000F0);
-            x3  = u16 & (container & 0x000000000F);
+            ushort 
+            pfx = u16 & (container & 0xF0000000000000);
+            iid = u16 & (container & 0x0F000000000000);
+            r1  = u16 & (container & 0x00F00000000000);
+            r2  = u16 & (container & 0x000F0000000000);
+            r3  = u16 & (container & 0x0000F000000000);
+            u1  = u16 & (container & 0x00000F00000000);
+            u2  = u16 & (container & 0x000000F0000000);
+            x1  = u16 & (container & 0x0000000F000000);
+            x2  = u16 & (container & 0x00000000F00000);
+            x3  = u16 & (container & 0x000000000F0000);
+            x4  = u16 & (container & 0x0000000000F000);
+            o1  = u16 & (container & 0x00000000000F00);
+            o2  = u16 & (container & 0x000000000000F0);
+            o3  = u16 & (container & 0x0000000000000F);
             iid = u16 & (pfx << 0x4 | iid );
         }
         /// <summary>
