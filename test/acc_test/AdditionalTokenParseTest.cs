@@ -8,7 +8,7 @@
     public class AdditionalTokenParseTest
     {
         [Theory]
-        [InlineData(".sig @test(u2, u32)")]
+        [InlineData(".sig @test(u2, u32) -> void")]
         public void CallStaticInternalFunctions(string code)
         {
             var result = new AssemblerSyntax().Signature.End().Parse(code);
