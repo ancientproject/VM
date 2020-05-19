@@ -11,6 +11,7 @@
                 Parse.String("u32").Text()).Or(
                 Parse.String("u64").Text()).Or(
                 Parse.String("f64").Text()).Or(
+                Parse.String("void").Text()).Or(
                 Parse.String("str").Text()).Or(
                 Parse.String("u2").Text()).Token();
 
