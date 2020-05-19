@@ -27,6 +27,9 @@
 
         public override void write(long address, ulong data)
         {
+            if (address > 0x900 && read(0x899) < (ulong)address) 
+                write(0x899, address);
+
             if (address >= mem.Length)
             {
                 _cpu.halt(0xBD);
