@@ -1,7 +1,6 @@
 ﻿namespace ancient.runtime
 {
     using System;
-    using System.Dynamic;
     using exceptions;
     using hardware;
     using Microsoft.CSharp.RuntimeBinder;
@@ -27,11 +26,20 @@
 
         #region read\write
 
+        public void write(ulong address, long data)
+            => write((long) address, data);
+
         public virtual void write(long address, long data) =>
             write(address, (ulong) data);
 
+        public void write(ulong address, ulong data)
+            => write((long) address, data);
+
         public virtual void write(long address, ulong data)
             =>(this as IDevice).WriteMemory(address, data);
+
+        public ulong read(ulong address)
+            => read((long) address);
 
         public virtual ulong read(long address) 
             => throw new DeviceReadonlyException();

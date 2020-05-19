@@ -1,14 +1,12 @@
 ﻿namespace ancient.runtime
 {
     using System;
+    using @base;
 
-    public interface IDevice : IComparable, IBusGate
+    public interface IDevice : IComparable, IBusGate, IMemoryRange
     {
         string name { get; }
         short startAddress { get; set; }
-        void write(long address, long data);
-        void write(long address, ulong data);
-        ulong read(long address);
 
         long this[long address] { get; set; }
 
