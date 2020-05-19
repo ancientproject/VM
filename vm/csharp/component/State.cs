@@ -226,11 +226,11 @@ namespace vm.component
         /// <summary>
         /// L1 Memory
         /// </summary>
-        public ulong[] mem = new ulong[64];
+        public ulong[] mem { get; } = new ulong[64];
         /// <summary>
         /// L1 Types 
         /// </summary>
-        private ExternType[] mem_types = new ExternType[64];
+        public ExternType[] mem_types { get; } = new ExternType[64];
         /// <summary>
         /// L1 Memory flags
         /// </summary>
@@ -417,7 +417,7 @@ namespace vm.component
         public event Action<string> OnTrace;
         public event Action<string> OnError;
 
-
+        
         public override string ToString() => $"[{pc:X} {r1:X} {r2:X} {r3:X} {u1:X} {u2:X} {x1:X} {x2:X}]";
 
         #endregion

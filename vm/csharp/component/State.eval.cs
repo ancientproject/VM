@@ -5,6 +5,7 @@ namespace vm.component
     using System.Globalization;
     using System.Linq;
     using ancient.runtime;
+    using ancient.runtime.@base;
     using ancient.runtime.emit.sys;
     using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
@@ -14,7 +15,7 @@ namespace vm.component
     using static System.MathF;
     using Module = ancient.runtime.emit.sys.Module;
 
-    public partial class State
+    public partial class State : IState
     {
         public void Eval()
         {
