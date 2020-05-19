@@ -19,8 +19,10 @@
                     from list in TypeListToken
                     from close in Parse.Char(')')
                     select list
-                )
-                select new SignatureEvolve(args.ToList(), name))
+                ).Token().Named("argument list")
+                from lambda in Parse.String("->").Token().Named("lambda")
+                from type in TypeToken
+                select new SignatureEvolve(args.ToList(), name, type))
             .Token()
             .WithPosition()
             .Named($"sig expression");

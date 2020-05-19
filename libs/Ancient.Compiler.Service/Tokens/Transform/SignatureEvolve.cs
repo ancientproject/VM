@@ -9,11 +9,13 @@
     {
         internal readonly List<string> _argumentTypes;
         internal readonly string _signatureName;
+        private readonly string _returnType;
 
-        public SignatureEvolve(List<string> argumentTypes, string signatureName)
+        public SignatureEvolve(List<string> argumentTypes, string signatureName, string returnType)
         {
             _argumentTypes = argumentTypes;
             _signatureName = signatureName;
+            _returnType = returnType;
         }
 
 
@@ -21,9 +23,8 @@
         {
             jar.AddRange(new Instruction[]
             {
-                new sig(_signatureName, _argumentTypes.Count),
-                new lpstr(_signatureName), 
-                new raw(0),
+                new sig(_signatureName, _argumentTypes.Count, _returnType),
+                new lpstr(_signatureName),
                 new orb((byte)_argumentTypes.Count)
             });
             jar.AddRange(_argumentTypes.Select(x => new raw(ExternType.FindAndConstruct(x))));
