@@ -106,6 +106,7 @@ namespace vm
                 DeviceLoader.OnTrace += Console.WriteLine;
 
             Module.Boot();
+            InternalVMFunctions.Setup(bus);
             DeviceLoader.AutoGrub(bus.Add);
 
             if (AppFlag.GetVariable("REPL"))
@@ -140,6 +141,8 @@ namespace vm
                 var input = Console.ReadLine();
                 if (input is null)
                     continue;
+                if (input == "exit")
+                    return;
 
                 if (input.StartsWith("0x"))
                 {
