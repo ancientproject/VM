@@ -7,6 +7,7 @@ namespace vm.component
     using System.Linq;
     using System.Text;
     using ancient.runtime;
+    using ancient.runtime.@base;
     using ancient.runtime.emit.sys;
     using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
@@ -27,6 +28,9 @@ namespace vm.component
             this.stack = new Stack(bus);
             Array.Fill(mem_types, new Unknown_Type());
             this.pipe = new ArgumentPipe(this);
+            this.cr = new ControlRegister(this);
+            this.CallStack = new CallStack(bus.debugger.GetSymbols());
+            this.CallStack.Enter(null, pc);
         }
 
 
@@ -83,6 +87,8 @@ namespace vm.component
         public ushort o1 { get; set; }
         public ushort o2 { get; set; }
         public ushort o3 { get; set; }
+
+        public ControlRegister cr { get; }
         
         /// <summary>
         /// id
@@ -245,6 +251,8 @@ namespace vm.component
         /// Halt flag
         /// </summary>
         public sbyte halt { get; set; } = 0;
+
+        public CallStack CallStack { get; }
 
 
         /// <summary>
