@@ -3,6 +3,7 @@ namespace vm_test
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+    using ancient.runtime;
     using ancient.runtime.emit.sys;
     using ancient.runtime.tools;
     using MoreLinq;
@@ -36,7 +37,11 @@ namespace vm_test
         public static void CallSuccess() => Assert.Pass("call_success");
         public static int CallValue() => 0xDDD;
 
+        public void load(params Instruction[] values) => load(values.Select(x => (ulong)x).ToArray());
         public void load(params ulong[] values) => bus.State.Load("<exec>",values);
+
+        public void loadMeta(params Instruction[] values) 
+            => state.LoadMeta(values.SelectMany(x => x.GetMetaDataILBytes()).ToArray());
 
         public bool IsHalt() => state.halt == 1;
         public bool IsFastWrite() => state.fw;
