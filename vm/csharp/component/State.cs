@@ -103,7 +103,12 @@ namespace vm.component
                 var template = MetaTemplate.FromBytes(steam.ReadBytes(sizeof(MetaTemplate)));
 
                 if (template.type == TemplateType.STR)
-                    StringLiteralMap.InternString(NativeString.Wrap(Encoding.UTF8.GetString(steam.ReadBytes(template.len))));
+                {
+                    var str = Encoding.UTF8.GetString(steam.ReadBytes(template.len));
+                    if(!StringLiteralMap.Has(NativeString.GetHashCode(str)))
+                        StringLiteralMap.InternString(NativeString.Wrap(str));
+                }
+                    
                 if (template.type == TemplateType.RND)
                     steam.ReadBytes(template.len);
             }
