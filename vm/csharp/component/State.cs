@@ -400,9 +400,9 @@ namespace vm.component
         /// </returns>
         public ushort AcceptOpCode(BitwiseContainer container)
         {
-            var o1 = u16 & (container & 0xF00000000);
-            var o2 = u16 & (container & 0x0F0000000);
-            return u16 & (o1 << 0x4 | o2);
+            var pfx1 = u16 & (container & 0xF0000000000000);
+            var pfx2 = u16 & (container & 0x0F000000000000);
+            return u16 & (pfx1 << 0x4 | pfx2);
         }
 
         #region trace
