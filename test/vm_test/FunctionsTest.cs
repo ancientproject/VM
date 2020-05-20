@@ -1,6 +1,8 @@
 ﻿namespace vm_test
 {
     using System;
+    using System.Diagnostics;
+    using ancient.runtime;
     using ancient.runtime.@base;
     using ancient.runtime.emit.sys;
     using ancient.runtime.hardware;
@@ -18,20 +20,116 @@
 
             public VMRef Write(IMemoryRange range)
             {
-                var start = (ushort)range.GetFreeAddress();
-                var p = start;
-                range.writeString(ref p, "t1.module");
-                range.writeString(ref p, Name);
-                range.write(p++, Args.Length);
+                var (free, start) = range.GetFreeAddress();
+                range.writeString(ref free, "t1.module");
+                range.writeString(ref free, Name);
+                range.write(free++, Args.Length);
                 foreach (var arg in Args)
                 {
-                    range.writeString(ref p, arg.Type.Name.Replace("_Type", ""));
-                    range.write(p++, arg.Value);
+                    range.writeString(ref free, arg.Type.Name.Replace("_Type", ""));
+                    range.write(free++, arg.Value);
                 }
-                range.writeString(ref p, ReturnType.ShortName);
+                range.writeString(ref free, ReturnType.ShortName);
 
-                return new VMRef(start, (ushort)(p - start));
+                return new VMRef(start, (free - start));
             }
+        }
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("execute sig test")]
+        public void ExecuteSigTest()
+        {
+            var mem = new Instruction[]
+            {
+                new sig("test", 1, "void"),
+                new lpstr("test"),
+                new raw(ExternType.FindAndConstruct("void")),
+                new nop(),
+                new ret(),
+                new nop()
+            };
+            load(mem);
+            loadMeta(mem);
+            shot(1);
+            Assert.True(Module.Current.Functions.ContainsKey("test"));
+        }
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("normal behaviour function calling test")]
+        public void NormalBehaviourFunctionTest()
+        {
+            /* 
+                .sig test() -> void
+                    .ldi &(0x0) <| $(0x5)
+                .ret
+                .ldi &(0x1) <| $(0x6)
+                .call.i !{test()}
+             */
+            var mem = new Instruction[]
+            {
+                new sig("test", 0, "void"),
+                new lpstr("test"),
+                new ldi(0x0, 0x5), 
+                new ret(),
+                new ldi(0x1, 0x6), 
+                new lpstr("test").Preload(out var hash), 
+                new call_i(hash), 
+                //new __static_extern_call("sys->DumpStackTrace()"), 
+            };
+            load(mem);
+            loadMeta(mem);
+            shot(mem.Length);
+
+            AssertRegister<ulong>(x => x.mem[0x0], 0x5);
+            AssertRegister<ulong>(x => x.mem[0x1], 0x6);
+        }
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("normal behaviour function calling test")]
+        public void SuperBehaviourFunctionTest()
+        {
+            /* 
+                .sig test1() -> void
+                    .ldi &(0x0) <| $(0x5)
+                .ret
+                .sig test2() -> void
+                    .ldi &(0x1) <| $(0x6)
+                    .call.i !{test1()}
+                .ret
+                .sig test3() -> void
+                    .call.i !{test2()}
+                    .mul &(0x3) <| &(0x0) &(0x1)
+                .ret
+                .call.i !{test3()}
+             */
+            var mem = new Instruction[]
+            {
+                new ldx(0x11, 0x1), // enable trace
+
+                new sig("test1", 0, "void"), new lpstr("test1"),
+                    new ldi(0x0, 0x5), 
+                new ret(),
+
+                new sig("test2", 0, "void"), new lpstr("test2"),
+                    new ldi(0x1, 0x6), 
+                    new call_i("test1()"), 
+                new ret(),
+
+                new sig("test3", 0, "void"), new lpstr("test3"),
+                    new call_i("test2()"), 
+                    new mul(0x3, 0x0, 0x1), 
+                new ret(),
+
+                new call_i("test3()"), 
+                //new __static_extern_call("sys->DumpCallStack()"), 
+            };
+            load(mem);
+            loadMeta(mem);
+            shot(mem.Length);
+
+            AssertRegister<ulong>(x => x.mem[0x0], 0x5);
+            AssertRegister<ulong>(x => x.mem[0x1], 0x6);
+            AssertRegister<ulong>(x => x.mem[0x3], 0x5 * 0x6);
         }
 
         [OneTimeSetUp]
@@ -43,7 +141,7 @@
         {
             if(!(bus.find(0x0) is Memory memory))
                 throw new Exception($"Device on [0x0] is not Memory table");
-            ushort p = 0x900;
+            var p = 0x900ul;
             // module
             memory.writeString(ref p, "test.module");
             // name
@@ -101,13 +199,13 @@
                 throw new Exception($"Device on [0x0] is not Memory table");
 
             memory.write(0x0, 0x0);
-            Assert.AreEqual(0x900, memory.GetFreeAddress());
+            Assert.AreEqual((0x900, 0x900), memory.GetFreeAddress());
             memory.write(0x500, 0x0);
-            Assert.AreEqual(0x900, memory.GetFreeAddress());
+            Assert.AreEqual((0x900, 0x900), memory.GetFreeAddress());
             memory.write(0x901, 0x0);
-            Assert.AreEqual(0x902, memory.GetFreeAddress());
+            Assert.AreEqual((0x902, 0x902), memory.GetFreeAddress());
             memory.write(0x1020, 0x0);
-            Assert.AreEqual(0x1021, memory.GetFreeAddress());
+            Assert.AreEqual((0x1021, 0x1021), memory.GetFreeAddress());
         }
     }
 }
