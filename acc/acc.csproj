@@ -12,6 +12,7 @@
     <SignAssembly>false</SignAssembly>
     <StartupObject>ancient.compiler.Host</StartupObject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

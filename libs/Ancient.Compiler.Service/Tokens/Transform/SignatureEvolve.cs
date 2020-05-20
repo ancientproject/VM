@@ -24,8 +24,7 @@
             jar.AddRange(new Instruction[]
             {
                 new sig(_signatureName, _argumentTypes.Count, _returnType),
-                new lpstr(_signatureName),
-                new orb((byte)_argumentTypes.Count)
+                new lpstr(_signatureName)
             });
             jar.AddRange(_argumentTypes.Select(x => new raw(ExternType.FindAndConstruct(x))));
         }
