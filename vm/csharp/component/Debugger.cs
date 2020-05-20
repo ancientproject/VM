@@ -20,6 +20,8 @@
             if(debugSymbols != null) OnBreak += Null;
         }
 
+        public DebugSymbols GetSymbols() => debugSymbols;
+
         public Break Null = (s, cpu, d) =>
         {
             Console.WriteLine("-=== BREAK ===-");
