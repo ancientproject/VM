@@ -2,6 +2,7 @@ namespace vm.component
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using ancient.runtime;
@@ -148,20 +149,77 @@ namespace vm.component
                     break;
 
                 case 0xA5: /* @sig */
-                    stack.push(mem[r2] = pc);
-                    var frag = default(ulong?);
-                    while (AcceptOpCode(frag) != 0xA6 /* @ret */)
+                    d8u arg_count = (u8 & r1, u8 & r2);
+                    var returnType = ExternType.Find(
+                        (u8 & r3, u8 & u1),
+                        (u8 & u2, u8 & x1),
+                        (u8 & x2, u8 & x3),
+                        (u8 & x4, u8 & o1)
+                    );
+                    // read function name
+                    var lp = (fetch() & 0x0000_0000_FFFF_FFFF_0000) >> 12 >> 4;
+                    var p = StringLiteralMap.GetInternedString((int) lp);
+                    NativeString.Unwrap(p,
+                        out var functionName, false, true);
+
+                    // read argument declaration
+                    var args = new Utb[arg_count];
+                    for (var i = 0; i != arg_count; i++)
+                        args[i] = (ExternType.FindAndConstruct(fetch()), 0);
+
+                    var memory = bus.find(0x0) as Memory;
+
+                    Debug.Assert(memory != null, $"{nameof(memory)} != null");
+
+                    // write function into memory
+                    var (free, startPoint) = memory.GetFreeAddress();
+
+                    memory.writeString(ref free, Module.Current.Name);
+                    memory.writeString(ref free, functionName);
+                    
+                    memory.write(free++, arg_count);
+                    foreach (var arg in args)
                     {
-                        var pc_r = stack.pop();
-                        frag = next(pc_r++);
-                        if (frag is null)
-                            bus.cpu.halt(0xA1);
-                        stack.push(pc_r);
+                        memory.writeString(ref free, arg.ConstructType().ShortName);
+                        memory.write(free++, arg.Value);
                     }
-                    mem[r2 + 1] = stack.pop();
+                    memory.writeString(ref free, returnType.ShortName);
+
+
+                    var bodyStart = free;
+
+                    var n_frag = fetch();
+                    while (AcceptOpCode(n_frag) != 0xA6 /* @ret */)
+                    {
+                        memory.write(free++, n_frag);
+                        n_frag = fetch();
+                    }
+                    memory.write(free++, n_frag);
+
+                    VMRef metadataRef = (startPoint, free - startPoint);
+                    VMRef bodyRef = (bodyStart, free - bodyStart);
+
+                    trace($"call :: declare function [{functionName}() -> {returnType.ShortName}] ");
+
+                    Module.Current.RegisterFunction(new Function((metadataRef, bodyRef), memory));
                     break;
                 case 0xA6: /* @ret */
+                    pc = cr.Recoil();
+                    CallStack.Exit();
                     trace("call :: ret");
+                    break; 
+                case 0x36: /* @call.i */
+                    cr.Branch(pc);
+                    d32i fp = (
+                        u8 & r1, u8 & r2,
+                        u8 & r3, u8 & u1,
+                        u8 & u2, u8 & x1,
+                        u8 & x2, u8 & x3
+                    );
+                    var f = Module.Current.FindFunction(fp);
+                    trace($"call :: call.i !{{{f.Name}}}() -> {f.ReturnType.ShortName}");
+                    CallStack.Enter(f, pc);
+                    pc = f.GetCoilRef().Point;
                     break;
 
                 case 0xB1: /* @inc */
@@ -190,11 +248,11 @@ namespace vm.component
                     if (ff && !float.IsFinite(u64f32 & mem[(r1 << 4) | r2]))
                         bus.cpu.halt(0xA9);
                     break;
-                case 0x36:
-                    warn("0x36 is not implemented");
-                    break;
                 case 0x40: /* @__static_extern_call */
-                    d16u sign = (u8 & r3, u8 & u1, u8 & u2, u8 & x1);
+                    d16u sign = (
+                        u8 & r1, u8 & r2, 
+                        u8 & r3, u8 & u1
+                    );
                     trace($"call :: static_call 0x{sign.Value:X}");
                     var find = Module.Global.Find(sign, out var @extern);
                     if (find != ExternStatus.Found)
