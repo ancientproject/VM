@@ -72,8 +72,7 @@
                 new ldi(0x0, 0x5), 
                 new ret(),
                 new ldi(0x1, 0x6), 
-                new lpstr("test").Preload(out var hash), 
-                new call_i(hash), 
+                new call_i("test()"), 
                 //new __static_extern_call("sys->DumpStackTrace()"), 
             };
             load(mem);
