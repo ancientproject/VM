@@ -101,6 +101,7 @@
             
 
             // transformators
+            .Or(Signature)
             .Or(Locals.Return(new NullExpression()))
             .Or(Group(Label).Return(new NullExpression()))
         ;
