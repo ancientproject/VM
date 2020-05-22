@@ -21,7 +21,7 @@
             public VMRef Write(IMemoryRange range)
             {
                 var (free, start) = range.GetFreeAddress();
-                range.writeString(ref free, "t1.module");
+                range.writeString(ref free, "main.module");
                 range.writeString(ref free, Name);
                 range.write(free++, Args.Length);
                 foreach (var arg in Args)
@@ -142,7 +142,7 @@
                 throw new Exception($"Device on [0x0] is not Memory table");
             var p = 0x900ul;
             // module
-            memory.writeString(ref p, "test.module");
+            memory.writeString(ref p, "main.module");
             // name
             memory.writeString(ref p, "func");
             // arg size

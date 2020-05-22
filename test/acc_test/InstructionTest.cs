@@ -123,7 +123,7 @@ namespace ancient.runtime.compiler.test
 
             if (result is InstructionExpression exp && exp.Instruction is __static_extern_call i)
             {
-                Assert.Equal($"{(ulong)0x40D5EDF9C00000:X}", $"{i.Assembly():X}");
+                Assert.Equal($"{(ulong)0x40EDF900000000:X}", $"{i.Assembly():X}");
             }
             else Assert.True(false, "Instruction is not '__static_extern_call'");
         }

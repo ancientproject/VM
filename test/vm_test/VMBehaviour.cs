@@ -23,6 +23,7 @@ namespace vm_test
             Module.Context.Add("assert->pass()", typeof(VMBehaviour).GetMethod("CallSuccess"));
             Module.Context.Add("assert->value()", typeof(VMBehaviour).GetMethod("CallValue"));
             reset();
+            Module.Boot(bus);
         }
         [TearDown]
         public void reset()
