@@ -9,10 +9,10 @@
         private static Bus _bus { get; set; }
 
 
-        public static void Setup(Bus bus)
+        public static void Boot(Bus bus)
         {
             _bus = bus;
-            Module.Global.Add("sys->DumpCallStack()", typeof(InternalVMFunctions).GetMethod("DumpCallStack"));
+            Module.Context.Add("sys->DumpCallStack()", typeof(InternalVMFunctions).GetMethod("DumpCallStack"));
         }
 
 
