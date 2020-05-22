@@ -52,8 +52,6 @@
         public IDevice find(int address) 
             => Devices.FirstOrDefault(x => x.startAddress == address) 
                ?? new CorruptedDevice(cpu);
-
-        public IState GetState() => State;
         internal void AttachDebugger(Debugger dbg) => this.debugger = dbg;
 
         public void Unload()

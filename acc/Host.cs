@@ -22,7 +22,6 @@ namespace ancient.compiler
     using static System.Console;
     using static _term;
     using Color = System.Drawing.Color;
-
     internal class Host
     {
         public static int Main(string[] c_args)
@@ -38,7 +37,6 @@ namespace ancient.compiler
                 ForegroundColor = ConsoleColor.White;
             }
 
-            Module.Boot();
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => { ConsoleExtensions.Disable(); };
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var raw = new FluentCommandLineParser<Args>();
