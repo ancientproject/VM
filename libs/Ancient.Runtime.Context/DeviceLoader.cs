@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Loader;
     using Ancient.ProjectSystem;
     using Newtonsoft.Json;
 
@@ -17,6 +18,11 @@
         {
             if(AppFlag.GetVariable("VM_TRACE"))
                 OnTrace += Console.WriteLine;
+
+            //AssemblyLoadContext.Default.Resolving += (context, name) => {
+            //    var assemblyPath = $"./{name.Name}.dll";
+            //    return context.LoadFromAssemblyPath(assemblyPath);
+            //};
         }
 
         public static void Boot(Action<IDevice> hook)
