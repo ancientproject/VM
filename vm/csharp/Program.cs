@@ -135,9 +135,9 @@
             if (AppFlag.GetVariable("VM_TRACE"))
                 DeviceLoader.OnTrace += Console.WriteLine;
 
-            Module.Boot();
-            InternalVMFunctions.Setup(bus);
-            DeviceLoader.AutoGrub(bus.Add);
+            Module.Boot(bus);
+            InternalVMFunctions.Boot(bus);
+            DeviceLoader.Boot(bus.Add);
 
             if (AppFlag.GetVariable("REPL"))
             {
