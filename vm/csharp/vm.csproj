@@ -11,7 +11,7 @@
       win10-arm64;
       win10-arm;
     </RuntimeIdentifiers>
-    <Version>0.70.706-beta</Version>
+    <Version>0.70.727-beta</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>
@@ -33,7 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Ancient.Compiler.Service\Ancient.Compiler.Service.csproj" />
     <ProjectReference Include="..\..\libs\Ancient.Runtime.Context\Ancient.Runtime.Context.csproj" />
-    <ProjectReference Include="..\..\libs\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
     <ProjectReference Include="..\..\submodules\runtime\src\Ancient.Runtime.csproj" />
   </ItemGroup>
 

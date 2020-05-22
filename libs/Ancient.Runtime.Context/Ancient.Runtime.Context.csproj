@@ -4,7 +4,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.70.624.37</Version>
+    <Version>0.70.646.37</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/ancientproject/cli/master/resource/icon.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/0xF6/ancient_cpu</PackageProjectUrl>
@@ -17,13 +17,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ancient.ProjectSystem" Version="0.60.358.20" />
-    <ProjectReference Include="..\Ancient.Runtime.Hardware\Ancient.Runtime.Hardware.csproj" />
   </ItemGroup>
   <ItemGroup Condition="$(Configuration) == 'Debug'">
     <PackageReference Include="Ivy.Versioning" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\submodules\runtime\src\Ancient.Runtime.csproj" />
   </ItemGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <BumpPatch>true</BumpPatch>

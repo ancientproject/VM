@@ -23,7 +23,7 @@ namespace vm.component
             MemoryManagement.FastWrite = fw;
             if (bf)
             {
-                bus.debugger.handleBreak(u16 & pc, bus.cpu);
+                bus.debugger.handleBreak(u16 & pc, this);
                 mem[0x17] = 0x0;
             }
 
@@ -265,7 +265,7 @@ namespace vm.component
                         u8 & r3, u8 & u1
                     );
                     trace($"call :: static_call 0x{sign.Value:X}");
-                    var find = Module.Global.Find(sign, out var @extern);
+                    var find = Module.Context.Find(sign, out var @extern);
                     if (find != ExternStatus.Found)
                     {
                         bus.cpu.halt(0xA16 + (int)find, $"0x{sign.Value:X}");
@@ -416,7 +416,7 @@ namespace vm.component
 
                 case 0xC1 when x2 == 0x1: /* @break :: now */
                     trace($"[0x{iid:X}] @break :: now");
-                    bus.debugger.handleBreak(u16 & pc, bus.cpu);
+                    bus.debugger.handleBreak(u16 & pc, this);
                     mem[0x17] = 0x0;
                     break;
 
@@ -552,7 +552,7 @@ namespace vm.component
             if (mem[0x17] == 0x3) mem[0x17] = 0x2;
             if (mem[0x17] == 0x2)
             {
-                bus.debugger.handleBreak(u16 & pc, bus.cpu);
+                bus.debugger.handleBreak(u16 & pc, this);
                 mem[0x17] = 0x0;
             }
             /* @break :: end */
