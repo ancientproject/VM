@@ -249,7 +249,7 @@
         public virtual Parser<IInputToken> Call_I =>
             (from dword in InstructionToken(IID.call_i)
                 from sign in SignatureToken
-                select new InstructionExpression(new call_i(Module.CompositeIndex(sign))))
+                select new InstructionExpression(new call_i(sign)))
             .Token()
             .WithPosition()
             .Named("call_inner expression");
