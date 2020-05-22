@@ -39,7 +39,7 @@
         public static void InitializeFlags(Bus bus)
         {
             /* @0x11 */
-            bus.State.tc = AppFlag.GetVariable("VM_TRACE", true);
+            bus.State.tc = AppFlag.GetVariable("VM_TRACE", false);
             /* @0x12 */
             bus.State.ec = AppFlag.GetVariable("VM_ERROR", false);
             /* @0x13 */
@@ -61,37 +61,7 @@
             if (bus.State.halt != 0)
                 return;
             if (!args.Any())
-            {
-                //var ev = new SignatureEvolve(new List<string> {"u32", "f32"}, "FuckingXuy");
-
-                //(ev as IEvolveEvent).OnBuild();
-
-                //bus.State.Load("<exec>", ev
-                //    .GetInstructions().Select(x =>(ulong)x).ToArray());
-                var mem = new Instruction[]
-                {
-                    new ldx(0x11, 0x1), 
-                    new sig("test1", 0, "void"), new lpstr("test1"),
-                    new ldi(0x0, 0x5), 
-                    new __static_extern_call("sys->DumpCallStack()"), 
-                    new ret(),
-                    new nop(),
-                    new sig("test2", 0, "void"), new lpstr("test2"),
-                    new ldi(0x1, 0x6), 
-                    new call_i("test1()"), 
-                    new ret(),
-                    new nop(),
-                    new sig("test3", 0, "void"), new lpstr("test3"),
-                    new call_i("test2()"), 
-                    new mul(0x3, 0x0, 0x1), 
-                    new ret(),
-                    new nop(),
-                    new call_i("test3()")
-                };
-                bus.State.Load("<exec>", mem.Select(x => (ulong)x).ToArray());
-                bus.State.LoadMeta(mem.SelectMany(x => x.GetMetaDataILBytes()).ToArray());
-                //bus.State.Load("<chip>", 0xB00B50000);
-            }
+                bus.State.Load("<chip>", 0xB00B50000);
             else
             {
                 var nameFile = Path.Combine(Path.GetDirectoryName(args.First()), Path.GetFileNameWithoutExtension(args.First()));
