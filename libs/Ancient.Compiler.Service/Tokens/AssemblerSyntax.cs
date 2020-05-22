@@ -62,6 +62,7 @@
             .Or(JumpX)
             // empty instruction token
             .Or(ByIIDToken(IID.halt))
+            .Or(ByIIDToken(IID.ret))
             .Or(ByIIDToken(IID.warm))
             // break instruction
             .Or(ByIIDToken(IID.brk_a))
@@ -99,7 +100,7 @@
             .Or(AdvMathInstruction(IID.dec))
 
             
-
+            .Or(UseToken)
             // transformators
             .Or(Signature)
             .Or(Locals.Return(new NullExpression()))

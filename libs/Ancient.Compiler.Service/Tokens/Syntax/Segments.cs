@@ -1,10 +1,22 @@
 ﻿namespace ancient.compiler.tokens
 {
     using System.Linq;
+    using runtime;
     using Sprache;
 
     public partial class AssemblerSyntax
     {
+        public virtual Parser<IInputToken> UseToken =>
+            (from dword in
+                    from sharp in Parse.Char('#')
+                    from word in Parse.String("use")
+                    select ""
+                from modulePath in StringToken
+                select new InstructionExpression(new use(modulePath)))
+            .Token()
+            .Named("use expression");
+
+
         public virtual Parser<string> TypeToken =>
             Parse.String("u8").Text().Or(
                 Parse.String("u16").Text()).Or(
