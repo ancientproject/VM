@@ -153,7 +153,11 @@ namespace ancient.compiler
             {
                 void CompileToken(Instruction token)
                 {
-                    map.symbols.Add(((short)offset, source.Split('\n')[offset]));
+                    try
+                    {
+                        map.symbols.Add(((short)offset, source.Split('\n')[offset]));
+                    }
+                    catch{}
                     offset++;
                     gen.Emit(token);
                     var value = token.Assembly();

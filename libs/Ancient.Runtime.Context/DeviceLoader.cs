@@ -19,10 +19,11 @@
             if(AppFlag.GetVariable("VM_TRACE"))
                 OnTrace += Console.WriteLine;
 
-            //AssemblyLoadContext.Default.Resolving += (context, name) => {
-            //    var assemblyPath = $"./{name.Name}.dll";
-            //    return context.LoadFromAssemblyPath(assemblyPath);
-            //};
+            AssemblyLoadContext.Default.Resolving += (context, name) =>
+            {
+                var assemblyPath = $"./{name.Name}.dll";
+                return context.LoadFromAssemblyPath(assemblyPath);
+            };
         }
 
         public static void Boot(Action<IDevice> hook)
