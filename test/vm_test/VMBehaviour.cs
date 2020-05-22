@@ -20,8 +20,8 @@ namespace vm_test
 
         protected VMBehaviour()
         {
-            Module.Global.Add("assert->pass()", typeof(VMBehaviour).GetMethod("CallSuccess"));
-            Module.Global.Add("assert->value()", typeof(VMBehaviour).GetMethod("CallValue"));
+            Module.Context.Add("assert->pass()", typeof(VMBehaviour).GetMethod("CallSuccess"));
+            Module.Context.Add("assert->value()", typeof(VMBehaviour).GetMethod("CallValue"));
             reset();
         }
         [TearDown]

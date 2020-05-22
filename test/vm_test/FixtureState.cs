@@ -2,9 +2,30 @@
 {
     using ancient.runtime.@base;
     using ancient.runtime.emit.sys;
+    using ancient.runtime.tools;
 
     public class FixtureState : IState
     {
+        public void LoadMeta(byte[] meta)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ulong? next(ulong pc_ref)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ulong fetch()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ushort AcceptOpCode(BitwiseContainer container)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public long SP { get; set; }
         public ulong pc { get; set; }
         public ushort r1 { get; set; }

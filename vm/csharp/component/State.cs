@@ -11,6 +11,7 @@ namespace vm.component
     using ancient.runtime.emit.sys;
     using ancient.runtime.emit.@unsafe;
     using ancient.runtime.exceptions;
+    using ancient.runtime.tools;
     using ancient.runtime.@unsafe;
     using Pastel;
     using static System.Console;
@@ -95,7 +96,7 @@ namespace vm.component
         /// </summary>
         public ushort iid { get; set; }
 
-        internal unsafe void LoadMeta(byte[] meta)
+        public unsafe void LoadMeta(byte[] meta)
         {
             using var steam = new MemoryStream(meta);
             while (steam.Position != steam.Length)

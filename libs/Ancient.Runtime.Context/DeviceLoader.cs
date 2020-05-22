@@ -19,7 +19,7 @@
                 OnTrace += Console.WriteLine;
         }
 
-        public static void AutoGrub(Action<IDevice> hook)
+        public static void Boot(Action<IDevice> hook)
         {
             if(!Directory.Exists("deps"))
             {
