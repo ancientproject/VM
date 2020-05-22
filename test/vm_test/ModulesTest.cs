@@ -38,14 +38,14 @@
                 new ret(),
                 new call_i("test3()"),
                 new nop(),
-            }.Reverse().ToArray();
+            }.ToArray();
             
             var assembly = new DynamicAssembly("test");
             var ilGen = assembly.GetGenerator();
             ilGen.Emit(mem.Select(x => (OpCode)x).ToArray());
             var module = new Module("test.module");
             Module.modules.Add(module.GetHashCode(), module);
-            state.LoadMeta(mem.Reverse().SelectMany(x => x.GetMetaDataILBytes()).ToArray());
+            state.LoadMeta(mem.SelectMany(x => x.GetMetaDataILBytes()).ToArray());
 
             var functions = Module.ImportFunctions(assembly.GetILCode(), module);
 
