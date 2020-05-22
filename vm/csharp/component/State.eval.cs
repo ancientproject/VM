@@ -223,10 +223,10 @@ namespace vm.component
                     break;
                 case 0x41:
                     d32i mn = (
+                        u8 & r1, u8 & r2,
                         u8 & r3, u8 & u1,
                         u8 & u2, u8 & x1,
-                        u8 & x2, u8 & x3,
-                        u8 & x4, u8 & o1
+                        u8 & x2, u8 & x3
                     );
                     NativeString.Unwrap(StringLiteralMap.GetInternedString(mn),
                         out var modulePath, false, true);
