@@ -5,7 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>flame.compiler</PackageId>
     <RuntimeIdentifiers>win10-x64;osx.10.14-x64;linux-x64</RuntimeIdentifiers>
-    <Version>0.70.499-beta</Version>
+    <Version>0.70.500-beta</Version>
     <Authors>Yuuki Wesp</Authors>
     <Product>flame.compiler</Product>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
