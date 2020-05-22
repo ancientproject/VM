@@ -1,8 +1,8 @@
 {
 	"name": "ancient-asm",
-	"displayName": "Ancient Assembly",
-	"description": "Ancient Assembly developmemnt environment (8bit cpu)",
-	"version": "0.70.2",
+	"displayName": "Ancient VM Language",
+	"description": "Ancient VM developmemnt environment",
+	"version": "0.70.4",
 	"icon": "images/icon.png",
 	"galleryBanner": {
 		"color": "#18c7b1",
@@ -25,9 +25,13 @@
 		"Programming Languages"
 	],
 	"keywords": [
-		"ancient",
-		"8bit",
-		"assembly"
+		"assembly",
+		"virtual-machine",
+		"cli",
+		"intermediate-language",
+		"il",
+		"assembler-language",
+		"language"
 	],
 	"activationEvents": [
 		"onLanguage:asm",

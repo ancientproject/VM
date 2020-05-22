@@ -52,7 +52,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?i)((^|\s+)\~label|.warm|init|.prune|.halt|\s+ert)\b</string>
+					<string>(?i)((^|\s+)\~label|#use|.sig|@|.ret|.warm|init|.prune|.halt|\s+ert)\b</string>
 					<key>name</key>
 					<string>keyword.control.error</string>
 				</dict>
@@ -143,11 +143,11 @@
 					<key>name</key>
 					<string>string.quoted.double</string>
 				</dict>
-                <dict>
+				<dict>
 					<key>begin</key>
-					<string>%</string>
+					<string>!{</string>
 					<key>end</key>
-					<string>%</string>
+					<string>}</string>
 					<key>name</key>
 					<string>string.quoted.double</string>
 				</dict>
@@ -201,7 +201,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>([uif]((2|8|16|32|64|128)))\b</string>
+					<string>(str|void|[uif]((2|8|16|32|64|128)))\b</string>
 					<key>name</key>
 					<string>support.type.asm</string>
 				</dict>

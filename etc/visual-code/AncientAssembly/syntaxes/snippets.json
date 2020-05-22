@@ -1,4 +1,40 @@
 {
+  ".sig": {
+    "prefix": [
+      ".sig"
+    ],
+    "body": [
+      ".sig @${0:functionName}({1:types}) -> {2:returnType}"
+    ],
+    "description": "Signature function defined operation"
+  },
+  ".call.i": {
+    "prefix": [
+      ".call.i"
+    ],
+    "body": [
+      ".call.i !{${0:target}}"
+    ],
+    "description": "Call function operation"
+  },
+  ".prune": {
+    "prefix": [
+      ".prune"
+    ],
+    "body": [
+      ".prune"
+    ],
+    "description": "prune operation"
+  },
+  ".ret": {
+    "prefix": [
+      ".ret"
+    ],
+    "body": [
+      ".ret"
+    ],
+    "description": "return operation"
+  },
   ".abs": {
     "prefix": [
       ".abs"

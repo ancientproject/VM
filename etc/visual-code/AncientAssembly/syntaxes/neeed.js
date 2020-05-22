@@ -4,5 +4,3 @@
 .rfd
 .jump.p
 .page
-.call.i
-.prune

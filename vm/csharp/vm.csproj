@@ -11,7 +11,7 @@
       win10-arm64;
       win10-arm;
     </RuntimeIdentifiers>
-    <Version>0.70.756-beta</Version>
+    <Version>0.70.800</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Copyright>Yuuki Wesp (C) 2020</Copyright>
   </PropertyGroup>
