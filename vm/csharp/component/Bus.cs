@@ -5,10 +5,10 @@
     using System.Linq;
     using Ancient.ProjectSystem;
     using ancient.runtime;
-    using dev;
+    using ancient.runtime.@base;
     using MoreLinq;
 
-    public class Bus
+    public class Bus : IBus
     {
         public State State { get; set; }
         public CPU cpu { get; }
@@ -53,6 +53,7 @@
             => Devices.FirstOrDefault(x => x.startAddress == address) 
                ?? new CorruptedDevice(cpu);
 
+        public IState GetState() => State;
         internal void AttachDebugger(Debugger dbg) => this.debugger = dbg;
 
         public void Unload()
