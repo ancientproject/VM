@@ -67,20 +67,20 @@
              */
             var mem = new Instruction[]
             {
-                new sig("test", 0, "void"),
-                new lpstr("test"),
+                new sig("test4", 0, "void"),
+                new lpstr("test4"),
                 new ldi(0x0, 0x5), 
                 new ret(),
                 new ldi(0x1, 0x6), 
-                new call_i("test()"), 
+                new call_i("test4()"), 
                 //new __static_extern_call("sys->DumpStackTrace()"), 
             };
             load(mem);
             loadMeta(mem);
             shot(mem.Length);
 
-            AssertRegister<ulong>(x => x.mem[0x0], 0x5);
             AssertRegister<ulong>(x => x.mem[0x1], 0x6);
+            AssertRegister<ulong>(x => x.mem[0x0], 0x5);
         }
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
