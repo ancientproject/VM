@@ -16,6 +16,21 @@ namespace vm_test
         public void Setup() => IntConverter.Register<char>();
         [Test]
         [Author("Yuuki Wesp", "ls-micro@ya.ru")]
+        [Description("Registers test")]
+        public void AdditionalRegistersTest()
+        {
+            var mem = new ulong[]
+            {
+                0xABCDEF12345678
+            };
+            load(mem);
+            shot(mem.Length);
+            AssertRegister(x => x.r1, 0xC);
+            AssertRegister(x => x.o1, 0x6);
+            AssertRegister(x => x.o3, 0x8);
+        }
+        [Test]
+        [Author("Yuuki Wesp", "ls-micro@ya.ru")]
         [Description("invert operation")]
         public void AdditionalLdiTest()
         {
