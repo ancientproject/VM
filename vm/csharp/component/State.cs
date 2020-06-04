@@ -260,6 +260,7 @@ namespace vm.component
 
         public CallStack CallStack { get; }
 
+        private ushort pfx { get; set; }
 
         /// <summary>
         /// Section addressing information
@@ -277,7 +278,7 @@ namespace vm.component
             var set = 0x599;
             if (AcceptOpCode(prog.First()) == 0x33)
             {
-                Func<int> shift = ShiftFactory.Create(sizeof(int) * 0b100 - 0b100).Shift;
+                Func<int> shift = ShiftFactory.CreateByIndex(sizeof(int) * 0b100 - 0b100).Shift;
                 Accept(prog.First());
                 prog = prog.Skip(1).ToArray();
                 pin = (r1 << shift()) | (r2 << shift()) | (r3 << shift()) | (u1 << shift());
@@ -372,25 +373,27 @@ namespace vm.component
         /// 0xFFFF__AAAA__DDDD__EEEE
         /// ===
         /// </remarks>
-        public void Accept(BitwiseContainer container)
+        public void Accept(ulong container)
         {
             trace($"fetch 0x{container:X}");
-            ushort 
-            pfx = u16 & (container & 0xF0000000000000);
-            iid = u16 & (container & 0x0F000000000000);
-            r1  = u16 & (container & 0x00F00000000000);
-            r2  = u16 & (container & 0x000F0000000000);
-            r3  = u16 & (container & 0x0000F000000000);
-            u1  = u16 & (container & 0x00000F00000000);
-            u2  = u16 & (container & 0x000000F0000000);
-            x1  = u16 & (container & 0x0000000F000000);
-            x2  = u16 & (container & 0x00000000F00000);
-            x3  = u16 & (container & 0x000000000F0000);
-            x4  = u16 & (container & 0x0000000000F000);
-            o1  = u16 & (container & 0x00000000000F00);
-            o2  = u16 & (container & 0x000000000000F0);
-            o3  = u16 & (container & 0x0000000000000F);
-            iid = u16 & (pfx << 0x4 | iid );
+
+            var shifter = ShiftFactory.CreateByIndex(52);
+
+            pfx = (ushort)((container & 0x00F0000000000000) >> shifter.Shift());
+            iid = (ushort)((container & 0x000F000000000000) >> shifter.Shift());
+            r1  = (ushort)((container & 0x0000F00000000000) >> shifter.Shift());
+            r2  = (ushort)((container & 0x00000F0000000000) >> shifter.Shift());
+            r3  = (ushort)((container & 0x000000F000000000) >> shifter.Shift());
+            u1  = (ushort)((container & 0x0000000F00000000) >> shifter.Shift());
+            u2  = (ushort)((container & 0x00000000F0000000) >> shifter.Shift());
+            x1  = (ushort)((container & 0x000000000F000000) >> shifter.Shift());
+            x2  = (ushort)((container & 0x0000000000F00000) >> shifter.Shift());
+            x3  = (ushort)((container & 0x00000000000F0000) >> shifter.Shift());
+            x4  = (ushort)((container & 0x000000000000F000) >> shifter.Shift());
+            o1  = (ushort)((container & 0x0000000000000F00) >> shifter.Shift());
+            o2  = (ushort)((container & 0x00000000000000F0) >> shifter.Shift());
+            o3  = (ushort)((container & 0x000000000000000F) >> shifter.Shift());
+            iid = (ushort)((pfx << 4) | iid );
         }
         /// <summary>
         /// Deconstruct <see cref="UInt64"/> to OpCode
