@@ -10,16 +10,16 @@
         {
             if (!args.Any())
             {
-                Console.WriteLine(BenchmarkRunner.Run<JobCompiling>());
+                Console.WriteLine(BenchmarkRunner.Run<JobDeconstruct>());
                 return;
             }
 
             switch (args.First())
             {
-                case "compiling":
-                    Console.WriteLine(BenchmarkRunner.Run<JobCompiling>()); return;
-                case "interned": 
-                    Console.WriteLine(BenchmarkRunner.Run<JobInternString>()); return;
+                //case "compiling":
+                //    Console.WriteLine(BenchmarkRunner.Run<JobCompiling>()); return;
+                //case "interned": 
+                //    Console.WriteLine(BenchmarkRunner.Run<JobInternString>()); return;
             }
 
             

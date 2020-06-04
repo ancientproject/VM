@@ -199,7 +199,7 @@ namespace ancient.runtime.compiler.test
         [Fact]
         public void ShiftTest()
         {
-            var shifter = ShiftFactory.Create(28);
+            var shifter = ShiftFactory.CreateByIndex(28);
             Assert.Equal(28, shifter.Shift());
             Assert.Equal(24, shifter.Shift());
             Assert.Equal(20, shifter.Shift());
