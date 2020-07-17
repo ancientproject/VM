@@ -67,22 +67,19 @@
         public override ulong read(long address)
         {
             var (u1, u2) = new d8u((byte) address);
-            switch (u1, _bus.State.southFlag) {
-                case (0x0, _):
-                    return i64 | unchecked((int) Ticks);
-                case (0x1, _):
-                    return i64 | (hpet ? 0x1 : 0x0);
-                case (0x2, _):
-                    return i64 |_bus.State.memoryChannel;
-                case (0xF, true):
-                    return mem[u2];
-                default: throw ThrowMemoryRead(_bus.State.curAddr, address);
-            }
+            return (u1, _bus.State.southFlag) switch
+            {
+                (0x0, _) => i64 | unchecked((int) Ticks),
+                (0x1, _) => i64 | (hpet ? 0x1 : 0x0),
+                (0x2, _) => i64 | _bus.State.memoryChannel,
+                (0xF, true) => mem[u2],
+                _ => throw ThrowMemoryRead(_bus.State.curAddr, address)
+            };
         }
         /// <summary>
         /// write 64bit data to internal bios memory
         /// </summary>
-        public override void write(long address, long data)
+        public override void write(long address, ulong data)
         {
             var (adr, u2) = new d8u((byte)address);
             _ = (adr, bios_guard, _bus.State.southFlag) switch {
@@ -90,7 +87,7 @@
                 (0xA, _, _)         => X(warmUp),
                 (0xC, true, false)  => X(clearRAM),
                 (0xD, _, _)         => X(() => Thread.Sleep((int)data)),
-                (0xF, _, true)      => X(() => mem[u2] = i64 | data),
+                (0xF, _, true)      => X(() => mem[u2] = data),
                 _                   => X(() => ThrowMemoryWrite(_bus.State.curAddr, address))
             };
         }
@@ -119,7 +116,7 @@
             Console.WriteLine($"|{new string('-', line.Length)}|".PastelBg(Color.DarkRed));
         }
 
-        public int X(Action _)
+        public int X(Action _) // the fuck
         {
             _();
             return 0;

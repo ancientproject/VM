@@ -20,7 +20,7 @@
 
             if (_provider.southFlag && _bus.find(0x45).read(0xF3) == 0x1)
             {
-                _bus.find(0x0).write(  _provider.SP+ 0x100, data);
+                _bus.find(0x0).write(  _provider.SP + 0x100, data);
                 _provider.SP++;
                 return;
             }

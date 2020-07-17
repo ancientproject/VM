@@ -467,9 +467,9 @@ namespace vm.component
                         (0x1) => mem[arg1],
                         (0x2) => mem[arg2],
                         (0x3) => mem[result],
-                        _ => (ulong) cpu.halt(0xD8)
+                        _ => i64 | cpu.halt(0xD8)
                     },
-                    _ => (ulong) cpu.halt(0xD7)
+                    _ => i64 | cpu.halt(0xD7)
                 };
                 set => _ = x3 switch
                 {
@@ -480,9 +480,9 @@ namespace vm.component
                         (0x1) => mem[arg1] = value,
                         (0x2) => mem[arg2] = value,
                         (0x3) => mem[result] = value,
-                        _ => (ulong) cpu.halt(0xD8)
+                        _ => i64 | cpu.halt(0xD8)
                     },
-                    _ => (ulong) cpu.halt(0xD7)
+                    _ => i64 | cpu.halt(0xD7)
                 };
             }
 
